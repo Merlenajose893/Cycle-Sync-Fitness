@@ -8,10 +8,6 @@ export interface IUser extends Document{
     role:'user'|'admin'
     avatarUrl?:string
     isEmailVerified:boolean;
-    otpVerification?:string|null;
-    otpExpires?:Date|null;
-    passwordResetOtp?:string;
-    passwordResetExpires?:Date;
     onboardingComplete:boolean
 
     bodyDetails?:{

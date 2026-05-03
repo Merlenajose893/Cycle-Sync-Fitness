@@ -10,6 +10,11 @@ export class UserRepository{
         return UserModel.create(userData)
     }
 
+    async findById(id:string):Promise<IUser | null>
+    {
+        return UserModel.findById(id)
+    }
+
     async save(user:IUser):Promise<IUser>{
         return user.save();
     }
