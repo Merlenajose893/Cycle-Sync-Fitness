@@ -4,19 +4,24 @@ import jwt from 'jsonwebtoken'
 import bcrypt  from "bcryptjs";
 import { EmailService } from "./EmailService.js";
 import { OtpRepository } from "../repositories/OtpRepository.js";
-import e from "express";
+import express from "express";
+import type { RegisterUserDTO ,LoginDTO,VerifyEmailDTO,ForgotPasswordDTO,ResetPasswordDTO,TrainerRegisterDTO,LoginTrainerDTO,verifyTrainerDTO} from "../dtos/types.js";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
+import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
+
 export class AuthService{
-    private userRepository:UserRepository;
+    private userRepository:IUserRepository;
     private emailService:EmailService;
-    private trainerRepository:TrainerRepository
-    private otpRepository:OtpRepository;
-    constructor()
+    private trainerRepository:ITrainerRepository
+    private otpRepository:IOtpRepository;
+    constructor(userRepository:IUserRepository,trainerRepository:ITrainerRepository,otpRepository:IOtpRepository,emailService:EmailService)
     {
 
-        this.userRepository=new UserRepository();
-        this.emailService=new EmailService();
-        this.trainerRepository=new TrainerRepository();
-        this.otpRepository=new OtpRepository();
+        this.userRepository=userRepository,
+        this.emailService=emailService,
+        this.trainerRepository=trainerRepository,
+        this.otpRepository=otpRepository
 
         
     }
@@ -31,7 +36,7 @@ export class AuthService{
     }
 
 
-    async registerUser(data:any)
+    async registerUser(data:RegisterUserDTO)
     {
         const {firstName,lastName,email,password}=data;
         const userExists=await this.userRepository.findByEmail(email);
@@ -70,7 +75,7 @@ export class AuthService{
         
     }
 
-    async verifyEmail(data:any)
+    async verifyEmail(data:VerifyEmailDTO)
     {
         const {email,otp}=data;
         const user=await this.userRepository.findByEmail(email);
@@ -101,7 +106,7 @@ export class AuthService{
         return {message:"Email Verified Successfully"}
     }
 
-    async login(data:any)
+    async login(data:LoginDTO)
     {
         const {email,password}=data;
         const user=await this.userRepository.findByEmail(email);
@@ -125,12 +130,12 @@ export class AuthService{
         }
 
 
-        return {message:""}
+        
 
     }
 
 
-    async forgetPassword(data:any)
+    async forgetPassword(data:ForgotPasswordDTO)
     {
         const {email}=data;
         const user=await this.userRepository.findByEmail(email);
@@ -157,7 +162,7 @@ export class AuthService{
     }
 
 
-    async resetPassword(data:any)
+    async resetPassword(data:ResetPasswordDTO)
     {
         const {email,otp,newPassword}=data;
         const user=await this.userRepository.findByEmail(email);
@@ -189,7 +194,7 @@ export class AuthService{
     }
 
 
-    async registerTrainer(data:any)
+    async registerTrainer(data:TrainerRegisterDTO)
     {
         const {firstName,lastName,email,password,speciality}=data;
         const trainerExists=await this.trainerRepository.findByEmail(email);
@@ -230,7 +235,7 @@ export class AuthService{
         
     }
 
-    async verifyTrainer(data:any)
+    async verifyTrainer(data:verifyTrainerDTO)
     {
         const {email,otp}=data;
         const trainer=await this.trainerRepository.findByEmail(email);
@@ -256,7 +261,7 @@ export class AuthService{
     }
 
 
-    async loginTrainer(data:any)
+    async loginTrainer(data:LoginTrainerDTO)
     {
         const {email,password}=data;
         const trainer=await this.trainerRepository.findByEmail(email);

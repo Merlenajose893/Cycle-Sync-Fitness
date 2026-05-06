@@ -1,7 +1,8 @@
 import { UserModel } from "../models/User.js";
 import type { IUser } from "../models/User.js";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
 
-export class UserRepository{
+export class UserRepository implements IUserRepository{
     async  findByEmail(email:string):Promise<IUser | null> {
         return UserModel.findOne({email})
     }

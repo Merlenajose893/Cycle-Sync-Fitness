@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import type { OtpType,UserType,IOtp } from "../models/Otp.js";
 import { otpModel } from "../models/Otp.js";
-import { error } from "node:console";
+import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
 
 
-export class OtpRepository{
+export class OtpRepository implements IOtpRepository{
 
-    async createOtp(userId:string,userType:UserType,email:string,otp:string,type:OtpType)
+    async createOtp(userId:string,userType:UserType,email:string,otp:string,type:OtpType):Promise<IOtp|null>
     {
         await otpModel.deleteOne({userId: new mongoose.Types.ObjectId(userId),type})
         const expiresAt=new Date(Date.now()+10*60*1000)
@@ -23,7 +23,7 @@ export class OtpRepository{
         return otp
     }
 
-    async findOtp(userId:string,type)
+    async findOtp(userId:string,type:OtpType)
     {
         return otpModel.findOne({
             userId:new mongoose.Types.ObjectId(userId),
@@ -31,7 +31,7 @@ export class OtpRepository{
         })
     }
 
-    async verifyOtp(userId:string,type:OtpType,rawOtp:string)
+    async verifyOtp(userId:string,type:OtpType,rawOtp:string):Promise<IOtp|null>
     {
         const record=await this.findOtp(userId,type);
         if(!record)
@@ -52,8 +52,8 @@ export class OtpRepository{
     }
 
 
-    async deleteOtp(userId:string,type:OtpType)
+    async deleteOtp(userId:string,type:OtpType):Promise<void>
     {
-        await otpModel.deleteOne({userId:new mongoose.Types.ObjectId(userId),type})
+         await otpModel.deleteOne({userId:new mongoose.Types.ObjectId(userId),type})
     }
 }
