@@ -1,22 +1,19 @@
+import { injectable } from "tsyringe";
 import { TrainerModel } from "../models/Trainer.js";
+
 import type { ITrainer } from "../models/Trainer.js";
 import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-export class TrainerRepository implements ITrainerRepository {
-    async findByEmail(email:string)
+import { BaseRepository } from "./BaseRepository.js";
+@injectable()
+export class TrainerRepository extends BaseRepository<ITrainer> implements ITrainerRepository {
+    constructor()
     {
-        return TrainerModel.findOne({email})
+        super(TrainerModel)
     }
-
-    async create(trainerDetail:Partial<ITrainer>):Promise<ITrainer>{
-        return TrainerModel.create(trainerDetail)
-    }
-
-    async save(trainer:ITrainer)
+    async findByEmail(email:string):Promise<ITrainer|null>
     {
-        return trainer.save();
+        return this.model.findOne({email})
     }
 
-    async findById(id: string): Promise<ITrainer | null> {
-        return TrainerModel.findById(id)
-    }
+    
 }

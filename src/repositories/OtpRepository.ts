@@ -1,17 +1,23 @@
+import { injectable } from "tsyringe";
 import mongoose from "mongoose";
 import type { OtpType,UserType,IOtp } from "../models/Otp.js";
 import { otpModel } from "../models/Otp.js";
 import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
+import { BaseRepository } from "./BaseRepository.js";
 
-
-export class OtpRepository implements IOtpRepository{
-
-    async createOtp(userId:string,userType:UserType,email:string,otp:string,type:OtpType):Promise<IOtp|null>
+@injectable()
+export class OtpRepository extends BaseRepository<IOtp>implements IOtpRepository{
+    constructor()
     {
-        await otpModel.deleteOne({userId: new mongoose.Types.ObjectId(userId),type})
+        super(otpModel)
+    }
+
+    async createOtp(userId:string,userType:UserType,email:string,otp:string,type:OtpType):Promise<IOtp>
+    {
+        await this.model.deleteOne({userId: new mongoose.Types.ObjectId(userId),type})
         const expiresAt=new Date(Date.now()+10*60*1000)
 
-        await otpModel.create({
+      const createdOtp=  await this.model.create({
             userId:new mongoose.Types.ObjectId(userId),
             userType,
             email,
@@ -20,40 +26,22 @@ export class OtpRepository implements IOtpRepository{
             expiresAt
         });
 
-        return otp
+        return createdOtp;
     }
 
-    async findOtp(userId:string,type:OtpType)
+    async findOtp(userId:string,type:OtpType):Promise<IOtp|null>
     {
-        return otpModel.findOne({
+        return this.model.findOne({
             userId:new mongoose.Types.ObjectId(userId),
             type
         })
     }
 
-    async verifyOtp(userId:string,type:OtpType,rawOtp:string):Promise<IOtp|null>
-    {
-        const record=await this.findOtp(userId,type);
-        if(!record)
-        {
-            throw new Error("No Otp found")
-        };
-        if(record.expiresAt<new Date())
-        {
-            throw new Error("Otp has expired")
-        }
-
-        if(record.otp!==rawOtp)
-        {
-            throw new Error("Otp is not matched")
-        }
-
-        return true;
-    }
+    
 
 
     async deleteOtp(userId:string,type:OtpType):Promise<void>
     {
-         await otpModel.deleteOne({userId:new mongoose.Types.ObjectId(userId),type})
+         await this.model.deleteOne({userId:new mongoose.Types.ObjectId(userId),type})
     }
 }

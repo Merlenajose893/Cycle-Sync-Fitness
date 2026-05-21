@@ -1,22 +1,17 @@
+import { injectable } from "tsyringe";
 import { UserModel } from "../models/User.js";
 import type { IUser } from "../models/User.js";
 import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-
-export class UserRepository implements IUserRepository{
-    async  findByEmail(email:string):Promise<IUser | null> {
-        return UserModel.findOne({email})
-    }
-
-    async create(userData:Partial<IUser>):Promise<IUser>{
-        return UserModel.create(userData)
-    }
-
-    async findById(id:string):Promise<IUser | null>
+import { BaseRepository } from "./BaseRepository.js";
+@injectable()
+export class UserRepository extends BaseRepository<IUser> implements IUserRepository{
+    constructor()
     {
-        return UserModel.findById(id)
+        super(UserModel)
+    }
+    async  findByEmail(email:string):Promise<IUser | null> {
+        return this.model.findOne({email})
     }
 
-    async save(user:IUser):Promise<IUser>{
-        return user.save();
-    }
+   
 }
