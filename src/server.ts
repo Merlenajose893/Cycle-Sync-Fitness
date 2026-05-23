@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connectDB from './config/db.js'
 import type {Request,Response} from 'express'
@@ -16,6 +17,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json())
+app.use(cookieParser());
 
 app.get('/',(req:Request,res:Response)=>{
 res.send("hello")

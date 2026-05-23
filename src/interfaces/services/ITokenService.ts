@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import type { TokenPayload } from "../../dtos/auth.types.js";
+import type { TokenPayload } from "../../types/auth.types.js";
 
 export interface ITokenService{
     generateAndSetAccessToken(payload:TokenPayload,res:Response):string;

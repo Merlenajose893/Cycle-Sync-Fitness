@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import type { Response } from "express";
 import { injectable,inject } from "tsyringe";
 import type { ITokenService } from "../interfaces/services/ITokenService.js";
-import type { TokenPayload } from "../dtos/auth.types.js";
+import type { TokenPayload } from "../types/auth.types.js";
 import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefreshTokenRepository.js";
 import { UnauthorizedError } from "../errors/index.js";
 import { TOKENS } from "../container/tokens.js";
