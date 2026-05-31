@@ -1,12 +1,12 @@
 
 export const API_ENDPOINTS={
     USER_AUTH:{
-        REGISTER:"/auth/user/register",
-        LOGIN:"/auth/user/login",
-        VERIFY_OTP:"/auth/user/verify-otp",
-        LOGOUT:"/auth/user/logout",
-        REFRESH:"/auth/user/refresh-token",
-        ME:"/auth/user/me"
+        REGISTER:"/api/users/register",
+        LOGIN:"/users/login",
+        VERIFY_OTP:"/users/verify-otp",
+        LOGOUT:"/users/logout",
+        REFRESH:"/users/refresh-token",
+        ME:"/users/me"
     },
      TRAINER_AUTH: {
 

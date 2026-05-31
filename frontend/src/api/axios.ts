@@ -9,7 +9,7 @@ axiosInstance.interceptors.response.use((response)=>response,async (error) => {
     {
         originalRequest._retry=true;
         try {
-            await axiosInstance.post("/auth/user/refresh");
+            await axiosInstance.post("/users/refresh");
             return axiosInstance(originalRequest)
         } catch (refreshError) {
             window.location.href='/login';

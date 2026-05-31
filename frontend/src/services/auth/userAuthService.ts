@@ -1,13 +1,19 @@
 import axiosInstance from "../../api/axios";
 import { API_ENDPOINTS } from "../../constants/apiEndpoints";
-import { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User,AuthResponse } from "../../types/auth.types";
+import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User,AuthResponse } from "../../types/auth.types";
 export const userAuthService={
     registerUser:async (data:RegisterUserPayload):Promise<AuthResponse<User>> => {
+        console.log(API_ENDPOINTS.USER_AUTH.REGISTER);
+        
         const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.REGISTER,data)
+        console.log(response.data);
         return response.data;
+
+        
 
     
     },
+
 
     loginUser:async (data:LoginUserPayload):Promise<AuthResponse<null>> => {
         const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.LOGIN,data);
@@ -27,3 +33,5 @@ export const userAuthService={
         return response.data;
     }
 }
+
+console.log(userAuthService.registerUser);

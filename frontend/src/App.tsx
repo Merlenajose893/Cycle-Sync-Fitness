@@ -1,14 +1,9 @@
 import React from 'react'
-import { BrowserRouter,Routes,Route } from 'react-router-dom'
+import AppRoutes from './routes/AppRoutes'
 import './api/axios'
 const App = () => {
   return (
-    <div>
-      <h1>
-        Cycle Sync Fitness
-      </h1>
-
-    </div>
+    <AppRoutes/>
   )
 }
 
