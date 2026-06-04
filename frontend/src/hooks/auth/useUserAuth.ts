@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { userAuthService } from "../../services/auth/userAuthService";
-import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User } from "../../types/auth.types";
+import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload } from "../../types/auth.types";
 export const useUserAuth=()=>{
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState<string|null>(null);
@@ -29,6 +29,22 @@ export const useUserAuth=()=>{
         } catch (error:any) {
             setError(error.response?.data?.message||"OTP verification failed");
             throw error;
+        }
+
+        finally{
+            setLoading(false)
+        }
+    }
+
+    const resendOTP=async (data:ResendOTPPayload) => {
+        try {
+           setLoading(true);
+           setError(null);
+           const response=await userAuthService.resendOtp(data);
+           return response;
+        } catch (error:any) {
+            setError(error.response?.data?.message||"OTP is not resend successfully")
+            throw error
         }
 
         finally{
@@ -82,7 +98,7 @@ export const useUserAuth=()=>{
     }
 
     return {
-        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser
+        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP
     }
 
 

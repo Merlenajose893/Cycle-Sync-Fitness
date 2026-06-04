@@ -25,6 +25,16 @@ export class UserAuthController {
         successResponse(res, "Login Successfull", null, HttpStatus.OK)
     }
 
+    resendOtp=async (req:Request,res:Response) => {
+        await this.userAuthService.resendOTP(req.body,res);
+        successResponse(
+            res,
+            "Otp resend Successfully",
+            null,
+            HttpStatus.OK
+        )
+    }
+
     logoutUser = async (
         req: Request,
 

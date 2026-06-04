@@ -35,7 +35,7 @@ export class OtpService implements IOtpService{
 
     verifyOtp=async(userId: string, type: OtpType, otp: string): Promise<void>=> {
         const existOtp=await this.otpRepository.findOtp(userId,type);
-        log
+        
         if(!existOtp)
         {
             throw new NotFoundError("OTP not found")
@@ -51,6 +51,12 @@ export class OtpService implements IOtpService{
         }
 
         await this.otpRepository.deleteOtp(userId,type)
+    }
+
+    resendOTP=async(userId: string, userType: UserType, email: string, type: OtpType): Promise<void> =>{
+       const ans= await this.createAndSentOtp(userId,userType,email,type)
+       console.log(ans);
+       
     }
 }
 

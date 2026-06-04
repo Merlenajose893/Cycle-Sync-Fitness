@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { trainerAuthService } from "../../services/auth/trainerAuthService";
-import type { RegisterTrainerPayload,LoginTrainerPayload,VerifyTrainerOtpPayload,Trainer } from "../../types/auth.types";
+import type { RegisterTrainerPayload,LoginTrainerPayload,VerifyTrainerOtpPayload,Trainer, ResendTrainerOTPPayload } from "../../types/auth.types";
 export const useTrainerAuth=()=>{
 
     const [loading,setLoading]=useState(false);
@@ -13,7 +13,7 @@ export const useTrainerAuth=()=>{
             const response=await trainerAuthService.registerTrainer(data);
             return response
         } catch (error:unknown) {
-            if(axios.isAxiosError)
+            if(axios.isAxiosError(error))
             {
                 setError(error.response?.data?.message||"Trainer registration failed")
             }
@@ -25,16 +25,16 @@ export const useTrainerAuth=()=>{
         finally{
             setLoading(false);
         }
-    },
+    }
 
-    const verifyTrainerOtp=async (data:VerifyTrainerOtpPayload) => {
+    let verifyTrainerOtp=async (data:VerifyTrainerOtpPayload) => {
         try {
             setLoading(true);
             setError(null);
             const response=await trainerAuthService.verifyTrainerOtp(data);
             return response;
         } catch (error:unknown) {
-            if(error.isAxiosError(error))
+            if(axios.isAxiosError(error))
             {
                 setError(error.response?.data?.message||"OTP verification failed");
             }
@@ -48,6 +48,27 @@ export const useTrainerAuth=()=>{
         }
     }
 
+    const resendOTP=async (data:ResendTrainerOTPPayload) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response=await trainerAuthService.resendOTP(data);
+            return response;
+
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data?.message||"Resend Otp is error")
+            }
+            else{
+                setError("Unexpected Error")
+            }
+            throw error;
+        }
+        finally{
+            setLoading(false)
+        }
+    }
     const loginTrainer=async (data:LoginTrainerPayload) => {
         try {
             setLoading(true)
@@ -109,9 +130,10 @@ export const useTrainerAuth=()=>{
             throw error;
         }
         finally{
-
-        }setLoading(false)
+            
+            setLoading(false)
+        }
     }
 
-    return {registerTrainer,verifyTrainerOtp,loading,error,logoutTrainer,getCurrentTrainer,loginTrainer}
+    return {registerTrainer,verifyTrainerOtp,loading,error,logoutTrainer,getCurrentTrainer,loginTrainer,resendOTP}
 }

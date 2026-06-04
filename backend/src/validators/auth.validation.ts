@@ -16,3 +16,7 @@ export const verifyOtpSchema=z.object({
     userId:z.string(),
     otp:z.string().length(6)
 })
+
+export const resendOtpSchema=z.object({
+    userId:z.string()
+})

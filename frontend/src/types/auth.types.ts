@@ -42,7 +42,9 @@ export interface VerifyOtpPayload{
     userId:string;
     otp:string;
 }
-
+export interface ResendOTPPayload{
+    userId:string;
+}
 export interface RegisterTrainerPayload{
 firstName:string;
 lastName:string;
@@ -61,6 +63,11 @@ export interface VerifyTrainerOtpPayload{
     trainerId:string;
     otp:string;
 }
+
+export interface ResendTrainerOTPPayload{
+    trainerId:string
+}
+
 export interface AdminLoginPayload {
 
   email: string;

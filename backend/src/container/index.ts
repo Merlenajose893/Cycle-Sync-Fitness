@@ -24,6 +24,9 @@ import { UserAuthService }
   import { RefreshTokenRepository }
 from "../repositories/RefreshTokenRepository.js";
 
+import { TrainerAuthService } from "../services/TrainerAuthService.js";
+import { TrainerRepository } from "../repositories/TrainerRepository.js";
+
 container.register(
   TOKENS.IUserRepository,
   {
@@ -70,5 +73,18 @@ container.register(
     useClass: OtpService,
   }
 );
+
+container.register(
+  TOKENS.ITrainerAuthService,
+  {
+    useClass:TrainerAuthService
+  }
+)
+container.register(
+  TOKENS.ITrainerRepository,
+  {
+    useClass:TrainerRepository
+  }
+)
 
 export { container };

@@ -1,7 +1,7 @@
 import type { Request,Response,NextFunction } from "express";
-import type { ZodSchema } from "zod/v3";
+import {z} from "zod"
 import { BadRequestError } from "../errors/index.js";
-export const validate=(schema:ZodSchema)=>{
+export const validate=(schema:z.ZodSchema)=>{
     return(req:Request,res:Response,next:NextFunction):void=>{
         const result=schema.safeParse(req.body)
         if(!result.success)

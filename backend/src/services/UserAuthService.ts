@@ -7,7 +7,7 @@ import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import { TOKENS } from "../container/tokens.js";
 import bcrypt from "bcryptjs";
 import { ConflictError, NotFoundError } from "../errors/index.js";
-import type { LogoutDTO, RegisterUserDTO, VerifyOtpDTO } from "../dtos/auth.dto.js";
+import type { LogoutDTO, RegisterUserDTO, ResendOTPDTO, VerifyOtpDTO } from "../dtos/auth.dto.js";
 import type { IUser } from "../models/User.js";
 import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { LoginDTO } from "../dtos/auth.dto.js";
@@ -67,6 +67,26 @@ verifyEmailOTP=async(data: VerifyOtpDTO,res:Response): Promise<IUser>=> {
 await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
 }
 
+resendOTP=async(data: ResendOTPDTO): Promise<void> =>{
+    const user=await this.userRepository.findById(data.userId)
+    if(!user)
+    {
+        throw new NotFoundError("User not found");
+    }
+
+    if(user.isEmailVerified)
+    {
+        throw new BadRequestError("Email already verified")
+    }
+
+    await this.otpService.resendOTP(
+        user._id.toString(),
+        "user",
+        user.email,
+        "email-verification"
+    )
+}
+
 loginUser=async(data: LoginDTO,res:Response): Promise<IUser>=> {
    const user=await this.userRepository.findByEmail(data.email);
    if(!user)
@@ -91,6 +111,8 @@ await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),r
 logoutuser=async(data: LogoutDTO,res:Response): Promise<IUser> =>{
     await this.tokenService.clearTokens(data.userId,res)
 }
+
+
 
 refreshToken=async(refreshToken: string, res: Response): Promise<void> =>{
     if(!refreshToken)

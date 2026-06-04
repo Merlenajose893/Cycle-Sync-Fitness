@@ -7,5 +7,8 @@ const router=Router();
 const trainerAuthController=container.resolve(TrainerAuthController);
 router.post("/register",validate(registerTrainerSchema),trainerAuthController.registerTrainer);
 router.post("/verify-otp",validate(verifyTrainerOtpSchema),trainerAuthController.verifyTrainerOTP);
+router.post("/resend-otp",trainerAuthController.resendTrainerOTP)
 router.post("/login",validate(loginTrainer),trainerAuthController.loginTrainer);
 router.post("/logout",trainerAuthController.logoutTrainer);
+
+export default router;

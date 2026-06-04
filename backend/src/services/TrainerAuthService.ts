@@ -9,14 +9,15 @@ import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO } from "../dto
 
 import { TOKENS } from "../container/tokens.js";
 import type { Response } from "express";
+import { email } from "zod";
 @injectable()
 export class TrainerAuthService implements ITrainerAuthService{
-constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.OtpService) private otpService:IOtpService ,@inject(TOKENS.TokenService) private tokenService:ITokenService)
+constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.IOtpService) private otpService:IOtpService ,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
 {
 
 }
 
-registerTrainer=async(data: TrainerRegisterDTO): Promise<void>=> {
+registerTrainer=async(data: TrainerRegisterDTO)=> {
     const existingTrainer=await this.trainerRepository.findByEmail(data.email);
     if(existingTrainer)
     {
@@ -31,7 +32,12 @@ throw new ConflictError("Trainer already exists")
         speciality:data.speciality
     })
 
-    await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification")
+    await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification");
+
+    return {
+        _id:trainer._id,
+        email:trainer.email
+    }
 }
 loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
@@ -63,6 +69,26 @@ verifyTrainerOtp=async(data: VerifyTrainerDTO): Promise<void> =>{
     trainer.isEmailVerified=true;
     await this.trainerRepository.save(trainer)
 
+}
+
+resendOTP=async(trainerId: string): Promise<void>=> {
+    const trainer=await this.trainerRepository.findById(trainerId);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer not found")
+    }
+
+    if(trainer.isEmailVerified)
+    {
+        throw new BadRequestError("Emaol already verified")
+    }
+
+    await this.otpService.createAndSentOtp(
+        trainer._id.toString(),
+        "trainer",
+        trainer.email,
+        "email-verification"
+    )
 }
 
 logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {

@@ -1,8 +1,69 @@
-import React from 'react'
-
+import React, { useState } from 'react'
+import { useUserAuth } from '../../hooks/auth/useUserAuth';
 import { Mail, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
+import { useLocation ,useNavigate} from 'react-router-dom';
 
 const VerifyOtp = () => {
+  const navigate=useNavigate();
+  const location=useLocation();
+  const {verifyOtp,loading,resendOTP}=useUserAuth();
+  const email=location.state?.email;
+  const userId=location.state?.userId;
+  const [otp,setOtp]=useState(["","","","","",""]);
+  const [error,setError]=useState("")
+  const handleChange=(value,index)=>{
+    if(!/^\d*$/.test(value)) return;
+    const newOtp=[...otp];
+    newOtp[index]=value;
+    setOtp(newOtp);
+
+    if(value && index<5)
+    {
+      document.getElementById(`otp-${index+1}`)?.focus();
+
+    }
+
+  }
+  const handleSubmit=async (e) => {
+    e.preventDefault();
+    const finalOtp=otp.join("");
+    if(finalOtp.length!==6)
+    {
+      setError("Please enter a valid 6-digit otp")
+      return;
+    }
+    try {
+      setError("");
+      const response=await verifyOtp({
+        userId,
+      
+        otp:finalOtp
+      });
+      console.log(response.data);
+      
+      if(response.success)
+      {
+        navigate("/login");
+
+      }
+      else{
+        setError("Invalid Otp")
+      }
+    } catch (error:any) {
+      setError(error.response?.data?.message||"OTP verification failed")
+    }
+
+  }
+
+  const handleResendOtp=async () => {
+    try {
+      await resendOTP({userId})
+      alert("OTP resend successfully");
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
   return (
     <div className="auth-wrapper">
       <div
@@ -43,48 +104,34 @@ const VerifyOtp = () => {
               <p>
                 We've sent a 6-digit verification code to
                 <br />
-                <strong>name@example.com</strong>
+                <strong>{email}</strong>
               </p>
             </div>
           </div>
-
-          <form>
+          {error && <div></div>}
+          <form onSubmit={handleSubmit}>
             <div className="otp-container">
               <div className="otp-input-wrapper">
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="otp-field"
-                />
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="otp-field"
-                />
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="otp-field"
-                />
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="otp-field"
-                />
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="otp-field"
-                />
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="otp-field"
-                />
-              </div>
+  {otp.map((digit, index) => (
+    <input
+      key={index}
+      id={`otp-${index}`}
+      type="text"
+      maxLength={1}
+      className="otp-field"
+      value={digit}
+      onChange={(e) => handleChange(e.target.value, index)}
+      onKeyDown={(e) => {
+        if (e.key === "Backspace" && !otp[index] && index > 0) {
+          document.getElementById(`otp-${index - 1}`)?.focus();
+        }
+      }}
+    />
+  ))}
+</div>
 
               <button
-                type="button"
+                type="submit"
                 className="btn btn-primary btn-full"
               >
                 Verify Email
@@ -102,7 +149,7 @@ const VerifyOtp = () => {
           >
             <p>
               Didn't receive the code?
-              <button className="resend-btn">
+              <button className="resend-btn" onClick={handleResendOtp}>
                 Click to resend
               </button>
             </p>

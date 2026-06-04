@@ -22,6 +22,12 @@ export class TrainerAuthController{
         await this.trainerAuthService.verifyTrainerOtp(req.body,res);
         successResponse(res,"Trainer email verified",null,HttpStatus.OK)
     }
+
+    resendTrainerOTP=async (req:Request,res:Response) => {
+        const {trainerId}=req.body;
+        await this.trainerAuthService.resendOTP(trainerId);
+        successResponse(res,"OTP resent successfully",null,HttpStatus.OK)
+    }
     loginTrainer=async (req:Request,res:Response):Promise<void> => {
         await this.trainerAuthService.loginTrainer(req.body,res);
         successResponse(res,"Trainer login successful",null,HttpStatus.OK);

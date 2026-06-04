@@ -15,6 +15,10 @@ export interface VerifyOtpDTO{
     otp:string
 }
 
+export interface ResendOTPDTO{
+    userId:string;
+}
+
 export interface LogoutDTO{
     userId:string
 }
