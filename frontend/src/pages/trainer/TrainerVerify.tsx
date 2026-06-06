@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
 import { useNavigate,useLocation } from 'react-router-dom';
 import { Mail, ShieldCheck, RefreshCw, Dumbbell } from 'lucide-react';
@@ -6,9 +6,13 @@ import '../../styles/Auth.css';
 
 
 const TrainerVerifyEmail: React.FC = () => {
-    const {verifyTrainerOtp,resendTrainerOTP,loading}=useTrainerAuth();
+    const {verifyTrainerOtp,resendOTP,loading}=useTrainerAuth();
     const location=useLocation();
     const trainerId=location.state?.trainerId;
+    console.log(trainerId);
+    // console.log(location.state.trainerId);
+    
+    
     const email=location.state?.email;
     const navigate = useNavigate();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -17,6 +21,19 @@ const TrainerVerifyEmail: React.FC = () => {
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+    useEffect(() => {
+
+  if(timer <= 0) return;
+
+  const interval =
+    setInterval(() => {
+      setTimer(prev => prev - 1);
+    },1000);
+
+  return () =>
+    clearInterval(interval);
+
+},[timer]);
     // const email = localStorage.getItem('pendingTrainerVerificationEmail') || 'trainer@cyclesync.ai';
     const handleChange = (index: number, value: string) => {
         if (!/^\d*$/.test(value)) return;
@@ -39,22 +56,40 @@ const TrainerVerifyEmail: React.FC = () => {
 
     const handleResendOtp=async () => {
     try {
-      await resendTrainerOTP({trainerId})
+        console.log(location.state?.trainerId);
+        
+        setIsResending(true);
+      await resendOTP({trainerId})
       alert("OTP resend successfully");
+      setTimer(30);
     } catch (error) {
       console.error(error);
       
     }
+    finally{
+        setIsResending(false)
+    }
   }
 
     const handleVerify = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const code=otp.join("")
+        if(code.length!==6)
+        {
+            setError(true)
+            setErrorMsg("Enter Valid OTP")
+            return;
+        }
         try {
             await verifyTrainerOtp({
                 trainerId,
-                otp
+                otp:code
             })
-        } catch (error) {
-            
+
+            navigate("/trainer/success")
+        } catch (error:any) {
+            setError(true);
+            setErrorMsg(error.response?.data?.message||"OTP verification failed")
         }
     };
 
@@ -177,7 +212,7 @@ const TrainerVerifyEmail: React.FC = () => {
                                 Didn't receive the code?{' '}
                                 <button 
                                     className="resend-btn" 
-                                    onClick={handleResend}
+                                    onClick={handleResendOtp}
                                     disabled={isResending}
                                     style={{
                                         border: 'none',
@@ -197,7 +232,7 @@ const TrainerVerifyEmail: React.FC = () => {
                     </div>
 
                     <p className="auth-footer" style={{ marginTop: '40px', textAlign: 'center', fontSize: '0.85rem' }}>
-                        Incorrect email? <span onClick={() => navigate('/trainer-panel/register')} style={{ color: '#0d9488', fontWeight: '600', cursor: 'pointer' }}>Register again</span>
+                        Incorrect email? <span onClick={() => navigate('/trainer/register')} style={{ color: '#0d9488', fontWeight: '600', cursor: 'pointer' }}>Register again</span>
                     </p>
                 </div>
             </div>

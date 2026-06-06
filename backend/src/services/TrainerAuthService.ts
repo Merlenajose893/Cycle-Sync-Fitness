@@ -73,6 +73,8 @@ verifyTrainerOtp=async(data: VerifyTrainerDTO): Promise<void> =>{
 
 resendOTP=async(trainerId: string): Promise<void>=> {
     const trainer=await this.trainerRepository.findById(trainerId);
+    console.log(trainer);
+    
     if(!trainer)
     {
         throw new NotFoundError("Trainer not found")

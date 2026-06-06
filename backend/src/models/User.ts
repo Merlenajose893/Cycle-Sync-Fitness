@@ -13,7 +13,7 @@ export interface IUser extends Document{
     bodyDetails?:{
         height:number;
         weight:number;
-        dateOfBirth:number;
+        dateOfBirth:Date;
         biologicalSex:string;
     };
 
