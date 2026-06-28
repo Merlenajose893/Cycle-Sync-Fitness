@@ -29,4 +29,10 @@ export const TOKENS = {
 
   IAdminService:
     Symbol.for("IAdminService"),
+
+    IUserOnboardingService:
+    Symbol.for("IUserOnboardingService"),
+
+    ITrainerOnboardingService:
+    Symbol.for("ITrainerOnboardingService")
 };

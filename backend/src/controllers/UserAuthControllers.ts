@@ -4,12 +4,13 @@ import type { IUserAuthService } from "../interfaces/services/IUserAuthService.j
 import { TOKENS } from "../container/tokens.js";
 import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
+import { UnauthorizedError } from "../errors/index.js";
 @injectable()
 
 export class UserAuthController {
     constructor(@inject(TOKENS.IUserAuthService) private userAuthService: IUserAuthService) { }
     registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const result = await this.userAuthService.registerUser(req.body);
+        const result = await this.userAuthService.registerUser(req.body,res);
         successResponse(res, "OTP sent successfully", result, HttpStatus.CREATED)
     }
 
@@ -43,9 +44,13 @@ export class UserAuthController {
 
         const userId =
             req.user?.userId;
+            if(!userId)
+            {
+                throw new UnauthorizedError("User ID is missing")
+            }
 
         await this.userAuthService
-            .logoutuser(userId, res);
+            .logoutuser({userId},res);
 
         successResponse(
 

@@ -34,10 +34,7 @@ throw new ConflictError("Trainer already exists")
 
     await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification");
 
-    return {
-        _id:trainer._id,
-        email:trainer.email
-    }
+    return trainer;
 }
 loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
@@ -59,7 +56,7 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     await this.tokenService.generateAndSetRefreshToken({userId:trainer._id.toString(),role:"trainer"},res)
 
 }
-verifyTrainerOtp=async(data: VerifyTrainerDTO): Promise<void> =>{
+verifyTrainerOtp=async(data: VerifyTrainerDTO,res:Response): Promise<void> =>{
     await this.otpService.verifyOtp(data.trainerId,"email-verification",data.otp);
     const trainer=await this.trainerRepository.findById(data.trainerId);
     if(!trainer)

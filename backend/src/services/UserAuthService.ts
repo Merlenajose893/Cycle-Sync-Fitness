@@ -1,4 +1,5 @@
 import { injectable,inject } from "tsyringe";
+import type { Response } from "express";
 import type { IUserAuthService } from "../interfaces/services/IUserAuthService.js";
 import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
 import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
@@ -65,6 +66,7 @@ verifyEmailOTP=async(data: VerifyOtpDTO,res:Response): Promise<IUser>=> {
     await this.tokenService.generateAndSetAccessToken({userId:user._id.toString(),role:user.role},res)
 
 await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
+return user;
 }
 
 resendOTP=async(data: ResendOTPDTO): Promise<void> =>{
@@ -105,10 +107,10 @@ if(!isPassword)
 }
 await this.tokenService.generateAndSetAccessToken({userId:user._id.toString(),role:user.role},res);
 await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
-
+return user;
 }
 
-logoutuser=async(data: LogoutDTO,res:Response): Promise<IUser> =>{
+logoutuser=async(data: LogoutDTO,res:Response): Promise<void> =>{
     await this.tokenService.clearTokens(data.userId,res)
 }
 

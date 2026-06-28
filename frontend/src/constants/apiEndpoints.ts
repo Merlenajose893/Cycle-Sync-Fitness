@@ -24,26 +24,44 @@ export const API_ENDPOINTS={
       "/api/trainer/resend-otp",
 
     LOGOUT:
-      "/auth/trainer/logout",
+      "/api/trainer/logout",
 
     REFRESH:
-      "/auth/trainer/refresh",
+      "/api/trainer/refresh",
 
     ME:
-      "/auth/trainer/me",
+      "/api/trainer/me",
   },
 
   ADMIN: {
 
   LOGIN:
-    "/auth/admin/login",
+    "/api/admin/login",
 
   USERS:
-    "/admin/users",
+    "/api/users",
 
   TRAINERS:
-    "/admin/trainers",
+    "/api/trainers",
 },
+
+
+USER_ONBOARDING:{
+  STATUS:"/api/onboarding/user/status",
+  BODY_DETAILS:"/api/onboarding/user/body-details",
+  CYCLE_SETUP:"/api/onboarding/user/cycle-setup",
+  GOALS:"/api/onboarding/user/goals",
+  COMPLETE:"/api/onboarding/user/complete",
+},
+
+TRAINER_ONBOARDING:{
+  STATUS:"/api/onboarding/trainer/status",
+  PROFILE:"/api/onboarding/trainer/profile",
+  CERTIFICATIONS:"/api/onboarding/trainer/certifications",
+  PACKAGES:"/api/onboarding/trainer/packages",
+  COMPLETE:"/api/onboarding/trainer/complete"
+
+}
 
 
 

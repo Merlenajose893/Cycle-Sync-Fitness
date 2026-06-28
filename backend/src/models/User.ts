@@ -8,7 +8,8 @@ export interface IUser extends Document{
     role:'user'|'admin'
     avatarUrl?:string
     isEmailVerified:boolean;
-    onboardingComplete:boolean
+    onboardingComplete:boolean;
+    onboardingStep:number;
 
     bodyDetails?:{
         height:number;
@@ -64,21 +65,14 @@ isEmailVerified:{
     type:Boolean,
     default:false
 },
-otpVerification:{
-    type:String
-},
-otpExpires:{
-    type:Date
-},
-passwordResetOtp:{
-    type:String
-},
-passwordResetExpires:{
-    type:Date
-},
+
+
 onboardingComplete:{
     type:Boolean,
     default:false
+},
+onboardingStep:{
+    type:Number
 },
 bodyDetails:{
     height:{type:Number},

@@ -1,0 +1,1 @@
+{"version":3,"file":"ITrainerRepository.d.ts","sourceRoot":"","sources":["ITrainerRepository.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,yBAAyB,CAAC;AACxD,OAAO,KAAK,EAAE,eAAe,EAAE,MAAM,sBAAsB,CAAC;AAC5D,MAAM,WAAY,kBAAmB,SAAQ,eAAe,CAAC,QAAQ,CAAC;IAElE,WAAW,CAAC,KAAK,EAAC,MAAM,GAAE,OAAO,CAAC,QAAQ,GAAC,IAAI,CAAC,CAAA;CAEnD"}

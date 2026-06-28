@@ -20,5 +20,5 @@ export interface ResendOTPDTO{
 }
 
 export interface LogoutDTO{
-    userId:string
+    userId:string;
 }
