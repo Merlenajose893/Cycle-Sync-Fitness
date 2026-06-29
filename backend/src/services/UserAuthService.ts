@@ -8,7 +8,7 @@ import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import { TOKENS } from "../container/tokens.js";
 import bcrypt from "bcryptjs";
 import { ConflictError, NotFoundError } from "../errors/index.js";
-import type { LogoutDTO, RegisterUserDTO, ResendOTPDTO, VerifyOtpDTO } from "../dtos/auth.dto.js";
+import type { ForgotPasswordDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.js";
 import type { IUser } from "../models/User.js";
 import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { LoginDTO } from "../dtos/auth.dto.js";
@@ -123,5 +123,29 @@ refreshToken=async(refreshToken: string, res: Response): Promise<void> =>{
     }
 
     await this.tokenService.refreshTokens(refreshToken,res)
+}
+
+forgotPassword=async (data: ForgotPasswordDTO, res: Response): Promise<void>=> {
+    const user=await this.userRepository.findByEmail(data.email);
+    if(!user)
+    {
+        throw new NotFoundError("User not Found");
+    }
+    await this.otpService.createAndSentOtp(user._id.toString(),"user",user.email,"password-reset");
+}
+verifyResetOtp=async(data: VerifyResetOtpDTO, res: Response): Promise<void> =>{
+    await this.otpService.verifyOtp(data.userId,"password-reset",data.otp)
+}
+resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void>=> {
+    await this.otpService.verifyOtp(data.userId,"password-reset",data.otp);
+    const user=await this.userRepository.findById(data.userId);
+    if(!user)
+    {
+        throw new NotFoundError("User not found");
+    }
+
+    const hashedPassword=await bcrypt.hash(data.newPassword,10);
+    user.password=hashedPassword;
+    await this.userRepository.save(user)
 }
 }

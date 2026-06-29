@@ -21,14 +21,24 @@ const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [selectedPlan, setSelectedPlan] = useState('pro');
-    const [formData, setFormData] = useState({
-        name: '',
-        age: '',
-        gender: '',
-        goals: [] as string[],
-        cycleLength: '',
-        periodLength: ''
+    const [bodyDetails,setBodyDetails]=useState({
+        height:"",
+        weight:"",
+        dateOfBirth:"",
+        biologicalSex:""
     });
+    const [cycleSetup,setCycleSetUp]=useState({
+        averageCycleLength:"",
+        averagePeriodLength:"",
+        lastPeriodStart:"",
+        birthControl:"",
+    });
+    const [goals,setGoals]=useState({
+        primaryGoal:"",
+        targetWeight:"",
+        activityLevel:"",
+    })
+
 
     const steps = [
         { id: 1, title: 'Identity', icon: User, sideTitle: 'Start your journey', sideQuote: '"The most important step is the first one."', sideImage: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=1200' },
@@ -62,7 +72,7 @@ const Onboarding: React.FC = () => {
         }));
     };
 
-    const goals = [
+    const goalOptions = [
         { id: 'CycleSync', label: 'Track Cycle', icon: Activity, color: '#0d9488' },
         { id: 'Weight', label: 'Lose Weight', icon: Heart, color: '#0ea5e9' },
         { id: 'Muscle', label: 'Gain Muscle', icon: Dumbbell, color: '#8b5cf6' },
@@ -100,53 +110,92 @@ const Onboarding: React.FC = () => {
                         {/* Step 1: Identity */}
                         {step === 1 && (
                             <div className="animate-fadeIn">
-                                <h1 className="onboarding-title">Step 1: Your Identity</h1>
-                                <p className="onboarding-p">Let's personalize your dashboard by getting to know you better.</p>
-                                
-                                <div className="form-group" style={{ marginBottom: '24px' }}>
-                                    <label>What should we call you?</label>
-                                    <div className="input-wrapper">
-                                        <User size={18} className="input-icon" />
-                                        <input 
-                                            type="text" 
-                                            placeholder="merlu" 
-                                            value={formData.name} 
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
-                                        />
-                                    </div>
-                                </div>
-
+                                <h1 className="onboarding-title">Welcome back</h1>
+                                <p className="onboarding-p"> Let's personalize your health journey by learning a little more about your body.</p>
                                 <div className="form-group-row">
-                                    <div className="form-group">
-                                        <label>How old are you?</label>
-                                        <div className="input-wrapper">
-                                            <TrendingUp size={18} className="input-icon" />
-                                            <input 
-                                                type="number" 
-                                                placeholder="25" 
-                                                value={formData.age} 
-                                                onChange={(e) => setFormData({ ...formData, age: e.target.value })} 
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Gender Identity</label>
-                                        <div className="input-wrapper">
-                                            <Zap size={18} className="input-icon" style={{ opacity: 0 }} />
-                                            <select 
-                                                className="select-input"
-                                                value={formData.gender} 
-                                                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                                            >
-                                                <option value="">Select Gender</option>
-                                                <option value="female">Female</option>
-                                                <option value="male">Male</option>
-                                                <option value="other">Other</option>
-                                                <option value="prefer-not">Prefer not to say</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+    <div className="form-group">
+        <label>Height (cm)</label>
+
+        <div className="input-wrapper">
+            <TrendingUp size={18} className="input-icon" />
+
+            <input
+                type="number"
+                placeholder="170"
+                value={bodyDetails.height}
+                onChange={(e) =>
+                    setBodyDetails({
+                        ...bodyDetails,
+                        height: e.target.value,
+                    })
+                }
+            />
+        </div>
+    </div>
+
+    <div className="form-group">
+        <label>Weight (kg)</label>
+
+        <div className="input-wrapper">
+            <Heart size={18} className="input-icon" />
+
+            <input
+                type="number"
+                placeholder="60"
+                value={bodyDetails.weight}
+                onChange={(e) =>
+                    setBodyDetails({
+                        ...bodyDetails,
+                        weight: e.target.value,
+                    })
+                }
+            />
+        </div>
+    </div>
+</div>
+
+<div className="form-group-row">
+    <div className="form-group">
+        <label>Date of Birth</label>
+
+        <div className="input-wrapper">
+            <User size={18} className="input-icon" />
+
+            <input
+                type="date"
+                value={bodyDetails.dateOfBirth}
+                onChange={(e) =>
+                    setBodyDetails({
+                        ...bodyDetails,
+                        dateOfBirth: e.target.value,
+                    })
+                }
+            />
+        </div>
+    </div>
+
+    <div className="form-group">
+        <label>Biological Sex</label>
+
+        <div className="input-wrapper">
+            <select
+                className="select-input"
+                value={bodyDetails.biologicalSex}
+                onChange={(e) =>
+                    setBodyDetails({
+                        ...bodyDetails,
+                        biologicalSex: e.target.value,
+                    })
+                }
+            >
+                <option value="">Select</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+            </select>
+        </div>
+    </div>
+</div>
+                                
                             </div>
                         )}
 

@@ -70,5 +70,24 @@ export class UserAuthController {
        successResponse(res,"Token refreshed",null,HttpStatus.OK)
     }
 
+
+    forgotPassword=async (req:Request,res:Response):Promise<void> => {
+        const {email}=req.body;
+        await this.userAuthService.forgotPassword({email},res);
+        successResponse(res,"OTP sent to email for password reset",null,HttpStatus.OK);
+    }
+
+    verifyForgotPasword=async (req:Request,res:Response) => {
+        const {userId,otp}=req.body;
+        await this.userAuthService.verifyResetOtp({userId,otp},res);
+        successResponse(res,"OTP verified successfully",null,HttpStatus.OK);
+        
+    }
+    resetPassword=async (req:Request,res:Response) => {
+        const {userId,otp,newPassword}=req.body;
+        await this.userAuthService.resetPassword({userId,otp,newPassword},res)
+        successResponse(res,"Password reset successfully",null,HttpStatus.OK)
+    }
+
     
 }

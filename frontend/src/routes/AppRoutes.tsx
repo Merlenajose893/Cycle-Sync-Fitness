@@ -5,7 +5,7 @@ import Login from "../pages/user/Login";
 import Dashboard from "../pages/user/Dashboard";
 import VerifyOtp from "../pages/user/VerifyOtp";
 import VerificationSuccess from "../pages/user/VerificationSuccess";
-import Onboarding from "../pages/user/Onboarding";
+// import Onboarding from "../pages/user/Onboarding";
 import TrainerRegister from "../pages/trainer/TrainerRegister";
 import TrainerLogin from "../pages/trainer/TrainerLogin";
 import TrainerVerifyEmail from "../pages/trainer/TrainerVerify";
@@ -23,7 +23,7 @@ function AppRoutes()
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/verify-otp" element={<VerifyOtp/>}/>
             <Route path="/verification-success" element={<VerificationSuccess/>}/>
-            <Route path="/onboarding" element={<Onboarding/>}/>
+            {/* <Route path="/onboarding" element={<Onboarding/>}/> */}
             <Route path="/trainer/register" element={<TrainerRegister/>}/>
             <Route path="/trainer/login" element={<TrainerLogin/>}/>
             <Route path="/trainer/verify-otp" element={<TrainerVerifyEmail/>}/>

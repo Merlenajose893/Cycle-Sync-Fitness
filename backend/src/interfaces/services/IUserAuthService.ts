@@ -1,4 +1,4 @@
-import type { RegisterUserDTO,LoginDTO,VerifyOtpDTO, LogoutDTO, ResendOTPDTO } from "../../dtos/auth.dto.js";
+import type { RegisterUserDTO,LoginDTO,VerifyOtpDTO, LogoutDTO, ResendOTPDTO, ForgotPasswordDTO, VerifyResetOtpDTO, ResetPasswordDTO } from "../../dtos/auth.dto.js";
 import type { Response } from "express";
 import type { IUser } from "../../models/User.js";
 
@@ -8,5 +8,8 @@ export interface IUserAuthService{
     verifyEmailOTP(data:VerifyOtpDTO,res:Response):Promise<IUser>;
     logoutuser(data:LogoutDTO,res:Response):Promise<void>;
     resendOTP(data:ResendOTPDTO,res:Response):Promise<void>;
-    refreshToken(refreshToken:string,res:Response):Promise<void>
+    refreshToken(refreshToken:string,res:Response):Promise<void>;
+    forgotPassword(data:ForgotPasswordDTO,res:Response):Promise<void>;
+    verifyResetOtp(data:VerifyResetOtpDTO,res:Response):Promise<void>;
+    resetPassword(data:ResetPasswordDTO,res:Response):Promise<void>;
 }

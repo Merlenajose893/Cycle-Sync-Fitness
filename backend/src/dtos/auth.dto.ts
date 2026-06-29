@@ -22,3 +22,18 @@ export interface ResendOTPDTO{
 export interface LogoutDTO{
     userId:string;
 }
+
+export interface ForgotPasswordDTO{
+    email:string;
+}
+
+export interface ResetPasswordDTO{
+    userId:string;
+    otp:string;
+    newPassword:string;
+}
+
+export interface VerifyResetOtpDTO{
+    userId:string;
+    otp:string;
+}
