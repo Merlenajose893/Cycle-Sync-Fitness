@@ -1,4 +1,4 @@
-import type { TrainerRegisterDTO, LoginTrainerDTO, VerifyTrainerDTO } from "../../dtos/trainerauth.dto.js";
+import type { TrainerRegisterDTO, LoginTrainerDTO, VerifyTrainerDTO, ForgotPasswordDTO, ResetPasswordDTO } from "../../dtos/trainerauth.dto.js";
 import type { Response } from "express";
 import type { ITrainer } from "../../models/Trainer.js";
 export interface ITrainerAuthService {
@@ -7,5 +7,6 @@ export interface ITrainerAuthService {
     verifyTrainerOtp(data: VerifyTrainerDTO, res: Response): Promise<void>;
     logoutTrainer(trainerId: string, res: Response): Promise<void>;
     resendOTP(trainerId: string): Promise<void>;
+        
 }
 //# sourceMappingURL=ITrainerAuthService.d.ts.map

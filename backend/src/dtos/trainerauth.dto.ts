@@ -16,3 +16,19 @@ export interface VerifyTrainerDTO{
     trainerId:string;
     otp:string;
 }
+
+export interface ForgotPasswordDTO{
+    email:string;
+}
+
+export interface ResetPasswordDTO{
+    userId:string;
+    otp:string;
+    newPassword:string;
+
+}
+export interface ForgotPasswordResponseDTO{
+    userId:string;
+    email:string;
+    message?:string;
+}

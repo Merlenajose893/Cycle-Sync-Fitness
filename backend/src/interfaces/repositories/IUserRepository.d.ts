@@ -5,5 +5,6 @@ export interface IUserRepository extends IBaseRepository<IUser> {
     findById(id: string): Promise<IUser | null>;
     create(data: Partial<IUser>): Promise<IUser>;
     save(user: IUser): Promise<IUser>;
+    
 }
 //# sourceMappingURL=IUserRepository.d.ts.map

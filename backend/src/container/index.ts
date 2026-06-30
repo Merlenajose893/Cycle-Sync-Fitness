@@ -21,6 +21,7 @@ import { EmailService }
 
 import { UserAuthService }
   from "../services/UserAuthService.js";
+  import { AdminService } from "../services/AdminService.js";
   import { RefreshTokenRepository }
 from "../repositories/RefreshTokenRepository.js";
 
@@ -100,6 +101,12 @@ container.register(
   TOKENS.ITrainerOnboardingService,
   {
     useClass:TrainerOnboardingService
+  }
+)
+container.register(
+  TOKENS.IAdminService,
+  {
+    useClass:AdminService
   }
 )
 

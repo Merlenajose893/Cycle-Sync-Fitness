@@ -37,3 +37,8 @@ export interface VerifyResetOtpDTO{
     userId:string;
     otp:string;
 }
+export interface ForgotPasswordResponseDTO{
+    userId:string;
+    email:string;
+    message?:string;
+}

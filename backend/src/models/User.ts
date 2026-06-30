@@ -36,7 +36,7 @@ export interface IUser extends Document{
         planId?:string;
         currentPeriodEnd?:Date;
     }
-
+isDeleted:boolean;
     createdAt:Date;
     updatedAt:Date;
 }
@@ -111,7 +111,7 @@ subscription:{
     },
      
 }
-})
+},{timestamps:true})
 
 
 export const UserModel = mongoose.model<IUser>('User', userSchema);

@@ -5,5 +5,6 @@ export interface IBaseRepository <T extends Document>{
     save(entity:T):Promise<T>;
     deleteById(id:string):Promise<void>;
     findAll(page:number,limit:number):Promise<T[]>;
+    
     // updateById(id:string,update:Partial<T>):Promise<T>;
 }
