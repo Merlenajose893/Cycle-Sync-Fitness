@@ -1,6 +1,6 @@
 import axiosInstance from "../../api/axios";
 import { API_ENDPOINTS } from "../../constants/apiEndpoints";
-import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User,AuthResponse, ResendOTPPayload } from "../../types/auth.types";
+import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User,AuthResponse, ResendOTPPayload,ForgotPasswordPayload, ResetPasswordPayload } from "../../types/auth.types";
 export const userAuthService={
     registerUser:async (data:RegisterUserPayload):Promise<AuthResponse<User>> => {
         console.log(API_ENDPOINTS.USER_AUTH.REGISTER);
@@ -34,11 +34,21 @@ export const userAuthService={
         const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.LOGOUT);
         return response.data;
     },
+    forgotPassword:async (data:ForgotPasswordPayload):Promise<AuthResponse<null>> => {
+        const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.FORGOTPASSWORD,data);
+        return response.data
+    },
+
+    resetPassword:async (data:ResetPasswordPayload):Promise<AuthResponse<null>> => {
+       const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.RESETPASSWORD(data));
+       return response.data; 
+    },
 
     getCurrentUser:async ():Promise<AuthResponse<User>> => {
         const response=await axiosInstance.get(API_ENDPOINTS.USER_AUTH.ME);
         return response.data;
     }
+
 }
 
 console.log(userAuthService.registerUser);

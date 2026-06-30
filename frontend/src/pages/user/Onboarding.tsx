@@ -17,10 +17,12 @@ import {
 } from 'lucide-react';
 import '../../styles/Auth.css';
 
+import { useUserOnboarding } from '../../hooks/onboarding/useUserOnboarding';
+
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
-    const [selectedPlan, setSelectedPlan] = useState('pro');
+    // const [selectedPlan, setSelectedPlan] = useState('pro');
     const [bodyDetails,setBodyDetails]=useState({
         height:"",
         weight:"",
@@ -39,6 +41,8 @@ const Onboarding: React.FC = () => {
         activityLevel:"",
     })
 
+    const [selectedGoals,setSelectedGoals]=useState<string[]>([]);
+    const {loading,error,updateBodyDetails,updateCycleSetUp,updateGoals,completeOnboarding}=useUserOnboarding();
 
     const steps = [
         { id: 1, title: 'Identity', icon: User, sideTitle: 'Start your journey', sideQuote: '"The most important step is the first one."', sideImage: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=1200' },
@@ -48,14 +52,18 @@ const Onboarding: React.FC = () => {
     ];
 
     const currentStepData = steps.find(s => s.id === step)!;
+    
 
-    const handleNext = () => {
-        if (step < 4) {
-            setStep(step + 1);
-        } else {
-            navigate('/app');
+    const handleNext=async () => {
+        try {
+            if(step===1)
+            {
+                await updateBodyDetails(bodyDetails)
+            }
+        } catch (error) {
+            
         }
-    };
+    }
 
     const handleBack = () => {
         if (step > 1) {

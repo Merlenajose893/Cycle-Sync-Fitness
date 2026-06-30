@@ -6,6 +6,13 @@ export interface User{
     role:"user"|"admin";
     isEmailVerified:boolean;
     onboardingComplete:boolean;
+    goals?: {
+    primaryGoal: string;
+  };
+
+  subscription?: {
+    status: string;
+  };
     createdAt:string;
     updatedAt:string;
 }
@@ -19,6 +26,7 @@ export interface Trainer{
     isEmailVerified:boolean;
     createdAt:string;
     updatedAt:string;
+    speciality:string;
 }
 
 export interface AuthResponse<T>{
@@ -45,6 +53,16 @@ export interface VerifyOtpPayload{
 export interface ResendOTPPayload{
     userId:string;
 }
+
+export interface ForgotPasswordPayload{
+    email:string;
+}
+
+export interface ResetPasswordPayload{
+    userId:string;
+    otp:string;
+    newPassword:string;
+}
 export interface RegisterTrainerPayload{
 firstName:string;
 lastName:string;
@@ -53,6 +71,8 @@ password:string;
 confirmPassword:string;
 speciality:string;
 }
+
+
 
 export interface LoginTrainerPayload{
     email:string;
@@ -68,11 +88,6 @@ export interface ResendTrainerOTPPayload{
     trainerId:string
 }
 
-export interface AdminLoginPayload {
 
-  email: string;
-
-  password: string;
-}
 
  

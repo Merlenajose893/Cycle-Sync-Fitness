@@ -1,14 +1,16 @@
 
 export const API_ENDPOINTS={
-    USER_AUTH:{
-        REGISTER:"/api/users/register",
-        LOGIN:"/users/login",
-        VERIFY_OTP:"/api/users/verify-otp",
-        RESEND_OTP:"/api/users/resend-otp",
-        LOGOUT:"/users/logout",
-        REFRESH:"/users/refresh-token",
-        ME:"/users/me"
-    },
+    USER_AUTH: {
+    REGISTER: "/api/users/register",
+    LOGIN: "/api/users/login",
+    VERIFY_OTP: "/api/users/verify-otp",
+    RESEND_OTP: "/api/users/resend-otp",
+    LOGOUT: "/api/users/logout",
+    REFRESH: "/api/users/refresh-token",
+    FORGOTPASSWORD: "/api/users/forgot-password",
+    RESETPASSWORD:"/api/users/reset-password",
+    ME: "/api/users/me"
+},
      TRAINER_AUTH: {
 
     REGISTER:
@@ -36,13 +38,13 @@ export const API_ENDPOINTS={
   ADMIN: {
 
   LOGIN:
-    "/api/admin/login",
+    "/api/admin/admin-login",
 
   USERS:
-    "/api/users",
+    "/api/admin/users",
 
   TRAINERS:
-    "/api/trainers",
+    "/api/admin/trainers",
 },
 
 

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { adminService } from "../../services/auth/adminAuthService";
-import { User,Trainer,AdminLoginPayload } from "../../types/auth.types";
+import type { User,Trainer } from "../../types/auth.types";
+import type  { AdminLoginPayload } from "../../types/admin.types";
 
 export const useAdminAuth=()=>{
     const [loading,setLoading]=useState(false);
