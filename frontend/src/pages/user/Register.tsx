@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/Auth.css';
+import { showToast } from '../../components/common/Toast/Toast';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   User,
@@ -115,6 +116,8 @@ const Register = () => {
                 password: formData.password,
                 confirmPassword: formData.confirmPassword,
             });
+                showToast.success("Account created successfully")
+
 
             navigate("/verify-otp", {
                 state: {

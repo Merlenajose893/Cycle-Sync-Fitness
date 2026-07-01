@@ -1,4 +1,5 @@
 import { BrowserRouter,Routes,Route } from "react-router-dom";
+// import AppLayout from "../layouts/AppLayouts";
 import RegisterPage from "../pages/user/Register";
 import Home from "../pages/user/Home";
 import Login from "../pages/user/Login";
@@ -19,6 +20,7 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboardPage from "../pages/admin/AdminDashboard";
 import ManageUsersPage from "../pages/admin/ManageUsers";
 import ManageTrainersPage from "../pages/admin/ManageTrainer";
+import AppLayout from "../layouts/AppLayouts";
 // import Dashboard from "../pages/user/Dashboard";
 function AppRoutes()
 {
@@ -34,7 +36,10 @@ function AppRoutes()
             <Route path="/reset-password" element={<ResetPasswordPage/>}/>
             <Route path="/verification-success" element={<VerificationSuccess/>}/>
             <Route path="/onboarding" element={<Onboarding/>}/>
+            <Route element={<AppLayout/>}>
+
             <Route path="/app" element={<Dashboard/>}/>
+                </Route> 
             <Route path="/trainer/register" element={<TrainerRegister/>}/>
             <Route path="/trainer/login" element={<TrainerLogin/>}/>
             <Route path="/trainer/verify-otp" element={<TrainerVerifyEmail/>}/>

@@ -13,11 +13,13 @@ export class UserOnboardingControlling{
     {
         try {
             const userId=req.user?.userId!;
+            console.log(userId);
+            
             const result=await this.useronboardingService.getOnboardingStatus(userId);
             successResponse(res,"Onboarding status fetched success",result)
         } catch (error) {
             next(error)
-            console.log(error);
+            console.log("message",error);
             
         }
     }
