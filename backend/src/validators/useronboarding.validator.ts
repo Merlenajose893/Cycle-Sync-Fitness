@@ -1,8 +1,8 @@
 import {z} from "zod"
 export const updateBodyDetailsSchema=z.object({
-    height:z.number().positive("Height must be greater than 0"),
-    weight:z.number().positive("Weight must be greater than 0"),
-    dateOfBirth:z.date(),
+    height:z.coerce.number().positive("Height must be greater than 0"),
+    weight:z.coerce.number().positive("Weight must be greater than 0"),
+    dateOfBirth:z.coerce.date(),
     biologicalSex:z.string().min(1,"Biological sex is required")
 });
 export const updateCycleSetupSchema=z.object({

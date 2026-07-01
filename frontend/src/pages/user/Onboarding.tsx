@@ -134,7 +134,7 @@ const Onboarding: React.FC = () => {
                 onChange={(e) =>
                     setBodyDetails({
                         ...bodyDetails,
-                        height: e.target.value,
+                        height: Number(e.target.value),
                     })
                 }
             />
@@ -154,7 +154,7 @@ const Onboarding: React.FC = () => {
                 onChange={(e) =>
                     setBodyDetails({
                         ...bodyDetails,
-                        weight: e.target.value,
+                        weight: Number(e.target.value),
                     })
                 }
             />
