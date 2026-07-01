@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import {
   ArrowRight, Sparkles, Activity, Shield,
   Zap, Calendar, Smartphone, ChevronRight,
@@ -7,11 +8,14 @@ import {
   TrendingUp, Heart, Waves, BrainCircuit, Dumbbell
 } from 'lucide-react';
 import '../../styles/Landing.css';
+import Header from '../../components/common/Header';
+import Footer from '../../components/common/Footer';
 
 const LandingPage: React.FC = () => {
   return (
     <div className="landing-container">
       {/* ── Hero Section (Glassmorphism & High Contrast) ── */}
+      <Header/>
       <section className="hero-premium">
         <div className="hero-blur-bg"></div>
         <div className="hero-content">
@@ -213,6 +217,7 @@ const LandingPage: React.FC = () => {
             </div>
          </div>
       </section>
+      <Footer/>
     </div>
   );
 };
