@@ -21,11 +21,14 @@ import { EmailService }
 
 import { UserAuthService }
   from "../services/UserAuthService.js";
+  import { AdminService } from "../services/AdminService.js";
   import { RefreshTokenRepository }
 from "../repositories/RefreshTokenRepository.js";
 
 import { TrainerAuthService } from "../services/TrainerAuthService.js";
 import { TrainerRepository } from "../repositories/TrainerRepository.js";
+import { UserOnboardingService } from "../services/UserOnboardingService.js";
+import { TrainerOnboardingService } from "../services/TrainerOnbaordingService.js";
 
 container.register(
   TOKENS.IUserRepository,
@@ -84,6 +87,26 @@ container.register(
   TOKENS.ITrainerRepository,
   {
     useClass:TrainerRepository
+  }
+)
+
+container.register(
+  TOKENS.IUserOnboardingService,
+  {
+    useClass:UserOnboardingService
+  }
+)
+
+container.register(
+  TOKENS.ITrainerOnboardingService,
+  {
+    useClass:TrainerOnboardingService
+  }
+)
+container.register(
+  TOKENS.IAdminService,
+  {
+    useClass:AdminService
   }
 )
 

@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
+import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
 import '../../styles/Auth.css';
 
 const AdminLogin: React.FC = () => {
-    const [showPassword, setShowPassword] = useState(false);
+    const [email,setEmail]=useState("");
+    const [password,setPassword]=useState("");
+    const {adminLogin,loading,error}=useAdminAuth();
     const navigate = useNavigate();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        navigate('/admin');
+        try {
+            await adminLogin({
+                email,password
+            })
+            navigate('/admin');
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
     };
 
     return (
+        
         <div className="auth-wrapper">
+            {error && (
+    <p className="error-message">
+        {error}
+    </p>
+)}
             <div className="auth-container" style={{ justifyContent: 'center' }}>
                 {/* Brand */}
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
@@ -62,9 +80,9 @@ const AdminLogin: React.FC = () => {
                                 <Mail size={18} className="input-icon" />
                                 <input
                                     type="email"
-                                    id="admin-email"
-                                    placeholder="admin@cyclesync.ai"
-                                    required
+                                    value={email}
+                                    onChange={(e)=>setEmail(e.target.value)}
+                                    placeholder='admin@cyclesync.ai'
                                 />
                             </div>
                         </div>
@@ -74,22 +92,23 @@ const AdminLogin: React.FC = () => {
                             <div className="input-wrapper">
                                 <Lock size={18} className="input-icon" />
                                 <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    id="admin-password"
+                                    type={password ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e)=>setPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    required
+                                    
                                 />
                                 <button
                                     type="button"
                                     className="show-password"
-                                    onClick={() => setShowPassword(!showPassword)}
+                                    onClick={() => setPassword(!password)}
                                 >
-                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    {password ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
                         </div>
 
-                        <button type="submit" className="btn btn-full" style={{
+                        <button type="submit" className="btn btn-full"  disabled={loading} style={{
                             padding: '14px',
                             background: 'var(--accent-purple)',
                             color: 'white',
@@ -103,7 +122,7 @@ const AdminLogin: React.FC = () => {
                             marginTop: '8px',
                             transition: 'opacity 0.2s'
                         }}>
-                            Sign In <ArrowRight size={18} />
+                            {loading ? "Signing In...":"Sign In"} <ArrowRight size={18} />
                         </button>
                     </form>
 

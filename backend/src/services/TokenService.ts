@@ -8,12 +8,13 @@ import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefres
 import { UnauthorizedError } from "../errors/index.js";
 import { TOKENS } from "../container/tokens.js";
 import { IdTokenClient } from "google-auth-library";
+import { Types } from "mongoose";
 @injectable()
 export class TokenService implements ITokenService{
     constructor(@inject(TOKENS.IRefreshTokenRepository)
 private refreshTokenRepository:IRefreshTokenRepository
 ){}
-async generateAndSetAccessToken(payload: TokenPayload, res: Response): string {
+async generateAndSetAccessToken(payload: TokenPayload, res: Response): Promise<string> {
     const acessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
     res.cookie("access_token",acessToken,{
         httpOnly:true,
@@ -29,9 +30,9 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
     const tokenHash=await bcrypt.hash(refreshToken,10);
     await this.refreshTokenRepository.create({
         tokenHash,
-        userId:payload.userId,
+        userId:new Types.ObjectId(payload.userId),
         userType:payload.role,
-        expiresAt:Date.now()+7*24*60*60*1000
+        expiresAt:new Date(Date.now()+7*24*60*60*1000)
     });
 
     res.cookie("refreshToken",refreshToken,{
@@ -44,7 +45,7 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
     return refreshToken;
 }
 
-async verifyAccessToken(token: string): TokenPayload {
+async verifyAccessToken(token: string): Promise<TokenPayload> {
     try {
         return jwt.verify(token,process.env.JWT_SECRET as string) as TokenPayload;
         
@@ -53,7 +54,7 @@ async verifyAccessToken(token: string): TokenPayload {
     }
 }
 
-async verifyRefreshToken(token: string): TokenPayload {
+async verifyRefreshToken(token: string): Promise<TokenPayload> {
     try {
         return jwt.verify(token,process.env.JWT_REFRESHTOKEN as string) as TokenPayload;
     } catch  {
@@ -61,9 +62,13 @@ async verifyRefreshToken(token: string): TokenPayload {
     }
 }
 async refreshTokens(refreshToken: string, res: Response): Promise<void> {
-    const payload=this.verifyRefreshToken(refreshToken);
+    const payload=await this.verifyRefreshToken(refreshToken);
     console.log(payload);
     const storedTokens=await this.refreshTokenRepository.findByUserId(payload.userId)
+    if(!storedTokens)
+    {
+        return;
+    }
     let validTokenFound=false;
     for(const tokenDoc of storedTokens)
     {

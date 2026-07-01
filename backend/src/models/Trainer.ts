@@ -24,6 +24,8 @@ export interface ITrainer extends Document {
   avatar?: string;
   bio?: string;
   experience: string;
+  onboardingCompleted:boolean;
+  onboardingSteps:number;
   tags: string[];
   location: string;
   languages: string[];
@@ -50,6 +52,8 @@ const TrainerSchema = new Schema<ITrainer>(
 
     avatar: { type: String },
     bio: { type: String },
+    onboardingSteps:{type:Number,default:1},
+    onboardingCompleted:{type:Boolean,default:false},
     experience: { type: String },
 
     packages: [

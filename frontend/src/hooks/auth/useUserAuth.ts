@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { userAuthService } from "../../services/auth/userAuthService";
-import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload } from "../../types/auth.types";
+import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload, ForgotPasswordPayload, ResetPasswordPayload } from "../../types/auth.types";
 export const useUserAuth=()=>{
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState<string|null>(null);
@@ -83,6 +83,38 @@ export const useUserAuth=()=>{
         }
     }
 
+    const forgotPassword=async (data:ForgotPasswordPayload) => {
+        try {
+            setLoading(true);
+        setError(null);
+        const response=await userAuthService.forgotPassword(data);
+        
+        return response;
+
+        } catch (error:any) {
+            setError(error.response?.data?.message||" Failed to load forgot password");
+            throw error;
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
+    const resetPassword=async (data:ResetPasswordPayload) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response=await userAuthService.resetPassword(data);
+            return response.data
+        } catch (error:any) {
+           setError(error.response?.data?.message||" Failed to Reset password");
+            throw error; 
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
     const getUser=async():Promise<User|null>  => {
         try {
             setLoading(true);
@@ -98,7 +130,7 @@ export const useUserAuth=()=>{
     }
 
     return {
-        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP
+        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP,forgotPassword,resetPassword
     }
 
 

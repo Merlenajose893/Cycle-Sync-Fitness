@@ -12,7 +12,16 @@
     max-width: 540px;
     margin: 0 auto;
 }
+.error {
+    border-color: #ef4444 !important;
+}
 
+.error-text {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
 .auth-brand {
     display: flex;
     align-items: center;

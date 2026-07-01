@@ -1,14 +1,16 @@
 
 export const API_ENDPOINTS={
-    USER_AUTH:{
-        REGISTER:"/api/users/register",
-        LOGIN:"/users/login",
-        VERIFY_OTP:"/api/users/verify-otp",
-        RESEND_OTP:"/api/users/resend-otp",
-        LOGOUT:"/users/logout",
-        REFRESH:"/users/refresh-token",
-        ME:"/users/me"
-    },
+    USER_AUTH: {
+    REGISTER: "/api/users/register",
+    LOGIN: "/api/users/login",
+    VERIFY_OTP: "/api/users/verify-otp",
+    RESEND_OTP: "/api/users/resend-otp",
+    LOGOUT: "/api/users/logout",
+    REFRESH: "/api/users/refresh-token",
+    FORGOTPASSWORD: "/api/users/forgot-password",
+    RESETPASSWORD:"/api/users/reset-password",
+    ME: "/api/users/me"
+},
      TRAINER_AUTH: {
 
     REGISTER:
@@ -24,26 +26,44 @@ export const API_ENDPOINTS={
       "/api/trainer/resend-otp",
 
     LOGOUT:
-      "/auth/trainer/logout",
+      "/api/trainer/logout",
 
     REFRESH:
-      "/auth/trainer/refresh",
+      "/api/trainer/refresh",
 
     ME:
-      "/auth/trainer/me",
+      "/api/trainer/me",
   },
 
   ADMIN: {
 
   LOGIN:
-    "/auth/admin/login",
+    "/api/admin/admin-login",
 
   USERS:
-    "/admin/users",
+    "/api/admin/users",
 
   TRAINERS:
-    "/admin/trainers",
+    "/api/admin/trainers",
 },
+
+
+USER_ONBOARDING:{
+  STATUS:"/api/onboarding/user/status",
+  BODY_DETAILS:"/api/onboarding/user/body-details",
+  CYCLE_SETUP:"/api/onboarding/user/cycle-setup",
+  GOALS:"/api/onboarding/user/goals",
+  COMPLETE:"/api/onboarding/user/complete",
+},
+
+TRAINER_ONBOARDING:{
+  STATUS:"/api/onboarding/trainer/status",
+  PROFILE:"/api/onboarding/trainer/profile",
+  CERTIFICATIONS:"/api/onboarding/trainer/certifications",
+  PACKAGES:"/api/onboarding/trainer/packages",
+  COMPLETE:"/api/onboarding/trainer/complete"
+
+}
 
 
 

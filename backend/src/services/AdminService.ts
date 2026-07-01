@@ -13,7 +13,7 @@ import type { ITrainer } from "../models/Trainer.js";
 
 @injectable()
 export class AdminService implements IAdminService{
-    constructor(@inject(TOKENS.UserRepository)private userRepository:IUserRepository,@inject(TOKENS.TrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.TokenService) private tokenService:ITokenService)
+    constructor(@inject(TOKENS.IUserRepository)private userRepository:IUserRepository,@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
     {
 
         

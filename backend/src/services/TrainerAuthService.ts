@@ -5,7 +5,7 @@ import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import bcrypt from "bcryptjs";
 import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError } from "../errors/index.js";
-import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO } from "../dtos/trainerauth.dto.js";
+import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO } from "../dtos/trainerauth.dto.js";
 
 import { TOKENS } from "../container/tokens.js";
 import type { Response } from "express";
@@ -34,10 +34,7 @@ throw new ConflictError("Trainer already exists")
 
     await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification");
 
-    return {
-        _id:trainer._id,
-        email:trainer.email
-    }
+    return trainer;
 }
 loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
@@ -59,7 +56,7 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     await this.tokenService.generateAndSetRefreshToken({userId:trainer._id.toString(),role:"trainer"},res)
 
 }
-verifyTrainerOtp=async(data: VerifyTrainerDTO): Promise<void> =>{
+verifyTrainerOtp=async(data: VerifyTrainerDTO,res:Response): Promise<void> =>{
     await this.otpService.verifyOtp(data.trainerId,"email-verification",data.otp);
     const trainer=await this.trainerRepository.findById(data.trainerId);
     if(!trainer)
@@ -91,6 +88,33 @@ resendOTP=async(trainerId: string): Promise<void>=> {
         trainer.email,
         "email-verification"
     )
+}
+
+forgotPassword=async(data: ForgotPasswordDTO, res: Response): Promise<ForgotPasswordResponseDTO> =>{
+    const trainer=await this.trainerRepository.findByEmail(data.email);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer Not  found")
+    }
+
+     await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"password-reset");
+     return{
+        
+        userId:trainer._id.toString(),
+        email:trainer.email,
+        message:"Password reset OTP has been sent to your email"
+     }
+}
+
+resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void> =>{
+    await this.otpService.verifyOtp(data.userId,"password-reset",data.otp);
+    const trainer=await this.trainerRepository.findById(data.userId);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer not Found")
+    }
+    trainer.password=await bcrypt.hash(data.newPassword,10);
+    await this.trainerRepository.save(trainer)
 }
 
 logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {
