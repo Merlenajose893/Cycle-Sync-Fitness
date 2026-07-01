@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
@@ -79,6 +80,18 @@ const Login = () => {
     }
   };
 
+=======
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  Mail,
+  Lock,
+  Eye,
+  ArrowRight
+} from "lucide-react";
+
+const Login = () => {
+>>>>>>> 081b12d (changes)
   return (
     <div className="auth-wrapper">
       <div className="auth-container">
@@ -95,11 +108,15 @@ const Login = () => {
             <p>Enter your details to access your dashboard</p>
           </div>
 
+<<<<<<< HEAD
           {errors.submit && (
             <div className="auth-error-message">{errors.submit}</div>
           )}
 
           <form className="auth-form" onSubmit={handleLogin} noValidate>
+=======
+          <form className="auth-form">
+>>>>>>> 081b12d (changes)
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <div className="input-wrapper">
@@ -108,6 +125,7 @@ const Login = () => {
                   type="email"
                   id="email"
                   placeholder="name@example.com"
+<<<<<<< HEAD
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -115,6 +133,10 @@ const Login = () => {
                 />
               </div>
               {errors.email && <p className="error-text">{errors.email}</p>}
+=======
+                />
+              </div>
+>>>>>>> 081b12d (changes)
             </div>
 
             <div className="form-group">
@@ -127,6 +149,7 @@ const Login = () => {
 
               <div className="input-wrapper">
                 <Lock size={18} className="input-icon" />
+<<<<<<< HEAD
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -153,6 +176,29 @@ const Login = () => {
               disabled={loading}
             >
               {loading ? "Signing in..." : "Login"} <ArrowRight size={18} />
+=======
+
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="••••••••"
+                />
+
+                <button
+                  type="button"
+                  className="show-password"
+                >
+                  <Eye size={18} />
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-primary btn-full"
+            >
+              Login <ArrowRight size={18} />
+>>>>>>> 081b12d (changes)
             </button>
           </form>
 
@@ -160,6 +206,10 @@ const Login = () => {
             <span>Or continue with</span>
           </div>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 081b12d (changes)
           <p className="auth-footer">
             Don't have an account?{" "}
             <Link to="/register">
@@ -205,11 +255,19 @@ const Login = () => {
         <div className="auth-side-content">
           <div className="testimonial-micro">
             <div className="stars">★★★★★</div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 081b12d (changes)
             <p>
               "The AI insights predicted my energy dip
               perfectly. I adjusted my workout and felt
               amazing!"
             </p>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 081b12d (changes)
             <p className="user">
               - Emily R., Pro Athlete
             </p>

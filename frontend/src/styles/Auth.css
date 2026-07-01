@@ -12,6 +12,7 @@
     max-width: 540px;
     margin: 0 auto;
 }
+<<<<<<< HEAD
 .error {
     border-color: #ef4444 !important;
 }
@@ -22,6 +23,9 @@
     margin-top: 4px;
     margin-bottom: 0;
 }
+=======
+
+>>>>>>> 081b12d (changes)
 .auth-brand {
     display: flex;
     align-items: center;

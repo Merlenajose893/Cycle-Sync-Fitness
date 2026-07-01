@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
 import { Mail, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
 import { useLocation ,useNavigate} from 'react-router-dom';
+<<<<<<< HEAD
 import { showToast } from '../../components/common/Toast/Toast';
+=======
+>>>>>>> 081b12d (changes)
 
 const VerifyOtp = () => {
   const navigate=useNavigate();
@@ -44,8 +47,12 @@ const VerifyOtp = () => {
       
       if(response.success)
       {
+<<<<<<< HEAD
         showToast.success("Otp is verified")
         navigate("/onboarding");
+=======
+        navigate("/login");
+>>>>>>> 081b12d (changes)
 
       }
       else{

@@ -1,5 +1,8 @@
 import { injectable,inject } from "tsyringe";
+<<<<<<< HEAD
 import type { Response } from "express";
+=======
+>>>>>>> 081b12d (changes)
 import type { IUserAuthService } from "../interfaces/services/IUserAuthService.js";
 import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
 import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
@@ -8,7 +11,11 @@ import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import { TOKENS } from "../container/tokens.js";
 import bcrypt from "bcryptjs";
 import { ConflictError, NotFoundError } from "../errors/index.js";
+<<<<<<< HEAD
 import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.js";
+=======
+import type { LogoutDTO, RegisterUserDTO, ResendOTPDTO, VerifyOtpDTO } from "../dtos/auth.dto.js";
+>>>>>>> 081b12d (changes)
 import type { IUser } from "../models/User.js";
 import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { LoginDTO } from "../dtos/auth.dto.js";
@@ -66,7 +73,10 @@ verifyEmailOTP=async(data: VerifyOtpDTO,res:Response): Promise<IUser>=> {
     await this.tokenService.generateAndSetAccessToken({userId:user._id.toString(),role:user.role},res)
 
 await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
+<<<<<<< HEAD
 return user;
+=======
+>>>>>>> 081b12d (changes)
 }
 
 resendOTP=async(data: ResendOTPDTO): Promise<void> =>{
@@ -107,10 +117,17 @@ if(!isPassword)
 }
 await this.tokenService.generateAndSetAccessToken({userId:user._id.toString(),role:user.role},res);
 await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
+<<<<<<< HEAD
 return user;
 }
 
 logoutuser=async(data: LogoutDTO,res:Response): Promise<void> =>{
+=======
+
+}
+
+logoutuser=async(data: LogoutDTO,res:Response): Promise<IUser> =>{
+>>>>>>> 081b12d (changes)
     await this.tokenService.clearTokens(data.userId,res)
 }
 
@@ -124,6 +141,7 @@ refreshToken=async(refreshToken: string, res: Response): Promise<void> =>{
 
     await this.tokenService.refreshTokens(refreshToken,res)
 }
+<<<<<<< HEAD
 
 forgotPassword=async (data: ForgotPasswordDTO, res: Response): Promise<ForgotPasswordResponseDTO>=> {
     const user=await this.userRepository.findByEmail(data.email);
@@ -155,3 +173,6 @@ resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void>=> {
     await this.userRepository.save(user)
 }
 }
+=======
+}
+>>>>>>> 081b12d (changes)

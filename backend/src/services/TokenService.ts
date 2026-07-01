@@ -8,13 +8,20 @@ import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefres
 import { UnauthorizedError } from "../errors/index.js";
 import { TOKENS } from "../container/tokens.js";
 import { IdTokenClient } from "google-auth-library";
+<<<<<<< HEAD
 import { Types } from "mongoose";
+=======
+>>>>>>> 081b12d (changes)
 @injectable()
 export class TokenService implements ITokenService{
     constructor(@inject(TOKENS.IRefreshTokenRepository)
 private refreshTokenRepository:IRefreshTokenRepository
 ){}
+<<<<<<< HEAD
 async generateAndSetAccessToken(payload: TokenPayload, res: Response): Promise<string> {
+=======
+async generateAndSetAccessToken(payload: TokenPayload, res: Response): string {
+>>>>>>> 081b12d (changes)
     const acessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
     res.cookie("access_token",acessToken,{
         httpOnly:true,
@@ -30,9 +37,15 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
     const tokenHash=await bcrypt.hash(refreshToken,10);
     await this.refreshTokenRepository.create({
         tokenHash,
+<<<<<<< HEAD
         userId:new Types.ObjectId(payload.userId),
         userType:payload.role,
         expiresAt:new Date(Date.now()+7*24*60*60*1000)
+=======
+        userId:payload.userId,
+        userType:payload.role,
+        expiresAt:Date.now()+7*24*60*60*1000
+>>>>>>> 081b12d (changes)
     });
 
     res.cookie("refreshToken",refreshToken,{
@@ -45,7 +58,11 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
     return refreshToken;
 }
 
+<<<<<<< HEAD
 async verifyAccessToken(token: string): Promise<TokenPayload> {
+=======
+async verifyAccessToken(token: string): TokenPayload {
+>>>>>>> 081b12d (changes)
     try {
         return jwt.verify(token,process.env.JWT_SECRET as string) as TokenPayload;
         
@@ -54,7 +71,11 @@ async verifyAccessToken(token: string): Promise<TokenPayload> {
     }
 }
 
+<<<<<<< HEAD
 async verifyRefreshToken(token: string): Promise<TokenPayload> {
+=======
+async verifyRefreshToken(token: string): TokenPayload {
+>>>>>>> 081b12d (changes)
     try {
         return jwt.verify(token,process.env.JWT_REFRESHTOKEN as string) as TokenPayload;
     } catch  {
@@ -62,6 +83,7 @@ async verifyRefreshToken(token: string): Promise<TokenPayload> {
     }
 }
 async refreshTokens(refreshToken: string, res: Response): Promise<void> {
+<<<<<<< HEAD
     const payload=await this.verifyRefreshToken(refreshToken);
     console.log(payload);
     const storedTokens=await this.refreshTokenRepository.findByUserId(payload.userId)
@@ -69,6 +91,11 @@ async refreshTokens(refreshToken: string, res: Response): Promise<void> {
     {
         return;
     }
+=======
+    const payload=this.verifyRefreshToken(refreshToken);
+    console.log(payload);
+    const storedTokens=await this.refreshTokenRepository.findByUserId(payload.userId)
+>>>>>>> 081b12d (changes)
     let validTokenFound=false;
     for(const tokenDoc of storedTokens)
     {

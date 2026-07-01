@@ -8,8 +8,12 @@ export interface IUser extends Document{
     role:'user'|'admin'
     avatarUrl?:string
     isEmailVerified:boolean;
+<<<<<<< HEAD
     onboardingComplete:boolean;
     onboardingStep:number;
+=======
+    onboardingComplete:boolean
+>>>>>>> 081b12d (changes)
 
     bodyDetails?:{
         height:number;
@@ -36,7 +40,11 @@ export interface IUser extends Document{
         planId?:string;
         currentPeriodEnd?:Date;
     }
+<<<<<<< HEAD
 isDeleted:boolean;
+=======
+
+>>>>>>> 081b12d (changes)
     createdAt:Date;
     updatedAt:Date;
 }
@@ -65,15 +73,33 @@ isEmailVerified:{
     type:Boolean,
     default:false
 },
+<<<<<<< HEAD
 
 
+=======
+otpVerification:{
+    type:String
+},
+otpExpires:{
+    type:Date
+},
+passwordResetOtp:{
+    type:String
+},
+passwordResetExpires:{
+    type:Date
+},
+>>>>>>> 081b12d (changes)
 onboardingComplete:{
     type:Boolean,
     default:false
 },
+<<<<<<< HEAD
 onboardingStep:{
     type:Number
 },
+=======
+>>>>>>> 081b12d (changes)
 bodyDetails:{
     height:{type:Number},
     weight:{type:Number},
@@ -111,7 +137,11 @@ subscription:{
     },
      
 }
+<<<<<<< HEAD
 },{timestamps:true})
+=======
+})
+>>>>>>> 081b12d (changes)
 
 
 export const UserModel = mongoose.model<IUser>('User', userSchema);

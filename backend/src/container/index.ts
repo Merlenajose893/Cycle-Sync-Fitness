@@ -21,14 +21,20 @@ import { EmailService }
 
 import { UserAuthService }
   from "../services/UserAuthService.js";
+<<<<<<< HEAD
   import { AdminService } from "../services/AdminService.js";
+=======
+>>>>>>> 081b12d (changes)
   import { RefreshTokenRepository }
 from "../repositories/RefreshTokenRepository.js";
 
 import { TrainerAuthService } from "../services/TrainerAuthService.js";
 import { TrainerRepository } from "../repositories/TrainerRepository.js";
+<<<<<<< HEAD
 import { UserOnboardingService } from "../services/UserOnboardingService.js";
 import { TrainerOnboardingService } from "../services/TrainerOnbaordingService.js";
+=======
+>>>>>>> 081b12d (changes)
 
 container.register(
   TOKENS.IUserRepository,
@@ -90,6 +96,7 @@ container.register(
   }
 )
 
+<<<<<<< HEAD
 container.register(
   TOKENS.IUserOnboardingService,
   {
@@ -110,4 +117,6 @@ container.register(
   }
 )
 
+=======
+>>>>>>> 081b12d (changes)
 export { container };

@@ -6,6 +6,7 @@ export interface User{
     role:"user"|"admin";
     isEmailVerified:boolean;
     onboardingComplete:boolean;
+<<<<<<< HEAD
     goals?: {
     primaryGoal: string;
   };
@@ -13,6 +14,8 @@ export interface User{
   subscription?: {
     status: string;
   };
+=======
+>>>>>>> 081b12d (changes)
     createdAt:string;
     updatedAt:string;
 }
@@ -26,7 +29,10 @@ export interface Trainer{
     isEmailVerified:boolean;
     createdAt:string;
     updatedAt:string;
+<<<<<<< HEAD
     speciality:string;
+=======
+>>>>>>> 081b12d (changes)
 }
 
 export interface AuthResponse<T>{
@@ -53,6 +59,7 @@ export interface VerifyOtpPayload{
 export interface ResendOTPPayload{
     userId:string;
 }
+<<<<<<< HEAD
 
 export interface ForgotPasswordPayload{
     email:string;
@@ -63,6 +70,8 @@ export interface ResetPasswordPayload{
     otp:string;
     newPassword:string;
 }
+=======
+>>>>>>> 081b12d (changes)
 export interface RegisterTrainerPayload{
 firstName:string;
 lastName:string;
@@ -72,8 +81,11 @@ confirmPassword:string;
 speciality:string;
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 081b12d (changes)
 export interface LoginTrainerPayload{
     email:string;
     password:string;
@@ -88,6 +100,15 @@ export interface ResendTrainerOTPPayload{
     trainerId:string
 }
 
+<<<<<<< HEAD
 
+=======
+export interface AdminLoginPayload {
+
+  email: string;
+
+  password: string;
+}
+>>>>>>> 081b12d (changes)
 
  

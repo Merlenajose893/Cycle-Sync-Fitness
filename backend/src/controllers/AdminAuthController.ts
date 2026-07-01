@@ -1,4 +1,5 @@
 import type { Request,Response,NextFunction } from "express";
+<<<<<<< HEAD
 import { container, inject,injectable } from "tsyringe";
 import { successResponse } from "../utils/response.js";
 import type { IAdminService } from "../interfaces/services/IAdminService.js";
@@ -39,3 +40,6 @@ import { HttpStatus } from "../constants/HttpStatus.js";
         }
     }
 
+=======
+import { container } from "tsyringe";
+>>>>>>> 081b12d (changes)

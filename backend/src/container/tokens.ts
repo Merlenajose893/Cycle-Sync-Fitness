@@ -29,6 +29,7 @@ export const TOKENS = {
 
   IAdminService:
     Symbol.for("IAdminService"),
+<<<<<<< HEAD
 
     IUserOnboardingService:
     Symbol.for("IUserOnboardingService"),
@@ -37,4 +38,6 @@ export const TOKENS = {
     Symbol.for("ITrainerOnboardingService")
     // IAdminService: Symbol.for("IAdminService"),
 
+=======
+>>>>>>> 081b12d (changes)
 };
