@@ -38,7 +38,7 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
 
         userId:new Types.ObjectId(payload.userId),
         userType:payload.role,
-        expiresAt:new Date(Date.now()+7*24*60*60*1000)
+        expiresAt:new Date(Date.now()+7*24*60*60*1000),
         userId:payload.userId,
         userType:payload.role,
         expiresAt:Date.now()+7*24*60*60*1000
@@ -56,7 +56,7 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
 }
 
 
-async verifyAccessToken(token: string): Promise<TokenPayload> {
+
 
 async verifyAccessToken(token: string): TokenPayload {
 
@@ -69,7 +69,7 @@ async verifyAccessToken(token: string): TokenPayload {
 }
 
 
-async verifyRefreshToken(token: string): Promise<TokenPayload> {
+
 
 async verifyRefreshToken(token: string): TokenPayload {
 
@@ -88,10 +88,7 @@ async refreshTokens(refreshToken: string, res: Response): Promise<void> {
         return;
     }
 
-    const payload=this.verifyRefreshToken(refreshToken);
-    console.log(payload);
-    const storedTokens=await this.refreshTokenRepository.findByUserId(payload.userId)
-
+    
     let validTokenFound=false;
     for(const tokenDoc of storedTokens)
     {

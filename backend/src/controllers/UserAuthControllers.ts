@@ -15,7 +15,7 @@ export class UserAuthController {
 
         const result = await this.userAuthService.registerUser(req.body,res);
 
-        const result = await this.userAuthService.registerUser(req.body);
+        
 
         successResponse(res, "OTP sent successfully", result, HttpStatus.CREATED)
     }

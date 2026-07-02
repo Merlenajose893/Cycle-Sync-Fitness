@@ -1,5 +1,5 @@
 import type { Request,Response,NextFunction } from "express";
-<<<<<<< HEAD
+
 import { container, inject,injectable } from "tsyringe";
 import { successResponse } from "../utils/response.js";
 import type { IAdminService } from "../interfaces/services/IAdminService.js";

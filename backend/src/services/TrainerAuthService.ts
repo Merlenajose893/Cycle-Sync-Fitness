@@ -139,3 +139,4 @@ logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {
 }
 
 }
+}
