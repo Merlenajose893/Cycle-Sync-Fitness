@@ -4,6 +4,7 @@ export interface IUserRepository extends IBaseRepository<IUser>{
 findByEmail(email:string):Promise<IUser|null>;
 findById(id:string):Promise<IUser|null>
 create(data:Partial<IUser>):Promise<IUser>;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 save(user:IUser):Promise<IUser>;
 findByGoogleId(googleId:string):Promise<IUser|null>
@@ -16,3 +17,8 @@ save(user:IUser):Promise<IUser|null>;
 softDelete(id:string):Promise<IUser>;
 }
 >>>>>>> Stashed changes
+=======
+
+save(user:IUser):Promise<IUser>;
+softDelete(id:string):Promise<IUser>
+>>>>>>> develop
