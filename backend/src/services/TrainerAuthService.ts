@@ -8,7 +8,7 @@ import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError } from "
 
 import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO } from "../dtos/trainerauth.dto.js";
 
-import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO } from "../dtos/trainerauth.dto.js";
+
 
 
 import { TOKENS } from "../container/tokens.js";
@@ -41,10 +41,7 @@ throw new ConflictError("Trainer already exists")
 
     return trainer;
 
-    return {
-        _id:trainer._id,
-        email:trainer.email
-    }
+   
 
 }
 loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
@@ -68,9 +65,8 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
 
 }
 
-verifyTrainerOtp=async(data: VerifyTrainerDTO,res:Response): Promise<void> =>{
 
-verifyTrainerOtp=async(data: VerifyTrainerDTO): Promise<void> =>{
+verifyTrainerOtp=async(data: VerifyTrainerDTO,res:Response): Promise<void> =>{
 
     await this.otpService.verifyOtp(data.trainerId,"email-verification",data.otp);
     const trainer=await this.trainerRepository.findById(data.trainerId);
@@ -139,4 +135,4 @@ logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {
 }
 
 }
-}
+

@@ -9,7 +9,6 @@ export interface IUser extends Document{
     avatarUrl?:string
     isEmailVerified:boolean;
     googleId?:string;
-    onboardingComplete:boolean;
     onboardingStep:number;
     onboardingComplete:boolean
 
@@ -74,18 +73,6 @@ isEmailVerified:{
     default:false
 },
 
-otpVerification:{
-    type:String
-},
-otpExpires:{
-    type:Date
-},
-passwordResetOtp:{
-    type:String
-},
-passwordResetExpires:{
-    type:Date
-},
 
 onboardingComplete:{
     type:Boolean,

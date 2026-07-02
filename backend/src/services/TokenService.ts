@@ -18,7 +18,7 @@ private refreshTokenRepository:IRefreshTokenRepository
 
 
 
-async generateAndSetAccessToken(payload: TokenPayload, res: Response): string {
+async generateAndSetAccessToken(payload: TokenPayload, res: Response): Promise<string> {
 
     const acessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
     res.cookie("access_token",acessToken,{
@@ -39,9 +39,7 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
         userId:new Types.ObjectId(payload.userId),
         userType:payload.role,
         expiresAt:new Date(Date.now()+7*24*60*60*1000),
-        userId:payload.userId,
-        userType:payload.role,
-        expiresAt:Date.now()+7*24*60*60*1000
+        
 
     });
 
@@ -58,7 +56,7 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
 
 
 
-async verifyAccessToken(token: string): TokenPayload {
+async verifyAccessToken(token: string): Promise<TokenPayload> {
 
     try {
         return jwt.verify(token,process.env.JWT_SECRET as string) as TokenPayload;
@@ -71,7 +69,7 @@ async verifyAccessToken(token: string): TokenPayload {
 
 
 
-async verifyRefreshToken(token: string): TokenPayload {
+async verifyRefreshToken(token: string): Promise<TokenPayload> {
 
     try {
         return jwt.verify(token,process.env.JWT_REFRESHTOKEN as string) as TokenPayload;

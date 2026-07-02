@@ -4,7 +4,7 @@ import type { IUserRepository } from "../interfaces/repositories/IUserRepository
 import type  { IDashboardService } from "../interfaces/services/IDashboardService.js";
 import { NotFoundError } from "../errors/index.js";
 import type { DashboardResponseDTO } from "../dtos/dashboard.dto.js";
-@injectable();
+@injectable()
 export class DashboardService implements IDashboardService{
     constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository)
     {}

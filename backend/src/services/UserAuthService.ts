@@ -13,7 +13,7 @@ import { ConflictError, NotFoundError } from "../errors/index.js";
 
 import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.js";
 
-import type { LogoutDTO, RegisterUserDTO, ResendOTPDTO, VerifyOtpDTO } from "../dtos/auth.dto.js";
+
 
 import type { IUser } from "../models/User.js";
 import type { IOtpService } from "../interfaces/services/IOtpService.js";
@@ -107,6 +107,10 @@ if(!user.isEmailVerified)
 {
     throw new BadRequestError("Email not verified")
 }
+if(!user.password)
+{
+    throw new UnauthorizedError("Password not found");
+}
 const isPassword=await bcrypt.compare(data.password,user.password);
 
 if(!isPassword)
@@ -119,12 +123,9 @@ await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),r
 return user;
 }
 
+
+
 logoutuser=async(data: LogoutDTO,res:Response): Promise<void> =>{
-
-
-}
-
-logoutuser=async(data: LogoutDTO,res:Response): Promise<IUser> =>{
 
     await this.tokenService.clearTokens(data.userId,res)
 }

@@ -60,8 +60,6 @@ export class UserAuthController {
             .logoutuser({userId},res);
 
 
-        await this.userAuthService
-            .logoutuser(userId, res);
 
 
         successResponse(
@@ -90,7 +88,7 @@ export class UserAuthController {
 
     verifyForgotPasword=async (req:Request,res:Response) => {
         const {userId,otp}=req.body;
-        await this.userAuthService.verifyResetOtp({userId,otp},res);
+        // await this.userAuthService.verifyResetOtp({userId,otp},res);
         successResponse(res,"OTP verified successfully",null,HttpStatus.OK);
         
     }

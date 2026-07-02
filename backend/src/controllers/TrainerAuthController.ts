@@ -40,8 +40,6 @@ export class TrainerAuthController{
             throw new UnauthorizedError("Trainer ID is missing")
         }
         await this.trainerAuthService.logoutTrainer(trainerId,res)
-        const traineriD=req.user?.userId;
-        await this.trainerAuthService.logoutTrainer(traineriD,res)
 
         successResponse(res,"Trainer logout successfull",null,HttpStatus.OK)
     }

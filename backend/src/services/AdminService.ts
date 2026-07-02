@@ -16,7 +16,7 @@ export class AdminService implements IAdminService{
 
     constructor(@inject(TOKENS.IUserRepository)private userRepository:IUserRepository,@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
 
-    constructor(@inject(TOKENS.UserRepository)private userRepository:IUserRepository,@inject(TOKENS.TrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.TokenService) private tokenService:ITokenService)
+    // constructor(@inject(TOKENS.UserRepository)private userRepository:IUserRepository,@inject(TOKENS.TrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.TokenService) private tokenService:ITokenService)
 
     {
 
@@ -33,7 +33,7 @@ export class AdminService implements IAdminService{
         {
             throw new UnauthorizedError("Access Denied")
         }
-        const isPasswordValid=await bcrypt.compare(data.password,admin.password);
+        const isPasswordValid=await bcrypt.compare(data.password,admin.password!);
         if(!isPasswordValid)
         {
             throw new UnauthorizedError("Invalid credentials")

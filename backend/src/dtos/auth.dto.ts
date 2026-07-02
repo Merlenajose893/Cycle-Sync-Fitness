@@ -41,6 +41,6 @@ export interface ForgotPasswordResponseDTO{
     userId:string;
     email:string;
     message?:string;
-    userId:string
+    
 
 }

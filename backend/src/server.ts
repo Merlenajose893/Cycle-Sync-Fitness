@@ -8,7 +8,7 @@ import connectDB from './config/db.js'
 import type {Request,Response} from 'express'
 import userAuthRoutes from './routes/userAuth.routes.js'
 import trainerRoutes from './routes/trainerAuth.routes.js'
-import onboardingRoutes from './routes/onboardingRoutes.js'
+import onboardingRoutes from './routes/onBoardingRoutes.js'
 import adminRoutes from './routes/adminAuthRoutes.js'
 const  app=express();
 connectDB();
