@@ -21,7 +21,7 @@ import { useUserAuth } from '../../hooks/auth/useUserAuth';
 const Register = () => {
     const navigate = useNavigate();
     const { registerUser, loading } = useUserAuth();
-
+    
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -29,7 +29,7 @@ const Register = () => {
         password: "",
         confirmPassword: ""
     });
-
+    
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -65,24 +65,23 @@ const Register = () => {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-        
+       
         Object.keys(formData).forEach(key => {
             const error = validateField(key, (formData as any)[key]);
             if (error) newErrors[key] = error;
         });
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        
+       
         setFormData(prev => ({
             ...prev,
             [id]: value,
         }));
-
+        
         // Clear error when user starts typing
         if (errors[id]) {
             setErrors(prev => ({ ...prev, [id]: '' }));
@@ -92,7 +91,7 @@ const Register = () => {
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const { id } = e.target;
         setTouched(prev => ({ ...prev, [id]: true }));
-        
+       
         const error = validateField(id, (formData as any)[id]);
         if (error) {
             setErrors(prev => ({ ...prev, [id]: error }));
@@ -101,20 +100,24 @@ const Register = () => {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        
         // Validate all fields on submit
         if (!validateForm()) {
-            // Mark all fields as touched to show errors
             const allTouched = Object.keys(formData).reduce((acc, key) => {
                 acc[key] = true;
                 return acc;
             }, {} as Record<string, boolean>);
             setTouched(allTouched);
+            
+            showToast.error("Please fix the errors in the form");
             return;
         }
 
+        const toastId = showToast.loading("Creating your account...");
+
         try {
             setErrors({});
+            
             const response = await registerUser({
                 firstName: formData.firstName.trim(),
                 lastName: formData.lastName.trim(),
@@ -122,9 +125,10 @@ const Register = () => {
                 password: formData.password,
                 confirmPassword: formData.confirmPassword,
             });
-                showToast.success("Account created successfully")
 
-
+            showToast.dismiss(toastId);
+            showToast.success("Account created successfully! 🎉");
+            
             navigate("/verify-otp", {
                 state: {
                     userId: response.data._id,
@@ -132,8 +136,14 @@ const Register = () => {
                 },
             });
         } catch (error: any) {
+            showToast.dismiss(toastId);
+            
+            const errorMessage = error.response?.data?.message || 
+                               "Registration failed. Please try again.";
+            
             console.error(error);
-            setErrors({ submit: error.response?.data?.message || "Registration failed. Please try again." });
+            setErrors({ submit: errorMessage });
+            showToast.error(errorMessage);
         }
     };
 
@@ -144,7 +154,7 @@ const Register = () => {
                     <div className="auth-logo">C</div>
                     <h1>CycleSync <span>AI</span></h1>
                 </div>
-
+                
                 <div className="auth-card animate-slideUp">
                     <div className="auth-header">
                         <h2>Create an account</h2>
@@ -152,9 +162,9 @@ const Register = () => {
                     </div>
 
                     {/* General Error */}
-                    {(errors.submit || Object.keys(errors).length > 0) && (
+                    {(errors.submit) && (
                         <div className="auth-error-message">
-                            {errors.submit || "Please fix the errors below"}
+                            {errors.submit}
                         </div>
                     )}
 
@@ -176,7 +186,6 @@ const Register = () => {
                                 </div>
                                 {errors.firstName && <p className="error-text">{errors.firstName}</p>}
                             </div>
-
                             <div className="form-group">
                                 <label htmlFor="lastName">Last Name</label>
                                 <div className="input-wrapper">
@@ -278,15 +287,12 @@ const Register = () => {
                     <div className="premium-badge">
                         <Zap size={14} /> AI-Powered Performance
                     </div>
-
                     <h2 className="auth-side-quote">
                         "The first fitness app that actually listens to your body's biology."
                     </h2>
-
                     <p className="auth-side-subtitle">
                         Join 10,000+ women optimizing their training with AI cycle-syncing.
                     </p>
-
                     <ul className="premium-perks">
                         <li><CheckCircle2 size={18} /> Phase-Specific Workout Plans</li>
                         <li><CheckCircle2 size={18} /> Real-time Metabolic Tracking</li>

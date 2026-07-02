@@ -7,6 +7,7 @@ import { registerUserSchema,loginSchema,verifyOtpSchema,resendOtpSchema } from "
 const router=Router();
 const userAuthController=container.resolve(UserAuthController);
 router.post('/register',validate(registerUserSchema),userAuthController.registerUser);
+router.post('/google-signin',userAuthController.googleSignIn);
 router.post('/login',validate(loginSchema),userAuthController.loginUser)
 router.post("/verify-otp",validate(verifyOtpSchema),userAuthController.verifyUserOtp);
 router.post('/resend-otp',validate(resendOtpSchema),userAuthController.resendOtp)

@@ -27,6 +27,12 @@ export class UserAuthController {
 
     }
 
+    googleSignIn=async (req:Request,res:Response):Promise<void> => {
+        const {idToken}=req.body;
+        const result=await this.userAuthService.googleSignIn(idToken,res);
+        successResponse(res,"Google authentication working",result,HttpStatus.OK)
+    }
+
     loginUser = async (req: Request, res: Response): Promise<void> => {
         await this.userAuthService.loginUser(req.body, res);
         successResponse(res, "Login Successfull", null, HttpStatus.OK)

@@ -20,6 +20,7 @@ import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { LoginDTO } from "../dtos/auth.dto.js";
 // import type { IUser } from "../models/User.js";
 import { UnauthorizedError,BadRequestError } from "../errors/index.js";
+import { OAuth2Client } from "google-auth-library";
 @injectable()
 export class UserAuthService implements IUserAuthService{
     constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository,
@@ -76,7 +77,55 @@ await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),r
 return user;
 
 }
+googleSignIn=async (idToken:string,res:Response):Promise<IUser>=>{
+const client=new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const ticket=await client.verifyIdToken({
+    idToken,audience:process.env.GOOGLE_CLIENT_ID!,
+});
+const payload=ticket.getPayload();
+if(!payload)
+{
+    throw new BadRequestError("Invalid Google token");
+}
+const {sub:googleId,email,given_name,family_name,picture,email_verified}=payload;
+if(!email ||!googleId)
+{
+    throw new BadRequestError("Google token missing email")
+}
+if(!email_verified)
+{
+    throw new BadRequestError("Google Email is not verified")
+}
+let user=await this.userRepository.findByGoogleId(googleId)
+if(!user)
+{
+    user=await this.userRepository.findByEmail(email);
 
+    if(user)
+    {
+        user.googleId=googleId;
+        user.isEmailVerified=true;
+        await this.userRepository.save(user);
+
+    }
+    else
+    {
+        user=await this.userRepository.create({
+            firstName:given_name||"User",
+            lastName:family_name||"",
+            email:email,
+            googleId:googleId,
+            isEmailVerified:true,
+            avatarUrl:picture!,
+
+        })
+    }
+    
+}
+await this.tokenService.generateAndSetAccessToken({userId:user._id.toString(),role:user.role},res);
+await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
+return user;
+}
 resendOTP=async(data: ResendOTPDTO): Promise<void> =>{
     const user=await this.userRepository.findById(data.userId)
     if(!user)
@@ -107,11 +156,15 @@ if(!user.isEmailVerified)
 {
     throw new BadRequestError("Email not verified")
 }
+<<<<<<< Updated upstream
 if(!user.password)
 {
     throw new UnauthorizedError("Password not found");
 }
 const isPassword=await bcrypt.compare(data.password,user.password);
+=======
+const isPassword=await bcrypt.compare(data.password,user.password!);
+>>>>>>> Stashed changes
 
 if(!isPassword)
 {

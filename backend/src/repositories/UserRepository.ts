@@ -12,7 +12,18 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     async  findByEmail(email:string):Promise<IUser | null> {
         return this.model.findOne({email})
     }
+<<<<<<< Updated upstream
    
+=======
+
+    async softDelete(id: string): Promise<IUser|null> {
+        return this.model.findByIdAndUpdate(id,{isDeleted:true});
+        
+    }
+    async findByGoogleId(googleId: string): Promise<IUser | null> {
+        return this.model.findOne({googleId})
+    }
+>>>>>>> Stashed changes
 
     async findByGoogleId(googleId:string):Promise<IUser|null>{
         return this.model.findOne({googleId})
