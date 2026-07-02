@@ -12,9 +12,7 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     async  findByEmail(email:string):Promise<IUser | null> {
         return this.model.findOne({email})
     }
-    async softDelete(id: string): Promise<IUser> {
-        
-    }
+    
 
     
 

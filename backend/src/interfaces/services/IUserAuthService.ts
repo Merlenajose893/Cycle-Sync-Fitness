@@ -1,3 +1,4 @@
+
 import type { RegisterUserDTO,LoginDTO,VerifyOtpDTO, LogoutDTO, ResendOTPDTO, ForgotPasswordDTO, VerifyResetOtpDTO, ResetPasswordDTO,ForgotPasswordResponseDTO } from "../../dtos/auth.dto.js";
 import type { Response } from "express";
 import type { IUser } from "../../models/User.js";
@@ -12,4 +13,4 @@ export interface IUserAuthService{
     forgotPassword(data:ForgotPasswordDTO,res:Response):Promise<ForgotPasswordResponseDTO>;
     // verifyResetOtp(data:VerifyResetOtpDTO,res:Response):Promise<void>;
     resetPassword(data:ResetPasswordDTO,res:Response):Promise<void>;
-}
+
