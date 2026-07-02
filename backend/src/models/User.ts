@@ -4,10 +4,11 @@ export interface IUser extends Document{
     firstName :string;
     lastName:string;
     email:string;
-    password:string;
+    password?:string;
     role:'user'|'admin'
     avatarUrl?:string
     isEmailVerified:boolean;
+    googleId?:string;
     onboardingComplete:boolean;
     onboardingStep:number;
     onboardingComplete:boolean
@@ -57,7 +58,10 @@ email:{
     type:String,required:true
 },
 password:{
-    type:String,required:true
+    type:String,required:false
+},
+googleId:{
+type:String,required:false
 },
 role:{
     type:String ,enum:['user','admin'],default:'user'
