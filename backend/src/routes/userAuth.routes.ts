@@ -13,10 +13,7 @@ router.post('/resend-otp',validate(resendOtpSchema),userAuthController.resendOtp
 router.post("/logout",userAuthController.logoutUser);
 
 router.post("/refresh-token",userAuthController.refreshToken)
-<<<<<<< HEAD
 router.post("/forgot-password",userAuthController.forgotPassword)
 router.post("/verify-forgot-password",userAuthController.verifyForgotPasword);
 router.post("/reset-password",userAuthController.resetPassword);
-=======
->>>>>>> 081b12d (changes)
 export default router;

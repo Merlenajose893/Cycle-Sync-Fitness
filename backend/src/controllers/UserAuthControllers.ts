@@ -4,20 +4,19 @@ import type { IUserAuthService } from "../interfaces/services/IUserAuthService.j
 import { TOKENS } from "../container/tokens.js";
 import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
-<<<<<<< HEAD
+
 import { UnauthorizedError } from "../errors/index.js";
-=======
->>>>>>> 081b12d (changes)
+
 @injectable()
 
 export class UserAuthController {
     constructor(@inject(TOKENS.IUserAuthService) private userAuthService: IUserAuthService) { }
     registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-<<<<<<< HEAD
+
         const result = await this.userAuthService.registerUser(req.body,res);
-=======
+
         const result = await this.userAuthService.registerUser(req.body);
->>>>>>> 081b12d (changes)
+
         successResponse(res, "OTP sent successfully", result, HttpStatus.CREATED)
     }
 
@@ -51,7 +50,7 @@ export class UserAuthController {
 
         const userId =
             req.user?.userId;
-<<<<<<< HEAD
+
             if(!userId)
             {
                 throw new UnauthorizedError("User ID is missing")
@@ -59,11 +58,11 @@ export class UserAuthController {
 
         await this.userAuthService
             .logoutuser({userId},res);
-=======
+
 
         await this.userAuthService
             .logoutuser(userId, res);
->>>>>>> 081b12d (changes)
+
 
         successResponse(
 
@@ -83,8 +82,6 @@ export class UserAuthController {
        successResponse(res,"Token refreshed",null,HttpStatus.OK)
     }
 
-<<<<<<< HEAD
-
     forgotPassword=async (req:Request,res:Response):Promise<void> => {
         const {email}=req.body;
         await this.userAuthService.forgotPassword({email},res);
@@ -103,7 +100,5 @@ export class UserAuthController {
         successResponse(res,"Password reset successfully",null,HttpStatus.OK)
     }
 
-=======
->>>>>>> 081b12d (changes)
     
 }

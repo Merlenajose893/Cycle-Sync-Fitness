@@ -15,7 +15,7 @@ export interface LoginTrainerDTO{
 export interface VerifyTrainerDTO{
     trainerId:string;
     otp:string;
-<<<<<<< HEAD
+
 }
 
 export interface ForgotPasswordDTO{
@@ -32,6 +32,5 @@ export interface ForgotPasswordResponseDTO{
     userId:string;
     email:string;
     message?:string;
-=======
->>>>>>> 081b12d (changes)
+
 }

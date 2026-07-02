@@ -4,10 +4,7 @@ import type { ITrainerAuthService } from "../interfaces/services/ITrainerAuthSer
 import { TOKENS } from "../container/tokens.js";
 import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
-<<<<<<< HEAD
 import { UnauthorizedError } from "../errors/index.js";
-=======
->>>>>>> 081b12d (changes)
 @injectable()
 export class TrainerAuthController{
     constructor(@inject(TOKENS.ITrainerAuthService) private trainerAuthService:ITrainerAuthService)
@@ -37,18 +34,15 @@ export class TrainerAuthController{
         successResponse(res,"Trainer login successful",null,HttpStatus.OK);
     }
     logoutTrainer=async (req:Request,res:Response):Promise<void> => {
-<<<<<<< HEAD
         const trainerId=req.user?.userId;
         if(!trainerId)
         {
             throw new UnauthorizedError("Trainer ID is missing")
         }
         await this.trainerAuthService.logoutTrainer(trainerId,res)
-
-=======
         const traineriD=req.user?.userId;
         await this.trainerAuthService.logoutTrainer(traineriD,res)
->>>>>>> 081b12d (changes)
+
         successResponse(res,"Trainer logout successfull",null,HttpStatus.OK)
     }
 

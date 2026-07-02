@@ -5,11 +5,11 @@ import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import bcrypt from "bcryptjs";
 import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError } from "../errors/index.js";
-<<<<<<< HEAD
+
 import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO } from "../dtos/trainerauth.dto.js";
-=======
+
 import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO } from "../dtos/trainerauth.dto.js";
->>>>>>> 081b12d (changes)
+
 
 import { TOKENS } from "../container/tokens.js";
 import type { Response } from "express";
@@ -38,14 +38,14 @@ throw new ConflictError("Trainer already exists")
 
     await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification");
 
-<<<<<<< HEAD
+
     return trainer;
-=======
+
     return {
         _id:trainer._id,
         email:trainer.email
     }
->>>>>>> 081b12d (changes)
+
 }
 loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
@@ -67,11 +67,11 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     await this.tokenService.generateAndSetRefreshToken({userId:trainer._id.toString(),role:"trainer"},res)
 
 }
-<<<<<<< HEAD
+
 verifyTrainerOtp=async(data: VerifyTrainerDTO,res:Response): Promise<void> =>{
-=======
+
 verifyTrainerOtp=async(data: VerifyTrainerDTO): Promise<void> =>{
->>>>>>> 081b12d (changes)
+
     await this.otpService.verifyOtp(data.trainerId,"email-verification",data.otp);
     const trainer=await this.trainerRepository.findById(data.trainerId);
     if(!trainer)
@@ -105,7 +105,7 @@ resendOTP=async(trainerId: string): Promise<void>=> {
     )
 }
 
-<<<<<<< HEAD
+
 forgotPassword=async(data: ForgotPasswordDTO, res: Response): Promise<ForgotPasswordResponseDTO> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
     if(!trainer)
@@ -133,9 +133,9 @@ resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void> =>{
     await this.trainerRepository.save(trainer)
 }
 
-=======
->>>>>>> 081b12d (changes)
+
 logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {
     await this.tokenService.clearTokens(trainerId,res)
 }
+
 }

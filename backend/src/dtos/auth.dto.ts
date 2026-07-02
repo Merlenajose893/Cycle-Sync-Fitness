@@ -20,7 +20,6 @@ export interface ResendOTPDTO{
 }
 
 export interface LogoutDTO{
-<<<<<<< HEAD
     userId:string;
 }
 
@@ -42,7 +41,6 @@ export interface ForgotPasswordResponseDTO{
     userId:string;
     email:string;
     message?:string;
-=======
     userId:string
->>>>>>> 081b12d (changes)
+
 }
