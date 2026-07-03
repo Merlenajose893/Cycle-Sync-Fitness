@@ -1,8 +1,8 @@
 
 export const API_ENDPOINTS={
-<<<<<<< HEAD
     USER_AUTH: {
     REGISTER: "/api/users/register",
+    GOOGLE_SIGIN:"/api/users/google-sign",
     LOGIN: "/api/users/login",
     VERIFY_OTP: "/api/users/verify-otp",
     RESEND_OTP: "/api/users/resend-otp",
@@ -12,17 +12,6 @@ export const API_ENDPOINTS={
     RESETPASSWORD:"/api/users/reset-password",
     ME: "/api/users/me"
 },
-=======
-    USER_AUTH:{
-        REGISTER:"/api/users/register",
-        LOGIN:"/users/login",
-        VERIFY_OTP:"/api/users/verify-otp",
-        RESEND_OTP:"/api/users/resend-otp",
-        LOGOUT:"/users/logout",
-        REFRESH:"/users/refresh-token",
-        ME:"/users/me"
-    },
->>>>>>> 081b12d (changes)
      TRAINER_AUTH: {
 
     REGISTER:
@@ -38,7 +27,6 @@ export const API_ENDPOINTS={
       "/api/trainer/resend-otp",
 
     LOGOUT:
-<<<<<<< HEAD
       "/api/trainer/logout",
 
     REFRESH:
@@ -46,21 +34,11 @@ export const API_ENDPOINTS={
 
     ME:
       "/api/trainer/me",
-=======
-      "/auth/trainer/logout",
-
-    REFRESH:
-      "/auth/trainer/refresh",
-
-    ME:
-      "/auth/trainer/me",
->>>>>>> 081b12d (changes)
   },
 
   ADMIN: {
 
   LOGIN:
-<<<<<<< HEAD
     "/api/admin/admin-login",
 
   USERS:
@@ -89,18 +67,6 @@ TRAINER_ONBOARDING:{
 }
 
 
-=======
-    "/auth/admin/login",
-
-  USERS:
-    "/admin/users",
-
-  TRAINERS:
-    "/admin/trainers",
-},
-
-
->>>>>>> 081b12d (changes)
 
     
 }

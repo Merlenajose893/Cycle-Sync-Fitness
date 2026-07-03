@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { userAuthService } from "../../services/auth/userAuthService";
-<<<<<<< HEAD
 import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload, ForgotPasswordPayload, ResetPasswordPayload } from "../../types/auth.types";
-=======
-import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload } from "../../types/auth.types";
->>>>>>> 081b12d (changes)
 export const useUserAuth=()=>{
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState<string|null>(null);
@@ -87,7 +83,6 @@ export const useUserAuth=()=>{
         }
     }
 
-<<<<<<< HEAD
     const forgotPassword=async (data:ForgotPasswordPayload) => {
         try {
             setLoading(true);
@@ -120,8 +115,6 @@ export const useUserAuth=()=>{
         }
     }
 
-=======
->>>>>>> 081b12d (changes)
     const getUser=async():Promise<User|null>  => {
         try {
             setLoading(true);
@@ -137,11 +130,9 @@ export const useUserAuth=()=>{
     }
 
     return {
-<<<<<<< HEAD
+
         loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP,forgotPassword,resetPassword
-=======
-        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP
->>>>>>> 081b12d (changes)
+
     }
 
 
