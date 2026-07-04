@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import '../../styles/Auth.css';
 import { showToast } from '../../components/common/Toast/Toast';
 import { Link, useNavigate } from 'react-router-dom';
+import type { CredentialResponse } from '@react-oauth/google';
+import { GoogleLogin } from "@react-oauth/google";
+
 import {
   User,
   Mail,
@@ -14,7 +17,7 @@ import { useUserAuth } from '../../hooks/auth/useUserAuth';
 
 const Register = () => {
     const navigate = useNavigate();
-    const { registerUser, loading } = useUserAuth();
+    const { registerUser, loading ,googleSignIn} = useUserAuth();
     
     const [formData, setFormData] = useState({
         firstName: "",
@@ -141,6 +144,28 @@ const Register = () => {
         }
     };
 
+  const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {
+  try {
+    const idToken = credentialResponse.credential;
+
+    if (!idToken) {
+      showToast.error("Google authentication failed");
+      return;
+    }
+
+    const response = await googleSignIn({ idToken });
+
+    showToast.success("Welcome!");
+    console.log(response);
+
+    navigate("/app"); 
+  } catch (error: any) {
+    showToast.error(
+      error.response?.data?.message || "Google Sign-In failed"
+    );
+  }
+};
+
     return (
         <div className="auth-wrapper">
             <div className="auth-container">
@@ -261,17 +286,10 @@ const Register = () => {
     <span>OR</span>
 </div>
 
-<button
-    type="button"
-    className="google-btn"
->
-    <img
-        src="https://www.svgrepo.com/show/475656/google-color.svg"
-        alt="Google"
-        className="google-icon"
-    />
-    Continue with Google
-</button>
+<GoogleLogin
+  onSuccess={handleGoogleSignIn}
+  onError={() => showToast.error("Google Sign-In failed")}
+/>
 
                         <button
                             type="submit"

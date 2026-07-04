@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { userAuthService } from "../../services/auth/userAuthService";
-import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload, ForgotPasswordPayload, ResetPasswordPayload } from "../../types/auth.types";
+import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload, ForgotPasswordPayload, ResetPasswordPayload,GoogleSignInPayload } from "../../types/auth.types";
 export const useUserAuth=()=>{
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState<string|null>(null);
@@ -10,6 +10,22 @@ export const useUserAuth=()=>{
             setError(null);
             const response=await userAuthService.registerUser(data);
             return response;
+        } catch (error:any) {
+            setError(error?.response?.data?.message||"Registration failed")
+            throw error;
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
+    const googleSignIn=async (data:GoogleSignInPayload) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response=await userAuthService.googleSignIn(data);
+            return response;
+            
         } catch (error:any) {
             setError(error?.response?.data?.message||"Registration failed")
             throw error;
@@ -131,7 +147,7 @@ export const useUserAuth=()=>{
 
     return {
 
-        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP,forgotPassword,resetPassword
+        loading,error,registerUser,verifyOtp,loginUser,logoutUser,getUser,resendOTP,forgotPassword,resetPassword,googleSignIn
 
     }
 
