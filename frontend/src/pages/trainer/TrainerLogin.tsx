@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Dumbbell, ArrowRight } from 'lucide-react';
+<<<<<<< HEAD
+=======
+import '../../styles/Auth.css';
+>>>>>>> feature/admin-manage
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
 import '../../styles/Auth.css';
 
@@ -87,7 +91,10 @@ const TrainerLogin: React.FC = () => {
     return (
         <div className="auth-wrapper">
             <div className="auth-container" style={{ justifyContent: 'center' }}>
+<<<<<<< HEAD
                 {/* Brand */}
+=======
+>>>>>>> feature/admin-manage
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
                     <div className="auth-logo" style={{ 
                         background: 'linear-gradient(135deg, #0d9488, #14b8a6)', 
@@ -107,7 +114,10 @@ const TrainerLogin: React.FC = () => {
                     border: '1px solid var(--border)',
                     boxShadow: 'var(--shadow-lg)'
                 }}>
+<<<<<<< HEAD
                     {/* Trainer Badge */}
+=======
+>>>>>>> feature/admin-manage
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
                         <div style={{
                             display: 'inline-flex',
@@ -149,7 +159,10 @@ const TrainerLogin: React.FC = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.email ? 'error' : ''}
+<<<<<<< HEAD
                                     required
+=======
+>>>>>>> feature/admin-manage
                                 />
                             </div>
                             {errors.email && <p className="error-text">{errors.email}</p>}
@@ -167,7 +180,10 @@ const TrainerLogin: React.FC = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.password ? 'error' : ''}
+<<<<<<< HEAD
                                     required
+=======
+>>>>>>> feature/admin-manage
                                 />
                                 <button
                                     type="button"
@@ -207,8 +223,12 @@ const TrainerLogin: React.FC = () => {
                                 cursor: loading ? 'not-allowed' : 'pointer'
                             }}
                         >
+<<<<<<< HEAD
                             {loading ? "Signing in..." : "Sign In"} 
                             <ArrowRight size={18} />
+=======
+                            {loading ? "Signing in..." : "Sign In"} <ArrowRight size={18} />
+>>>>>>> feature/admin-manage
                         </button>
                     </form>
 
@@ -235,7 +255,10 @@ const TrainerLogin: React.FC = () => {
                 </div>
             </div>
 
+<<<<<<< HEAD
             {/* Side Panel */}
+=======
+>>>>>>> feature/admin-manage
             <div className="auth-side" style={{
                 background: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #5eead4 100%)',
                 alignItems: 'center',
@@ -258,6 +281,7 @@ const TrainerLogin: React.FC = () => {
 };
 
 export default TrainerLogin;
+<<<<<<< HEAD
 
 
 
@@ -276,3 +300,5 @@ export default TrainerLogin;
 
 
 
+=======
+>>>>>>> feature/admin-manage

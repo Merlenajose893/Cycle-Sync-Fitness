@@ -6,6 +6,7 @@ import {
     Play, CheckCircle2, Star, Quote, UserPlus,
     TrendingUp, Heart, Waves, BrainCircuit, Dumbbell
 } from 'lucide-react';
+<<<<<<< HEAD
 import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
 import '../../styles/Landing.css';
@@ -15,6 +16,42 @@ const LandingPage: React.FC = () => {
         <div className="landing-container">
             {/* Header */}
             <Header />
+=======
+import '../../styles/Landing.css';
+import Header from '../../components/common/Header';
+import Footer from '../../components/common/Footer';
+
+const LandingPage: React.FC = () => {
+  return (
+    <div className="landing-container">
+      {/* ── Hero Section (Glassmorphism & High Contrast) ── */}
+      <Header/>
+      <section className="hero-premium">
+        <div className="hero-blur-bg"></div>
+        <div className="hero-content">
+          <div className="badge-premium animate-slideUp">
+            <Sparkles size={14} />
+            <span>The Gold Standard of Cycle Syncing</span>
+          </div>
+          
+          <h1 className="hero-title-premium animate-slideUp" style={{ animationDelay: '0.1s' }}>
+            Master Your Biology, <br />
+            <span className="text-gradient-purple">Elevate Your Life.</span>
+          </h1>
+          
+          <p className="hero-subtitle-premium animate-slideUp" style={{ animationDelay: '0.2s' }}>
+            The only AI-driven health & fitness ecosystem that adapts in real-time to your hormonal fluctuations. Train harder, recover smarter, and live in sync.
+          </p>
+          
+          <div className="hero-actions-premium animate-slideUp" style={{ animationDelay: '0.3s' }}>
+            <Link to="/register" className="btn btn-premium btn-lg">
+              Start Your Journey <ArrowRight size={20} />
+            </Link>
+            <Link to="/about" className="btn btn-outline btn-lg">
+              Watch Demo <Play size={18} fill="currentColor" />
+            </Link>
+          </div>
+>>>>>>> feature/admin-manage
 
             {/* ── Hero Section (Glassmorphism & High Contrast) ── */}
             <section className="hero-premium">
@@ -162,6 +199,7 @@ const LandingPage: React.FC = () => {
                 </div>
             </section>
 
+<<<<<<< HEAD
             {/* ── AI Daily Protocol Preview ── */}
             <section className="ai-preview-section">
                 <div className="ai-preview-card glassmorphism">
@@ -222,6 +260,43 @@ const LandingPage: React.FC = () => {
             <Footer />
         </div>
     );
+=======
+      {/* ── Final CTA (High Urgency) ── */}
+      <section className="final-cta-premium">
+         <div className="cta-glass-container">
+            <h2>Ready to transform your <span className="text-gradient-purple">Rhythm?</span></h2>
+            <p>Join the movement of thousands of women reclaiming their peak performance through cycle intelligence.</p>
+            <div className="cta-actions-premium">
+                <Link to="/register" className="btn btn-premium btn-lg">Start Free Trial</Link>
+                <Link
+                  to="/trainer-panel/register"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '12px 28px',
+                    borderRadius: 'var(--radius-full)',
+                    border: '2px solid rgba(255,255,255,0.7)',
+                    background: 'transparent',
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.15)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
+                >
+                  <Dumbbell size={18} /> Join as Trainer
+                </Link>
+            </div>
+         </div>
+      </section>
+      <Footer/>
+    </div>
+  );
+>>>>>>> feature/admin-manage
 };
 
 export default LandingPage;

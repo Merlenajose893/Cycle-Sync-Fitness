@@ -1,8 +1,12 @@
 
 export const API_ENDPOINTS={
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/admin-manage
     USER_AUTH: {
     REGISTER: "/api/users/register",
+    GOOGLE_SIGIN:"/api/users/google-sign",
     LOGIN: "/api/users/login",
     VERIFY_OTP: "/api/users/verify-otp",
     RESEND_OTP: "/api/users/resend-otp",
@@ -12,9 +16,12 @@ export const API_ENDPOINTS={
     RESETPASSWORD:"/api/users/reset-password",
     ME: "/api/users/me"
 },
+<<<<<<< HEAD
 
    
 
+=======
+>>>>>>> feature/admin-manage
      TRAINER_AUTH: {
 
     REGISTER:
@@ -30,7 +37,10 @@ export const API_ENDPOINTS={
       "/api/trainer/resend-otp",
 
     LOGOUT:
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/admin-manage
       "/api/trainer/logout",
 
     REFRESH:
@@ -38,17 +48,23 @@ export const API_ENDPOINTS={
 
     ME:
       "/api/trainer/me",
+<<<<<<< HEAD
 
       
 
     
 
+=======
+>>>>>>> feature/admin-manage
   },
 
   ADMIN: {
 
   LOGIN:
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/admin-manage
     "/api/admin/admin-login",
 
   USERS:
@@ -78,7 +94,10 @@ TRAINER_ONBOARDING:{
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/admin-manage
 
     
 }

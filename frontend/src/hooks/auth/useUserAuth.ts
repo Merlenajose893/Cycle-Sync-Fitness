@@ -83,7 +83,10 @@ export const useUserAuth=()=>{
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/admin-manage
     const forgotPassword=async (data:ForgotPasswordPayload) => {
         try {
             setLoading(true);
@@ -116,7 +119,10 @@ export const useUserAuth=()=>{
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/admin-manage
     const getUser=async():Promise<User|null>  => {
         try {
             setLoading(true);

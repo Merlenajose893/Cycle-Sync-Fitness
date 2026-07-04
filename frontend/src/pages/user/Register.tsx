@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
 import {
     User,
@@ -7,6 +8,18 @@ import {
     ArrowRight,
     Zap,
     CheckCircle2,
+=======
+import '../../styles/Auth.css';
+import { showToast } from '../../components/common/Toast/Toast';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  User,
+  Mail,
+  Lock,
+  ArrowRight,
+  Zap,
+  CheckCircle2,
+>>>>>>> feature/admin-manage
 } from "lucide-react";
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
 import { showToast } from '../../components/common/Toast/Toast';
@@ -299,4 +312,8 @@ const Register = () => {
     );
 };
 
+<<<<<<< HEAD
 export default Register;
+=======
+export default Register;
+>>>>>>> feature/admin-manage

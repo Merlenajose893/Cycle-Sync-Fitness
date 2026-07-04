@@ -363,4 +363,8 @@ const Onboarding: React.FC = () => {
     );
 };
 
+<<<<<<< HEAD
 export default Onboarding;
+=======
+export default Onboarding;
+>>>>>>> feature/admin-manage

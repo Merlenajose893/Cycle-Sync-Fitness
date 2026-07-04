@@ -6,4 +6,6 @@ export interface IAdminService{
     adminLogin(data:AdminLoginDto,res:Response):Promise<void>;
     listUsers(pagination:PaginationDto):Promise<IUser[]>;
     listTrainer(pagination:PaginationDto):Promise<ITrainer[]>;
+    blockUser(userId:string):Promise<IUser|null>
+unblockUser(userId:string):Promise<IUser|null>
 }

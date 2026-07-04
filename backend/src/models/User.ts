@@ -4,6 +4,11 @@ export interface IUser extends Document{
     firstName :string;
     lastName:string;
     email:string;
+<<<<<<< HEAD
+=======
+    // googleId:string;
+
+>>>>>>> feature/admin-manage
     password?:string;
     role:'user'|'admin'
     avatarUrl?:string
@@ -61,8 +66,11 @@ password:{
 },
 googleId:{
 type:String,required:false
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> feature/admin-manage
 },
 role:{
     type:String ,enum:['user','admin'],default:'user'
@@ -126,6 +134,7 @@ subscription:{
 },{timestamps:true})
 
 
+console.log("hello");
 
 
 
