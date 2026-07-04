@@ -4,10 +4,8 @@ export interface IUser extends Document{
     firstName :string;
     lastName:string;
     email:string;
-<<<<<<< Updated upstream
-=======
-    googleId:string;
->>>>>>> Stashed changes
+    // googleId:string;
+
     password?:string;
     role:'user'|'admin'
     avatarUrl?:string
@@ -64,11 +62,7 @@ password:{
     type:String,required:false
 },
 googleId:{
-<<<<<<< Updated upstream
 type:String,required:false
-=======
-    type:String,required:false
->>>>>>> Stashed changes
 },
 role:{
     type:String ,enum:['user','admin'],default:'user'
@@ -132,6 +126,7 @@ subscription:{
 },{timestamps:true})
 
 
+console.log("hello");
 
 
 
