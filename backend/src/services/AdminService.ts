@@ -50,4 +50,12 @@ export class AdminService implements IAdminService{
     listTrainer(pagination: PaginationDto): Promise<ITrainer[]> {
         return this.trainerRepository.findAll(pagination.page,pagination.limit)
     }
+
+    blockUser(userId: string): Promise<IUser | null> {
+        return this.userRepository.blockUser(userId);
+    }
+
+    unblockUser(userId: string): Promise<IUser | null> {
+        return this.userRepository.unblockUser(userId);
+    }
 }

@@ -6,8 +6,9 @@ findById(id:string):Promise<IUser|null>
 create(data:Partial<IUser>):Promise<IUser>;
 
 save(user:IUser):Promise<IUser>;
-findByGoogleId(googleId:string):Promise<IUser|null>
-// softDelete(id:string):Promise<IUser>
+findByGoogleId(googleId:string):Promise<IUser|null>;
+blockUser(userId:string):Promise<IUser|null>;
+unblockUser(userId:string):Promise<IUser|null>;
 
 }
 
