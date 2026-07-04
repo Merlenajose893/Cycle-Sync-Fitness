@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Dumbbell, ArrowRight } from 'lucide-react';
 import '../../styles/Auth.css';
-<<<<<<< HEAD
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
 
 const TrainerLogin: React.FC = () => {
@@ -78,25 +77,11 @@ const TrainerLogin: React.FC = () => {
             console.error(error);
             setErrors({ submit: error.response?.data?.message || "Invalid email or password." });
         }
-=======
-
-const TrainerLogin: React.FC = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
-
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        navigate('/trainer-panel/dashboard');
->>>>>>> 081b12d (changes)
     };
 
     return (
         <div className="auth-wrapper">
             <div className="auth-container" style={{ justifyContent: 'center' }}>
-<<<<<<< HEAD
-=======
-                {/* Brand */}
->>>>>>> 081b12d (changes)
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
                     <div className="auth-logo" style={{ background: 'linear-gradient(135deg, #0d9488, #14b8a6)', width: '48px', height: '48px', fontSize: '1.4rem' }}>C</div>
                     <h1>CycleSync <span style={{ color: '#0d9488' }}>AI</span></h1>
@@ -109,10 +94,6 @@ const TrainerLogin: React.FC = () => {
                     border: '1px solid var(--border)',
                     boxShadow: 'var(--shadow-lg)'
                 }}>
-<<<<<<< HEAD
-=======
-                    {/* Trainer Badge */}
->>>>>>> 081b12d (changes)
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
                         <div style={{
                             display: 'inline-flex',
@@ -135,22 +116,17 @@ const TrainerLogin: React.FC = () => {
                         <p>Enter your credentials to manage your clients and sessions.</p>
                     </div>
 
-<<<<<<< HEAD
                     {errors.submit && (
                         <div className="auth-error-message">{errors.submit}</div>
                     )}
 
                     <form className="auth-form" onSubmit={handleLogin} noValidate>
-=======
-                    <form className="auth-form" onSubmit={handleLogin}>
->>>>>>> 081b12d (changes)
                         <div className="form-group">
                             <label>Email Address</label>
                             <div className="input-wrapper">
                                 <Mail size={18} className="input-icon" />
                                 <input
                                     type="email"
-<<<<<<< HEAD
                                     id="email"
                                     placeholder="trainer@cyclesync.ai"
                                     value={formData.email}
@@ -160,13 +136,6 @@ const TrainerLogin: React.FC = () => {
                                 />
                             </div>
                             {errors.email && <p className="error-text">{errors.email}</p>}
-=======
-                                    id="trainer-email"
-                                    placeholder="trainer@cyclesync.ai"
-                                    required
-                                />
-                            </div>
->>>>>>> 081b12d (changes)
                         </div>
 
                         <div className="form-group">
@@ -175,18 +144,12 @@ const TrainerLogin: React.FC = () => {
                                 <Lock size={18} className="input-icon" />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-<<<<<<< HEAD
                                     id="password"
                                     placeholder="••••••••"
                                     value={formData.password}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.password ? 'error' : ''}
-=======
-                                    id="trainer-password"
-                                    placeholder="••••••••"
-                                    required
->>>>>>> 081b12d (changes)
                                 />
                                 <button
                                     type="button"
@@ -196,10 +159,7 @@ const TrainerLogin: React.FC = () => {
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
-<<<<<<< HEAD
                             {errors.password && <p className="error-text">{errors.password}</p>}
-=======
->>>>>>> 081b12d (changes)
                         </div>
 
                         <div style={{ textAlign: 'right', marginBottom: '8px' }}>
@@ -208,7 +168,6 @@ const TrainerLogin: React.FC = () => {
                             </a>
                         </div>
 
-<<<<<<< HEAD
                         <button
                             type="submit"
                             className="btn btn-full"
@@ -231,23 +190,6 @@ const TrainerLogin: React.FC = () => {
                             }}
                         >
                             {loading ? "Signing in..." : "Sign In"} <ArrowRight size={18} />
-=======
-                        <button type="submit" className="btn btn-full" style={{
-                            padding: '14px',
-                            background: 'linear-gradient(135deg, #0d9488, #14b8a6)',
-                            color: 'white',
-                            borderRadius: 'var(--radius-md)',
-                            fontWeight: '600',
-                            fontSize: '1rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '8px',
-                            marginTop: '8px',
-                            transition: 'opacity 0.2s'
-                        }}>
-                            Sign In <ArrowRight size={18} />
->>>>>>> 081b12d (changes)
                         </button>
                     </form>
 
@@ -260,10 +202,6 @@ const TrainerLogin: React.FC = () => {
                 </div>
             </div>
 
-<<<<<<< HEAD
-=======
-            {/* Side Panel */}
->>>>>>> 081b12d (changes)
             <div className="auth-side" style={{
                 background: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #5eead4 100%)',
                 alignItems: 'center',
@@ -283,8 +221,4 @@ const TrainerLogin: React.FC = () => {
     );
 };
 
-<<<<<<< HEAD
 export default TrainerLogin;
-=======
-export default TrainerLogin;
->>>>>>> 081b12d (changes)

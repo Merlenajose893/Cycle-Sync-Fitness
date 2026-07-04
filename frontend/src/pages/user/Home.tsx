@@ -8,20 +8,14 @@ import {
   TrendingUp, Heart, Waves, BrainCircuit, Dumbbell
 } from 'lucide-react';
 import '../../styles/Landing.css';
-<<<<<<< HEAD
 import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
-=======
->>>>>>> 081b12d (changes)
 
 const LandingPage: React.FC = () => {
   return (
     <div className="landing-container">
       {/* ── Hero Section (Glassmorphism & High Contrast) ── */}
-<<<<<<< HEAD
       <Header/>
-=======
->>>>>>> 081b12d (changes)
       <section className="hero-premium">
         <div className="hero-blur-bg"></div>
         <div className="hero-content">
@@ -223,10 +217,7 @@ const LandingPage: React.FC = () => {
             </div>
          </div>
       </section>
-<<<<<<< HEAD
       <Footer/>
-=======
->>>>>>> 081b12d (changes)
     </div>
   );
 };
