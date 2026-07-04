@@ -156,15 +156,15 @@ if(!user.isEmailVerified)
 {
     throw new BadRequestError("Email not verified")
 }
-<<<<<<< Updated upstream
+
 if(!user.password)
 {
     throw new UnauthorizedError("Password not found");
 }
-const isPassword=await bcrypt.compare(data.password,user.password);
-=======
+
+
 const isPassword=await bcrypt.compare(data.password,user.password!);
->>>>>>> Stashed changes
+
 
 if(!isPassword)
 {
