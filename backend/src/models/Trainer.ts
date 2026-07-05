@@ -21,6 +21,7 @@ export interface ITrainer extends Document {
   password: string;
   speciality: string;
   isEmailVerified:boolean;
+  isDeleted:boolean;
   avatar?: string;
   bio?: string;
   experience: string;
@@ -49,6 +50,7 @@ const TrainerSchema = new Schema<ITrainer>(
     password: { type: String, required: true },
 
     speciality: { type: String, required: true },
+    isDeleted:{type:Boolean, required:false},
 
     avatar: { type: String },
     bio: { type: String },
