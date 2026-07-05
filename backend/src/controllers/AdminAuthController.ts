@@ -60,4 +60,24 @@ import { HttpStatus } from "../constants/HttpStatus.js";
                 next(error)
             }
         }
+
+        blockTrainer=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const trainerId=req.params.id as string;
+                const result=await this.adminService.blockTrainer(trainerId);
+                successResponse(res,"Trainer blocked successfully",result,HttpStatus.OK);
+            } catch (error) {
+                next(error)
+            }
+        }
+
+        unblockTrainer=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const trainerId=req.params.id as string;
+                const result=await this.adminService.unblockTrainer(trainerId);
+                successResponse(res,"Trainer unblocked successfully",result,HttpStatus.OK)
+            } catch (error) {
+                
+            }
+        }
     }

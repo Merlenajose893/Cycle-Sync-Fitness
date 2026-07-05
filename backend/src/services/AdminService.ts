@@ -69,4 +69,25 @@ export class AdminService implements IAdminService{
 
         return user;
     }
+
+
+    blockTrainer=async(trainerId: string): Promise<ITrainer | null> =>{
+        const trainer=await this.trainerRepository.blockTrainer(trainerId);
+        if(!trainer)
+        {
+            throw new NotFoundError("Trainer not found")
+        }
+
+        return trainer;
+    }
+
+
+    unblockTrainer=async(trainerId: string): Promise<ITrainer | null> =>{
+        const trainer=await this.trainerRepository.unblockTrainer(trainerId);
+        if(!trainer)
+        {
+            throw new NotFoundError("Trainer not Found")
+        }
+        return trainer
+    }
 }
