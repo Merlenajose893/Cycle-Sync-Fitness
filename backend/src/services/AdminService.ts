@@ -51,7 +51,7 @@ export class AdminService implements IAdminService{
         return this.trainerRepository.findAll(pagination.page,pagination.limit)
     }
 
-    blockUser=async(userId: string): Promise<IUser | null> {
+    blockUser=async(userId: string): Promise<IUser | null> =>{
     const user=await this.userRepository.blockUser(userId);
     if(!user)
     {
@@ -60,7 +60,7 @@ export class AdminService implements IAdminService{
     return user;
     }
 
-    unblockUser=async(userId: string): Promise<IUser | null> {
+    unblockUser=async(userId: string): Promise<IUser | null>=> {
         const user=await this.userRepository.unblockUser(userId);
         if(!user)
         {
