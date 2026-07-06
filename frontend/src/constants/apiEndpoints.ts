@@ -2,7 +2,7 @@
 export const API_ENDPOINTS={
     USER_AUTH: {
     REGISTER: "/api/users/register",
-    GOOGLE_SIGIN:"/api/users/google-sign",
+    GOOGLE_SIGIN:"/api/users/google-signin",
     LOGIN: "/api/users/login",
     VERIFY_OTP: "/api/users/verify-otp",
     RESEND_OTP: "/api/users/resend-otp",

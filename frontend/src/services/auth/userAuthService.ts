@@ -42,7 +42,7 @@ export const userAuthService={
     },
 
     resetPassword:async (data:ResetPasswordPayload):Promise<AuthResponse<null>> => {
-       const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.RESETPASSWORD(data));
+       const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.RESETPASSWORD,data);
        return response.data; 
     },
 

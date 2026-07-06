@@ -56,8 +56,12 @@ function Ring({
 }
 import '../../styles/Auth.css'
 import '../../styles/Dashboard.css'
+import { useUserContext } from '../../context/UserAuthContext';
 
 const Dashboard = () => {
+  const {user}=useUserContext();
+  console.log(user?.firstName);
+  
   const calorieGoal = 1800;
   const calorieFood = 550;
   const calorieExercise = 200;
@@ -75,7 +79,7 @@ const Dashboard = () => {
             <span>Optimal Performance State</span>
           </div>
 
-          <h1>Good Morning, Merlu</h1>
+          <h1>Good Morning, {user?.firstName}</h1>
 
           <p>
             Tuesday, February 17 •{" "}
