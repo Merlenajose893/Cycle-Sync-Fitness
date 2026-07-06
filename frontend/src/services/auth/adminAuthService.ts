@@ -15,6 +15,26 @@ getAllUsers:async ():Promise<AuthResponse<User[]>> => {
 getAllTrainers:async ():Promise<AuthResponse<Trainer[]>> => {
     const response=await axiosInstance.get(API_ENDPOINTS.ADMIN.TRAINERS);
     return response.data
+},
+
+blockUser:async (userId:string) => {
+    const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.BLOCK_USER}/${userId}/block`);
+    return response.data;
+},
+unblockUser:async(userId:string)=>{
+    const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.UNBLOCK_USER}/${userId}/unblock`);
+    return response.data;
+},
+
+blockTrainer:async (trainerId:string) => {
+    const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.BLOCK_TRAINER}/${trainerId}/block`);
+    return response.data;
+},
+
+unblockTrainer:async (trainerId:string) => {
+    const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.UNBLOCK_TRAINER}/${trainerId}/unblock`)
+    return response.data
 }
+
 }
 

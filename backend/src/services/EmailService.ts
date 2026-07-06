@@ -15,6 +15,8 @@ implements IEmailService {
   private transporter;
 
   constructor() {
+    // console.log(process.env.EMAIL_USER);
+    
 
     if (
       !process.env.EMAIL_USER ||

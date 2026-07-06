@@ -12,6 +12,11 @@
     max-width: 540px;
     margin: 0 auto;
 }
+<<<<<<< HEAD
+
+/* Error Styles */
+=======
+>>>>>>> feature/admin-manage
 .error {
     border-color: #ef4444 !important;
 }
@@ -22,12 +27,17 @@
     margin-top: 4px;
     margin-bottom: 0;
 }
+<<<<<<< HEAD
+
+=======
+>>>>>>> feature/admin-manage
 .auth-brand {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 60px;
 }
+
 .auth-divider {
     display: flex;
     align-items: center;
@@ -81,6 +91,7 @@
     width: 22px;
     height: 22px;
 }
+
 .auth-logo {
     width: 40px;
     height: 40px;
@@ -226,10 +237,10 @@
     color: var(--text-primary);
     cursor: pointer;
     transition: all var(--transition-fast);
-    appearance: none; /* Hide default arrow for select */
+    appearance: none;
 }
 
-/* Custom dropdown arrow for select */
+/* Custom dropdown arrow */
 .select-input {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -241,7 +252,6 @@
     font-family: inherit;
 }
 
-/* Customizing date picker icon for modern browsers */
 .date-input::-webkit-calendar-picker-indicator {
     opacity: 0.4;
     cursor: pointer;
@@ -270,34 +280,6 @@
     width: 100%;
 }
 
-.auth-divider {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 24px 0;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-}
-
-.social-auth {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.social-auth .btn {
-    font-size: 0.875rem;
-}
-
 .auth-footer {
     text-align: center;
     font-size: 0.9rem;
@@ -309,11 +291,12 @@
     font-weight: 700;
 }
 
-/* Auth Side */
+/* Auth Side Panel */
 .auth-side {
     flex: 1;
     background: var(--primary);
-    background-image: linear-gradient(135deg, rgba(13, 148, 136, 0.8) 0%, rgba(139, 92, 246, 0.4) 100%), url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=1200');
+    background-image: linear-gradient(135deg, rgba(13, 148, 136, 0.8) 0%, rgba(139, 92, 246, 0.4) 100%), 
+                      url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=1200');
     background-blend-mode: overlay;
     background-size: cover;
     background-position: center;
@@ -352,12 +335,6 @@
     font-size: 0.9rem;
     opacity: 0.8;
     font-weight: 600;
-}
-
-.premium-perks-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 24px;
 }
 
 .premium-perks {
@@ -406,13 +383,7 @@
     line-height: 1.5;
 }
 
-@media (max-width: 1024px) {
-    .auth-side {
-        display: none;
-    }
-}
-
-/* OTP Verification Styles */
+/* OTP Styles */
 .otp-container {
     display: flex;
     flex-direction: column;
@@ -467,7 +438,6 @@
     margin-left: 6px;
     cursor: pointer;
     text-decoration: underline;
-    transition: opacity 0.2s;
 }
 
 .resend-btn:disabled {
@@ -490,4 +460,11 @@
 
 .verify-info strong {
     color: var(--text-primary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .auth-side {
+        display: none;
+    }
 }

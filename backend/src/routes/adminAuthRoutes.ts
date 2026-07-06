@@ -6,4 +6,8 @@ const adminController=container.resolve(AdminController);
 router.post("/admin-login",adminController.adminLogin);
 router.get("/users",adminController.listUsers);
 router.get("/trainers",adminController.listTrainers);
+router.patch("/users/:id/block",adminController.blockUser);
+router.patch("/users/:id/unblock",adminController.unblockUser);
+router.patch("/trainers/:id/block",adminController.blockTrainer);
+router.patch("/trainers/:id/unblock",adminController.unblockTrainer)
 export default router;

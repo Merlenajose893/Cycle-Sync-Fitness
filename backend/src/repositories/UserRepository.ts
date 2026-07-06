@@ -14,12 +14,18 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     }
 
 
-    async softDelete(id: string): Promise<IUser|null> {
-        return this.model.findByIdAndUpdate(id,{isDeleted:true});
-        
-    }
+    
     async findByGoogleId(googleId: string): Promise<IUser | null> {
         return this.model.findOne({googleId})
+    }
+
+
+    async blockUser(userId: string): Promise<IUser | null> {
+        return this.model.findByIdAndUpdate(userId,{isDeleted:true},{new:true});
+    }
+
+    async unblockUser(userId: string): Promise<IUser | null> {
+        return this.model.findByIdAndUpdate(userId,{isDeleted:false},{new:true})
     }
 
 

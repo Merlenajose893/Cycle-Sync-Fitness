@@ -4,5 +4,6 @@ import { BaseRepository } from "./BaseRepository.js";
 export declare class TrainerRepository extends BaseRepository<ITrainer> implements ITrainerRepository {
     constructor();
     findByEmail(email: string): Promise<ITrainer | null>;
+    
 }
 //# sourceMappingURL=TrainerRepository.d.ts.map

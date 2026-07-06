@@ -20,7 +20,7 @@ console.log(connectDB());
 app.use(cors({
   origin: "http://localhost:5173",     // ← Use exact origin
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
