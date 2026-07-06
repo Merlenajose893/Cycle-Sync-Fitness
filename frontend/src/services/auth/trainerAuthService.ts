@@ -25,5 +25,5 @@ export const trainerAuthService={
     getCurrentTrainer:async ():Promise<AuthResponse<Trainer>> => {
         const response=await axiosInstance.get(API_ENDPOINTS.TRAINER_AUTH.ME);
         return response.data;
-    }
+    },
 }

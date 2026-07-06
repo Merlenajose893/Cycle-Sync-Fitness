@@ -6,7 +6,7 @@ import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
 import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
 import { TOKENS } from "../container/tokens.js";
-import { UnauthorizedError } from "../errors/index.js";
+import { NotFoundError, UnauthorizedError } from "../errors/index.js";
 import type { Response } from "express";
 import type { IUser } from "../models/User.js";
 import type { ITrainer } from "../models/Trainer.js";
@@ -51,11 +51,43 @@ export class AdminService implements IAdminService{
         return this.trainerRepository.findAll(pagination.page,pagination.limit)
     }
 
-    blockUser(userId: string): Promise<IUser | null> {
-        return this.userRepository.blockUser(userId);
+    blockUser=async(userId: string): Promise<IUser | null> =>{
+    const user=await this.userRepository.blockUser(userId);
+    if(!user)
+    {
+        throw new NotFoundError("User not found")
+    }
+    return user;
     }
 
-    unblockUser(userId: string): Promise<IUser | null> {
-        return this.userRepository.unblockUser(userId);
+    unblockUser=async(userId: string): Promise<IUser | null>=> {
+        const user=await this.userRepository.unblockUser(userId);
+        if(!user)
+        {
+            throw new NotFoundError("User not found")
+        }
+
+        return user;
+    }
+
+
+    blockTrainer=async(trainerId: string): Promise<ITrainer | null> =>{
+        const trainer=await this.trainerRepository.blockTrainer(trainerId);
+        if(!trainer)
+        {
+            throw new NotFoundError("Trainer not found")
+        }
+
+        return trainer;
+    }
+
+
+    unblockTrainer=async(trainerId: string): Promise<ITrainer | null> =>{
+        const trainer=await this.trainerRepository.unblockTrainer(trainerId);
+        if(!trainer)
+        {
+            throw new NotFoundError("Trainer not Found")
+        }
+        return trainer
     }
 }

@@ -7,5 +7,7 @@ export interface IAdminService{
     listUsers(pagination:PaginationDto):Promise<IUser[]>;
     listTrainer(pagination:PaginationDto):Promise<ITrainer[]>;
     blockUser(userId:string):Promise<IUser|null>
-unblockUser(userId:string):Promise<IUser|null>
+unblockUser(userId:string):Promise<IUser|null>;
+blockTrainer(trainerId:string):Promise<ITrainer|null>;
+unblockTrainer(trainerId:string):Promise<ITrainer|null>;
 }

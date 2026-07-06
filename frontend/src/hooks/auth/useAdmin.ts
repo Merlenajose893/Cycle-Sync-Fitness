@@ -1,10 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { adminService } from "../../services/auth/adminAuthService";
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/admin-manage
 import type { User,Trainer } from "../../types/auth.types";
 import type  { AdminLoginPayload } from "../../types/admin.types";
 
@@ -78,5 +74,88 @@ export const useAdminAuth=()=>{
         }
     }
 
-    return {adminLogin,getAllUsers,getAllTrainers,loading,error}
+    const blockUser=async (userId:string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            return await adminService.blockUser(userId);
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Failed to block user")
+            }
+            else{
+                setError("Unexpected error occured")
+            }
+            throw error;
+        }
+
+        finally{
+            setLoading(false);
+        }
+    }
+
+    const unblockUser=async (userId:string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            return await adminService.unblockUser(userId);
+
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Failed to unblock user");
+            }
+            else{
+                setError("unexpectec error occured")
+            }
+            throw error;
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
+
+    const blockTrainer=async (trainerId:string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            return await adminService.blockTrainer(trainerId);
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Failed to block the trainer")
+            }
+            else{
+                setError("Unexpected error occured")
+            }
+        }
+        finally{
+            setLoading(false);
+        }
+    }
+
+    const unblockTrainer=async (trainerId:string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            return adminService.unblockTrainer(trainerId);
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Failed to unblock the trainer")
+            }
+            else{
+                setError("Unexpected error occured")
+            }
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
+
+
+    return {adminLogin,getAllUsers,getAllTrainers,blockUser,unblockUser,blockTrainer,unblockTrainer,loading,error}
 }

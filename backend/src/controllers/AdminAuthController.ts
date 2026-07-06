@@ -38,4 +38,46 @@ import { HttpStatus } from "../constants/HttpStatus.js";
                 next(error)
             }
         }
+
+
+        blockUser=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const userId=req.params.id as string;
+                const result=await this.adminService.blockUser(userId);
+                successResponse(res,"User is blocked Successfully",result,HttpStatus.OK);
+
+            } catch (error) {
+                next(error)
+            }
+        }
+
+        unblockUser=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+               const userId=req.params.id as string;
+               const result=await this.adminService.unblockUser(userId);
+               successResponse(res,"User is unblocked successfully",result,HttpStatus.OK) 
+            } catch (error) {
+                next(error)
+            }
+        }
+
+        blockTrainer=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const trainerId=req.params.id as string;
+                const result=await this.adminService.blockTrainer(trainerId);
+                successResponse(res,"Trainer blocked successfully",result,HttpStatus.OK);
+            } catch (error) {
+                next(error)
+            }
+        }
+
+        unblockTrainer=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const trainerId=req.params.id as string;
+                const result=await this.adminService.unblockTrainer(trainerId);
+                successResponse(res,"Trainer unblocked successfully",result,HttpStatus.OK)
+            } catch (error) {
+                
+            }
+        }
     }

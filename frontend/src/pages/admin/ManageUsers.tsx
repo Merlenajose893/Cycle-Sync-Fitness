@@ -15,6 +15,7 @@ import '../../styles/AdminPage.css';
 import type { User } from '../../types/auth.types';
 import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import { useEffect } from 'react';
+import { showToast } from '../../components/common/Toast/Toast';
 
 const ManageUsersPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +23,7 @@ const ManageUsersPage: React.FC = () => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]); // ✅ was number[]
 
   const [users, setUsers] = useState<User[]>([]);
-  const { getAllUsers, loading, error } = useAdminAuth();
+  const { getAllUsers, loading, error ,blockUser,unblockUser} = useAdminAuth();
 
   const fetchUsers = async () => {
     try {
@@ -35,7 +36,26 @@ const ManageUsersPage: React.FC = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+const handleBlock=async (userId:string) => {
+  try {
+    await blockUser(userId)
+    showToast.success("blocked success")
+    fetchUsers();
+  } catch (error) {
+    console.error(error);
+    
+  }
+}
 
+const  handleUnblock=async (userId:string) => {
+  try {
+    await unblockUser(userId);
+    showToast.success("unblocked user")
+  } catch (error) {
+    console.error(error);
+    
+  }
+}
   const stats = {
     total: users.length,
     active: users.filter(
@@ -261,6 +281,16 @@ const ManageUsersPage: React.FC = () => {
                     <button className="p-action-btn more" title="More">
                       <MoreVertical size={14} />
                     </button>
+                    <button
+    onClick={() => handleBlock(user._id)}
+>
+    Block
+</button>
+<button
+    onClick={() => handleUnblock(user._id)}
+>
+    Unblock
+</button>
                   </div>
                 </td>
               </tr>

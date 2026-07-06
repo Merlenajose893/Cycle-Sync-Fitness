@@ -21,11 +21,11 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
 
 
     async blockUser(userId: string): Promise<IUser | null> {
-        return this.model.findByIdAndUpdate(userId,{isDeleted:true});
+        return this.model.findByIdAndUpdate(userId,{isDeleted:true},{new:true});
     }
 
     async unblockUser(userId: string): Promise<IUser | null> {
-        return this.model.findByIdAndUpdate(userId,{isDeleted:false})
+        return this.model.findByIdAndUpdate(userId,{isDeleted:false},{new:true})
     }
 
 
