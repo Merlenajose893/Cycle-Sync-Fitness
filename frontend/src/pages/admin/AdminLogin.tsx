@@ -132,17 +132,16 @@ const AdminLogin: React.FC = () => {
 <<<<<<< HEAD
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
-                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-=======
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />
                                     onClick={() => setPassword(!password)}
                                 >
                                     {password ? <EyeOff size={18} /> : <Eye size={18} />}
->>>>>>> feature/admin-manage
+
                                 </button>
                             </div>
                         </div>
 
-<<<<<<< HEAD
+
                         <button
                             type="submit"
                             className="btn btn-full"
