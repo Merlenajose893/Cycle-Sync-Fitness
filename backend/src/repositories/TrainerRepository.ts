@@ -23,5 +23,15 @@ export class TrainerRepository extends BaseRepository<ITrainer> implements ITrai
     async unblockTrainer(trainerId: string): Promise<ITrainer | null> {
         return this.model.findByIdAndUpdate(trainerId,{isDeleted:false},{new :true})
     }
-    
+
+    async findByInviteToken(token: string): Promise<ITrainer | null> {
+        return this.model.findOne({inviteToken:token})
+    }
+    async updateTrainerInvite(trainerId: string, inviteToken: string, inviteExpiresAt: Date): Promise<ITrainer | null> {
+        return this.model.findByIdAndUpdate(trainerId,{inviteToken,inviteExpiresAt,inviteAccepted:false},{new:true});
+    }
+
+    async acceptTrainer(trainerId: string, hashedPassword: string): Promise<ITrainer | null> {
+        return this.model.findByIdAndUpdate(trainerId,{password:hashedPassword,inviteToken:null,inviteExpiresAt:null,inviteAccepted:true},{new:true})
+    }
 }
