@@ -5,6 +5,7 @@ import { successResponse } from "../utils/response.js";
 import type { IAdminService } from "../interfaces/services/IAdminService.js";
 import { TOKENS } from "../container/tokens.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
+import type { InviteTrainerDTO } from "../dtos/admin.dto.js";
 @injectable()
 
     export class AdminController{
@@ -78,6 +79,16 @@ import { HttpStatus } from "../constants/HttpStatus.js";
                 successResponse(res,"Trainer unblocked successfully",result,HttpStatus.OK)
             } catch (error) {
                 
+            }
+        }
+
+        inviteTrainerController=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const data:InviteTrainerDTO=req.body;
+                const result=await this.adminService.inviteTrainer(data);
+                successResponse(res,"Trainer is invited",result,HttpStatus.OK);
+            } catch (error) {
+                next(error)
             }
         }
     }
