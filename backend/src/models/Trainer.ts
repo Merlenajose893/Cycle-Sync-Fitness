@@ -18,13 +18,13 @@ export interface ITrainer extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   speciality: string;
   isEmailVerified:boolean;
   isDeleted:boolean;
   avatar?: string;
   bio?: string;
-  experience: string;
+  experience: number;
   inviteToken:string;
   inviteExpiresAt:Date;
   inviteAccepted:boolean;
@@ -62,7 +62,7 @@ const TrainerSchema = new Schema<ITrainer>(
 
     onboardingSteps:{type:Number,default:1},
     onboardingCompleted:{type:Boolean,default:false},
-    experience: { type: String },
+    experience: { type: Number,default:0},
 
     packages: [
       {

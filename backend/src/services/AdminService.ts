@@ -1,20 +1,22 @@
 import { inject,injectable } from "tsyringe";
 import bcrypt from "bcryptjs";
-import type { AdminLoginDto,PaginationDto } from "../dtos/admin.dto.js";
+import type { AdminLoginDto,PaginationDto ,InviteTrainerDTO} from "../dtos/admin.dto.js";
 import type { IAdminService } from "../interfaces/services/IAdminService.js";
 import type { ITokenService } from "../interfaces/services/ITokenService.js";
+import type { IEmailService } from "../interfaces/services/IEmailService.js";
 import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
 import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
 import { TOKENS } from "../container/tokens.js";
-import { NotFoundError, UnauthorizedError } from "../errors/index.js";
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "../errors/index.js";
 import type { Response } from "express";
 import type { IUser } from "../models/User.js";
 import type { ITrainer } from "../models/Trainer.js";
+import crypto from "crypto"
 
 @injectable()
 export class AdminService implements IAdminService{
 
-    constructor(@inject(TOKENS.IUserRepository)private userRepository:IUserRepository,@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
+    constructor(@inject(TOKENS.IUserRepository)private userRepository:IUserRepository,@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.ITokenService) private tokenService:ITokenService,@inject(TOKENS.IEmailService) private emailService:IEmailService)
 
     // constructor(@inject(TOKENS.UserRepository)private userRepository:IUserRepository,@inject(TOKENS.TrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.TokenService) private tokenService:ITokenService)
 
@@ -90,4 +92,44 @@ export class AdminService implements IAdminService{
         }
         return trainer
     }
+
+   inviteTrainer = async (data: InviteTrainerDTO): Promise<void> => {
+    const existingTrainer = await this.trainerRepository.findByEmail(data.email);
+
+    if (existingTrainer) {
+        throw new BadRequestError("Trainer with this email already exists.");
+    }
+
+    const inviteToken = crypto.randomBytes(32).toString("hex");
+
+    const inviteExpiresAt = new Date(
+        Date.now() + 24 * 60 * 60 * 1000
+    );
+
+    const trainer = await this.trainerRepository.create({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        speciality: data.specialization,
+        experience: data.experience,
+        inviteToken,
+        inviteExpiresAt,
+        inviteAccepted: false,
+        onboardingCompleted: false,
+        isEmailVerified: false,
+        isDeleted: false
+    });
+
+    if (!trainer) {
+        throw new Error("Failed to create trainer.");
+    }
+
+    const inviteLink = `${process.env.FRONTEND_URL}/trainer/register?token=${inviteToken}`;
+
+    await this.emailService.sendTrainerInvitation(
+        trainer.email,
+        trainer.firstName,
+        inviteLink
+    );
+};
 }

@@ -162,13 +162,11 @@ if(!user.password)
     throw new UnauthorizedError("Password not found");
 }
 
-<<<<<<< HEAD
+
+// const isPassword=await bcrypt.compare(data.password,user.password!);
 
 const isPassword=await bcrypt.compare(data.password,user.password!);
 
-=======
-const isPassword=await bcrypt.compare(data.password,user.password!);
->>>>>>> feature/admin-manage
 
 if(!isPassword)
 {
