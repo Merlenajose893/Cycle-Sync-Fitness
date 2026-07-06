@@ -1,4 +1,14 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
+import { Link, useNavigate } from 'react-router-dom';
+import {
+    User,
+    Mail,
+    Lock,
+    ArrowRight,
+    Zap,
+    CheckCircle2,
+=======
 import '../../styles/Auth.css';
 import { showToast } from '../../components/common/Toast/Toast';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,13 +19,16 @@ import {
   ArrowRight,
   Zap,
   CheckCircle2,
+>>>>>>> feature/admin-manage
 } from "lucide-react";
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
+import { showToast } from '../../components/common/Toast/Toast';
+import '../../styles/Auth.css';
 
 const Register = () => {
     const navigate = useNavigate();
     const { registerUser, loading } = useUserAuth();
-    
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -23,7 +36,7 @@ const Register = () => {
         password: "",
         confirmPassword: ""
     });
-    
+
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -59,7 +72,6 @@ const Register = () => {
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
-       
         Object.keys(formData).forEach(key => {
             const error = validateField(key, (formData as any)[key]);
             if (error) newErrors[key] = error;
@@ -70,13 +82,8 @@ const Register = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-       
-        setFormData(prev => ({
-            ...prev,
-            [id]: value,
-        }));
-        
-        // Clear error when user starts typing
+        setFormData(prev => ({ ...prev, [id]: value }));
+
         if (errors[id]) {
             setErrors(prev => ({ ...prev, [id]: '' }));
         }
@@ -85,7 +92,7 @@ const Register = () => {
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const { id } = e.target;
         setTouched(prev => ({ ...prev, [id]: true }));
-       
+
         const error = validateField(id, (formData as any)[id]);
         if (error) {
             setErrors(prev => ({ ...prev, [id]: error }));
@@ -94,15 +101,8 @@ const Register = () => {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        // Validate all fields on submit
+
         if (!validateForm()) {
-            const allTouched = Object.keys(formData).reduce((acc, key) => {
-                acc[key] = true;
-                return acc;
-            }, {} as Record<string, boolean>);
-            setTouched(allTouched);
-            
             showToast.error("Please fix the errors in the form");
             return;
         }
@@ -111,7 +111,6 @@ const Register = () => {
 
         try {
             setErrors({});
-            
             const response = await registerUser({
                 firstName: formData.firstName.trim(),
                 lastName: formData.lastName.trim(),
@@ -122,7 +121,7 @@ const Register = () => {
 
             showToast.dismiss(toastId);
             showToast.success("Account created successfully! 🎉");
-            
+
             navigate("/verify-otp", {
                 state: {
                     userId: response.data._id,
@@ -131,11 +130,7 @@ const Register = () => {
             });
         } catch (error: any) {
             showToast.dismiss(toastId);
-            
-            const errorMessage = error.response?.data?.message || 
-                               "Registration failed. Please try again.";
-            
-            console.error(error);
+            const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
             setErrors({ submit: errorMessage });
             showToast.error(errorMessage);
         }
@@ -148,15 +143,14 @@ const Register = () => {
                     <div className="auth-logo">C</div>
                     <h1>CycleSync <span>AI</span></h1>
                 </div>
-                
+
                 <div className="auth-card animate-slideUp">
                     <div className="auth-header">
                         <h2>Create an account</h2>
                         <p>Start your 14-day free trial today</p>
                     </div>
 
-                    {/* General Error */}
-                    {(errors.submit) && (
+                    {errors.submit && (
                         <div className="auth-error-message">
                             {errors.submit}
                         </div>
@@ -176,10 +170,12 @@ const Register = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         className={errors.firstName ? 'error' : ''}
+                                        required
                                     />
                                 </div>
                                 {errors.firstName && <p className="error-text">{errors.firstName}</p>}
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="lastName">Last Name</label>
                                 <div className="input-wrapper">
@@ -192,6 +188,7 @@ const Register = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         className={errors.lastName ? 'error' : ''}
+                                        required
                                     />
                                 </div>
                                 {errors.lastName && <p className="error-text">{errors.lastName}</p>}
@@ -210,6 +207,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.email ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.email && <p className="error-text">{errors.email}</p>}
@@ -227,6 +225,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.password ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.password && <p className="error-text">{errors.password}</p>}
@@ -245,6 +244,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.confirmPassword ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
@@ -257,21 +257,19 @@ const Register = () => {
                                 <Link to="/privacy">Privacy Policy</Link>
                             </label>
                         </div>
-                        <div className="auth-divider">
-    <span>OR</span>
-</div>
 
-<button
-    type="button"
-    className="google-btn"
->
-    <img
-        src="https://www.svgrepo.com/show/475656/google-color.svg"
-        alt="Google"
-        className="google-icon"
-    />
-    Continue with Google
-</button>
+                        <div className="auth-divider">
+                            <span>OR</span>
+                        </div>
+
+                        <button type="button" className="google-btn">
+                            <img
+                                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                alt="Google"
+                                className="google-icon"
+                            />
+                            Continue with Google
+                        </button>
 
                         <button
                             type="submit"
@@ -314,4 +312,8 @@ const Register = () => {
     );
 };
 
+<<<<<<< HEAD
 export default Register;
+=======
+export default Register;
+>>>>>>> feature/admin-manage

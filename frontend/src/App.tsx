@@ -15,5 +15,8 @@ const App = () => {
   )
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> feature/admin-manage
 export default App

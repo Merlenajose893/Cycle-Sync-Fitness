@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Dumbbell, CheckCircle2 } from 'lucide-react';
-import '../../styles/Auth.css';
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
+import '../../styles/Auth.css';
 
 const TrainerRegister: React.FC = () => {
     const navigate = useNavigate();
@@ -72,11 +72,7 @@ const TrainerRegister: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
 
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
@@ -129,19 +125,30 @@ const TrainerRegister: React.FC = () => {
             });
         } catch (error: any) {
             console.error(error);
-            setErrors({ submit: error.response?.data?.message || "Registration failed. Please try again." });
+            setErrors({ 
+                submit: error.response?.data?.message || "Registration failed. Please try again." 
+            });
         }
     };
 
+<<<<<<< HEAD
+    return (
+=======
 
 
     
 
      return (
+>>>>>>> feature/admin-manage
         <div className="auth-wrapper">
             <div className="auth-container" style={{ justifyContent: 'center' }}>
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
-                    <div className="auth-logo" style={{ background: 'linear-gradient(135deg, #0d9488, #14b8a6)', width: '48px', height: '48px', fontSize: '1.4rem' }}>C</div>
+                    <div className="auth-logo" style={{ 
+                        background: 'linear-gradient(135deg, #0d9488, #14b8a6)', 
+                        width: '48px', 
+                        height: '48px', 
+                        fontSize: '1.4rem' 
+                    }}>C</div>
                     <h1>CycleSync <span style={{ color: '#0d9488' }}>AI</span></h1>
                 </div>
 
@@ -174,18 +181,25 @@ const TrainerRegister: React.FC = () => {
                         <p>Create your profile to start coaching with expert cycle-sync precision.</p>
                     </div>
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> feature/admin-manage
                     {/* General Error */}
-                    {(errors.submit || Object.keys(errors).length > 0) && (
-                        <div className="auth-error-message">
-                            {errors.submit || "Please fix the errors below"}
+                    {errors.submit && (
+                        <div className="auth-error-message" style={{ marginBottom: '20px' }}>
+                            {errors.submit}
                         </div>
                     )}
 
+<<<<<<< HEAD
+                    <form className="auth-form" onSubmit={handleRegister} noValidate>
+=======
                     <form className="auth-form" onSubmit={handleRegister} noValidate/>
 
                     <form className="auth-form" onSubmit={handleRegister}>
 
+>>>>>>> feature/admin-manage
                         <div className="form-group">
                             <label>First Name</label>
                             <div className="input-wrapper">
@@ -198,6 +212,7 @@ const TrainerRegister: React.FC = () => {
                                     onBlur={handleBlur}
                                     placeholder="Dr. Sarah Mitchell"
                                     className={errors.firstName ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.firstName && <p className="error-text">{errors.firstName}</p>}
@@ -215,6 +230,7 @@ const TrainerRegister: React.FC = () => {
                                     onBlur={handleBlur}
                                     placeholder="Mitchell"
                                     className={errors.lastName ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.lastName && <p className="error-text">{errors.lastName}</p>}
@@ -232,6 +248,7 @@ const TrainerRegister: React.FC = () => {
                                     onBlur={handleBlur}
                                     placeholder="trainer@cyclesync.ai"
                                     className={errors.email ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.email && <p className="error-text">{errors.email}</p>}
@@ -249,6 +266,7 @@ const TrainerRegister: React.FC = () => {
                                     onBlur={handleBlur}
                                     placeholder="••••••••"
                                     className={errors.password ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.password && <p className="error-text">{errors.password}</p>}
@@ -267,6 +285,7 @@ const TrainerRegister: React.FC = () => {
                                     onBlur={handleBlur}
                                     placeholder="••••••••"
                                     className={errors.confirmPassword ? 'error' : ''}
+                                    required
                                 />
                             </div>
                             {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
@@ -283,6 +302,7 @@ const TrainerRegister: React.FC = () => {
                                     name="speciality"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    required
                                 >
                                     <option value="">Select Specialty...</option>
                                     <option value="nutrition">Nutrition & Hormones</option>
@@ -302,9 +322,14 @@ const TrainerRegister: React.FC = () => {
                                 onChange={handleTermsChange}
                             />
                             <label htmlFor="trainer-terms" style={{ fontSize: '0.85rem' }}>
-                                I agree to the <Link to="/terms" style={{ color: '#0d9488' }}>Trainer Terms</Link> and <Link to="/privacy" style={{ color: '#0d9488' }}>Privacy Policy</Link>
+                                I agree to the <Link to="/terms" style={{ color: '#0d9488' }}>Trainer Terms</Link> and 
+                                <Link to="/privacy" style={{ color: '#0d9488' }}>Privacy Policy</Link>
                             </label>
                         </div>
+<<<<<<< HEAD
+
+=======
+>>>>>>> feature/admin-manage
                         {errors.terms && <p className="error-text" style={{ marginBottom: '16px' }}>{errors.terms}</p>}
 
                         <button
@@ -334,19 +359,30 @@ const TrainerRegister: React.FC = () => {
                         </button>
                     </form>
 
-                    <p className="auth-footer" style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                        Already have a trainer account? <Link to="/trainer-panel/login" style={{ color: '#0d9488', fontWeight: '600' }}>Log in</Link>
+                    <p className="auth-footer" style={{ 
+                        textAlign: 'center', 
+                        marginTop: '24px', 
+                        fontSize: '0.85rem', 
+                        color: 'var(--text-muted)' 
+                    }}>
+                        Already have a trainer account?{' '}
+                        <Link to="/trainer-panel/login" style={{ color: '#0d9488', fontWeight: '600' }}>
+                            Log in
+                        </Link>
                     </p>
                 </div>
             </div>
 
+            {/* Side Panel */}
             <div className="auth-side animate-fadeIn" style={{
                 background: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #5eead4 100%)',
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
                 <div className="auth-side-content" style={{ color: 'white' }}>
-                    <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '24px' }}>Professional Trainer Benefits:</h2>
+                    <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '24px' }}>
+                        Professional Trainer Benefits:
+                    </h2>
                     <ul className="premium-perks" style={{ listStyle: 'none', padding: 0 }}>
                         <li style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px', fontSize: '1.1rem' }}>
                             <CheckCircle2 size={24} /> Client Cycle Monitoring
@@ -367,5 +403,9 @@ const TrainerRegister: React.FC = () => {
     );
 };
 
+<<<<<<< HEAD
+export default TrainerRegister;
+=======
 
 export default TrainerRegister;
+>>>>>>> feature/admin-manage

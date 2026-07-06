@@ -12,6 +12,7 @@ export const API_ENDPOINTS={
     RESETPASSWORD:"/api/users/reset-password",
     ME: "/api/users/me"
 },
+
      TRAINER_AUTH: {
 
     REGISTER:
@@ -27,6 +28,7 @@ export const API_ENDPOINTS={
       "/api/trainer/resend-otp",
 
     LOGOUT:
+
       "/api/trainer/logout",
 
     REFRESH:
@@ -34,15 +36,18 @@ export const API_ENDPOINTS={
 
     ME:
       "/api/trainer/me",
+
   },
 
   ADMIN: {
 
   LOGIN:
+
     "/api/admin/admin-login",
 
   USERS:
     "/api/admin/users",
+
 
   TRAINERS:
     "/api/admin/trainers",
@@ -70,6 +75,7 @@ TRAINER_ONBOARDING:{
   COMPLETE:"/api/onboarding/trainer/complete"
 
 }
+
 
 
 

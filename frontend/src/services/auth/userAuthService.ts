@@ -11,7 +11,10 @@ export const userAuthService={
         return response.data;
     },
 
-    
+    googleSignIn:async (data:GoogleSignInPayload):Promise<AuthResponse<null>> => {
+        const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.GOOGLE_SIGIN,data);
+        return response.data
+    },
     
 
     loginUser:async (data:LoginUserPayload):Promise<AuthResponse<null>> => {
@@ -47,8 +50,6 @@ export const userAuthService={
         const response=await axiosInstance.get(API_ENDPOINTS.USER_AUTH.ME);
         return response.data;
     }
-    
 
 }
-
 
