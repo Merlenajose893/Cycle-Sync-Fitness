@@ -1,4 +1,4 @@
-import type { AdminLoginDto,PaginationDto } from "../../dtos/admin.dto.js";
+import type { AdminLoginDto,PaginationDto ,InviteTrainerDTO} from "../../dtos/admin.dto.js";
 import type { Response } from "express";
 import type { IUser } from "../../models/User.js";
 import type { ITrainer } from "../../models/Trainer.js";
@@ -10,4 +10,5 @@ export interface IAdminService{
 unblockUser(userId:string):Promise<IUser|null>;
 blockTrainer(trainerId:string):Promise<ITrainer|null>;
 unblockTrainer(trainerId:string):Promise<ITrainer|null>;
+inviteTrainer(data:InviteTrainerDTO):Promise<void>
 }

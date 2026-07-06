@@ -50,7 +50,7 @@ const TrainerSchema = new Schema<ITrainer>(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true ,unique:true},
-    password: { type: String, required: true },
+    password: { type: String, required: false },
 
     speciality: { type: String, required: true },
     isDeleted:{type:Boolean, required:false},
