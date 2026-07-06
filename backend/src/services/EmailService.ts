@@ -101,4 +101,44 @@ implements IEmailService {
       `,
     });
   }
+  
+  async sendTrainerInvitation(
+  to: string,
+  firstName: string,
+  inviteLink: string
+): Promise<void> {
+
+  await this.transporter.sendMail({
+
+    from:
+      `"CycleSyncAI" <${process.env.EMAIL_USER}>`,
+
+    to,
+
+    subject: "Trainer Invitation",
+
+    html: `
+      <h2>Welcome to CycleSync AI</h2>
+
+      <p>Hi ${firstName},</p>
+
+      <p>
+        You have been invited to join CycleSync AI as a Trainer.
+      </p>
+
+      <p>
+        Click the link below to activate your account and create your password.
+      </p>
+
+      <a href="${inviteLink}">
+        Accept Invitation
+      </a>
+
+      <p>
+        This invitation expires in 24 hours.
+      </p>
+    `,
+  });
+
+}
 }
