@@ -134,5 +134,22 @@ logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {
     await this.tokenService.clearTokens(trainerId,res)
 }
 
+verifyTrainerInvite=async(token: string,res:Response): Promise<void> =>{
+    const trainer=await this.trainerRepository.findByInviteToken(token);
+    if(!trainer)
+    {
+        throw new BadRequestError("Invalid Token")
+    }
+    if(trainer.inviteAccepted)
+    {
+        throw new BadRequestError("Trainer is already invided")
+    }
+    if(trainer.inviteExpiresAt && trainer.inviteExpiresAt<new Date())
+    {
+        throw new BadRequestError("Token is expired")
+    }
+    return trainer;
+}
+
 }
 

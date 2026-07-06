@@ -11,6 +11,7 @@ export interface ITrainerAuthService{
     resendOTP(trainerId:string):Promise<void>;
     forgotPassword(data:ForgotPasswordDTO,res:Response):Promise<ForgotPasswordResponseDTO>;
     resetPassword(data:ResetPasswordDTO,res:Response):Promise<void>;
+    verifyTrainerInvite(token:string,res:Response):Promise<void>;
     
 
 }
