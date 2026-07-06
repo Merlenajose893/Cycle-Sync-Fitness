@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import {
     Dumbbell,
     Search,
@@ -24,11 +24,12 @@ import {
 import '../../styles/AdminPage.css';
 import type { Trainer } from '../../types/auth.types';
 import { useAdminAuth } from '../../hooks/auth/useAdmin';
+import { showToast } from '../../components/common/Toast/Toast';
 // import { usePackages, updatePackageStatus } from '../../data/mockPackages';
 
 const ManageTrainersPage: React.FC = () => {
     const [trainers,setTrainers]=useState<Trainer[]>([]);
-    const {getAllTrainers,loading,error}=useAdminAuth();
+    const {getAllTrainers,loading,error,blockTrainer,unblockTrainer}=useAdminAuth();
     const [searchQuery, setSearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
     const [selectedTrainers, setSelectedTrainers] = useState<number[]>([]);
@@ -44,20 +45,40 @@ const ManageTrainersPage: React.FC = () => {
         // pendingPackages: packages.filter(p => p.status === 'pending').length
     };
 
-    const fetchTrainers=async()=>{
+    const fetchTrainers = useCallback(async () => {
+    try {
+        const data = await getAllTrainers();
+        setTrainers(data);
+    } catch (err) {
+        showToast.error("Failed to fetch trainers");
+    }
+}, [getAllTrainers]);
+
+useEffect(() => {
+    fetchTrainers();
+}, [fetchTrainers]);
+
+    const handleBlock=async (trainerId:string):Promise<void> => {
         try {
-            const data=await getAllTrainers();
-            setTrainers(data);
+            await blockTrainer(trainerId);
+            showToast.success("Trainer blocked successfully");
+            fetchTrainers();
         } catch (error) {
             console.log(error);
-            
             
         }
     }
 
-    useEffect(()=>{
-        fetchTrainers();
-    },[])
+    const handleUnBlock=async (trainerId:string):Promise<void> => {
+        try {
+            await unblockTrainer(trainerId);
+            showToast.success("Trainer unblocked successfully");
+            fetchTrainers();
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
 
     const toggleSelection = (id: number) => {
         setSelectedTrainers((prev) =>
@@ -279,6 +300,8 @@ const ManageTrainersPage: React.FC = () => {
                                                 <CheckCircle2 size={16} />
                                             </button>
                                         )}
+                                        <button onClick={()=>handleBlock(trainer._id)}>block</button>
+                                        <button onClick={()=>handleUnBlock(trainer._id)}> unblock</button>
                                         <button className="btn-icon" title="More Actions"><MoreVertical size={16} /></button>
                                     </div>
                                 </td>

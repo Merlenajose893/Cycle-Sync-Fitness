@@ -116,5 +116,46 @@ export const useAdminAuth=()=>{
         }
     }
 
-    return {adminLogin,getAllUsers,getAllTrainers,blockUser,unblockUser,loading,error}
+
+    const blockTrainer=async (trainerId:string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            return await adminService.blockTrainer(trainerId);
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Failed to block the trainer")
+            }
+            else{
+                setError("Unexpected error occured")
+            }
+        }
+        finally{
+            setLoading(false);
+        }
+    }
+
+    const unblockTrainer=async (trainerId:string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            return adminService.unblockTrainer(trainerId);
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Failed to unblock the trainer")
+            }
+            else{
+                setError("Unexpected error occured")
+            }
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
+
+
+    return {adminLogin,getAllUsers,getAllTrainers,blockUser,unblockUser,blockTrainer,unblockTrainer,loading,error}
 }

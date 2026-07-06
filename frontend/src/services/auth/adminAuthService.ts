@@ -24,6 +24,16 @@ blockUser:async (userId:string) => {
 unblockUser:async(userId:string)=>{
     const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.UNBLOCK_USER}/${userId}/unblock`);
     return response.data;
+},
+
+blockTrainer:async (trainerId:string) => {
+    const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.BLOCK_TRAINER}/${trainerId}/block`);
+    return response.data;
+},
+
+unblockTrainer:async (trainerId:string) => {
+    const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.UNBLOCK_TRAINER}/${trainerId}/unblock`)
+    return response.data
 }
 
 }

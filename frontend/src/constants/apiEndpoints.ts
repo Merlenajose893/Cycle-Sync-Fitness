@@ -48,7 +48,9 @@ export const API_ENDPOINTS={
     "/api/admin/trainers",
 
     BLOCK_USER:"/api/admin/users",
-    UNBLOCK_USER:"/api/admin/users"
+    UNBLOCK_USER:"/api/admin/users",
+    BLOCK_TRAINER:"/api/admin/trainers",
+    UNBLOCK_TRAINER:"/api/admin/trainers",
 },
 
 
