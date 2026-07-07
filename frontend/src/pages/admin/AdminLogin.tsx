@@ -1,22 +1,17 @@
+// src/pages/AdminLogin.tsx
 import React, { useState } from 'react';
-import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
+import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import '../../styles/Auth.css';
 
 const AdminLogin: React.FC = () => {
-<<<<<<< HEAD
+    const navigate = useNavigate();
+    const { adminLogin, loading, error } = useAdminAuth();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
-    const { adminLogin, loading, error } = useAdminAuth();
-=======
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("");
-    const {adminLogin,loading,error}=useAdminAuth();
->>>>>>> feature/admin-manage
-    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,18 +25,15 @@ const AdminLogin: React.FC = () => {
 
     return (
         <div className="auth-wrapper">
-<<<<<<< HEAD
-=======
-            {error && (
-    <p className="error-message">
-        {error}
-    </p>
-)}
->>>>>>> feature/admin-manage
             <div className="auth-container" style={{ justifyContent: 'center' }}>
                 {/* Brand */}
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
-                    <div className="auth-logo" style={{ background: 'var(--accent-purple)', width: '48px', height: '48px', fontSize: '1.4rem' }}>
+                    <div className="auth-logo" style={{ 
+                        background: 'var(--accent-purple)', 
+                        width: '48px', 
+                        height: '48px', 
+                        fontSize: '1.4rem' 
+                    }}>
                         C
                     </div>
                     <h1>CycleSync <span style={{ color: 'var(--accent-purple)' }}>AI</span></h1>
@@ -95,14 +87,9 @@ const AdminLogin: React.FC = () => {
                                 <input
                                     type="email"
                                     value={email}
-<<<<<<< HEAD
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="admin@cyclesync.ai"
                                     required
-=======
-                                    onChange={(e)=>setEmail(e.target.value)}
-                                    placeholder='admin@cyclesync.ai'
->>>>>>> feature/admin-manage
                                 />
                             </div>
                         </div>
@@ -112,35 +99,21 @@ const AdminLogin: React.FC = () => {
                             <div className="input-wrapper">
                                 <Lock size={18} className="input-icon" />
                                 <input
-<<<<<<< HEAD
                                     type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
                                     required
-=======
-                                    type={password ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={(e)=>setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                    
->>>>>>> feature/admin-manage
                                 />
                                 <button
                                     type="button"
                                     className="show-password"
-<<<<<<< HEAD
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
-                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />
-                                    onClick={() => setPassword(!password)}
-                                >
-                                    {password ? <EyeOff size={18} /> : <Eye size={18} />}
-
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
                         </div>
-
 
                         <button
                             type="submit"
@@ -163,23 +136,6 @@ const AdminLogin: React.FC = () => {
                         >
                             {loading ? "Signing In..." : "Sign In"}
                             <ArrowRight size={18} />
-=======
-                        <button type="submit" className="btn btn-full"  disabled={loading} style={{
-                            padding: '14px',
-                            background: 'var(--accent-purple)',
-                            color: 'white',
-                            borderRadius: 'var(--radius-md)',
-                            fontWeight: '600',
-                            fontSize: '1rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '8px',
-                            marginTop: '8px',
-                            transition: 'opacity 0.2s'
-                        }}>
-                            {loading ? "Signing In...":"Sign In"} <ArrowRight size={18} />
->>>>>>> feature/admin-manage
                         </button>
                     </form>
 

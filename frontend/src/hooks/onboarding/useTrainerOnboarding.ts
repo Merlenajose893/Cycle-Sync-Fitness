@@ -32,4 +32,6 @@ export const useTrainerOnboarding=()=>{
     const completeOnboarding=async (params:type) => {
         
     }
+
+    
 }

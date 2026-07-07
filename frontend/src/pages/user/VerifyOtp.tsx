@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Mail, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
-<<<<<<< HEAD
+
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
 import { showToast } from '../../components/common/Toast/Toast';
 import '../../styles/Auth.css';
-=======
-import { useLocation ,useNavigate} from 'react-router-dom';
-import { showToast } from '../../components/common/Toast/Toast';
->>>>>>> feature/admin-manage
+
 
 const VerifyOtp = () => {
     const navigate = useNavigate();
@@ -21,10 +18,10 @@ const VerifyOtp = () => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [error, setError] = useState("");
 
-<<<<<<< HEAD
+
     const handleChange = (value: string, index: number) => {
         if (!/^\d*$/.test(value)) return;
-=======
+
   }
   const handleSubmit=async (e) => {
     e.preventDefault();
@@ -47,7 +44,7 @@ const VerifyOtp = () => {
       {
         showToast.success("Otp is verified")
         navigate("/onboarding");
->>>>>>> feature/admin-manage
+
 
         const newOtp = [...otp];
         newOtp[index] = value;
