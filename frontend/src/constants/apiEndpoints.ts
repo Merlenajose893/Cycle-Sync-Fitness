@@ -37,6 +37,8 @@ export const API_ENDPOINTS={
     ME:
       "/api/trainer/me",
 
+      
+
   },
 
   ADMIN: {
@@ -74,8 +76,18 @@ TRAINER_ONBOARDING:{
   PACKAGES:"/api/onboarding/trainer/packages",
   COMPLETE:"/api/onboarding/trainer/complete"
 
-}
+},
 
+
+TRAINER_INVITE:{
+
+    VERIFY:
+        "/api/trainer/invite/verify",
+
+    REGISTER:
+        "/api/trainer/invite/register"
+
+}
 
 
 
