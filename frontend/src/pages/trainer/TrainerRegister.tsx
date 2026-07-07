@@ -1,3 +1,4 @@
+// src/pages/TrainerRegister.tsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Dumbbell, CheckCircle2 } from 'lucide-react';
@@ -131,15 +132,7 @@ const TrainerRegister: React.FC = () => {
         }
     };
 
-<<<<<<< HEAD
     return (
-=======
-
-
-    
-
-     return (
->>>>>>> feature/admin-manage
         <div className="auth-wrapper">
             <div className="auth-container" style={{ justifyContent: 'center' }}>
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
@@ -181,10 +174,6 @@ const TrainerRegister: React.FC = () => {
                         <p>Create your profile to start coaching with expert cycle-sync precision.</p>
                     </div>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> feature/admin-manage
                     {/* General Error */}
                     {errors.submit && (
                         <div className="auth-error-message" style={{ marginBottom: '20px' }}>
@@ -192,14 +181,7 @@ const TrainerRegister: React.FC = () => {
                         </div>
                     )}
 
-<<<<<<< HEAD
                     <form className="auth-form" onSubmit={handleRegister} noValidate>
-=======
-                    <form className="auth-form" onSubmit={handleRegister} noValidate/>
-
-                    <form className="auth-form" onSubmit={handleRegister}>
-
->>>>>>> feature/admin-manage
                         <div className="form-group">
                             <label>First Name</label>
                             <div className="input-wrapper">
@@ -326,10 +308,7 @@ const TrainerRegister: React.FC = () => {
                                 <Link to="/privacy" style={{ color: '#0d9488' }}>Privacy Policy</Link>
                             </label>
                         </div>
-<<<<<<< HEAD
 
-=======
->>>>>>> feature/admin-manage
                         {errors.terms && <p className="error-text" style={{ marginBottom: '16px' }}>{errors.terms}</p>}
 
                         <button
@@ -403,9 +382,4 @@ const TrainerRegister: React.FC = () => {
     );
 };
 
-<<<<<<< HEAD
 export default TrainerRegister;
-=======
-
-export default TrainerRegister;
->>>>>>> feature/admin-manage

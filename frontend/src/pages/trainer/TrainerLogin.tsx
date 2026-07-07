@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Dumbbell, ArrowRight } from 'lucide-react';
-<<<<<<< HEAD
-=======
 import '../../styles/Auth.css';
->>>>>>> feature/admin-manage
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
-import '../../styles/Auth.css';
 
 const TrainerLogin: React.FC = () => {
     const navigate = useNavigate();
@@ -16,7 +12,6 @@ const TrainerLogin: React.FC = () => {
         email: "",
         password: "",
     });
-
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -25,8 +20,7 @@ const TrainerLogin: React.FC = () => {
         switch (name) {
             case 'email':
                 if (!value.trim()) return 'Email is required';
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) 
-                    return 'Please enter a valid email address';
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email address';
                 return '';
             case 'password':
                 if (!value) return 'Password is required';
@@ -49,7 +43,6 @@ const TrainerLogin: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setFormData(prev => ({ ...prev, [id]: value }));
-
         if (errors[id]) {
             setErrors(prev => ({ ...prev, [id]: '' }));
         }
@@ -58,7 +51,6 @@ const TrainerLogin: React.FC = () => {
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const { id } = e.target;
         setTouched(prev => ({ ...prev, [id]: true }));
-
         const error = validateField(id, (formData as any)[id]);
         if (error) {
             setErrors(prev => ({ ...prev, [id]: error }));
@@ -75,35 +67,23 @@ const TrainerLogin: React.FC = () => {
 
         try {
             setErrors({});
-            await loginTrainer({
+            const response = await loginTrainer({
                 email: formData.email.trim(),
                 password: formData.password,
             });
+            console.log(response);
             navigate('/trainer-panel/dashboard');
         } catch (error: any) {
             console.error(error);
-            setErrors({ 
-                submit: error.response?.data?.message || "Invalid email or password." 
-            });
+            setErrors({ submit: error.response?.data?.message || "Invalid email or password." });
         }
     };
 
     return (
         <div className="auth-wrapper">
             <div className="auth-container" style={{ justifyContent: 'center' }}>
-<<<<<<< HEAD
-                {/* Brand */}
-=======
->>>>>>> feature/admin-manage
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
-                    <div className="auth-logo" style={{ 
-                        background: 'linear-gradient(135deg, #0d9488, #14b8a6)', 
-                        width: '48px', 
-                        height: '48px', 
-                        fontSize: '1.4rem' 
-                    }}>
-                        C
-                    </div>
+                    <div className="auth-logo" style={{ background: 'linear-gradient(135deg, #0d9488, #14b8a6)', width: '48px', height: '48px', fontSize: '1.4rem' }}>C</div>
                     <h1>CycleSync <span style={{ color: '#0d9488' }}>AI</span></h1>
                 </div>
 
@@ -114,10 +94,6 @@ const TrainerLogin: React.FC = () => {
                     border: '1px solid var(--border)',
                     boxShadow: 'var(--shadow-lg)'
                 }}>
-<<<<<<< HEAD
-                    {/* Trainer Badge */}
-=======
->>>>>>> feature/admin-manage
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
                         <div style={{
                             display: 'inline-flex',
@@ -141,9 +117,7 @@ const TrainerLogin: React.FC = () => {
                     </div>
 
                     {errors.submit && (
-                        <div className="auth-error-message" style={{ textAlign: 'center', marginBottom: '20px' }}>
-                            {errors.submit}
-                        </div>
+                        <div className="auth-error-message">{errors.submit}</div>
                     )}
 
                     <form className="auth-form" onSubmit={handleLogin} noValidate>
@@ -159,10 +133,6 @@ const TrainerLogin: React.FC = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.email ? 'error' : ''}
-<<<<<<< HEAD
-                                    required
-=======
->>>>>>> feature/admin-manage
                                 />
                             </div>
                             {errors.email && <p className="error-text">{errors.email}</p>}
@@ -180,10 +150,6 @@ const TrainerLogin: React.FC = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     className={errors.password ? 'error' : ''}
-<<<<<<< HEAD
-                                    required
-=======
->>>>>>> feature/admin-manage
                                 />
                                 <button
                                     type="button"
@@ -223,42 +189,19 @@ const TrainerLogin: React.FC = () => {
                                 cursor: loading ? 'not-allowed' : 'pointer'
                             }}
                         >
-<<<<<<< HEAD
-                            {loading ? "Signing in..." : "Sign In"} 
-                            <ArrowRight size={18} />
-=======
                             {loading ? "Signing in..." : "Sign In"} <ArrowRight size={18} />
->>>>>>> feature/admin-manage
                         </button>
                     </form>
 
-                    <p style={{ 
-                        textAlign: 'center', 
-                        marginTop: '24px', 
-                        fontSize: '0.85rem', 
-                        color: 'var(--text-muted)' 
-                    }}>
-                        Don't have a trainer account?{' '}
-                        <Link to="/trainer-panel/register" style={{ color: '#0d9488', fontWeight: '600' }}>
-                            Register
-                        </Link>
+                    <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                        Don't have a trainer account? <Link to="/trainer-panel/register" style={{ color: '#0d9488', fontWeight: '600' }}>Register</Link>
                     </p>
-
-                    <p style={{ 
-                        textAlign: 'center', 
-                        marginTop: '8px', 
-                        fontSize: '0.85rem', 
-                        color: 'var(--text-muted)' 
-                    }}>
+                    <p style={{ textAlign: 'center', marginTop: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                         Access restricted to registered trainers.
                     </p>
                 </div>
             </div>
 
-<<<<<<< HEAD
-            {/* Side Panel */}
-=======
->>>>>>> feature/admin-manage
             <div className="auth-side" style={{
                 background: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #5eead4 100%)',
                 alignItems: 'center',
@@ -268,9 +211,7 @@ const TrainerLogin: React.FC = () => {
                     <div style={{ marginBottom: '32px' }}>
                         <Dumbbell size={64} color="rgba(255,255,255,0.4)" />
                     </div>
-                    <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '16px' }}>
-                        Trainer Hub
-                    </h2>
+                    <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '16px' }}>Trainer Hub</h2>
                     <p style={{ fontSize: '1.1rem', opacity: 0.8, lineHeight: '1.6' }}>
                         Manage workouts, meal plans, recipes, and session slots from a single dashboard.
                     </p>
@@ -281,24 +222,3 @@ const TrainerLogin: React.FC = () => {
 };
 
 export default TrainerLogin;
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> feature/admin-manage
