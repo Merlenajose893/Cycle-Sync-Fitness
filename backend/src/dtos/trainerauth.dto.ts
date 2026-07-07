@@ -34,3 +34,7 @@ export interface ForgotPasswordResponseDTO{
     message?:string;
 
 }
+export interface registerTrainerInviteDTO{
+    token:string;
+    password:string;
+}

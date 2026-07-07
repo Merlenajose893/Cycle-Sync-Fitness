@@ -6,7 +6,7 @@ import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import bcrypt from "bcryptjs";
 import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError } from "../errors/index.js";
 
-import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO } from "../dtos/trainerauth.dto.js";
+import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO, registerTrainerInviteDTO } from "../dtos/trainerauth.dto.js";
 
 
 
@@ -14,6 +14,7 @@ import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPassword
 import { TOKENS } from "../container/tokens.js";
 import type { Response } from "express";
 import { email } from "zod";
+import type { ITrainer } from "../models/Trainer.js";
 @injectable()
 export class TrainerAuthService implements ITrainerAuthService{
 constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.IOtpService) private otpService:IOtpService ,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
@@ -134,7 +135,7 @@ logoutTrainer=async(trainerId: string, res: Response): Promise<void>=> {
     await this.tokenService.clearTokens(trainerId,res)
 }
 
-verifyTrainerInvite=async(token: string,res:Response): Promise<void> =>{
+verifyTrainerInvite=async(token: string,res:Response): Promise<ITrainer> =>{
     const trainer=await this.trainerRepository.findByInviteToken(token);
     if(!trainer)
     {
@@ -149,6 +150,26 @@ verifyTrainerInvite=async(token: string,res:Response): Promise<void> =>{
         throw new BadRequestError("Token is expired")
     }
     return trainer;
+}
+
+registerTrainerInvite=async(data: registerTrainerInviteDTO): Promise<void> =>{
+    const trainer=await this.trainerRepository.findByInviteToken(data.token);
+    if(!trainer)
+    {
+        throw new BadRequestError("Invalid Invitation")
+    }
+
+    if(trainer.inviteAccepted)
+    {
+        throw new BadRequestError("Trainer alreafy invided")
+    }
+    if(trainer.inviteExpiresAt && trainer.inviteExpiresAt<new Date())
+    {
+        throw new BadRequestError("Token is expired")
+    }
+    const hashedPassword=await bcrypt.hash(data.password,10);
+
+    await this.trainerRepository.acceptTrainer(trainer._id!,hashedPassword);
 }
 
 }

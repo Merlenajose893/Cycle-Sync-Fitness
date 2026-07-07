@@ -1,5 +1,5 @@
 
-import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO,ForgotPasswordResponseDTO} from "../../dtos/trainerauth.dto.js";
+import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO,ForgotPasswordResponseDTO, registerTrainerInviteDTO} from "../../dtos/trainerauth.dto.js";
 // import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO } from "../../dtos/trainerauth.dto.js";
 import type { Response } from "express";
 import type { ITrainer } from "../../models/Trainer.js";
@@ -11,7 +11,8 @@ export interface ITrainerAuthService{
     resendOTP(trainerId:string):Promise<void>;
     forgotPassword(data:ForgotPasswordDTO,res:Response):Promise<ForgotPasswordResponseDTO>;
     resetPassword(data:ResetPasswordDTO,res:Response):Promise<void>;
-    verifyTrainerInvite(token:string,res:Response):Promise<void>;
+    verifyTrainerInvite(token:string,res:Response):Promise<ITrainer>;
+    registerTrainerInvite(data:registerTrainerInviteDTO):Promise<void>;
     
 
 }

@@ -10,5 +10,6 @@ export interface IAdminService{
 unblockUser(userId:string):Promise<IUser|null>;
 blockTrainer(trainerId:string):Promise<ITrainer|null>;
 unblockTrainer(trainerId:string):Promise<ITrainer|null>;
-inviteTrainer(data:InviteTrainerDTO):Promise<void>
+inviteTrainer(data:InviteTrainerDTO):Promise<void>;
+
 }

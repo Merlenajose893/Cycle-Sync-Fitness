@@ -10,5 +10,6 @@ router.post("/verify-otp",validate(verifyTrainerOtpSchema),trainerAuthController
 router.post("/resend-otp",trainerAuthController.resendTrainerOTP)
 router.post("/login",validate(loginTrainer),trainerAuthController.loginTrainer);
 router.post("/logout",trainerAuthController.logoutTrainer);
+router.post("/invite/verify",trainerAuthController.verifyTrainer);
 
 export default router;

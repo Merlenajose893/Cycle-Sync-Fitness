@@ -5,6 +5,7 @@ import { TOKENS } from "../container/tokens.js";
 import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
 import { UnauthorizedError } from "../errors/index.js";
+import type { registerTrainerInviteDTO } from "../dtos/trainerauth.dto.js";
 @injectable()
 export class TrainerAuthController{
     constructor(@inject(TOKENS.ITrainerAuthService) private trainerAuthService:ITrainerAuthService)
@@ -42,6 +43,22 @@ export class TrainerAuthController{
         await this.trainerAuthService.logoutTrainer(trainerId,res)
 
         successResponse(res,"Trainer logout successfull",null,HttpStatus.OK)
+    }
+
+    verifyTrainer=async (req:Request,res:Response,next:NextFunction):Promise<void> => {
+        try {
+            const token=req.query.token as string;
+            const result=await this.trainerAuthService.verifyTrainerInvite(token,res);
+
+            successResponse(res,"Trainer Invite is verified",result,HttpStatus.OK)
+        } catch (error) {
+            next(error)
+        }
+    }
+    registerFromInvite=async (req:Request,res:Response,next:NextFunction) => {
+        const data:registerTrainerInviteDTO=req.body;
+        const result=await this.trainerAuthService.registerTrainerInvite(data);
+        successResponse(res,"Registration invite done",result,HttpStatus.OK)
     }
 
 }
