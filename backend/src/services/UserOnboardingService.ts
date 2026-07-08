@@ -64,7 +64,9 @@ updateGoals=async (userId: string, data: UpdateGoals): Promise<IUser> =>{
 }
 
 completeOnboarding=async (userId: string): Promise<IUser>=> {
-    const user=await this.userRepository.findByEmail(userId);
+    const user=await this.userRepository.findById(userId);
+    console.log(user);
+    
     if(!user)
     {
         throw new NotFoundError("User Not found");
