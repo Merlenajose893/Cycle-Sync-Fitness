@@ -1,4 +1,5 @@
 import {z} from "zod"
+import { coerce } from "zod";
 export const updateBodyDetailsSchema=z.object({
     height:z.coerce.number().positive("Height must be greater than 0"),
     weight:z.coerce.number().positive("Weight must be greater than 0"),
@@ -8,7 +9,7 @@ export const updateBodyDetailsSchema=z.object({
 export const updateCycleSetupSchema=z.object({
     averageCycleLength:z.number().optional(),
     averagePeriodLength:z.number().positive().optional(),
-    lastPeriodStart:z.date(),
+    lastPeriodStart:z.coerce.date(),
     birthControl:z.string().optional()
 })
 

@@ -49,11 +49,17 @@ export class UserOnboardingControlling{
         }
     }
 
-    async updateGoals(req:Request,res:Response,next:NextFunction){
+     updateGoals=async(req:Request,res:Response,next:NextFunction)=>{
         try {
             
             const userId=req.user?.userId!;
+            console.log(userId);
+            console.log(req.body);
+            
+            
             const result=await this.useronboardingService.updateGoals(userId,req.body);
+            console.log(result);
+            
             successResponse(res,"Goals are updated",result)
         } catch (error) {
             next(error)

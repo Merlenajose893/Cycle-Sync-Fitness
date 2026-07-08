@@ -49,11 +49,15 @@ updateCycleSetUp=async(userId: string, data: UpdateCycleSetUpDTO): Promise<IUser
 
 updateGoals=async (userId: string, data: UpdateGoals): Promise<IUser> =>{
     const user=await this.userRepository.findById(userId);
+    console.log(user);
+    
     if(!user)
     {
         throw new NotFoundError("User not found")
     }
     user.goals=UserOnboardingMapper.toGoals(data);
+    console.log(user.goals.primaryGoal);
+    
     user.onboardingStep=4;
     return this.userRepository.save(user);
 
