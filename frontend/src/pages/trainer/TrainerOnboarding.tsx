@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTrainerOnboarding } from '../../hooks/onboarding/useTrainerOnboarding';
 import {
     ArrowRight,
     ArrowLeft,
@@ -48,12 +49,50 @@ const TrainerOnboarding: React.FC = () => {
     });
 
     const totalSteps = 5;
+    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, loading } = useTrainerOnboarding();
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (step < totalSteps) {
             setStep(step + 1);
         } else {
-            navigate('/trainer-panel/login');
+            try {
+                await updateProfile({
+                    bio: formData.bio,
+                    experience: formData.experience,
+                    location: formData.location,
+                    avatar: formData.profilePhoto,
+                    speciality: formData.specialty.join(', '),
+                    languages: formData.languages,
+                });
+
+                const certsList = formData.certifications.split(',').map(c => c.trim()).filter(c => c);
+                if (certsList.length > 0) {
+                    await updateCertifications({
+                        certifications: certsList.map(c => ({
+                            title: c,
+                            issuedBy: "Unknown",
+                            year: new Date().getFullYear().toString()
+                        }))
+                    });
+                }
+
+                if (formData.packageName && formData.packagePrice) {
+                    await updatePackages({
+                        packages: [{
+                            name: formData.packageName,
+                            sessions: Number(formData.packageSessions) || 1,
+                            duration: "1 Hour",
+                            price: Number(formData.packagePrice) || 0,
+                            popular: true
+                        }]
+                    });
+                }
+
+                await completeOnboarding();
+                navigate('/trainer-panel/login');
+            } catch (err) {
+                console.error("Failed to submit onboarding data", err);
+            }
         }
     };
 
@@ -439,12 +478,13 @@ const TrainerOnboarding: React.FC = () => {
                                 <ArrowLeft size={18} /> Back
                             </button>
                         ) : <div />}
-                        <button onClick={handleNext} className="btn btn-primary" style={{
+                        <button onClick={handleNext} disabled={loading} className="btn btn-primary" style={{
                             display: 'flex', alignItems: 'center', gap: '8px',
                             paddingLeft: '32px', paddingRight: '32px',
-                            background: 'linear-gradient(135deg, #0d9488, #14b8a6)'
+                            background: 'linear-gradient(135deg, #0d9488, #14b8a6)',
+                            opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer'
                         }}>
-                            {step === totalSteps ? 'Submit Application' : 'Next'} {step !== totalSteps && <ArrowRight size={18} />}
+                            {step === totalSteps ? (loading ? 'Submitting...' : 'Submit Application') : 'Next'} {step !== totalSteps && <ArrowRight size={18} />}
                         </button>
                     </div>
                 </div>

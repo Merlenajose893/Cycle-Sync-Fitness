@@ -95,7 +95,7 @@ const Onboarding: React.FC = () => {
                 setStep(4);
             } else if (step === 4) {
                 await completeOnboarding();
-                navigate('/dashboard');
+                navigate('/app');
             }
         } catch (err) {
             console.error("Onboarding step error:", err);
