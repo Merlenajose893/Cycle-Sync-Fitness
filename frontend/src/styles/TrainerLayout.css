@@ -1,0 +1,383 @@
+/* ═══════════════════════════════════════════════════════
+   TRAINER LAYOUT — Sidebar + Topbar Shell
+   Dark sidebar with teal accents, glassmorphic topbar
+   ═══════════════════════════════════════════════════════ */
+
+/* ─────────────────── Layout Root ─────────────────── */
+
+.trainer-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #f8f9fc;
+}
+
+/* ─────────────────── Sidebar ─────────────────── */
+
+.trainer-sidebar {
+    width: 272px;
+    background: linear-gradient(180deg, #111827 0%, #1f2937 50%, #111827 100%);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.trainer-sidebar-closed .trainer-sidebar {
+    width: 0;
+    overflow: hidden;
+}
+
+/* ─── Sidebar Header / Brand ─── */
+
+.trainer-sidebar-header {
+    padding: 28px 22px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.trainer-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    overflow: hidden;
+}
+
+.trainer-brand-logo {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
+}
+
+.trainer-brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.trainer-brand-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.trainer-brand-subtitle {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+}
+
+.trainer-sidebar-close-mobile {
+    display: none;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.trainer-sidebar-close-mobile:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Sidebar Navigation ─── */
+
+.trainer-sidebar-nav {
+    padding: 20px 14px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Custom scrollbar for dark sidebar */
+.trainer-sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.trainer-sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.trainer-sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.trainer-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    position: relative;
+}
+
+.trainer-nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.trainer-nav-item.active {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.2) 0%, rgba(20, 184, 166, 0.1) 100%);
+    color: #5eead4;
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1px rgba(13, 148, 136, 0.2);
+}
+
+.trainer-nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(180deg, #0d9488, #14b8a6);
+    border-radius: 0 4px 4px 0;
+}
+
+.trainer-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+.trainer-nav-item:hover .trainer-nav-icon {
+    transform: scale(1.08);
+}
+
+.trainer-nav-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Logout & Profile section */
+.trainer-nav-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 16px 14px;
+}
+
+.trainer-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #f87171 !important;
+}
+
+/* ─────────────────── Main Content Wrapper ─────────────────── */
+
+.trainer-main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────── Top Bar ─────────────────── */
+
+.trainer-topbar {
+    height: 72px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.trainer-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.trainer-sidebar-toggle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #64748b;
+    background: #f1f5f9;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.trainer-sidebar-toggle:hover {
+    color: #0d9488;
+    background: #f0fdfa;
+    border-color: #ccfbf1;
+}
+
+/* Topbar Right */
+.trainer-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.trainer-topbar-icon-btn {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #64748b;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.trainer-topbar-icon-btn:hover {
+    color: #0d9488;
+    background: #f0fdfa;
+    border-color: #ccfbf1;
+}
+
+.trainer-notification-dot {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* User profile in topbar */
+.trainer-user-avatar {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+/* ─────────────────── Content Area ─────────────────── */
+
+.trainer-content-area {
+    padding: 32px;
+    flex: 1;
+}
+
+.trainer-content-container {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* ─────────────────── Sidebar Overlay (Mobile) ─────────────────── */
+
+.trainer-sidebar-overlay {
+    display: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    .trainer-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+        z-index: 1100;
+        width: 272px;
+    }
+
+    .trainer-sidebar-open .trainer-sidebar {
+        transform: translateX(0);
+    }
+
+    .trainer-sidebar-closed .trainer-sidebar {
+        transform: translateX(-100%);
+        width: 272px;
+    }
+
+    .trainer-sidebar-close-mobile {
+        display: flex;
+    }
+
+    .trainer-sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1050;
+        animation: trainer-overlay-in 0.25s ease;
+    }
+
+    @keyframes trainer-overlay-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+
+@media (max-width: 640px) {
+    .trainer-topbar {
+        padding: 0 20px;
+        height: 64px;
+    }
+
+    .trainer-content-area {
+        padding: 20px;
+    }
+}

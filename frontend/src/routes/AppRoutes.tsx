@@ -21,6 +21,8 @@ import ManageUsersPage from "../pages/admin/ManageUsers";
 import ManageTrainersPage from "../pages/admin/ManageTrainer";
 import AppLayout from "../layouts/AppLayouts";
 import AdminLayout from "../layouts/AdminLayout";
+import TrainerDashboard from "../pages/trainer/trainerDashboard";
+import TrainerLayout from "../layouts/TrainerLayout";
 // import Dashboard from "../pages/user/Dashboard";
 function AppRoutes() {
     return (
@@ -46,6 +48,10 @@ function AppRoutes() {
                 <Route path="/trainer/reset-password" element={<TrainerResetPassword />} />
                 <Route path="/trainer/success" element={<TrainerVerificationSuccess />} />
                 <Route path="/trainer/onboarding" element={<TrainerOnboarding />} />
+                <Route element={<TrainerLayout/>}>
+
+                <Route path="/trainer" element={<TrainerDashboard/>}/>
+                </Route>
                 <Route path="/admin/admin-login" element={<AdminLogin />} />
                 <Route element={<AdminLayout/>}>
 

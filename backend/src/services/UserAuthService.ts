@@ -9,7 +9,7 @@ import type { IEmailService } from "../interfaces/services/IEmailService.js";
 import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import { TOKENS } from "../container/tokens.js";
 import bcrypt from "bcryptjs";
-import { ConflictError, NotFoundError } from "../errors/index.js";
+import { ConflictError, ForbiddenError, NotFoundError } from "../errors/index.js";
 
 import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.js";
 
@@ -160,6 +160,11 @@ if(!user.isEmailVerified)
 if(!user.password)
 {
     throw new UnauthorizedError("Password not found");
+}
+
+if(user.isDeleted)
+{
+    throw new ForbiddenError("Your account is blokced")
 }
 
 
