@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrainerOnboarding } from '../../hooks/onboarding/useTrainerOnboarding';
+import { showToast } from '../../components/common/Toast/Toast';
 import {
     ArrowRight,
     ArrowLeft,
@@ -49,9 +50,27 @@ const TrainerOnboarding: React.FC = () => {
     });
 
     const totalSteps = 5;
-    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, loading } = useTrainerOnboarding();
+    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, loading, error } = useTrainerOnboarding();
 
     const handleNext = async () => {
+        // --- Added Validation Checks ---
+        if (step === 1 && (!formData.fullName || !formData.phone || !formData.gender)) {
+            showToast.error("Please fill all required personal details");
+            return;
+        }
+        if (step === 2 && (formData.specialty.length === 0 || !formData.experience)) {
+            showToast.error("Please select at least one specialty and experience level");
+            return;
+        }
+        if (step === 3 && (!formData.packageName || !formData.packagePrice)) {
+            showToast.error("Please provide package details");
+            return;
+        }
+        if (step === 4 && !formData.agreeTerms) {
+            showToast.error("You must agree to the Terms of Service to proceed");
+            return;
+        }
+
         if (step < totalSteps) {
             setStep(step + 1);
         } else {
@@ -89,9 +108,11 @@ const TrainerOnboarding: React.FC = () => {
                 }
 
                 await completeOnboarding();
+                showToast.success("Application submitted successfully!"); // Success Toast
                 navigate('/trainer-panel/login');
-            } catch (err) {
+            } catch (err: any) {
                 console.error("Failed to submit onboarding data", err);
+                showToast.error(error || err.message || "Failed to submit application"); // Error Toast
             }
         }
     };
