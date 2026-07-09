@@ -171,6 +171,8 @@ if(user.isDeleted)
 // const isPassword=await bcrypt.compare(data.password,user.password!);
 
 const isPassword=await bcrypt.compare(data.password,user.password!);
+console.log(isPassword);
+
 
 
 if(!isPassword)
