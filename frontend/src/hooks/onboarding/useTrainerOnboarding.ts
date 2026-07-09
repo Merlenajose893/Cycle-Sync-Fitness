@@ -1,35 +1,93 @@
 import { useState } from "react";
-import axios from "axios";
-import {train}
-import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerPackageDTO,TrainerOnboardingStatus ,CertificateItems,PackageItem} from "../../types/traineronboarding.types";
-export const useTrainerOnboarding=()=>{
-    const [loading,setLoading]=useState(true);
-    const [error,setError]=useState<string|null>(null)
-    const getOnboardingStatus=async ():Promise<TrainerOnboardingStatus> => {
+import type { 
+    UpdateTrainerProfileDTO,
+    UpdateTrainerCertificateDTO,
+    UpdateTrainerPackageDTO,
+    TrainerOnboardingStatus 
+} from "../../types/traineronboarding.types";
+import { traineronboardingService } from "../../services/onboarding/traineronboardingService";
+
+export const useTrainerOnboarding = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const getOnboardingStatus = async (): Promise<TrainerOnboardingStatus | null> => {
         try {
             setLoading(true);
-            setError(null)
-
-            const response=await 
-        } catch (error) {
-            
+            setError(null);
+            const response = await traineronboardingService.getOnboardingStatus();
+            return response.data;
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to fetch status");
+            return null;
+        } finally {
+            setLoading(false);
         }
-        finally{
+    };
 
+    const updateProfile = async (data: UpdateTrainerProfileDTO) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await traineronboardingService.updateProfile(data);
+            return response;
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to update profile");
+            throw err;
+        } finally {
+            setLoading(false);
         }
-    }
-    const updateProfile=async (params:type) => {
-        
-    }
+    };
 
-    const updateCertifications=async (params:type) => {
-        
-    }
-    const updatePackages=async (params:type) => {
-        
-    }
+    const updateCertifications = async (data: UpdateTrainerCertificateDTO) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await traineronboardingService.updateCertifications(data);
+            return response;
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to update certifications");
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const completeOnboarding=async (params:type) => {
-        
-    }
-}
+    const updatePackages = async (data: UpdateTrainerPackageDTO) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await traineronboardingService.updatePackages(data);
+            return response;
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to update packages");
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const completeOnboarding = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await traineronboardingService.completeOnboarding();
+            return response;
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to complete onboarding");
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return {
+        loading,
+        error,
+        getOnboardingStatus,
+        updateProfile,
+        updateCertifications,
+        updatePackages,
+        completeOnboarding
+    };
+};
