@@ -4,10 +4,12 @@ import { TrainerOnboardingController } from "../controllers/TrainerOnboardingCon
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { validate } from "../middlewares/validate.js";
 import { updateTrainerCertificationSchema, updateTrainerPackageSchema, updateTrainerProfileSchema } from "../validators/traineronboarding.validator.js";
+import { upload } from "../middlewares/upload.js";
 const router=express.Router();
 const controller=container.resolve(TrainerOnboardingController);
 router.get("/status",authMiddleware,controller.getTrainerOnboardingStatus.bind(controller));
 router.put("/profile",authMiddleware,validate(updateTrainerProfileSchema),controller.updateTrainerProfile.bind(controller));
 router.put("/packages",authMiddleware,validate(updateTrainerPackageSchema),controller.updateTrainerPackages.bind(controller));
 router.post("/complete",authMiddleware,controller.completeTrainerOnboarding.bind(controller))
+router.put("/avatar", authMiddleware,upload.single("avatar"),controller.uploadAvatar.bind(controller));
 export default router;

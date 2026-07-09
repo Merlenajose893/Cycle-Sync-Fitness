@@ -12,4 +12,5 @@ router.post("/login",validate(loginTrainer),trainerAuthController.loginTrainer);
 router.post("/logout",trainerAuthController.logoutTrainer);
 router.post("/invite/verify",trainerAuthController.verifyTrainer);
 router.post("/invite/register",trainerAuthController.registerFromInvite)
+
 export default router;
