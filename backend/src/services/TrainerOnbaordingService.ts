@@ -6,10 +6,11 @@ import { TOKENS } from "../container/tokens.js";
 import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerPackageDTO } from "../dtos/traineronboarding.dto.js";
 import { TrainerOnboardingMapper } from "../mappers/TrainerOnboardingMapper.js";
 import { NotFoundError } from "../errors/index.js";
+import type { IImageService } from "../interfaces/services/IImageService.js";
 
 @injectable()
 export class TrainerOnboardingService implements ITrainerOnboardingService{
-constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository)
+constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository, @inject(TOKENS.IImageService) private imageService:IImageService)
 {
 
 }
