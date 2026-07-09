@@ -52,7 +52,7 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
         throw new UnauthorizedError("Invalid Credentials")
     }
 
-    const isCompare=await bcrypt.compare(data.password,trainer.password);
+    const isCompare=await bcrypt.compare(data.password,trainer.password!);
     if(!isCompare)
     {
         throw new UnauthorizedError("Invalid Credentials")

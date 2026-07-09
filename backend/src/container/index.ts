@@ -32,7 +32,7 @@ import { TrainerRepository } from "../repositories/TrainerRepository.js";
 
 import { UserOnboardingService } from "../services/UserOnboardingService.js";
 import { TrainerOnboardingService } from "../services/TrainerOnbaordingService.js";
-
+import { ImageService } from "../services/ImageService.js";
 
 container.register(
   TOKENS.IUserRepository,
@@ -112,6 +112,13 @@ container.register(
   TOKENS.IAdminService,
   {
     useClass:AdminService
+  }
+)
+
+container.register(
+  TOKENS.IImageService,
+  {
+    useClass:ImageService
   }
 )
 

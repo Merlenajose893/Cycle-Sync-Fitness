@@ -70,8 +70,14 @@ export class TrainerOnboardingController{
     next: NextFunction
 ) => {
     try {
+        console.log("hi");
+        
         const trainerId = req.user!.userId;
-        const file = req.file;
+        const file = req.file!;
+        console.log(trainerId);
+        console.log(file);
+        
+        
 
         const trainer = await this.trainerOnboardingService.uploadAvatar(
             trainerId,

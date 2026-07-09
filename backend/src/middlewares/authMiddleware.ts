@@ -5,6 +5,10 @@ import type { TokenPayload } from "../types/auth.types.js";
 import type { UserRepository } from "../repositories/UserRepository.js";
 export const authMiddleware=(req:Request,res:Response,next:NextFunction):void=>{
     const token=req.cookies.access_token;
+    console.log(req.cookies.refresh_token);
+    
+    console.log(token);
+    
     if(!token)
     {
         throw new UnauthorizedError("Access token missing")
