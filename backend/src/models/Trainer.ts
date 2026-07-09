@@ -23,6 +23,7 @@ export interface ITrainer extends Document {
   isEmailVerified:boolean;
   isDeleted:boolean;
   avatar?: string;
+  avatarPublicId?:string;
   bio?: string;
   experience: number;
   inviteToken:string;
@@ -58,6 +59,7 @@ const TrainerSchema = new Schema<ITrainer>(
     inviteExpiresAt:{type:Date,default:null},
     inviteAccepted:{type:Boolean,default:false},
     avatar: { type: String },
+    avatarPublicId:{type:String},
     bio: { type: String },
 
     onboardingSteps:{type:Number,default:1},

@@ -5,7 +5,7 @@ import type { ITrainerOnboardingService } from "../interfaces/services/ITrainerO
 import { TOKENS } from "../container/tokens.js";
 import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerPackageDTO } from "../dtos/traineronboarding.dto.js";
 import { TrainerOnboardingMapper } from "../mappers/TrainerOnboardingMapper.js";
-import { NotFoundError } from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 import type { IImageService } from "../interfaces/services/IImageService.js";
 
 @injectable()
@@ -64,5 +64,23 @@ completeTrainerOnboardingStatus=async(trainerId: string): Promise<ITrainer> =>{
     }
     trainer.onboardingCompleted=true;
     return this.trainerRepository.save(trainer);
+}
+
+uploadAvatar=async(trainerId: string, file: Express.Multer.File): Promise<ITrainer> =>{
+    const trainer=await this.trainerRepository.findById(trainerId);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer Not found");
+    }
+    if(file===undefined)
+    {
+        throw new BadRequestError("File is Undefined")
+    }
+    const image=await this.imageService.uploadImage(file);
+    trainer.avatar=image.url;
+    trainer.avatarPublicId=image.publicId;
+
+    await this.trainerRepository.save(trainer);
+    return trainer;
 }
 }
