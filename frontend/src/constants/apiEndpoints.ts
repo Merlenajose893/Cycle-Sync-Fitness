@@ -74,7 +74,8 @@ TRAINER_ONBOARDING:{
   PROFILE:"/api/onboarding/trainer/profile",
   CERTIFICATIONS:"/api/onboarding/trainer/certifications",
   PACKAGES:"/api/onboarding/trainer/packages",
-  COMPLETE:"/api/onboarding/trainer/complete"
+  COMPLETE:"/api/onboarding/trainer/complete",
+  AVATAR:"/api/onboarding/trainer/avatar"
 
 },
 

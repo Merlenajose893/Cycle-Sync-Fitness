@@ -81,6 +81,34 @@ export const useTrainerOnboarding = () => {
         }
     };
 
+    const uploadAvatar = async (file: File) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+        const response =
+            await traineronboardingService.uploadAvatar(file);
+
+        return response;
+
+    } catch (error: unknown) {
+
+        if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data.message ??
+                "Avatar upload failed."
+            );
+        } else {
+            setError("Something went wrong.");
+        }
+
+        throw error;
+
+    } finally {
+        setLoading(false);
+    }
+};
+
     return {
         loading,
         error,
@@ -88,6 +116,7 @@ export const useTrainerOnboarding = () => {
         updateProfile,
         updateCertifications,
         updatePackages,
-        completeOnboarding
+        completeOnboarding,
+        uploadAvatar
     };
 };

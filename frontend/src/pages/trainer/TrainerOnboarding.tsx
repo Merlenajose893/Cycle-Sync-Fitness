@@ -50,7 +50,22 @@ const TrainerOnboarding: React.FC = () => {
     });
 
     const totalSteps = 5;
-    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, loading, error } = useTrainerOnboarding();
+    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, uploadAvatar, loading, error } = useTrainerOnboarding();
+
+    const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            try {
+                const response = await uploadAvatar(file);
+                const avatarUrl = response?.data?.avatar || response?.avatar || URL.createObjectURL(file);
+                setFormData(prev => ({ ...prev, profilePhoto: avatarUrl }));
+                showToast.success("Photo uploaded successfully");
+            } catch (err) {
+                // error is already handled and potentially set by the hook, but we can also show a toast
+                showToast.error("Failed to upload photo");
+            }
+        }
+    };
 
     const handleNext = async () => {
         // --- Added Validation Checks ---
@@ -194,11 +209,24 @@ const TrainerOnboarding: React.FC = () => {
                                 <div style={{
                                     width: '80px', height: '80px', borderRadius: 'var(--radius-full)',
                                     background: '#f0fdfa', border: '2px dashed #99f6e4', display: 'flex',
-                                    alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', cursor: 'pointer'
+                                    alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', cursor: 'pointer',
+                                    position: 'relative', overflow: 'hidden'
                                 }}>
-                                    <Camera size={28} color="#0d9488" />
+                                    {formData.profilePhoto ? (
+                                        <img src={formData.profilePhoto} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ) : (
+                                        <Camera size={28} color="#0d9488" />
+                                    )}
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        onChange={handleAvatarUpload} 
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} 
+                                    />
                                 </div>
-                                <span style={{ fontSize: '0.82rem', color: '#0d9488', fontWeight: 600, cursor: 'pointer' }}>Upload Photo</span>
+                                <span style={{ fontSize: '0.82rem', color: '#0d9488', fontWeight: 600, cursor: 'pointer' }}>
+                                    {formData.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                                </span>
                             </div>
 
                             <div className="tp-form-group">

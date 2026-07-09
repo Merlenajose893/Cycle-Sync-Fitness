@@ -22,5 +22,11 @@ export const traineronboardingService={
     completeOnboarding:async ():Promise<AuthResponse<TrainerOnboardingStatus>> => {
         const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.COMPLETE);
         return response.data
+    },
+    uploadAvatar:async(file:File):Promise<AuthResponse<TrainerOnboardingStatus>>=>{
+        const formData=new FormData();
+        formData.append("avatar",file)
+        const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.AVATAR,formData)
+        return response.data
     }
 }
