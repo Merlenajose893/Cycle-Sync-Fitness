@@ -11,5 +11,5 @@ router.get("/status",authMiddleware,controller.getTrainerOnboardingStatus.bind(c
 router.put("/profile",authMiddleware,validate(updateTrainerProfileSchema),controller.updateTrainerProfile.bind(controller));
 router.put("/packages",authMiddleware,validate(updateTrainerPackageSchema),controller.updateTrainerPackages.bind(controller));
 router.post("/complete",authMiddleware,controller.completeTrainerOnboarding.bind(controller))
-router.put("/avatar",authMiddleware,upload.single("avatar"),controller.uploadAvatar);
+router.post("/avatar",authMiddleware,upload.single("avatar"),controller.uploadAvatar);
 export default router;
