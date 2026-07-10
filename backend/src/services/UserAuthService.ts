@@ -233,6 +233,7 @@ resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void>=> {
     user.password=hashedPassword;
     await this.userRepository.save(user)
 }
+
 }
 
 

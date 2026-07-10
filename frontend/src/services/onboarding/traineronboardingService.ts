@@ -26,7 +26,7 @@ export const traineronboardingService={
     uploadAvatar:async(file:File):Promise<AuthResponse<TrainerOnboardingStatus>>=>{
         const formData=new FormData();
         formData.append("avatar",file)
-        const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.AVATAR,formData)
+        const response=await axiosInstance.post(API_ENDPOINTS.TRAINER_ONBOARDING.AVATAR,formData)
         return response.data
     }
 }
