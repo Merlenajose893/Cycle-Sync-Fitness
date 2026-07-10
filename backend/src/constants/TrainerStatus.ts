@@ -9,3 +9,5 @@ export enum TrainerStatus{
 
   BLOCKED = "BLOCKED",
 }
+
+

@@ -7,6 +7,7 @@ import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerP
 import { TrainerOnboardingMapper } from "../mappers/TrainerOnboardingMapper.js";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import type { IImageService } from "../interfaces/services/IImageService.js";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
 
 @injectable()
 export class TrainerOnboardingService implements ITrainerOnboardingService{
@@ -62,12 +63,19 @@ completeTrainerOnboardingStatus=async(trainerId: string): Promise<ITrainer> =>{
     {
         throw new NotFoundError("Trainer Not found")
     }
+    if(trainer.status!==TrainerStatus.REGISTERED && trainer.status!==TrainerStatus.REJECTED)
+    {
+        throw new BadRequestError("Trainer cannot submit onboarding")
+    }
+    trainer.status=TrainerStatus.PENDING_APPROVAL;
     trainer.onboardingCompleted=true;
     return this.trainerRepository.save(trainer);
 }
 
 uploadAvatar=async(trainerId: string, file: Express.Multer.File): Promise<ITrainer> =>{
     const trainer=await this.trainerRepository.findById(trainerId);
+    console.log(trainer);
+    
     if(!trainer)
     {
         throw new NotFoundError("Trainer Not found");

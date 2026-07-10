@@ -72,7 +72,7 @@ export class TrainerOnboardingController{
     try {
         console.log("hi");
         
-        const trainerId = req.user!.userId;
+        const trainerId = req.user?.userId;
         const file = req.file!;
         console.log(trainerId);
         console.log(file);
@@ -80,7 +80,7 @@ export class TrainerOnboardingController{
         
 
         const trainer = await this.trainerOnboardingService.uploadAvatar(
-            trainerId,
+            trainerId!,
             file
         );
 

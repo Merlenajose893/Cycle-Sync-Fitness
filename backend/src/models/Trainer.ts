@@ -25,7 +25,7 @@ export interface ITrainer extends Document {
   isDeleted:boolean;
   avatar?: string;
   status:TrainerStatus;
-  rejectionReason?:string;
+  rejectionReason?:string|null;
   avatarPublicId?:string;
   bio?: string;
   experience: number;
