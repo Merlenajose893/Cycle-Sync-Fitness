@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
 
 export interface ITrainerPackage {
   name: string;
@@ -23,6 +24,8 @@ export interface ITrainer extends Document {
   isEmailVerified:boolean;
   isDeleted:boolean;
   avatar?: string;
+  status:TrainerStatus;
+  rejectionReason?:string;
   avatarPublicId?:string;
   bio?: string;
   experience: number;
@@ -59,6 +62,8 @@ const TrainerSchema = new Schema<ITrainer>(
     inviteExpiresAt:{type:Date,default:null},
     inviteAccepted:{type:Boolean,default:false},
     avatar: { type: String },
+    status:{type:String,enum:Object.values(TrainerStatus),default:TrainerStatus.REGISTERED},
+    rejectionReason:{type:String,default:null},
     avatarPublicId:{type:String},
     bio: { type: String },
 

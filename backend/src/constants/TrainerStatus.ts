@@ -1,0 +1,11 @@
+export enum TrainerStatus{
+     REGISTERED = "REGISTERED",
+
+  PENDING_APPROVAL = "PENDING_APPROVAL",
+
+  ACTIVE = "ACTIVE",
+
+  REJECTED = "REJECTED",
+
+  BLOCKED = "BLOCKED",
+}
