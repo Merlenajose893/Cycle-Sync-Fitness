@@ -38,7 +38,10 @@ export const TOKENS = {
     Symbol.for("ITrainerOnboardingService"),
 
     IImageService:
-    Symbol.for("IImageService")
+    Symbol.for("IImageService"),
+
+      IAccountStatusService:
+      Symbol.for("IAccountStatusService")
     // IAdminService: Symbol.for("IAdminService"),
 
 

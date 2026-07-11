@@ -16,6 +16,11 @@ axiosInstance.interceptors.response.use((response)=>response,async (error) => {
             return Promise.reject(refreshError)
         }
     }
+
+     if (error.response?.status === 403) {
+        window.location.href = '/blocked';
+        return Promise.reject(error);
+    }
     return Promise.reject(error)
 })
 console.log(import.meta.env.VITE_API_URL)
