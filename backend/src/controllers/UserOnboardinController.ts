@@ -72,7 +72,9 @@ export class UserOnboardingControlling{
 
     }
 
+
     completeOnboarding=async(req:Request,res:Response,next:NextFunction)=>
+
     {
         const userId=req.user?.userId
         console.log(userId);
