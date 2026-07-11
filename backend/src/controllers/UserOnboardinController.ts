@@ -23,7 +23,7 @@ export class UserOnboardingControlling{
             
         }
     }
-    async updateBodyDetails(req:Request,res:Response,next:NextFunction)
+    updateBodyDetails=async(req:Request,res:Response,next:NextFunction)=>
     {
         try {
             const userId=req.user?.userId!;
@@ -70,10 +70,14 @@ export class UserOnboardingControlling{
 
     }
 
-    async completeOnboarding(req:Request,res:Response,next:NextFunction)
+     completeOnboarding=async(req:Request,res:Response,next:NextFunction)=>
     {
         const userId=req.user?.userId
+        console.log(userId);
+        
         const result=await this.useronboardingService.completeOnboarding(userId!)
+        console.log(result);
+        
         successResponse(res,"Completed Onboarding",result)
     }
 }

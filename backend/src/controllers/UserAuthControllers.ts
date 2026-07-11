@@ -104,5 +104,11 @@ export class UserAuthController {
         successResponse(res,"Password reset successfully",null,HttpStatus.OK)
     }
 
+    getCurrentUser=async (req:Request,res:Response,next:NextFunction) => {
+        const userId=req.user?.userId!
+        const result=await this.userAuthService.getCurrentUser(userId);
+        successResponse(res,"Current User is getting",result,HttpStatus.OK)
+    }
+
     
 }
