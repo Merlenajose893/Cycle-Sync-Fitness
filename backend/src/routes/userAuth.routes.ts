@@ -5,6 +5,7 @@ import { validate } from "../middlewares/validate.js";
 import { registerUserSchema,loginSchema,verifyOtpSchema,resendOtpSchema } from "../validators/auth.validation.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
+
 const router=Router();
 const userAuthController=container.resolve(UserAuthController);
 router.post('/register',validate(registerUserSchema),userAuthController.registerUser);
