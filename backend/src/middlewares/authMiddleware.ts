@@ -2,9 +2,11 @@ import type { Request,Response,NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "../errors/index.js";
 import type { TokenPayload } from "../types/auth.types.js";
-import type { UserRepository } from "../repositories/UserRepository.js";
+
 export const authMiddleware=(req:Request,res:Response,next:NextFunction):void=>{
     const token=req.cookies.access_token;
+    
+    
     if(!token)
     {
         throw new UnauthorizedError("Access token missing")
@@ -12,9 +14,9 @@ export const authMiddleware=(req:Request,res:Response,next:NextFunction):void=>{
 
     try {
         const decoded=jwt.verify(token,process.env.JWT_SECRET as string) as TokenPayload;
-        if(decoded.role==="user")
+        if(decoded.role!=="user")
         {
-
+            throw new UnauthorizedError("Insufficient Permissions")
         }
         req.user=decoded;
         next();

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTrainerOnboarding } from '../../hooks/onboarding/useTrainerOnboarding';
+import { showToast } from '../../components/common/Toast/Toast';
 import {
     ArrowRight,
     ArrowLeft,
@@ -48,12 +50,85 @@ const TrainerOnboarding: React.FC = () => {
     });
 
     const totalSteps = 5;
+    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, uploadAvatar, loading, error } = useTrainerOnboarding();
 
-    const handleNext = () => {
+    const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            try {
+                const response = await uploadAvatar(file);
+                const avatarUrl = response?.data?.avatar || response?.avatar || URL.createObjectURL(file);
+                setFormData(prev => ({ ...prev, profilePhoto: avatarUrl }));
+                showToast.success("Photo uploaded successfully");
+            } catch (err) {
+                // error is already handled and potentially set by the hook, but we can also show a toast
+                showToast.error("Failed to upload photo");
+            }
+        }
+    };
+
+    const handleNext = async () => {
+        // --- Added Validation Checks ---
+        if (step === 1 && (!formData.fullName || !formData.phone || !formData.gender)) {
+            showToast.error("Please fill all required personal details");
+            return;
+        }
+        if (step === 2 && (formData.specialty.length === 0 || !formData.experience)) {
+            showToast.error("Please select at least one specialty and experience level");
+            return;
+        }
+        if (step === 3 && (!formData.packageName || !formData.packagePrice)) {
+            showToast.error("Please provide package details");
+            return;
+        }
+        if (step === 4 && !formData.agreeTerms) {
+            showToast.error("You must agree to the Terms of Service to proceed");
+            return;
+        }
+
         if (step < totalSteps) {
             setStep(step + 1);
         } else {
-            navigate('/trainer-panel/login');
+            try {
+                await updateProfile({
+                    bio: formData.bio,
+                    experience: formData.experience,
+                    location: formData.location,
+                    avatar: formData.profilePhoto,
+                    speciality: formData.specialty.join(', '),
+                    languages: formData.languages,
+                });
+
+                const certsList = formData.certifications.split(',').map(c => c.trim()).filter(c => c);
+                if (certsList.length > 0) {
+                    await updateCertifications({
+                        certifications: certsList.map(c => ({
+                            title: c,
+                            issuedBy: "Unknown",
+                            year: new Date().getFullYear().toString()
+                        }))
+                    });
+                }
+
+                if (formData.packageName && formData.packagePrice) {
+                    await updatePackages({
+                        packages: [{
+                            name: formData.packageName,
+                            sessions: Number(formData.packageSessions) || 1,
+                            duration: "1 Hour",
+                            price: Number(formData.packagePrice) || 0,
+                            popular: true
+                        }]
+                    });
+                }
+
+                await completeOnboarding();
+                showToast.success("Application submitted successfully!"); // Success Toast
+                navigate('/trainer-panel/login');
+            } catch (err: any) {
+                console.error("Failed to submit onboarding data", err);
+                showToast.error(error || err.message || "Failed to submit application"); // Error Toast
+            }
         }
     };
 
@@ -134,11 +209,24 @@ const TrainerOnboarding: React.FC = () => {
                                 <div style={{
                                     width: '80px', height: '80px', borderRadius: 'var(--radius-full)',
                                     background: '#f0fdfa', border: '2px dashed #99f6e4', display: 'flex',
-                                    alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', cursor: 'pointer'
+                                    alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', cursor: 'pointer',
+                                    position: 'relative', overflow: 'hidden'
                                 }}>
-                                    <Camera size={28} color="#0d9488" />
+                                    {formData.profilePhoto ? (
+                                        <img src={formData.profilePhoto} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ) : (
+                                        <Camera size={28} color="#0d9488" />
+                                    )}
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        onChange={handleAvatarUpload} 
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} 
+                                    />
                                 </div>
-                                <span style={{ fontSize: '0.82rem', color: '#0d9488', fontWeight: 600, cursor: 'pointer' }}>Upload Photo</span>
+                                <span style={{ fontSize: '0.82rem', color: '#0d9488', fontWeight: 600, cursor: 'pointer' }}>
+                                    {formData.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                                </span>
                             </div>
 
                             <div className="tp-form-group">
@@ -439,12 +527,13 @@ const TrainerOnboarding: React.FC = () => {
                                 <ArrowLeft size={18} /> Back
                             </button>
                         ) : <div />}
-                        <button onClick={handleNext} className="btn btn-primary" style={{
+                        <button onClick={handleNext} disabled={loading} className="btn btn-primary" style={{
                             display: 'flex', alignItems: 'center', gap: '8px',
                             paddingLeft: '32px', paddingRight: '32px',
-                            background: 'linear-gradient(135deg, #0d9488, #14b8a6)'
+                            background: 'linear-gradient(135deg, #0d9488, #14b8a6)',
+                            opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer'
                         }}>
-                            {step === totalSteps ? 'Submit Application' : 'Next'} {step !== totalSteps && <ArrowRight size={18} />}
+                            {step === totalSteps ? (loading ? 'Submitting...' : 'Submit Application') : 'Next'} {step !== totalSteps && <ArrowRight size={18} />}
                         </button>
                     </div>
                 </div>

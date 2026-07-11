@@ -5,11 +5,13 @@ import type { ITrainerOnboardingService } from "../interfaces/services/ITrainerO
 import { TOKENS } from "../container/tokens.js";
 import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerPackageDTO } from "../dtos/traineronboarding.dto.js";
 import { TrainerOnboardingMapper } from "../mappers/TrainerOnboardingMapper.js";
-import { NotFoundError } from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
+import type { IImageService } from "../interfaces/services/IImageService.js";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
 
 @injectable()
 export class TrainerOnboardingService implements ITrainerOnboardingService{
-constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository)
+constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository, @inject(TOKENS.IImageService) private imageService:IImageService)
 {
 
 }
@@ -61,7 +63,32 @@ completeTrainerOnboardingStatus=async(trainerId: string): Promise<ITrainer> =>{
     {
         throw new NotFoundError("Trainer Not found")
     }
+    if(trainer.status!==TrainerStatus.REGISTERED && trainer.status!==TrainerStatus.REJECTED)
+    {
+        throw new BadRequestError("Trainer cannot submit onboarding")
+    }
+    trainer.status=TrainerStatus.PENDING_APPROVAL;
     trainer.onboardingCompleted=true;
     return this.trainerRepository.save(trainer);
+}
+
+uploadAvatar=async(trainerId: string, file: Express.Multer.File): Promise<ITrainer> =>{
+    const trainer=await this.trainerRepository.findById(trainerId);
+    console.log(trainer);
+    
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer Not found");
+    }
+    if(file===undefined)
+    {
+        throw new BadRequestError("File is Undefined")
+    }
+    const image=await this.imageService.uploadImage(file);
+    trainer.avatar=image.url;
+    trainer.avatarPublicId=image.publicId;
+
+    await this.trainerRepository.save(trainer);
+    return trainer;
 }
 }

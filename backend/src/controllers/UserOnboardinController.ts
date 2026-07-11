@@ -36,11 +36,13 @@ export class UserOnboardingControlling{
         }
     }
 
-    async updateCycleDetails(req:Request,res:Response,next:NextFunction)
+ updateCycleDetails=async(req:Request,res:Response,next:NextFunction)=>
     {
         try {
             const userId=req.user?.userId!;
             const result=await this.useronboardingService.updateCycleSetUp(userId,req.body);
+            console.log(result);
+            
             successResponse(res,"Cycle details are updated",result)
         } catch (error) {
             next(error);
@@ -70,7 +72,9 @@ export class UserOnboardingControlling{
 
     }
 
-     completeOnboarding=async(req:Request,res:Response,next:NextFunction)=>
+
+    completeOnboarding=async(req:Request,res:Response,next:NextFunction)=>
+
     {
         const userId=req.user?.userId
         console.log(userId);

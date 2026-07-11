@@ -21,6 +21,8 @@ private refreshTokenRepository:IRefreshTokenRepository
 async generateAndSetAccessToken(payload: TokenPayload, res: Response): Promise<string> {
 
     const acessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
+    console.log(acessToken);
+    
     res.cookie("access_token",acessToken,{
         httpOnly:true,
         secure:process.env.NODE_ENV==="production",

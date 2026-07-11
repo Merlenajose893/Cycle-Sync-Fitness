@@ -3,6 +3,7 @@ import type { Request,Response,NextFunction } from "express";
 import type { ITrainerOnboardingService } from "../interfaces/services/ITrainerOnboardingService.js";
 import { TOKENS } from "../container/tokens.js";
 import { successResponse } from "../utils/response.js";
+import { HttpStatus } from "../constants/HttpStatus.js";
 @injectable()
 export class TrainerOnboardingController{
     constructor(
@@ -62,4 +63,35 @@ export class TrainerOnboardingController{
             next(error)
         }
     }
+
+    uploadAvatar = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        console.log("hi");
+        
+        const trainerId = req.user?.userId;
+        const file = req.file!;
+        console.log(trainerId);
+        console.log(file);
+        
+        
+
+        const trainer = await this.trainerOnboardingService.uploadAvatar(
+            trainerId!,
+            file
+        );
+
+        successResponse(
+            res,
+            "Avatar uploaded successfully",
+            trainer,
+            HttpStatus.OK
+        );
+    } catch (error) {
+        next(error);
+    }
+};
 }

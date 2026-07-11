@@ -4,9 +4,9 @@ import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepo
 import type { IOtpService } from "../interfaces/services/IOtpService.js";
 import type { ITokenService } from "../interfaces/services/ITokenService.js";
 import bcrypt from "bcryptjs";
-import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError } from "../errors/index.js";
+import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError, ForbiddenError } from "../errors/index.js";
 
-import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO, registerTrainerInviteDTO } from "../dtos/trainerauth.dto.js";
+import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO, registerTrainerInviteDTO, loginTrainerResponseDTO } from "../dtos/trainerauth.dto.js";
 
 
 
@@ -15,6 +15,8 @@ import { TOKENS } from "../container/tokens.js";
 import type { Response } from "express";
 import { email } from "zod";
 import type { ITrainer } from "../models/Trainer.js";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
+import { TRAINER_NEXT_STEP } from "../constants/Trainer-next-step.js";
 @injectable()
 export class TrainerAuthService implements ITrainerAuthService{
 constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.IOtpService) private otpService:IOtpService ,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
@@ -34,7 +36,11 @@ throw new ConflictError("Trainer already exists")
         lastName:data.lastName,
         email:data.email,
         password:hashedPassword,
-        speciality:data.speciality
+        speciality:data.speciality,
+        status:TrainerStatus.REGISTERED,
+        onboardingCompleted:false,
+        onboardingSteps:1,
+        rejectionReason:null
     })
 
     await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification");
@@ -45,17 +51,22 @@ throw new ConflictError("Trainer already exists")
    
 
 }
-loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
+loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<loginTrainerResponseDTO> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
     if(!trainer)
     {
         throw new UnauthorizedError("Invalid Credentials")
     }
 
-    const isCompare=await bcrypt.compare(data.password,trainer.password);
+    const isCompare=await bcrypt.compare(data.password,trainer.password!);
     if(!isCompare)
     {
         throw new UnauthorizedError("Invalid Credentials")
+    }
+
+    if(trainer.status===TrainerStatus.BLOCKED)
+    {
+        throw new ForbiddenError("Your account is blocked")
     }
     await this.tokenService.generateAndSetAccessToken({
         userId:trainer._id.toString(),
@@ -63,6 +74,9 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<void> =>{
     },res)
 
     await this.tokenService.generateAndSetRefreshToken({userId:trainer._id.toString(),role:"trainer"},res)
+
+    const nextStep=this.getNextStep(trainer.status)
+    return {trainer,nextStep}
 
 }
 
@@ -172,5 +186,15 @@ registerTrainerInvite=async(data: registerTrainerInviteDTO): Promise<void> =>{
     await this.trainerRepository.acceptTrainer(trainer._id!,hashedPassword);
 }
 
+private getNextStep= (status:string) => {
+    const nextStep=TRAINER_NEXT_STEP[status];
+    if(!nextStep)
+    {
+        throw new ForbiddenError("Invalid trainer")
+    }
+
+    return nextStep;
+
+}
 }
 

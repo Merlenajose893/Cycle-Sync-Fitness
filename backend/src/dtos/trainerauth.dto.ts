@@ -1,3 +1,5 @@
+import type { ITrainer } from "../models/Trainer.js";
+
 export interface TrainerRegisterDTO{
 firstName:string;
 lastName:string;
@@ -37,4 +39,9 @@ export interface ForgotPasswordResponseDTO{
 export interface registerTrainerInviteDTO{
     token:string;
     password:string;
+}
+
+export interface loginTrainerResponseDTO{
+    trainer:ITrainer;
+    nextStep:string;
 }
