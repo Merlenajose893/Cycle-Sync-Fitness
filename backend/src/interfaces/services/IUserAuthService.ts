@@ -14,5 +14,6 @@ export interface IUserAuthService{
     forgotPassword(data:ForgotPasswordDTO,res:Response):Promise<ForgotPasswordResponseDTO>;
     // verifyResetOtp(data:VerifyResetOtpDTO,res:Response):Promise<void>;
     resetPassword(data:ResetPasswordDTO,res:Response):Promise<void>;
+    getCurrentUser(userId:string):Promise<IUser>;
 
 }

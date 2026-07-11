@@ -234,6 +234,16 @@ resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void>=> {
     await this.userRepository.save(user)
 }
 
+
+getCurrentUser=async(userId: string): Promise<IUser> =>{
+    const user=await this.userRepository.findById(userId);
+    if(!user)
+    {
+        throw new NotFoundError("User not found");
+    }
+    return user;
+}
+
 }
 
 

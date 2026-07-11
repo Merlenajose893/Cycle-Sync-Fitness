@@ -64,8 +64,10 @@ updateGoals=async (userId: string, data: UpdateGoals): Promise<IUser> =>{
 }
 
 completeOnboarding=async (userId: string): Promise<IUser>=> {
+
     const user=await this.userRepository.findById(userId);
     console.log(user);
+
     
     if(!user)
     {

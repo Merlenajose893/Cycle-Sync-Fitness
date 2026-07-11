@@ -9,8 +9,8 @@ const router=express.Router();
 const controller=container.resolve(UserOnboardingControlling);
 router.get("/status",authMiddleware,controller.getOnboardingStatus);
 router.put("/body-details",authMiddleware,validate(updateBodyDetailsSchema),controller.updateBodyDetails.bind(controller));
-router.put("/cycle-setup",authMiddleware,validate(updateCycleSetupSchema),controller.updateCycleDetails);
+router.put("/cycle-setup",authMiddleware,validate(updateCycleSetupSchema),controller.updateCycleDetails.bind(controller));
 router.put("/goals",authMiddleware,validate(updateGoalsSchema),controller.updateGoals);
-router.post("/complete",authMiddleware,controller.completeOnboarding);
+router.post("/complete",authMiddleware,controller.completeOnboarding.bind(controller));
 export default router;
 
