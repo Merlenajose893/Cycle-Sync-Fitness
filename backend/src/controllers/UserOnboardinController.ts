@@ -23,7 +23,7 @@ export class UserOnboardingControlling{
             
         }
     }
-    updateBodyDetails=async(req:Request,res:Response,next:NextFunction)=>
+    async updateBodyDetails(req:Request,res:Response,next:NextFunction)
     {
         try {
             const userId=req.user?.userId!;
@@ -80,8 +80,6 @@ export class UserOnboardingControlling{
         console.log(userId);
         
         const result=await this.useronboardingService.completeOnboarding(userId!)
-        console.log(result);
-        
         successResponse(res,"Completed Onboarding",result)
     }
 }

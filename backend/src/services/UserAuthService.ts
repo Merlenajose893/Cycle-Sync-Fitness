@@ -171,6 +171,8 @@ if(user.isDeleted)
 // const isPassword=await bcrypt.compare(data.password,user.password!);
 
 const isPassword=await bcrypt.compare(data.password,user.password!);
+console.log(isPassword);
+
 
 
 if(!isPassword)
@@ -232,6 +234,7 @@ resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void>=> {
     await this.userRepository.save(user)
 }
 
+
 getCurrentUser=async(userId: string): Promise<IUser> =>{
     const user=await this.userRepository.findById(userId);
     if(!user)
@@ -240,6 +243,7 @@ getCurrentUser=async(userId: string): Promise<IUser> =>{
     }
     return user;
 }
+
 }
 
 
