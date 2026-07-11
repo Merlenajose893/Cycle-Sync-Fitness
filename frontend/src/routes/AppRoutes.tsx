@@ -23,6 +23,7 @@ import AppLayout from "../layouts/AppLayouts";
 import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
 import TrainerLayout from "../layouts/TrainerLayout";
+import BlockedPage from "../pages/common/BlockedPage";
 // import Dashboard from "../pages/user/Dashboard";
 function AppRoutes() {
     return (
@@ -37,6 +38,7 @@ function AppRoutes() {
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/verification-success" element={<VerificationSuccess />} />
                 <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/blocked" element={<BlockedPage/>}/>
                 <Route element={<AppLayout />}>
 
                     <Route path="/app" element={<Dashboard />} />
