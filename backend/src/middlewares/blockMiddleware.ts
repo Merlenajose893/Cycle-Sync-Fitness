@@ -11,7 +11,7 @@ const blockMiddleWare=async (req:Request,res:Response,next:NextFunction)=>{
         {
             throw new UnauthorizedError("User is missing")
         }
-        await accountStatusService.verifyAccount(req.user?.userId,req.role);
+        await accountStatusService.verifyAccount(req.user?.userId,req.user?.role);
         next();
     } catch (error) {
         
