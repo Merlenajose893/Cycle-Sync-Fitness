@@ -4,7 +4,7 @@ import { TOKENS } from "../container/tokens.js";
 import { UnauthorizedError } from "../errors/index.js";
 // import type { NextFunction } from "express";
 const accountStatusService=container.resolve(TOKENS.IAccountStatusService)
-const blockMiddleWare=async (req:Request,res:Response,next:NextFunction)=>{
+export const blockMiddleWare=async (req:Request,res:Response,next:NextFunction)=>{
     try {
         const user=req.user;
         if(!user)

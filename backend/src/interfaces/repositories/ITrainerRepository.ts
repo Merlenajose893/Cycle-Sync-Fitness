@@ -1,5 +1,6 @@
 import type { ITrainer } from "../../models/Trainer.js";
 import type { IBaseRepository } from "./IBaseRepository.js";
+import { TrainerStatus } from "../../constants/TrainerStatus.js";
 export interface  ITrainerRepository extends IBaseRepository<ITrainer>{
 
     findByEmail(email:string):Promise<ITrainer|null>;
@@ -7,6 +8,7 @@ export interface  ITrainerRepository extends IBaseRepository<ITrainer>{
     unblockTrainer(trainerId:string):Promise<ITrainer|null>;
     findByInviteToken(token:string):Promise<ITrainer|null>;
     updateTrainerInvite(trainerId:string,inviteToken:string,inviteExpiresAt:Date):Promise<ITrainer|null>;
-    acceptTrainer(trainerId:string,hashedPassword:string):Promise<ITrainer|null>
+    acceptTrainer(trainerId:string,hashedPassword:string):Promise<ITrainer|null>;
+    findByStatus(status: TrainerStatus): Promise<ITrainer[]>;
     
 }

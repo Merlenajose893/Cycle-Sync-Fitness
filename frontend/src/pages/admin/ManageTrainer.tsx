@@ -98,23 +98,6 @@ useEffect(() => {
         return matchesSearch && matchesFilter;
     });
 
-    // const filteredPackages = packages.filter(pkg => {
-    //     const matchesStatus = filterStatus === 'all' || pkg.status === filterStatus;
-    //     const matchesSearch = pkg.name.toLowerCase().includes(searchQuery.toLowerCase());
-    //     return matchesStatus && matchesSearch;
-    // });
-
-    // const handleApprovePkg = (id: number) => {
-    //     if (window.confirm('Approve this package for user assignment?')) {
-    //         updatePackageStatus(id, 'active');
-    //     }
-    // };
-
-    // const handleRejectPkg = (id: number) => {
-    //     if (window.confirm('Reject this package?')) {
-    //         updatePackageStatus(id, 'rejected');
-    //     }
-    // };
 
     return (
         <div className="admin-container">

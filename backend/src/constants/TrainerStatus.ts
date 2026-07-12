@@ -1,6 +1,7 @@
 export enum TrainerStatus{
      REGISTERED = "REGISTERED",
-
+  ONBOARDING = "ONBOARDING",
+  
   PENDING_APPROVAL = "PENDING_APPROVAL",
 
   ACTIVE = "ACTIVE",

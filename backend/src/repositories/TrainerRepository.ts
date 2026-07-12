@@ -4,6 +4,7 @@ import { TrainerModel } from "../models/Trainer.js";
 import type { ITrainer } from "../models/Trainer.js";
 import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
 import { BaseRepository } from "./BaseRepository.js";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
 // import { tr } from "zod/locales";
 @injectable()
 export class TrainerRepository extends BaseRepository<ITrainer> implements ITrainerRepository {
@@ -33,5 +34,9 @@ export class TrainerRepository extends BaseRepository<ITrainer> implements ITrai
 
     async acceptTrainer(trainerId: string, hashedPassword: string): Promise<ITrainer | null> {
         return this.model.findByIdAndUpdate(trainerId,{password:hashedPassword,inviteToken:null,inviteExpiresAt:null,inviteAccepted:true},{new:true})
+    }
+
+    async findByStatus(status: TrainerStatus): Promise<ITrainer[]> {
+        return this.model.find({status})
     }
 }

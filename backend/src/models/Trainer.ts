@@ -29,9 +29,6 @@ export interface ITrainer extends Document {
   avatarPublicId?:string;
   bio?: string;
   experience: number;
-  inviteToken:string;
-  inviteExpiresAt:Date;
-  inviteAccepted:boolean;
   onboardingCompleted:boolean;
   onboardingSteps:number;
   tags: string[];
@@ -58,9 +55,6 @@ const TrainerSchema = new Schema<ITrainer>(
 
     speciality: { type: String, required: true },
     isDeleted:{type:Boolean, required:false},
-    inviteToken:{type:String,default:null},
-    inviteExpiresAt:{type:Date,default:null},
-    inviteAccepted:{type:Boolean,default:false},
     avatar: { type: String },
     status:{type:String,enum:Object.values(TrainerStatus),default:TrainerStatus.REGISTERED},
     rejectionReason:{type:String,default:null},

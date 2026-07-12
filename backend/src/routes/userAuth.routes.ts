@@ -4,6 +4,7 @@ import {  UserAuthController } from "../controllers/UserAuthControllers.js";
 import { validate } from "../middlewares/validate.js";
 import { registerUserSchema,loginSchema,verifyOtpSchema,resendOtpSchema } from "../validators/auth.validation.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { blockMiddleWare } from "../middlewares/blockMiddleware.js";
 
 
 const router=Router();
@@ -19,5 +20,5 @@ router.post("/refresh-token",userAuthController.refreshToken)
 router.post("/forgot-password",userAuthController.forgotPassword)
 router.post("/verify-forgot-password",userAuthController.verifyForgotPasword);
 router.post("/reset-password",userAuthController.resetPassword);
-router.get('/me',authMiddleware,userAuthController.getCurrentUser);
+router.get('/me',authMiddleware,blockMiddleWare,userAuthController.getCurrentUser);
 export default router;
