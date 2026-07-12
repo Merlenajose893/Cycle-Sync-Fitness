@@ -12,6 +12,8 @@ import type { Response } from "express";
 import type { IUser } from "../models/User.js";
 import type { ITrainer } from "../models/Trainer.js";
 import crypto from "crypto"
+import { TrainerStatus } from "../constants/TrainerStatus.js";
+// import { tr } from "zod/locales";
 
 @injectable()
 export class AdminService implements IAdminService{
@@ -132,6 +134,45 @@ export class AdminService implements IAdminService{
         inviteLink
     );
 };
+getPendingTrainers=async(): Promise<ITrainer[]> =>{
+    return this.trainerRepository.findByStatus(TrainerStatus.PENDING_APPROVAL);
+}
+
+approveTrainer = async (trainerId: string): Promise<ITrainer> => {
+    const trainer = await this.trainerRepository.findById(trainerId);
+
+    if (!trainer) {
+        throw new NotFoundError("Trainer not found");
+    }
+
+    if (trainer.status !== TrainerStatus.PENDING_APPROVAL) {
+        throw new BadRequestError("Trainer is not pending approval.");
+    }
+
+    trainer.status = TrainerStatus.ACTIVE;
+
+    return await this.trainerRepository.save(trainer);
+};
+
+rejectTrainer=async(trainerId: string, reason: string): Promise<void> =>{
+    const trainer=await this.trainerRepository.findById(trainerId);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer Not Found");
+    }
+    if(trainer.status!==TrainerStatus.PENDING_APPROVAL)
+    {
+        throw new BadRequestError("Trainer is not in pending")
+    }
+
+    trainer.status=TrainerStatus.ACTIVE;
+    trainer.rejectionReason=reason;
+
+    await this.trainerRepository.save(trainer)
+}
+
+
+
 
 
 }
