@@ -6,6 +6,7 @@ import type { IAdminService } from "../interfaces/services/IAdminService.js";
 import { TOKENS } from "../container/tokens.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
 import type { InviteTrainerDTO } from "../dtos/admin.dto.js";
+import { errorResponse } from "../dtos/response.dto.js";
 @injectable()
 
     export class AdminController{
@@ -87,6 +88,35 @@ import type { InviteTrainerDTO } from "../dtos/admin.dto.js";
                 const data:InviteTrainerDTO=req.body;
                 const result=await this.adminService.inviteTrainer(data);
                 successResponse(res,"Trainer is invited",result,HttpStatus.OK);
+            } catch (error) {
+                next(error)
+            }
+        }
+
+        getPendingTrainers=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const result=await this.adminService.getPendingTrainers();
+                successResponse(res,"Pending Trainers are fetched",result,HttpStatus.OK);
+            } catch (error) {
+                next(error);
+            }
+        }
+
+        approveTrainer=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const trainerId!=req.params.id;
+                const result=await this.adminService.approveTrainer(trainerId);
+                successResponse(res,"Trainer are approved",result,HttpStatus.OK);
+            } catch (error) {
+                next(error)
+            }
+        }
+        rejectTrainer=async (req:Request,res:Response,next:NextFunction) => {
+            try {
+                const {trainerId}=req.params;
+                const {reason}=req.body;
+                const result=await this.adminService.rejectTrainer(trainerId,reason)
+                successResponse(res,"Trainer is rejected",result,HttpStatus.OK);
             } catch (error) {
                 next(error)
             }
