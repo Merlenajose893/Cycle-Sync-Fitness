@@ -124,7 +124,7 @@ const TrainerOnboarding: React.FC = () => {
 
                 await completeOnboarding();
                 showToast.success("Application submitted successfully!"); // Success Toast
-                navigate('/trainer-panel/login');
+                navigate('/trainer/pending');
             } catch (err: any) {
                 console.error("Failed to submit onboarding data", err);
                 showToast.error(error || err.message || "Failed to submit application"); // Error Toast

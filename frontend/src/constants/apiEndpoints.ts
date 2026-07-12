@@ -58,6 +58,10 @@ export const API_ENDPOINTS={
     UNBLOCK_USER:"/api/admin/users",
     BLOCK_TRAINER:"/api/admin/trainers",
     UNBLOCK_TRAINER:"/api/admin/trainers",
+
+    PENDING_TRAINERS:"/api/admin/trainers/pending",
+    APPROVE_TRAINER:"/api/admin/trainers",
+    REJECT_TRAINER:"/api/admin/trainers"
 },
 
 

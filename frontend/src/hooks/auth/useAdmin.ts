@@ -154,8 +154,74 @@ export const useAdminAuth=()=>{
             setLoading(false)
         }
     }
+    const getPendingTrainers = async (): Promise<Trainer[]> => {
+    try {
+        setLoading(true);
+        setError(null);
+
+        const response = await adminService.getPendingTrainers();
+
+        return response.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data?.message || "Failed to fetch pending trainers"
+            );
+        } else {
+            setError("Unexpected error occurred");
+        }
+
+        return [];
+    } finally {
+        setLoading(false);
+    }
+};
+
+const approveTrainer = async (trainerId: string) => {
+    try {
+        setLoading(true);
+        setError(null);
+
+        return await adminService.approveTrainer(trainerId);
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data?.message || "Failed to approve trainer"
+            );
+        } else {
+            setError("Unexpected error occurred");
+        }
+
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+};
+const rejectTrainer = async (
+    trainerId: string,
+    reason: string
+) => {
+    try {
+        setLoading(true);
+        setError(null);
+
+        return await adminService.rejectTrainer(trainerId, reason);
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            setError(
+                error.response?.data?.message || "Failed to reject trainer"
+            );
+        } else {
+            setError("Unexpected error occurred");
+        }
+
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+};
 
 
 
-    return {adminLogin,getAllUsers,getAllTrainers,blockUser,unblockUser,blockTrainer,unblockTrainer,loading,error}
+    return {adminLogin,getAllUsers,getAllTrainers,blockUser,unblockUser,blockTrainer,unblockTrainer,getPendingTrainers,approveTrainer,rejectTrainer,loading,error}
 }

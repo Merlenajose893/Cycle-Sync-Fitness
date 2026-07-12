@@ -34,7 +34,34 @@ blockTrainer:async (trainerId:string) => {
 unblockTrainer:async (trainerId:string) => {
     const response=await axiosInstance.patch(`${API_ENDPOINTS.ADMIN.UNBLOCK_TRAINER}/${trainerId}/unblock`)
     return response.data
-}
+},
+getPendingTrainers: async (): Promise<AuthResponse<Trainer[]>> => {
+    const response = await axiosInstance.get(
+        API_ENDPOINTS.ADMIN.PENDING_TRAINERS
+    );
+
+    return response.data;
+},
+
+approveTrainer: async (trainerId: string): Promise<AuthResponse<Trainer>> => {
+    const response = await axiosInstance.patch(
+        `${API_ENDPOINTS.ADMIN.APPROVE_TRAINER}/${trainerId}/approve`
+    );
+
+    return response.data;
+},
+
+rejectTrainer: async (
+    trainerId: string,
+    reason: string
+): Promise<AuthResponse<Trainer>> => {
+    const response = await axiosInstance.patch(
+        `${API_ENDPOINTS.ADMIN.REJECT_TRAINER}/${trainerId}/reject`,
+        { reason }
+    );
+
+    return response.data;
+},
 
 }
 

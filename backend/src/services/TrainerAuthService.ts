@@ -13,10 +13,10 @@ import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPassword
 
 import { TOKENS } from "../container/tokens.js";
 import type { Response } from "express";
-import { email } from "zod";
+// import { email } from "zod";
 import type { ITrainer } from "../models/Trainer.js";
 import { TrainerStatus } from "../constants/TrainerStatus.js";
-import { TRAINER_NEXT_STEP } from "../constants/Trainer-next-step.js";
+// import { TRAINER_NEXT_STEP } from "../constants/Trainer-next-step.js";
 @injectable()
 export class TrainerAuthService implements ITrainerAuthService{
 constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.IOtpService) private otpService:IOtpService ,@inject(TOKENS.ITokenService) private tokenService:ITokenService)
@@ -51,6 +51,8 @@ throw new ConflictError("Trainer already exists")
    
 
 }
+
+
 loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<loginTrainerResponseDTO> =>{
     const trainer=await this.trainerRepository.findByEmail(data.email);
     if(!trainer)
@@ -64,7 +66,7 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<loginTrainerRe
         throw new UnauthorizedError("Invalid Credentials")
     }
 
-    if(trainer.status===TrainerStatus.BLOCKED)
+    if(trainer.isDeleted)
     {
         throw new ForbiddenError("Your account is blocked")
     }
@@ -75,8 +77,8 @@ loginTrainer=async(data: LoginTrainerDTO, res: Response): Promise<loginTrainerRe
 
     await this.tokenService.generateAndSetRefreshToken({userId:trainer._id.toString(),role:"trainer"},res)
 
-    const nextStep=this.getNextStep(trainer.status)
-    return {trainer,nextStep}
+    
+    return {trainer}
 
 }
 
@@ -186,15 +188,6 @@ registerTrainerInvite=async(data: registerTrainerInviteDTO): Promise<void> =>{
     await this.trainerRepository.acceptTrainer(trainer._id!,hashedPassword);
 }
 
-private getNextStep= (status:string) => {
-    const nextStep=TRAINER_NEXT_STEP[status];
-    if(!nextStep)
-    {
-        throw new ForbiddenError("Invalid trainer")
-    }
 
-    return nextStep;
-
-}
 }
 

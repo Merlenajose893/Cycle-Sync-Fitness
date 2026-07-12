@@ -47,7 +47,7 @@ const TrainerVerificationSuccess: React.FC = () => {
                     </div>
 
                     <button
-                        onClick={() => navigate('/trainer/onboarding')}
+                        onClick={() => navigate('/trainer/login')}
                         className="btn btn-full success-btn"
                         style={{
                             width: '100%',

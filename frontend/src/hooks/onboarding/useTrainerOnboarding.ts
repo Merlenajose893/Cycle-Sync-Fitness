@@ -29,7 +29,7 @@ export const useTrainerOnboarding = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await traineronboardingService.updateProfile(data);
+            const response = await traineronboardingService.updateTrainerProfile(data);
             return response;
         } catch (err: any) {
             setError(err.response?.data?.message || "Failed to update profile");
@@ -43,7 +43,7 @@ export const useTrainerOnboarding = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await traineronboardingService.updateCertifications(data);
+            const response = await traineronboardingService.updateTrainerCertifications(data);
             return response;
         } catch (err: any) {
             setError(err.response?.data?.message || "Failed to update certifications");
@@ -57,7 +57,7 @@ export const useTrainerOnboarding = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await traineronboardingService.updatePackages(data);
+            const response = await traineronboardingService.updateTrainerPackages(data);
             return response;
         } catch (err: any) {
             setError(err.response?.data?.message || "Failed to update packages");

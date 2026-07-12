@@ -68,12 +68,44 @@ const TrainerLogin: React.FC = () => {
         try {
             setErrors({});
             const response = await loginTrainer({
-                email: formData.email.trim(),
-                password: formData.password,
-            });
-            console.log(response);
-            navigate('/trainer-panel/dashboard');
-        } catch (error: any) {
+    email: formData.email.trim(),
+    password: formData.password,
+});
+console.log(response);
+console.log(response.data.trainer.status);
+
+
+const trainer = response?.data.trainer;
+
+switch (trainer.status) {
+    case "REGISTERED":
+        navigate("/trainer/onboarding");
+        break;
+
+    case "ONBOARDING":
+        navigate("/trainer/onboarding");
+        break;
+
+    case "PENDING_APPROVAL":
+        navigate("/trainer/pending");
+        break;
+
+    case "ACTIVE":
+        navigate("/trainer/dashboard");
+        break;
+
+    case "REJECTED":
+        navigate("/trainer/rejected");
+        break;
+
+    default:
+        setErrors({
+            submit: "Unknown trainer status.",
+        });
+}
+}
+            // navigate('/trainer/dashboard');
+         catch (error: any) {
             console.error(error);
             setErrors({ submit: error.response?.data?.message || "Invalid email or password." });
         }

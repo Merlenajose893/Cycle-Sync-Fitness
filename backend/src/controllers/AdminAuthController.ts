@@ -104,7 +104,7 @@ import { errorResponse } from "../dtos/response.dto.js";
 
         approveTrainer=async (req:Request,res:Response,next:NextFunction) => {
             try {
-                const trainerId!=req.params.id;
+                const {trainerId}=req.params;
                 const result=await this.adminService.approveTrainer(trainerId);
                 successResponse(res,"Trainer are approved",result,HttpStatus.OK);
             } catch (error) {

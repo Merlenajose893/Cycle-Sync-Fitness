@@ -30,10 +30,16 @@ export class TrainerAuthController{
         await this.trainerAuthService.resendOTP(trainerId);
         successResponse(res,"OTP resent successfully",null,HttpStatus.OK)
     }
-    loginTrainer=async (req:Request,res:Response):Promise<void> => {
-        await this.trainerAuthService.loginTrainer(req.body,res);
-        successResponse(res,"Trainer login successful",null,HttpStatus.OK);
-    }
+    loginTrainer = async (req: Request, res: Response): Promise<void> => {
+    const result = await this.trainerAuthService.loginTrainer(req.body, res);
+
+    successResponse(
+        res,
+        "Trainer login successful",
+        result,           
+        HttpStatus.OK
+    );
+}
     logoutTrainer=async (req:Request,res:Response):Promise<void> => {
         const trainerId=req.user?.userId;
         if(!trainerId)

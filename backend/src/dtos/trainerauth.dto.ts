@@ -43,5 +43,5 @@ export interface registerTrainerInviteDTO{
 
 export interface loginTrainerResponseDTO{
     trainer:ITrainer;
-    nextStep:string;
+    
 }

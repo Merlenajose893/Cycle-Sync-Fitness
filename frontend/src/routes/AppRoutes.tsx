@@ -24,6 +24,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
 import TrainerLayout from "../layouts/TrainerLayout";
 import BlockedPage from "../pages/common/BlockedPage";
+import TrainerPendingPage from "../pages/trainer/TrainerPending";
+import TrainerRejectedPage from "../pages/trainer/TrainerRejectd";
 // import Dashboard from "../pages/user/Dashboard";
 function AppRoutes() {
     return (
@@ -50,6 +52,8 @@ function AppRoutes() {
                 <Route path="/trainer/reset-password" element={<TrainerResetPassword />} />
                 <Route path="/trainer/success" element={<TrainerVerificationSuccess />} />
                 <Route path="/trainer/onboarding" element={<TrainerOnboarding />} />
+                <Route path="/trainer/pending" element={<TrainerPendingPage/>}/>
+                <Route path="/trainer/rejected" element={<TrainerRejectedPage/>}/>
                 <Route element={<TrainerLayout/>}>
 
                 <Route path="/trainer" element={<TrainerDashboard/>}/>

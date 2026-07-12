@@ -9,6 +9,8 @@ export const traineronboardingService={
     },
     updateTrainerProfile:async (data:UpdateTrainerProfileDTO):Promise<AuthResponse<TrainerOnboardingStatus>> => {
         const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.PROFILE,data);
+        console.log(response);
+        
         return response.data;
     },
     updateTrainerCertifications:async (data:UpdateTrainerCertificateDTO):Promise<AuthResponse<TrainerOnboardingStatus>> => {
