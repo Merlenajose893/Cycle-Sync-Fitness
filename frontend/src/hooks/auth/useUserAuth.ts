@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { userAuthService } from "../../services/auth/userAuthService";
 import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload, ForgotPasswordPayload, ResetPasswordPayload,GoogleSignInPayload } from "../../types/auth.types";
+import axios from "axios";
+// import type { User } from "../../types/auth.types";
 export const useUserAuth=()=>{
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState<string|null>(null);
@@ -137,8 +139,15 @@ export const useUserAuth=()=>{
             setError(null);
             const response=await userAuthService.getCurrentUser();
             return response.data;
-        } catch (error) {
-            return null;
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Not able to get current user")
+            }
+            else{
+                setError("Something unexpected happened")
+            }
+            
         }
         finally{
             setLoading(false)

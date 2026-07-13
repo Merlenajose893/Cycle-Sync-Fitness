@@ -66,7 +66,7 @@ const TrainerVerificationSuccess: React.FC = () => {
                             cursor: 'pointer'
                         }}
                     >
-                        Start Trainer Onboarding <ArrowRight size={20} />
+                        Login <ArrowRight size={20} />
                     </button>
 
                     <div className="success-footer" style={{ marginTop: '32px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: '600' }}>

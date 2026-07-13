@@ -42,6 +42,7 @@ function AppRoutes() {
                 <Route path="/verification-success" element={<VerificationSuccess />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/blocked" element={<BlockedPage/>}/>
+                
                 <Route element={<AppLayout />}>
 
                     <Route path="/app" element={<Dashboard />} />
