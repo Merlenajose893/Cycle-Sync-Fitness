@@ -21,10 +21,41 @@ const VerifyOtp = () => {
 
 
 
-    const handleChange = (value: string, index: number) => {
-        if (!/^\d*$/.test(value)) return;
+   const handleChange = (value: string, index: number) => {
+    if (!/^\d*$/.test(value)) return;
 
-  }
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(0, 1);
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+        document.getElementById(`otp-${index + 1}`)?.focus();
+    }
+};
+
+{/* Inside the map */}
+{otp.map((digit, index) => (
+    <input
+        key={index}
+        id={`otp-${index}`}
+        type="text"
+        maxLength={1}
+        className="otp-field"
+        value={digit}
+        onChange={(e) => handleChange(e.target.value, index)}
+        onKeyDown={(e) => {
+            if (e.key === "Backspace") {
+                if (!otp[index] && index > 0) {
+                    document.getElementById(`otp-${index - 1}`)?.focus();
+                } else if (otp[index]) {
+                    const newOtp = [...otp];
+                    newOtp[index] = "";
+                    setOtp(newOtp);
+                }
+            }
+        }}
+    />
+))}
   
 
     const handleSubmit = async (e: React.FormEvent) => {

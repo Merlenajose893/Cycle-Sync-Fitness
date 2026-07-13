@@ -37,7 +37,7 @@ const Header: React.FC = () => {
 
                 <div className="navbar-actions">
                     <Link
-                        to="/trainer-panel/login"
+                        to="/trainer/login"
                         className="btn btn-ghost"
                         style={{
                             display: 'flex',

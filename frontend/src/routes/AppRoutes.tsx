@@ -24,6 +24,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
 import TrainerLayout from "../layouts/TrainerLayout";
 import BlockedPage from "../pages/common/BlockedPage";
+import About from "../pages/common/About";
 import TrainerPendingPage from "../pages/trainer/TrainerPending";
 import TrainerRejectedPage from "../pages/trainer/TrainerRejectd";
 // import Dashboard from "../pages/user/Dashboard";
@@ -33,6 +34,7 @@ function AppRoutes() {
             <Routes>
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/verify-otp" element={<VerifyOtp />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
