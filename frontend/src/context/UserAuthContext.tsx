@@ -45,6 +45,21 @@ export const UserAuthProvider=({
         setUser(null);
     }
 
+    useEffect(() => {
+  if (!user) return;
+
+  const interval = setInterval(async () => {
+    try {
+      await getUser();
+    } catch (error) {
+      // The interceptor will handle ACCOUNT_BLOCKED.
+      // Ignore the error here.
+    }
+  }, 15000); // Check every 15 seconds
+
+  return () => clearInterval(interval);
+}, [user]);
+
     return(
         <UserAuthContext.Provider value={{user,isAuthenticated:!!user,loading,login,logout}}>
             {children}

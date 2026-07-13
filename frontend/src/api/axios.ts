@@ -9,7 +9,7 @@ axiosInstance.interceptors.response.use((response)=>response,async (error) => {
     {
         originalRequest._retry=true;
         try {
-            await axiosInstance.post("/users/refresh");
+            await axiosInstance.post("/users/refresh-token");
             return axiosInstance(originalRequest)
         } catch (refreshError) {
             window.location.href='/login';
@@ -18,7 +18,7 @@ axiosInstance.interceptors.response.use((response)=>response,async (error) => {
     }
 
      if (error.response?.status === 403) {
-        window.location.href = '/blocked';
+        window.location.href = '/users/blocked';
         return Promise.reject(error);
     }
     return Promise.reject(error)
