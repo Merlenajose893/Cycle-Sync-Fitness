@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Mail, ShieldCheck, RefreshCw } from 'lucide-react';
+
+import { Mail, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
 
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
 import { showToast } from '../../components/common/Toast/Toast';
 import '../../styles/Auth.css';
+
 
 const VerifyOtp = () => {
     const navigate = useNavigate();
@@ -17,17 +19,13 @@ const VerifyOtp = () => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [error, setError] = useState("");
 
+
+
     const handleChange = (value: string, index: number) => {
         if (!/^\d*$/.test(value)) return;
 
-        const newOtp = [...otp];
-        newOtp[index] = value;
-        setOtp(newOtp);
-
-        if (value && index < 5) {
-            document.getElementById(`otp-${index + 1}`)?.focus();
-        }
-    };
+  }
+  
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

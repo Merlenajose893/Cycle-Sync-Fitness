@@ -1,16 +1,19 @@
+// src/pages/AdminLogin.tsx
 import React, { useState } from 'react';
-import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
+import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import '../../styles/Auth.css';
 
 const AdminLogin: React.FC = () => {
+
+    const navigate = useNavigate();
+    const { adminLogin, loading, error } = useAdminAuth();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const { adminLogin, loading, error } = useAdminAuth();
-    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,7 +30,12 @@ const AdminLogin: React.FC = () => {
             <div className="auth-container" style={{ justifyContent: 'center' }}>
                 {/* Brand */}
                 <div className="auth-brand" style={{ justifyContent: 'center', marginBottom: '40px' }}>
-                    <div className="auth-logo" style={{ background: 'var(--accent-purple)', width: '48px', height: '48px', fontSize: '1.4rem' }}>
+                    <div className="auth-logo" style={{ 
+                        background: 'var(--accent-purple)', 
+                        width: '48px', 
+                        height: '48px', 
+                        fontSize: '1.4rem' 
+                    }}>
                         C
                     </div>
                     <h1>CycleSync <span style={{ color: 'var(--accent-purple)' }}>AI</span></h1>
@@ -82,7 +90,9 @@ const AdminLogin: React.FC = () => {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+
                                     placeholder='admin@cyclesync.ai'
+
                                 />
                             </div>
                         </div>
@@ -96,6 +106,7 @@ const AdminLogin: React.FC = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
+
                                 />
                                 <button
                                     type="button"

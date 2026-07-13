@@ -107,6 +107,7 @@ export const useTrainerOnboarding = () => {
     } finally {
         setLoading(false);
     }
+
 };
 
     return {
@@ -120,3 +121,4 @@ export const useTrainerOnboarding = () => {
         uploadAvatar
     };
 };
+
