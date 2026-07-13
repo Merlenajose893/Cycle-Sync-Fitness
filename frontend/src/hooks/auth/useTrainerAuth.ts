@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { trainerAuthService } from "../../services/auth/trainerAuthService";
-import type { RegisterTrainerPayload,LoginTrainerPayload,VerifyTrainerOtpPayload,Trainer, ResendTrainerOTPPayload } from "../../types/auth.types";
+import type { RegisterTrainerPayload,LoginTrainerPayload,VerifyTrainerOtpPayload,Trainer, ResendTrainerOTPPayload, ForgotPasswordTrainerPayload, ResetPasswordTrainerPayload } from "../../types/auth.types";
 export const useTrainerAuth=()=>{
 
     const [loading,setLoading]=useState(false);
@@ -90,6 +90,46 @@ export const useTrainerAuth=()=>{
         }
     }
 
+    const forgetPassword=async (data:ForgotPasswordTrainerPayload) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response=await trainerAuthService.forgotPasswordTrainer(data);
+            return response
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Forget password is not gettig")
+            }
+            else{
+                setError("Unexpected Error")
+            }
+        }
+        finally{
+            setLoading(false);
+        }
+    }
+
+    const resetPassword=async (data:ResetPasswordTrainerPayload) => {
+        try {
+            setLoading(true)
+            setError(null);
+            const response=await trainerAuthService.resetPasswordTrainer(data);
+            return response;
+        } catch (error:unknown) {
+            if(axios.isAxiosError(error))
+            {
+                setError(error.response?.data.message||"Reset password is having error")
+            }
+            else{
+                setError("Something went wrong")
+            }
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
     const logoutTrainer=async () => {
         try {
             setLoading(true)
@@ -135,5 +175,5 @@ export const useTrainerAuth=()=>{
         }
     }
 
-    return {registerTrainer,verifyTrainerOtp,loading,error,logoutTrainer,getCurrentTrainer,loginTrainer,resendOTP}
+    return {registerTrainer,verifyTrainerOtp,loading,error,logoutTrainer,getCurrentTrainer,loginTrainer,resendOTP,forgetPassword,resetPassword}
 }

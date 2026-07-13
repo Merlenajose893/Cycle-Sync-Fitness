@@ -37,6 +37,10 @@ export const API_ENDPOINTS={
     ME:
       "/api/trainer/me",
 
+    FORGOT_PASSWORD:"/api/trainer/forgot-password",
+
+    RESET_PASSWORD:"/api/trainer/reset-password"
+
       
 
   },
@@ -84,15 +88,7 @@ TRAINER_ONBOARDING:{
 },
 
 
-TRAINER_INVITE:{
 
-    VERIFY:
-        "/api/trainer/invite/verify",
-
-    REGISTER:
-        "/api/trainer/invite/register"
-
-}
 
 
 

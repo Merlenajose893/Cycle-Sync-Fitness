@@ -96,6 +96,17 @@ export interface ResendTrainerOTPPayload{
     trainerId:string
 }
 
+export interface ForgotPasswordTrainerPayload
+{
+    email:string
+}
+
+export interface ResetPasswordTrainerPayload
+{
+    trainerId:string;
+    otp:string;
+    newPassword:string;
+}
 
 
 export interface AdminLoginPayload {

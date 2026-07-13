@@ -1,6 +1,6 @@
 import axiosInstance from "../../api/axios";
 import { API_ENDPOINTS } from "../../constants/apiEndpoints";
-import type { RegisterTrainerPayload,LoginTrainerPayload,VerifyTrainerOtpPayload,AuthResponse, Trainer, ResendTrainerOTPPayload } from "../../types/auth.types";
+import type { RegisterTrainerPayload,LoginTrainerPayload,VerifyTrainerOtpPayload,AuthResponse, Trainer, ResendTrainerOTPPayload, ForgotPasswordTrainerPayload, ResetPasswordTrainerPayload } from "../../types/auth.types";
 import type { RegisterTrainerInviteDTO } from "../../types/trainer.types";
 export const trainerAuthService={
     registerTrainer:async (data:RegisterTrainerPayload):Promise<AuthResponse<Trainer>> => {
@@ -27,13 +27,14 @@ export const trainerAuthService={
         const response=await axiosInstance.get(API_ENDPOINTS.TRAINER_AUTH.ME);
         return response.data;
     },
-    verifyTrainerInvite:async (token:string):Promise<AuthResponse<null>> => {
-        const response=await axiosInstance.post(`${API_ENDPOINTS.TRAINER_INVITE.VERIFY}?token=${token}`);
-        return response.data;
-    },
 
-    registerTrainerInvite:async (data:RegisterTrainerInviteDTO) => {
-        const response=await axiosInstance.post(API_ENDPOINTS.TRAINER_INVITE.REGISTER,data);
-        return response.data;
+    forgotPasswordTrainer:async (data:ForgotPasswordTrainerPayload):Promise<AuthResponse<null>> => {
+        const response=await axiosInstance.post(API_ENDPOINTS.TRAINER_AUTH.FORGOT_PASSWORD,data);
+        return response.data
+    },
+    resetPasswordTrainer:async (data:ResetPasswordTrainerPayload):Promise<AuthResponse<null>> => {
+        const response=await axiosInstance.post(API_ENDPOINTS.TRAINER_AUTH.RESET_PASSWORD,data);
+        return response.data
     }
+    
 }
