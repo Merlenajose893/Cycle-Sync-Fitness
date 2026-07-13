@@ -195,7 +195,7 @@ switch (trainer.status) {
                         </div>
 
                         <div style={{ textAlign: 'right', marginBottom: '8px' }}>
-                            <a href="#" style={{ fontSize: '0.85rem', color: '#0d9488', fontWeight: '500' }}>
+                            <a href="/trainer/forgot-password" style={{ fontSize: '0.85rem', color: '#0d9488', fontWeight: '500' }}>
                                 Forgot Password?
                             </a>
                         </div>
@@ -226,7 +226,7 @@ switch (trainer.status) {
                     </form>
 
                     <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                        Don't have a trainer account? <Link to="/trainer-panel/register" style={{ color: '#0d9488', fontWeight: '600' }}>Register</Link>
+                        Don't have a trainer account? <Link to="/trainer/register" style={{ color: '#0d9488', fontWeight: '600' }}>Register</Link>
                     </p>
                     <p style={{ textAlign: 'center', marginTop: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                         Access restricted to registered trainers.
