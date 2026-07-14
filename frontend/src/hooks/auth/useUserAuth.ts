@@ -138,21 +138,31 @@ export const useUserAuth=()=>{
             setLoading(true);
             setError(null);
             const response=await userAuthService.getCurrentUser();
+            console.log(response);
+            
             return response.data;
         } catch (error:unknown) {
+            // if(error.res)
             if(axios.isAxiosError(error))
             {
+                if(error.response?.status===403)
+                {
+                    Navigate("/blocked")
+                }
                 setError(error.response?.data.message||"Not able to get current user")
             }
             else{
                 setError("Something unexpected happened")
             }
+            return null
             
         }
         finally{
             setLoading(false)
         }
     }
+    // console.log(getUser.);
+    
     
 
     return {

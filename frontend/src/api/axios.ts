@@ -21,8 +21,13 @@ axiosInstance.interceptors.response.use(
             }
         }
 
+        console.log(error.response.status);
+        
         if (error.response?.status === 403) {
-            window.location.href = "/blocked";
+            
+         
+            window.location.href = "/login";
+            
             return Promise.reject(error);
         }
 

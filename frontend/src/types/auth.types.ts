@@ -5,6 +5,7 @@ export interface User{
     email:string;
     role:"user"|"admin";
     isEmailVerified:boolean;
+    isDeleted:boolean;
     onboardingComplete:boolean;
 
     goals?: {
