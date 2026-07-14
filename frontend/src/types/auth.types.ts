@@ -22,6 +22,7 @@ export interface User{
 
 export interface Trainer{
     _id:string;
+    id?:string;
     firstName:string;
     lastName:string;
     email:string;
@@ -30,7 +31,14 @@ export interface Trainer{
     createdAt:string;
     updatedAt:string;
     speciality:string;
-
+    status:string;
+    avatar?:string;
+    rating:number;
+    totalClients?:number;
+    activeClients?:number;
+    totalSessions?:number;
+    sessionsCompleted?:number;
+    isDeleted?:boolean;
 }
 
 export interface AuthResponse<T>{

@@ -104,7 +104,7 @@ import { errorResponse } from "../dtos/response.dto.js";
 
         approveTrainer=async (req:Request,res:Response,next:NextFunction) => {
             try {
-                const {trainerId}=req.params;
+                const {trainerId}=req.params as {trainerId:string};
                 const result=await this.adminService.approveTrainer(trainerId);
                 successResponse(res,"Trainer are approved",result,HttpStatus.OK);
             } catch (error) {
@@ -113,7 +113,7 @@ import { errorResponse } from "../dtos/response.dto.js";
         }
         rejectTrainer=async (req:Request,res:Response,next:NextFunction) => {
             try {
-                const {trainerId}=req.params;
+                const {trainerId}=req.params as {trainerId:string};
                 const {reason}=req.body;
                 const result=await this.adminService.rejectTrainer(trainerId,reason)
                 successResponse(res,"Trainer is rejected",result,HttpStatus.OK);

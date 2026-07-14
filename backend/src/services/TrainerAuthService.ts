@@ -136,8 +136,16 @@ forgotPassword=async(data: ForgotPasswordDTO, res: Response): Promise<ForgotPass
 }
 
 resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void> =>{
-    await this.otpService.verifyOtp(data.userId,"password-reset",data.otp);
-    const trainer=await this.trainerRepository.findById(data.userId);
+    let trainerId = data.userId;
+    if (data.userId && data.userId.includes("@")) {
+        const trainer = await this.trainerRepository.findByEmail(data.userId);
+        if (!trainer) {
+            throw new NotFoundError("Trainer not found");
+        }
+        trainerId = trainer._id.toString();
+    }
+    await this.otpService.verifyOtp(trainerId,"password-reset",data.otp);
+    const trainer=await this.trainerRepository.findById(trainerId);
     if(!trainer)
     {
         throw new NotFoundError("Trainer not Found")
@@ -185,9 +193,17 @@ registerTrainerInvite=async(data: registerTrainerInviteDTO): Promise<void> =>{
     }
     const hashedPassword=await bcrypt.hash(data.password,10);
 
-    await this.trainerRepository.acceptTrainer(trainer._id!,hashedPassword);
+    await this.trainerRepository.acceptTrainer(trainer._id.toString(),hashedPassword);
+}
+
+getCurrentTrainer=async(trainerId: string): Promise<ITrainer> =>{
+    const trainer=await this.trainerRepository.findById(trainerId);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer not found");
+    }
+    return trainer;
 }
 
 
 }
-

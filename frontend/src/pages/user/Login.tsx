@@ -21,7 +21,7 @@ const Login = () => {
         switch (name) {
             case 'email':
                 if (!value.trim()) return 'Email is required';
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) 
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
                     return 'Please enter a valid email address';
                 return '';
             case 'password':
@@ -78,8 +78,8 @@ const Login = () => {
             navigate("/app");
         } catch (error: any) {
             console.error(error);
-            setErrors({ 
-                submit: error.response?.data?.message || "Invalid email or password." 
+            setErrors({
+                submit: error.response?.data?.message || "Invalid email or password."
             });
         }
     };
@@ -158,7 +158,7 @@ const Login = () => {
                             className="btn btn-primary btn-full"
                             disabled={loading}
                         >
-                            {loading ? "Signing in..." : "Login"} 
+                            {loading ? "Signing in..." : "Login"}
                             <ArrowRight size={18} />
                         </button>
                     </form>
@@ -205,7 +205,7 @@ const Login = () => {
                     <div className="testimonial-micro">
                         <div className="stars">★★★★★</div>
                         <p>
-                            "The AI insights predicted my energy dip perfectly. 
+                            "The AI insights predicted my energy dip perfectly.
                             I adjusted my workout and felt amazing!"
                         </p>
                         <p className="user">- Emily R., Pro Athlete</p>

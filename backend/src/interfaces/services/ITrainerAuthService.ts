@@ -13,6 +13,7 @@ export interface ITrainerAuthService{
     resetPassword(data:ResetPasswordDTO,res:Response):Promise<void>;
     verifyTrainerInvite(token:string,res:Response):Promise<ITrainer>;
     registerTrainerInvite(data:registerTrainerInviteDTO):Promise<void>;
+    getCurrentTrainer(trainerId:string):Promise<ITrainer>;
     
 
 }

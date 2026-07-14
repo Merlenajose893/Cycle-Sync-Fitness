@@ -3,6 +3,8 @@ import { container } from "tsyringe";
 import { TrainerAuthController } from "../controllers/TrainerAuthController.js";
 import { validate } from "../middlewares/validate.js";
 import { loginTrainer, registerTrainerSchema, verifyTrainerOtpSchema } from "../validators/trainer.validation.js";
+import { trainerAuthMiddleware } from "../middlewares/trainerAuthMiddleware.js";
+import { blockMiddleWare } from "../middlewares/blockMiddleware.js";
 const router=Router();
 const trainerAuthController=container.resolve(TrainerAuthController);
 router.post("/register",validate(registerTrainerSchema),trainerAuthController.registerTrainer);
@@ -12,5 +14,8 @@ router.post("/login",validate(loginTrainer),trainerAuthController.loginTrainer);
 router.post("/logout",trainerAuthController.logoutTrainer);
 router.post("/invite/verify",trainerAuthController.verifyTrainer);
 router.post("/invite/register",trainerAuthController.registerFromInvite)
+router.get('/me',trainerAuthMiddleware,blockMiddleWare,trainerAuthController.getCurrentTrainer);
+router.post("/forgot-password",trainerAuthController.forgotPassword);
+router.post("/reset-password",trainerAuthController.resetPassword);
 
-export default router;
+export default router;

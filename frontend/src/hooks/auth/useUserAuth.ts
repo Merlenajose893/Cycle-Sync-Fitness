@@ -142,13 +142,8 @@ export const useUserAuth=()=>{
             
             return response.data;
         } catch (error:unknown) {
-            // if(error.res)
             if(axios.isAxiosError(error))
             {
-                if(error.response?.status===403)
-                {
-                    Navigate("/blocked")
-                }
                 setError(error.response?.data.message||"Not able to get current user")
             }
             else{

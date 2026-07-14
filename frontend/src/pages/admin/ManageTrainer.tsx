@@ -29,20 +29,20 @@ import { showToast } from '../../components/common/Toast/Toast';
 
 const ManageTrainersPage: React.FC = () => {
     const [trainers,setTrainers]=useState<Trainer[]>([]);
-    const {getAllTrainers,loading,error,blockTrainer,unblockTrainer}=useAdminAuth();
+    const {getAllTrainers,loading,error,blockTrainer,unblockTrainer,approveTrainer,rejectTrainer}=useAdminAuth();
     const [searchQuery, setSearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
-    const [selectedTrainers, setSelectedTrainers] = useState<number[]>([]);
+    const [selectedTrainers, setSelectedTrainers] = useState<string[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [activeTab, setActiveTab] = useState<'trainers' | 'packages'>('trainers');
-    // const packages = usePackages();
+    const filteredPackages: any[] = [];
 
     const stats = {
-        total: 24,
-        active: 18,
-        suspended: 2,
-        pendingTrainers: 4,
-        // pendingPackages: packages.filter(p => p.status === 'pending').length
+        total: trainers.length,
+        active: trainers.filter(t => t.status === 'ACTIVE' && !t.isDeleted).length,
+        suspended: trainers.filter(t => t.isDeleted).length,
+        pendingTrainers: trainers.filter(t => t.status === 'PENDING_APPROVAL').length,
+        pendingPackages: 0
     };
 
     const fetchTrainers = useCallback(async () => {
@@ -80,21 +80,54 @@ useEffect(() => {
         }
     }
 
-    const toggleSelection = (id: number) => {
+    const handleApprove = async (trainerId: string): Promise<void> => {
+        try {
+            await approveTrainer(trainerId);
+            showToast.success("Trainer approved successfully");
+            fetchTrainers();
+        } catch (error) {
+            console.error(error);
+            showToast.error("Failed to approve trainer");
+        }
+    };
+
+    const handleReject = async (trainerId: string): Promise<void> => {
+        const reason = prompt("Please enter the reason for rejection:");
+        if (reason === null) return; // cancelled
+        try {
+            await rejectTrainer(trainerId, reason || "Does not meet requirements");
+            showToast.success("Trainer rejected successfully");
+            fetchTrainers();
+        } catch (error) {
+            console.error(error);
+            showToast.error("Failed to reject trainer");
+        }
+    };
+
+    const toggleSelection = (id: string) => {
         setSelectedTrainers((prev) =>
             prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
         );
     };
 
     const filteredTrainers = trainers.filter((t) => {
-        const matchesSearch = t.firstName.toLowerCase().includes(searchQuery.toLowerCase()) || t.email.toLowerCase().includes(searchQuery.toLowerCase());
-        // const matchesFilter = filterStatus === 'all' || t.isEmailVerified === filterStatus;
-        const matchesFilter =
-        filterStatus === "all" ||
-        (filterStatus === "verified" &&
-            t.isEmailVerified) ||
-        (filterStatus === "unverified" &&
-            !t.isEmailVerified);
+        const matchesSearch = 
+            t.firstName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            t.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            t.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t.speciality?.toLowerCase().includes(searchQuery.toLowerCase());
+
+        let matchesFilter = false;
+        if (filterStatus === "all") {
+            matchesFilter = true;
+        } else if (filterStatus === "active") {
+            matchesFilter = t.status === "ACTIVE" && !t.isDeleted;
+        } else if (filterStatus === "pending") {
+            matchesFilter = t.status === "PENDING_APPROVAL";
+        } else if (filterStatus === "suspended") {
+            matchesFilter = t.isDeleted === true;
+        }
+
         return matchesSearch && matchesFilter;
     });
 
@@ -206,7 +239,7 @@ useEffect(() => {
                                 <input
                                     type="checkbox"
                                     checked={selectedTrainers.length === filteredTrainers.length && filteredTrainers.length > 0}
-                                    onChange={(e) => setSelectedTrainers(e.target.checked ? filteredTrainers.map((t) => t.id) : [])}
+                                    onChange={(e) => setSelectedTrainers(e.target.checked ? filteredTrainers.map((t) => t._id) : [])}
                                 />
                             </th>
                             <th>Trainer</th>
@@ -221,7 +254,7 @@ useEffect(() => {
                     </thead>
                     <tbody>
                         {filteredTrainers.map((trainer) => (
-                            <tr key={trainer._id} className={selectedTrainers.includes(trainer.id) ? 'selected' : ''}>
+                            <tr key={trainer._id} className={selectedTrainers.includes(trainer._id) ? 'selected' : ''}>
                                 <td>
                                     <input
                                         type="checkbox"
@@ -244,12 +277,39 @@ useEffect(() => {
                                     </span>
                                 </td>
                                 <td>
-                                    <span className={`status-badge ${trainer.status === 'pending' ? 'suspended' : trainer.status}`}>
-                                        {trainer.status === 'active' && <CheckCircle2 size={14} />}
-                                        {trainer.status === 'suspended' && <Ban size={14} />}
-                                        {trainer.status === 'pending' && <Clock size={14} />}
-                                        {trainer.status + trainer.status}
-                                    </span>
+                                    {trainer.isDeleted ? (
+                                        <span className="status-badge suspended">
+                                            <Ban size={14} /> BLOCKED
+                                        </span>
+                                    ) : (
+                                        <>
+                                            {trainer.status === 'ACTIVE' && (
+                                                <span className="status-badge active">
+                                                    <CheckCircle2 size={14} /> ACTIVE
+                                                </span>
+                                            )}
+                                            {trainer.status === 'PENDING_APPROVAL' && (
+                                                <span className="status-badge pending">
+                                                    <Clock size={14} /> PENDING APPROVAL
+                                                </span>
+                                            )}
+                                            {trainer.status === 'REGISTERED' && (
+                                                <span className="status-badge inactive">
+                                                    <Clock size={14} /> REGISTERED
+                                                </span>
+                                            )}
+                                            {trainer.status === 'ONBOARDING' && (
+                                                <span className="status-badge inactive">
+                                                    <Clock size={14} /> ONBOARDING
+                                                </span>
+                                            )}
+                                            {trainer.status === 'REJECTED' && (
+                                                <span className="status-badge suspended">
+                                                    <XCircle size={14} /> REJECTED
+                                                </span>
+                                            )}
+                                        </>
+                                    )}
                                 </td>
                                 <td>
                                     {trainer.rating > 0 ? (
@@ -275,16 +335,48 @@ useEffect(() => {
                                     </div>
                                 </td>
                                 <td>
-                                    <div className="action-buttons">
+                                    <div className="action-buttons" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <button className="btn-icon" title="View Profile"><Eye size={16} /></button>
                                         <button className="btn-icon" title="Send Email"><Mail size={16} /></button>
-                                        {trainer.status === 'pending' && (
-                                            <button className="btn-icon" title="Approve" style={{ borderColor: '#22c55e', color: '#22c55e' }}>
-                                                <CheckCircle2 size={16} />
+                                        {!trainer.isDeleted && trainer.status === 'PENDING_APPROVAL' && (
+                                            <>
+                                                <button 
+                                                    className="btn-icon" 
+                                                    title="Approve" 
+                                                    onClick={() => handleApprove(trainer._id)}
+                                                    style={{ borderColor: '#22c55e', color: '#22c55e', background: 'transparent' }}
+                                                >
+                                                    <CheckCircle2 size={16} />
+                                                </button>
+                                                <button 
+                                                    className="btn-icon" 
+                                                    title="Reject" 
+                                                    onClick={() => handleReject(trainer._id)}
+                                                    style={{ borderColor: '#ef4444', color: '#ef4444', background: 'transparent' }}
+                                                >
+                                                    <XCircle size={16} />
+                                                </button>
+                                            </>
+                                        )}
+                                        {trainer.isDeleted ? (
+                                            <button 
+                                                className="btn-icon" 
+                                                title="Unblock Trainer" 
+                                                onClick={() => handleUnBlock(trainer._id)}
+                                                style={{ borderColor: '#3b82f6', color: '#3b82f6', background: 'transparent', padding: '2px 8px', fontSize: '0.8rem', height: '28px' }}
+                                            >
+                                                unblock
+                                            </button>
+                                        ) : (
+                                            <button 
+                                                className="btn-icon" 
+                                                title="Block Trainer" 
+                                                onClick={() => handleBlock(trainer._id)}
+                                                style={{ borderColor: '#ef4444', color: '#ef4444', background: 'transparent', padding: '2px 8px', fontSize: '0.8rem', height: '28px' }}
+                                            >
+                                                block
                                             </button>
                                         )}
-                                        <button onClick={()=>handleBlock(trainer._id)}>block</button>
-                                        <button onClick={()=>handleUnBlock(trainer._id)}> unblock</button>
                                         <button className="btn-icon" title="More Actions"><MoreVertical size={16} /></button>
                                     </div>
                                 </td>

@@ -18,7 +18,7 @@ export const TrainerAuthprovider=({
     children,
 }:TrainerAuthProviderProps)=>{
 const [trainer,setTrainer]=useState<Trainer|null>(null);
-const [loading,setLoading]=useState(false);
+const [loading,setLoading]=useState(true);
 const {getCurrentTrainer,logoutTrainer}=useTrainerAuth();
 useEffect(()=>{
     const restoreSession=async () => {

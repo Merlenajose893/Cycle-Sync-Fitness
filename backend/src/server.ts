@@ -13,6 +13,7 @@ import userAuthRoutes from './routes/userAuth.routes.js'
 import trainerRoutes from './routes/trainerAuth.routes.js'
 import onboardingRoutes from './routes/onBoardingRoutes.js'
 import adminRoutes from './routes/adminAuthRoutes.js'
+import { errorHandler } from './middlewares/errorHandler.js'
 const  app=express();
 connectDB();
 console.log(connectDB());
@@ -38,7 +39,7 @@ app.use('/api/users',userAuthRoutes)
 app.use('/api/trainer',trainerRoutes)
 app.use("/api/onboarding", onboardingRoutes);
 app.use("/api/admin", adminRoutes);
-// app.use('/api/onboarding', onboardingRoutes);
+app.use(errorHandler);
 const PORT=process.env.PORT||3000;
 app.listen(PORT,()=>{
     console.log(`Server running on ${PORT}`);

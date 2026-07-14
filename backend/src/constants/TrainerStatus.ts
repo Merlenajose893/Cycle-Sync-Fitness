@@ -7,6 +7,7 @@ export enum TrainerStatus{
   ACTIVE = "ACTIVE",
 
   REJECTED = "REJECTED",
+  BLOCKED = "BLOCKED",
 
   
 }

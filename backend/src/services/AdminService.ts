@@ -165,7 +165,7 @@ rejectTrainer=async(trainerId: string, reason: string): Promise<void> =>{
         throw new BadRequestError("Trainer is not in pending")
     }
 
-    trainer.status=TrainerStatus.ACTIVE;
+    trainer.status=TrainerStatus.REJECTED;
     trainer.rejectionReason=reason;
 
     await this.trainerRepository.save(trainer)

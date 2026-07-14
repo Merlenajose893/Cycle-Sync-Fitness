@@ -74,7 +74,7 @@ implements IEmailService {
     });
   }
 
-  async sendPasswordResetOTP(
+  async sendPasswordResetOtp(
     to: string,
     otp: string
   ): Promise<void> {

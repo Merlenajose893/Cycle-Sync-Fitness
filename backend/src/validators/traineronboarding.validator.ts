@@ -1,6 +1,6 @@
 import {z} from "zod";
 export const updateTrainerProfileSchema=z.object({
-    bio:z.object().optional(),
+    bio:z.string().optional(),
     experience:z.string().optional(),
     location:z.string().optional(),
     avatar:z.string().optional(),

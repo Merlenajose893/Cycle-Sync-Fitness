@@ -25,10 +25,13 @@ export interface ITrainer extends Document {
   isDeleted:boolean;
   avatar?: string;
   status:TrainerStatus;
+  inviteToken?: string | null;
+  inviteExpiresAt?: Date | null;
+  inviteAccepted?: boolean;
   rejectionReason?:string|null;
   avatarPublicId?:string;
   bio?: string;
-  experience: number;
+  experience: string;
   onboardingCompleted:boolean;
   onboardingSteps:number;
   tags: string[];
@@ -57,13 +60,16 @@ const TrainerSchema = new Schema<ITrainer>(
     isDeleted:{type:Boolean, required:false},
     avatar: { type: String },
     status:{type:String,enum:Object.values(TrainerStatus),default:TrainerStatus.REGISTERED},
+    inviteToken: { type: String, default: null },
+    inviteExpiresAt: { type: Date, default: null },
+    inviteAccepted: { type: Boolean, default: false },
     rejectionReason:{type:String,default:null},
     avatarPublicId:{type:String},
     bio: { type: String },
 
     onboardingSteps:{type:Number,default:1},
     onboardingCompleted:{type:Boolean,default:false},
-    experience: { type: Number,default:0},
+    experience: { type: String, default: "0" },
 
     packages: [
       {

@@ -15,6 +15,6 @@ export interface InviteTrainerDTO{
     email:string;
     phone:string;
     specialization:string;
-    experience:number;
+    experience:string;
 
 }

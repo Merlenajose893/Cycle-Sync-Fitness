@@ -67,4 +67,30 @@ export class TrainerAuthController{
         successResponse(res,"Registration invite done",result,HttpStatus.OK)
     }
 
+    getCurrentTrainer=async (req:Request,res:Response,next:NextFunction) => {
+        const trainerId=req.user?.userId!
+        const result=await this.trainerAuthService.getCurrentTrainer(trainerId);
+        successResponse(res,"Current Trainer fetched",result,HttpStatus.OK)
+    }
+
+    forgotPassword=async (req:Request,res:Response,next:NextFunction):Promise<void> => {
+        try {
+            const {email}=req.body;
+            const result=await this.trainerAuthService.forgotPassword({email},res);
+            successResponse(res,"OTP sent to email for password reset",result,HttpStatus.OK);
+        } catch (error) {
+            next(error)
+        }
+    }
+    resetPassword=async (req:Request,res:Response,next:NextFunction):Promise<void> => {
+        try {
+            const {userId,trainerId,otp,newPassword}=req.body;
+            const targetId=userId||trainerId;
+            await this.trainerAuthService.resetPassword({userId:targetId,otp,newPassword},res)
+            successResponse(res,"Password reset successfully",null,HttpStatus.OK)
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }

@@ -1,15 +1,16 @@
 import express from "express";
 import { container } from "tsyringe";
 import { TrainerOnboardingController } from "../controllers/TrainerOnboardingController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { trainerAuthMiddleware } from "../middlewares/trainerAuthMiddleware.js";
 import { validate } from "../middlewares/validate.js";
 import { updateTrainerCertificationSchema, updateTrainerPackageSchema, updateTrainerProfileSchema } from "../validators/traineronboarding.validator.js";
 import { upload } from "../middlewares/upload.js";
 const router=express.Router();
 const controller=container.resolve(TrainerOnboardingController);
-router.get("/status",authMiddleware,controller.getTrainerOnboardingStatus.bind(controller));
-router.put("/profile",authMiddleware,validate(updateTrainerProfileSchema),controller.updateTrainerProfile.bind(controller));
-router.put("/packages",authMiddleware,validate(updateTrainerPackageSchema),controller.updateTrainerPackages.bind(controller));
-router.post("/complete",authMiddleware,controller.completeTrainerOnboarding.bind(controller))
-router.post("/avatar",authMiddleware,upload.single("avatar"),controller.uploadAvatar);
+router.get("/status",trainerAuthMiddleware,controller.getTrainerOnboardingStatus.bind(controller));
+router.put("/profile",trainerAuthMiddleware,validate(updateTrainerProfileSchema),controller.updateTrainerProfile.bind(controller));
+router.put("/certifications",trainerAuthMiddleware,validate(updateTrainerCertificationSchema),controller.updateTrainerCertifications.bind(controller));
+router.put("/packages",trainerAuthMiddleware,validate(updateTrainerPackageSchema),controller.updateTrainerPackages.bind(controller));
+router.put("/complete",trainerAuthMiddleware,controller.completeTrainerOnboarding.bind(controller));
+router.post("/avatar",trainerAuthMiddleware,upload.single("avatar"),controller.uploadAvatar);
 export default router;

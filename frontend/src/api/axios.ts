@@ -16,7 +16,7 @@ axiosInstance.interceptors.response.use(
                 await axiosInstance.post("/users/refresh-token");
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
-                window.location.href = "/login";
+                // Reject the promise and let context/route-guards handle redirection
                 return Promise.reject(refreshError);
             }
         }
@@ -26,7 +26,7 @@ axiosInstance.interceptors.response.use(
         if (error.response?.status === 403) {
             
          
-            window.location.href = "/login";
+            window.location.href = "/blocked";
             
             return Promise.reject(error);
         }
