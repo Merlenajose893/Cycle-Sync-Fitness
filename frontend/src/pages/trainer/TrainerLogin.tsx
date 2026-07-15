@@ -79,7 +79,7 @@ const TrainerLogin: React.FC = () => {
 
             switch (trainer.status) {
                 case "REGISTERED":
-                    navigate("/trainer/onboarding");
+                    navigate("/trainer/verify-otp");
                     break;
 
                 case "ONBOARDING":
