@@ -6,6 +6,8 @@ interface UserAuthContextType{
     isAuthenticated:boolean;
     loading:boolean;
     login:(user:User)=>void;
+      googleAuth: (credential: string) => Promise<void>;
+
     logout:()=>Promise<void>;
 }
 const UserAuthContext=createContext<UserAuthContextType|undefined>(undefined);
@@ -17,7 +19,7 @@ export const UserAuthProvider=({
 }:UserAuthProviderProps)=>{
     const [user,setUser]=useState<User|null>(null);
     const [loading,setLoading]=useState(true);
-    const {getUser,logoutUser}=useUserAuth();
+    const {getUser,logoutUser,googleSignIn}=useUserAuth();
     useEffect(()=>{
         const restoreSession=async () => {
             try {
@@ -44,11 +46,16 @@ export const UserAuthProvider=({
         await logoutUser();
         setUser(null);
     }
+    const googleAuth=async (credential:string) => {
+        await googleSignIn(credential);
+        setUser(user?.googleId);
+        
+    }
 
     
 
     return(
-        <UserAuthContext.Provider value={{user,isAuthenticated:!!user,loading,login,logout}}>
+        <UserAuthContext.Provider value={{user,isAuthenticated:!!user,loading,login,logout,googleAuth}}>
             {children}
         </UserAuthContext.Provider>
     )

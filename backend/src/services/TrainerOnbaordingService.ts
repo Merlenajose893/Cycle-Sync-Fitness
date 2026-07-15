@@ -63,7 +63,7 @@ completeTrainerOnboardingStatus=async(trainerId: string): Promise<ITrainer> =>{
     {
         throw new NotFoundError("Trainer Not found")
     }
-    if(trainer.status!==TrainerStatus.REGISTERED && trainer.status!==TrainerStatus.REJECTED)
+    if(trainer.status!==TrainerStatus.ONBOARDING && trainer.status!==TrainerStatus.REJECTED)
     {
         throw new BadRequestError("Trainer cannot submit onboarding")
     }

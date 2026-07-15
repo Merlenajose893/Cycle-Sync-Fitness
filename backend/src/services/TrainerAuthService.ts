@@ -92,6 +92,7 @@ verifyTrainerOtp=async(data: VerifyTrainerDTO,res:Response): Promise<void> =>{
         throw new NotFoundError("Trainer not found")
     }
     trainer.isEmailVerified=true;
+    trainer.status=TrainerStatus.ONBOARDING;
     await this.trainerRepository.save(trainer)
 
 }

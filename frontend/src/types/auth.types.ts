@@ -7,6 +7,7 @@ export interface User{
     isEmailVerified:boolean;
     isDeleted:boolean;
     onboardingComplete:boolean;
+    googleId:string;
 
     goals?: {
     primaryGoal: string;
