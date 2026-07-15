@@ -35,6 +35,7 @@ useEffect(()=>{
         finally{
             setLoading(false)
         }
+    };
     restoreSession();
 
     const handleBlocked = async () => {
