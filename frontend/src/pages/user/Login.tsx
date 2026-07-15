@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
 import '../../styles/Auth.css';
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
 
 const Login = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const isBlocked = searchParams.get("blocked") === "true";
     const { loginUser, loading } = useUserAuth();
 
     const [formData, setFormData] = useState({
@@ -99,6 +101,17 @@ const Login = () => {
                         <h2>Welcome back</h2>
                         <p>Enter your details to access your dashboard</p>
                     </div>
+
+                    {isBlocked && (
+                        <div style={{
+                            padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', 
+                            borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '10px',
+                            color: '#dc2626', marginBottom: '20px', fontSize: '0.9rem', fontWeight: 500
+                        }}>
+                            <AlertCircle size={20} />
+                            Your account has been blocked. Please contact support.
+                        </div>
+                    )}
 
                     {errors.submit && (
                         <div className="auth-error-message">{errors.submit}</div>

@@ -60,12 +60,21 @@ function AppRoutes() {
                 <Route path="/trainer/forgot-password" element={<TrainerForgotPassword />} />
                 <Route path="/trainer/reset-password" element={<TrainerResetPassword />} />
                 <Route path="/trainer/success" element={<TrainerVerificationSuccess />} />
-                <Route path="/trainer/onboarding" element={<TrainerOnboarding />} />
-                <Route path="/trainer/pending" element={<TrainerPendingPage />} />
-                <Route path="/trainer/rejected" element={<TrainerRejectedPage />} />
 
                 {/* ── Protected Trainer Routes ── */}
-                <Route element={<ProtectedTrainerRoute />}>
+                <Route element={<ProtectedTrainerRoute allowedStatuses={["ONBOARDING", "REJECTED"]} />}>
+                    <Route path="/trainer/onboarding" element={<TrainerOnboarding />} />
+                </Route>
+
+                <Route element={<ProtectedTrainerRoute allowedStatuses={["PENDING_APPROVAL"]} />}>
+                    <Route path="/trainer/pending" element={<TrainerPendingPage />} />
+                </Route>
+
+                <Route element={<ProtectedTrainerRoute allowedStatuses={["REJECTED"]} />}>
+                    <Route path="/trainer/rejected" element={<TrainerRejectedPage />} />
+                </Route>
+
+                <Route element={<ProtectedTrainerRoute allowedStatuses={["ACTIVE"]} />}>
                     <Route element={<TrainerLayout />}>
                         <Route path="/trainer" element={<TrainerDashboard />} />
                     </Route>

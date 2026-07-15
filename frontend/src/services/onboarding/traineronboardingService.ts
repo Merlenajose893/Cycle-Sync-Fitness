@@ -30,5 +30,13 @@ export const traineronboardingService={
         formData.append("avatar",file)
         const response=await axiosInstance.post(API_ENDPOINTS.TRAINER_ONBOARDING.AVATAR,formData)
         return response.data
+    },
+    uploadDocuments:async(files:File[]):Promise<AuthResponse<TrainerOnboardingStatus>>=>{
+        const formData=new FormData();
+        files.forEach(file => {
+            formData.append("documents", file);
+        });
+        const response=await axiosInstance.post(API_ENDPOINTS.TRAINER_ONBOARDING.DOCUMENTS,formData)
+        return response.data
     }
 }

@@ -40,6 +40,11 @@ export interface Trainer{
     totalSessions?:number;
     sessionsCompleted?:number;
     isDeleted?:boolean;
+    documents?: {
+        type: 'ID' | 'CERTIFICATE';
+        url: string;
+        name?: string;
+    }[];
 }
 
 export interface AuthResponse<T>{

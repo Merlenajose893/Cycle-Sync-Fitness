@@ -117,7 +117,8 @@ if(!user)
             googleId:googleId,
             isEmailVerified:true,
             avatarUrl:picture!,
-
+            onboardingStep: 1,
+            onboardingComplete: false,
         })
     }
     

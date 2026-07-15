@@ -94,4 +94,29 @@ export class TrainerOnboardingController{
         next(error);
     }
 };
+
+    uploadDocuments = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        try {
+            const trainerId = req.user?.userId;
+            const files = req.files as Express.Multer.File[];
+            
+            const trainer = await this.trainerOnboardingService.uploadDocuments(
+                trainerId!,
+                files
+            );
+
+            successResponse(
+                res,
+                "Documents uploaded successfully",
+                trainer,
+                HttpStatus.OK
+            );
+        } catch (error) {
+            next(error);
+        }
+    };
 }

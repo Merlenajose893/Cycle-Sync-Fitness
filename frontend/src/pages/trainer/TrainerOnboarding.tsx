@@ -48,9 +48,11 @@ const TrainerOnboarding: React.FC = () => {
         certFiles: '',
         agreeTerms: false,
     });
+    const [idDocumentFile, setIdDocumentFile] = useState<File | null>(null);
+    const [certificationFiles, setCertificationFiles] = useState<File[]>([]);
 
     const totalSteps = 5;
-    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, uploadAvatar, loading, error } = useTrainerOnboarding();
+    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, uploadAvatar, uploadDocuments, loading, error } = useTrainerOnboarding();
 
     const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -79,6 +81,10 @@ const TrainerOnboarding: React.FC = () => {
         }
         if (step === 3 && (!formData.packageName || !formData.packagePrice)) {
             showToast.error("Please provide package details");
+            return;
+        }
+        if (step === 4 && (!idDocumentFile)) {
+            showToast.error("Please upload a valid ID document");
             return;
         }
         if (step === 4 && !formData.agreeTerms) {
@@ -120,6 +126,11 @@ const TrainerOnboarding: React.FC = () => {
                             popular: true
                         }]
                     });
+                }
+
+                if (idDocumentFile) {
+                    const allDocs = [idDocumentFile, ...certificationFiles];
+                    await uploadDocuments(allDocs);
                 }
 
                 await completeOnboarding();
@@ -433,10 +444,22 @@ const TrainerOnboarding: React.FC = () => {
                                 <div style={{
                                     border: '2px dashed var(--border)', borderRadius: 'var(--radius-lg)',
                                     padding: '32px', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s',
-                                    background: 'var(--bg-primary)'
+                                    background: 'var(--bg-primary)', position: 'relative'
                                 }}>
-                                    <Upload size={32} color="var(--text-muted)" style={{ margin: '0 auto 8px' }} />
-                                    <p style={{ fontWeight: 600, color: 'var(--text-secondary)', margin: '0 0 4px' }}>Click or drag to upload</p>
+                                    <input 
+                                        type="file" 
+                                        accept=".pdf,image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setIdDocumentFile(e.target.files[0]);
+                                            }
+                                        }}
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    />
+                                    <Upload size={32} color={idDocumentFile ? "#0d9488" : "var(--text-muted)"} style={{ margin: '0 auto 8px' }} />
+                                    <p style={{ fontWeight: 600, color: idDocumentFile ? "#0d9488" : "var(--text-secondary)", margin: '0 0 4px' }}>
+                                        {idDocumentFile ? idDocumentFile.name : 'Click or drag to upload'}
+                                    </p>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>PDF, JPG, PNG • Max 5MB</p>
                                 </div>
                             </div>
@@ -446,10 +469,23 @@ const TrainerOnboarding: React.FC = () => {
                                 <div style={{
                                     border: '2px dashed var(--border)', borderRadius: 'var(--radius-lg)',
                                     padding: '32px', textAlign: 'center', cursor: 'pointer',
-                                    background: 'var(--bg-primary)'
+                                    background: 'var(--bg-primary)', position: 'relative'
                                 }}>
-                                    <Upload size={32} color="var(--text-muted)" style={{ margin: '0 auto 8px' }} />
-                                    <p style={{ fontWeight: 600, color: 'var(--text-secondary)', margin: '0 0 4px' }}>Upload certification files</p>
+                                    <input 
+                                        type="file" 
+                                        multiple
+                                        accept=".pdf,image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files) {
+                                                setCertificationFiles(Array.from(e.target.files));
+                                            }
+                                        }}
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    />
+                                    <Upload size={32} color={certificationFiles.length > 0 ? "#0d9488" : "var(--text-muted)"} style={{ margin: '0 auto 8px' }} />
+                                    <p style={{ fontWeight: 600, color: certificationFiles.length > 0 ? "#0d9488" : "var(--text-secondary)", margin: '0 0 4px' }}>
+                                        {certificationFiles.length > 0 ? `${certificationFiles.length} files selected` : 'Upload certification files'}
+                                    </p>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>PDF, JPG, PNG • Max 5MB each</p>
                                 </div>
                             </div>

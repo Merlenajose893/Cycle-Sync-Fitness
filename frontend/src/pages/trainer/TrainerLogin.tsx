@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Dumbbell, ArrowRight } from 'lucide-react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, Dumbbell, ArrowRight, AlertCircle } from 'lucide-react';
 import '../../styles/Auth.css';
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
 
 const TrainerLogin: React.FC = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const isBlocked = searchParams.get("blocked") === "true";
     const { loginTrainer, loading } = useTrainerAuth();
 
     const [formData, setFormData] = useState({
@@ -147,6 +149,17 @@ const TrainerLogin: React.FC = () => {
                         <h2>Trainer Sign In</h2>
                         <p>Enter your credentials to manage your clients and sessions.</p>
                     </div>
+
+                    {isBlocked && (
+                        <div style={{
+                            padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', 
+                            borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '10px',
+                            color: '#dc2626', marginBottom: '20px', fontSize: '0.9rem', fontWeight: 500
+                        }}>
+                            <AlertCircle size={20} />
+                            Your account has been blocked. Please contact support.
+                        </div>
+                    )}
 
                     {errors.submit && (
                         <div className="auth-error-message">{errors.submit}</div>

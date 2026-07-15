@@ -24,10 +24,7 @@ axiosInstance.interceptors.response.use(
         console.log(error.response.status);
         
         if (error.response?.status === 403) {
-            
-         
-            window.location.href = "/blocked";
-            
+            window.dispatchEvent(new Event("auth-blocked"));
             return Promise.reject(error);
         }
 

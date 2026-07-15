@@ -35,8 +35,18 @@ useEffect(()=>{
         finally{
             setLoading(false)
         }
-    };
     restoreSession();
+
+    const handleBlocked = async () => {
+        await logoutTrainer();
+        setTrainer(null);
+        window.location.href = "/trainer/login?blocked=true";
+    };
+    window.addEventListener("auth-blocked", handleBlocked);
+
+    return () => {
+        window.removeEventListener("auth-blocked", handleBlocked);
+    };
 },[]);
 
 const login=(trainerData:Trainer)=>{

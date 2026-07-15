@@ -83,7 +83,8 @@ TRAINER_ONBOARDING:{
   CERTIFICATIONS:"/api/onboarding/trainer/certifications",
   PACKAGES:"/api/onboarding/trainer/packages",
   COMPLETE:"/api/onboarding/trainer/complete",
-  AVATAR:"/api/onboarding/trainer/avatar"
+  AVATAR:"/api/onboarding/trainer/avatar",
+  DOCUMENTS:"/api/onboarding/trainer/documents"
 
 },
 

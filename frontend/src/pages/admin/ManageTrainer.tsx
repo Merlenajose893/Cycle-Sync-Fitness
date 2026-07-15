@@ -19,7 +19,8 @@ import {
     Users,
     X,
     Package,
-    CheckCircle
+    CheckCircle,
+    FileText
 } from 'lucide-react';
 import '../../styles/AdminPage.css';
 import type { Trainer } from '../../types/auth.types';
@@ -34,6 +35,7 @@ const ManageTrainersPage: React.FC = () => {
     const [filterStatus, setFilterStatus] = useState('all');
     const [selectedTrainers, setSelectedTrainers] = useState<string[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [viewingDocumentsFor, setViewingDocumentsFor] = useState<Trainer | null>(null);
     const [activeTab, setActiveTab] = useState<'trainers' | 'packages'>('trainers');
     const filteredPackages: any[] = [];
 
@@ -338,6 +340,14 @@ useEffect(() => {
                                     <div className="action-buttons" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <button className="btn-icon" title="View Profile"><Eye size={16} /></button>
                                         <button className="btn-icon" title="Send Email"><Mail size={16} /></button>
+                                        <button 
+                                            className="btn-icon" 
+                                            title="View Documents" 
+                                            onClick={() => setViewingDocumentsFor(trainer)}
+                                            style={{ color: '#0d9488' }}
+                                        >
+                                            <FileText size={16} />
+                                        </button>
                                         {!trainer.isDeleted && trainer.status === 'PENDING_APPROVAL' && (
                                             <>
                                                 <button 
@@ -456,6 +466,52 @@ useEffect(() => {
                             <button onClick={() => setShowAddModal(false)} className="btn btn-primary" style={{ background: '#0d9488' }}>
                                 <Mail size={16} style={{ marginRight: '6px' }} /> Send Invite
                             </button>
+                        </div>
+                    </div>
+                </div>
+            {/* View Documents Modal */}
+            {viewingDocumentsFor && (
+                <div style={{
+                    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+                    backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', zIndex: 1000
+                }} onClick={() => setViewingDocumentsFor(null)}>
+                    <div style={{
+                        background: 'white', borderRadius: 'var(--radius-xl)', width: '600px',
+                        maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto',
+                        boxShadow: 'var(--shadow-xl)', animation: 'scaleIn 0.2s ease'
+                    }} onClick={(e) => e.stopPropagation()}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 24px 0' }}>
+                            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>Documents for {viewingDocumentsFor.firstName}</h2>
+                            <button onClick={() => setViewingDocumentsFor(null)} style={{
+                                width: '36px', height: '36px', borderRadius: 'var(--radius-full)',
+                                background: 'var(--bg-primary)', border: 'none', display: 'flex',
+                                alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-secondary)'
+                            }}><X size={20} /></button>
+                        </div>
+                        <div style={{ padding: '24px' }}>
+                            {(!viewingDocumentsFor.documents || viewingDocumentsFor.documents.length === 0) ? (
+                                <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px 0' }}>
+                                    No documents uploaded by this trainer.
+                                </p>
+                            ) : (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    {viewingDocumentsFor.documents.map((doc, idx) => (
+                                        <div key={idx} style={{ padding: '16px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div>
+                                                <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '4px' }}>{doc.name || `Document ${idx + 1}`}</div>
+                                                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Type: {doc.type}</div>
+                                            </div>
+                                            <a href={doc.url} target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm" style={{ textDecoration: 'none' }}>
+                                                View
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', padding: '16px 24px 24px', borderTop: '1px solid var(--border)' }}>
+                            <button onClick={() => setViewingDocumentsFor(null)} className="btn btn-secondary">Close</button>
                         </div>
                     </div>
                 </div>

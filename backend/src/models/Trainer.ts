@@ -15,6 +15,12 @@ export interface ICertificate {
   year: string;
 }
 
+export interface IDocument {
+  type: 'ID' | 'CERTIFICATE';
+  url: string;
+  name?: string;
+}
+
 export interface ITrainer extends Document {
   firstName: string;
   lastName: string;
@@ -45,6 +51,7 @@ export interface ITrainer extends Document {
   featured: boolean;
   packages: ITrainerPackage[];
   certifications: ICertificate[];
+  documents?: IDocument[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -87,6 +94,14 @@ const TrainerSchema = new Schema<ITrainer>(
         issuedBy: { type: String, required: true },
         year: { type: String, required: true },
       },
+    ],
+
+    documents: [
+      {
+        type: { type: String, enum: ['ID', 'CERTIFICATE'], required: true },
+        url: { type: String, required: true },
+        name: { type: String }
+      }
     ],
 
     tags: [{ type: String }],

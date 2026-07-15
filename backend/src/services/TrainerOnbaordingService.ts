@@ -68,8 +68,35 @@ completeTrainerOnboardingStatus=async(trainerId: string): Promise<ITrainer> =>{
         throw new BadRequestError("Trainer cannot submit onboarding")
     }
     trainer.status=TrainerStatus.PENDING_APPROVAL;
+    trainer.rejectionReason = null;
     trainer.onboardingCompleted=true;
     return this.trainerRepository.save(trainer);
+}
+
+uploadDocuments=async(trainerId: string, files: Express.Multer.File[]): Promise<ITrainer> =>{
+    const trainer=await this.trainerRepository.findById(trainerId);
+    if(!trainer)
+    {
+        throw new NotFoundError("Trainer Not found");
+    }
+    if(!files || files.length === 0)
+    {
+        throw new BadRequestError("No files uploaded");
+    }
+
+    const newDocuments = [];
+    for (const file of files) {
+        const image = await this.imageService.uploadImage(file);
+        newDocuments.push({
+            type: file.originalname.toLowerCase().includes('cert') ? 'CERTIFICATE' : 'ID',
+            url: image.url,
+            name: file.originalname
+        });
+    }
+
+    trainer.documents = [...(trainer.documents || []), ...newDocuments];
+    await this.trainerRepository.save(trainer);
+    return trainer;
 }
 
 uploadAvatar=async(trainerId: string, file: Express.Multer.File): Promise<ITrainer> =>{

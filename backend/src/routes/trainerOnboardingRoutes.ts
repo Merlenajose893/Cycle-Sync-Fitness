@@ -13,4 +13,5 @@ router.put("/certifications",trainerAuthMiddleware,validate(updateTrainerCertifi
 router.put("/packages",trainerAuthMiddleware,validate(updateTrainerPackageSchema),controller.updateTrainerPackages.bind(controller));
 router.put("/complete",trainerAuthMiddleware,controller.completeTrainerOnboarding.bind(controller));
 router.post("/avatar",trainerAuthMiddleware,upload.single("avatar"),controller.uploadAvatar);
+router.post("/documents",trainerAuthMiddleware,upload.array("documents", 5),controller.uploadDocuments);
 export default router;

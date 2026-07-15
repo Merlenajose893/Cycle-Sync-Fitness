@@ -35,8 +35,18 @@ export const UserAuthProvider=({
             finally{
                 setLoading(false);
             }
-        };
         restoreSession();
+
+        const handleBlocked = async () => {
+            await logoutUser();
+            setUser(null);
+            window.location.href = "/login?blocked=true";
+        };
+        window.addEventListener("auth-blocked", handleBlocked);
+
+        return () => {
+            window.removeEventListener("auth-blocked", handleBlocked);
+        };
     },[])
 
     const login=(userData:User)=>{
