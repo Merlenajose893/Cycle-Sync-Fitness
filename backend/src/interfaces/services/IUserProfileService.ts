@@ -1,0 +1,9 @@
+import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../../dtos/userprofile.dto.js";
+import type { IUser } from "../../models/User.js";
+
+export interface IUerProfileService{
+    getProfile(userId:string):Promise<UserProfileResponseDTO>;
+    updateProfile(userId:string,data:UpdateUserProfileDTO):Promise<IUser|null>;
+    uploadAvatar(userId:string,file:Express.Multer.files):Promise<UserProfileResponseDTO>;
+    deleteAvatar(userId:string):Promise<UserProfileResponseDTO>;
+}
