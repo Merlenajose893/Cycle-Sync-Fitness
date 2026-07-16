@@ -34,6 +34,7 @@ import { UserOnboardingService } from "../services/UserOnboardingService.js";
 import { TrainerOnboardingService } from "../services/TrainerOnbaordingService.js";
 import { ImageService } from "../services/ImageService.js";
 import { AccountStatusService } from "../services/AccountStatusService.js";
+import { UserProfileService } from "../services/UserProfileService.js";
 
 container.register(
   TOKENS.IUserRepository,
@@ -41,6 +42,12 @@ container.register(
     useClass: UserRepository,
   }
 );
+container.register(
+  TOKENS.IUserProfileService,
+  {
+    useClass:UserProfileService
+  }
+)
 
 container.register(
   TOKENS.IOtpRepository,
