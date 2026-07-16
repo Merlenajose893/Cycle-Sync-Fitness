@@ -28,6 +28,9 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
         return this.model.findByIdAndUpdate(userId,{isDeleted:false},{new:true})
     }
 
+    async updateProfile(userId: string, data: Partial<IUser>): Promise<IUser | null> {
+        return this.model.findByIdAndUpdate(userId,data,{new:true})
+    }
 
     
 
