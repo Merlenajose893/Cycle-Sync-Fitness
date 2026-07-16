@@ -8,7 +8,7 @@ import { UserProfileMapper } from "../mappers/UserProfileMappers.js";
 import type { IUser } from "../models/User.js";
 @injectable()
 export class UserProfileService implements IUserProfileService{
-    constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository)
+    constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository )
     {
 
     }
@@ -34,5 +34,18 @@ updateProfile=async(userId: string, data: UpdateUserProfileDTO): Promise<IUser |
       throw new NotFoundError("User not found");
     }
     return UserProfileMapper.toResponseDTO(updatedUser);
+}
+
+uploadAvatar=async(userId: string, file: Express.Multer.files): Promise<UserProfileResponseDTO> =>{
+    const user=await this.userRepository.findById(userId);
+    if(!user)
+    {
+        throw new NotFoundError("User Not Found");
+    }
+
+}
+
+deleteAvatar(userId: string): Promise<UserProfileResponseDTO> {
+    
 }
 }
