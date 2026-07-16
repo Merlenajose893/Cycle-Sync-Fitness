@@ -1,11 +1,14 @@
 export interface UpdateUserProfileDTO{
     firstName?:string;
     lastName?:string;
+    bio?:string;
+    avatarUrl?:string;
+    avatarPublicId?:string;
     bodyDetails?:{
-        height:number;
-        weight:number;
-        dateOfBirth:Date;
-        biologicalSex:string;
+        height?:number;
+        weight?:number;
+        dateOfBirth?:Date;
+        biologicalSex?:string;
     };
     cycleSetUp?:{
         averageCycleLength?:number;
@@ -35,10 +38,10 @@ export interface UserProfileResponseDTO {
   onboardingComplete: boolean;
 
   bodyDetails?: {
-    height: number;
-    weight: number;
-    dateOfBirth: Date;
-    biologicalSex: string;
+    height?: number;
+    weight?: number;
+    dateOfBirth?: Date;
+    biologicalSex?: string;
   };
 
   cycleSetUp?: {
