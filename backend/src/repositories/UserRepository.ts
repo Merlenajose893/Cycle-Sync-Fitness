@@ -28,8 +28,16 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
         return this.model.findByIdAndUpdate(userId,{isDeleted:false},{new:true})
     }
 
+    async updateProfile(userId: string, data: Partial<IUser>): Promise<IUser | null> {
+        return this.model.findByIdAndUpdate(userId,data,{new:true})
+    }
 
-    
+    async softDelete(userId: string): Promise<IUser | null> {
+        return this.model.findByIdAndUpdate(userId,{isDeleted:true,deletedAt:new Date()},{new:true})
+    }
+    async hardDelete(userId: string): Promise<IUser | null> {
+        return this.model.findByIdAndDelete(userId)
+    }
 
    
 }

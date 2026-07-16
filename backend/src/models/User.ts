@@ -6,11 +6,15 @@ export interface IUser extends Document{
     email:string;
     password?:string;
     role:'user'|'admin'
-    avatarUrl?:string
+    avatarUrl?:string;
+    avatarPublicId?:string;
     isEmailVerified:boolean;
     googleId?:string;
     onboardingStep:number;
-    onboardingComplete:boolean
+    onboardingComplete:boolean;
+    bio?:string;
+    
+    
 
 
     bodyDetails?:{
@@ -43,6 +47,7 @@ isDeleted:boolean;
 
     createdAt:Date;
     updatedAt:Date;
+    deletedAt?:Date;
 }
 
 
@@ -68,15 +73,25 @@ role:{
 avatarUrl:{
     type:String
 },
+avatarPublicId:{
+    type:String
+},
 isEmailVerified:{
     type:Boolean,
     default:false
 },
+<<<<<<< HEAD
 isDeleted:{
     type:Boolean,
     default:false
 },
 
+=======
+bio:{
+    type:String,
+    required:false
+},
+>>>>>>> feature/profile-manage
 
 onboardingComplete:{
     type:Boolean,
@@ -84,7 +99,8 @@ onboardingComplete:{
 },
 
 onboardingStep:{
-    type:Number
+    type:Number,
+    default:0
 },
 
 bodyDetails:{
@@ -114,7 +130,7 @@ goals:{
 subscription:{
     status:{
         type:String,
-        enum:['active','inactive','trainling','cancelled'],default:'inactive'
+        enum:['active','inactive','trailing','cancelled'],default:'inactive'
     },
     planId:{
         type:String
@@ -122,13 +138,16 @@ subscription:{
     currentPeriodEnd:{
         type:Date
     },
+    
      
+},
+deletedAt:{
+    type:Date,
+    default:null
 }
 
 },{timestamps:true})
 
-
-// console.log("hello");
 
 
 
