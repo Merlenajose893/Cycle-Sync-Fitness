@@ -2,6 +2,8 @@ export const TOKENS = {
 
   IUserRepository:
     Symbol.for("IUserRepository"),
+    IUserProfileService:
+    Symbol.for("IUserProfileService"),
 
   ITrainerRepository:
     Symbol.for("ITrainerRepository"),
