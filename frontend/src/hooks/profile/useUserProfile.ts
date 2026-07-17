@@ -22,7 +22,7 @@ export const useUserProfile=()=>{
             }
         }
         finally{
-            setLoading(true);
+            setLoading(false);
         }
     }
 
@@ -42,7 +42,7 @@ export const useUserProfile=()=>{
             }
         }
         finally{
-
+            setLoading(false);
         }
     }
 
@@ -62,7 +62,7 @@ export const useUserProfile=()=>{
             }
         }
         finally{
-            setLoading(true)
+            setLoading(false);
         }
     }
 

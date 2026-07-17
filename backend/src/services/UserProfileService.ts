@@ -9,7 +9,7 @@ import type { IUser } from "../models/User.js";
 import type { IImageService } from "../interfaces/services/IImageService.js";
 @injectable()
 export class UserProfileService implements IUserProfileService{
-    constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository @inject(TOKENS.IImageService) private imageService:IImageService)
+    constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository ,@inject(TOKENS.IImageService) private imageService:IImageService)
     {
 
     }

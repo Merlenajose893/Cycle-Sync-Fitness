@@ -1,33 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Edit2, MapPin, Calendar, Activity, Zap, Settings, MessageSquare, FileText } from 'lucide-react';
 import '../../styles/UserProfile.css';
+import { useUserProfile } from '../../hooks/profile/useUserProfile';
+import type { UserProfile } from '../../types/profile.types'
+
 
 const Profile: React.FC = () => {
+    const [profile,setProfile]=useState<UserProfile|null>(null);
+    const {getProfile,loading}=useUserProfile();
+    useEffect(()=>{
+        const fetchProfile=async () => {
+            try {
+                const data=await getProfile();
+                setProfile(data)
+            } catch (error) {
+                console.log(error);
+                
+            }
+        }
+        fetchProfile();
+    },[])
     return (
+        
         <div className="user-profile-container">
             {/* Profile Banner */}
+            
             <div className="profile-banner-card">
                 <div className="profile-banner-left">
                     <div className="profile-avatar-wrapper">
                         {/* Use a placeholder image or generic avatar here for the UI */}
                         <img
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            src={profile?.avatarUrl}
                             alt="Jane Doe"
                             className="profile-avatar-img"
                         />
                     </div>
                     <div className="profile-info">
-                        <h1 className="profile-name">Jane Doe</h1>
-                        <p className="profile-username">@janedoe</p>
+                        <h1 className="profile-name">{profile?.firstName}</h1>
+                        <p className="profile-username">{profile?.email}</p>
                         <div className="profile-meta">
-                            <span className="meta-item">
-                                <MapPin size={14} />
-                                San Francisco, CA
-                            </span>
+                            
                             <span className="meta-item">
                                 <Calendar size={14} />
-                                Joined September 2025
+                                {profile?.createdAt}
                             </span>
                         </div>
                     </div>

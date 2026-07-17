@@ -3,12 +3,17 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
 import '../../styles/Auth.css';
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
+import { useUserContext } from '../../context/UserAuthContext';
+import { GoogleLogin } from "@react-oauth/google";
+import type { CredentialResponse } from '@react-oauth/google';
+import { showToast } from '../../components/common/Toast/Toast';
 
 const Login = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const isBlocked = searchParams.get("blocked") === "true";
-    const { loginUser, loading } = useUserAuth();
+    const { loginUser, loading, googleSignIn, getUser } = useUserAuth();
+    const { login } = useUserContext();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -77,12 +82,40 @@ const Login = () => {
                 email: formData.email.trim(),
                 password: formData.password,
             });
+            const user = await getUser();
+            if (user) {
+                login(user);
+            }
             navigate("/app");
         } catch (error: any) {
             console.error(error);
             setErrors({
                 submit: error.response?.data?.message || "Invalid email or password."
             });
+        }
+    };
+
+    const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {
+        try {
+            const idToken = credentialResponse.credential;
+
+            if (!idToken) {
+                showToast.error("Google authentication failed");
+                return;
+            }
+
+            await googleSignIn({ idToken });
+            const user = await getUser();
+            if (user) {
+                login(user);
+            }
+
+            showToast.success("Welcome back!");
+            navigate("/app"); 
+        } catch (error: any) {
+            showToast.error(
+                error.response?.data?.message || "Google Sign-In failed"
+            );
         }
     };
 
@@ -178,6 +211,13 @@ const Login = () => {
 
                     <div className="auth-divider">
                         <span>Or continue with</span>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                        <GoogleLogin
+                          onSuccess={handleGoogleSignIn}
+                          onError={() => showToast.error("Google Sign-In failed")}
+                        />
                     </div>
 
                     <p className="auth-footer">

@@ -32,7 +32,7 @@ export class UserAccountStatusService implements IUserStatusService{
         await this.userrepository.save(user);
 
     }
-    deleteAccount=async(userId: string, data: DeleteAccount): Promise<void> {
+    deleteAccount=async(userId: string, data: DeleteAccount): Promise<void>=> {
         const user=await this.userrepository.findById(userId);
         if(!user)
         {
