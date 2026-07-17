@@ -87,6 +87,15 @@ TRAINER_ONBOARDING:{
   DOCUMENTS:"/api/onboarding/trainer/documents"
 
 },
+USER_PROFILE: {
+  PROFILE: "/api/users/profile",
+  AVATAR: "/api/users/profile/avatar",
+},
+
+USER_ACCOUNT: {
+  CHANGE_PASSWORD: "/api/users/account/change-password",
+  DELETE_ACCOUNT: "/api/users/account",
+},
 
 
 

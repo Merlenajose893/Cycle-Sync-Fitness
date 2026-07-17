@@ -80,18 +80,18 @@ isEmailVerified:{
     type:Boolean,
     default:false
 },
-<<<<<<< HEAD
+
 isDeleted:{
     type:Boolean,
     default:false
 },
 
-=======
+
 bio:{
     type:String,
     required:false
 },
->>>>>>> feature/profile-manage
+
 
 onboardingComplete:{
     type:Boolean,

@@ -14,10 +14,12 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
+import { useUserContext } from '../../context/UserAuthContext';
 
 const Register = () => {
     const navigate = useNavigate();
-    const { registerUser, loading ,googleSignIn} = useUserAuth();
+    const { registerUser, loading ,googleSignIn, getUser} = useUserAuth();
+    const { login } = useUserContext();
     
     const [formData, setFormData] = useState({
         firstName: "",
@@ -153,10 +155,13 @@ const Register = () => {
       return;
     }
 
-    const response = await googleSignIn({ idToken });
+    await googleSignIn({ idToken });
+    const user = await getUser();
+    if (user) {
+        login(user);
+    }
 
     showToast.success("Welcome!");
-    console.log(response);
 
     navigate("/app"); 
   } catch (error: any) {
