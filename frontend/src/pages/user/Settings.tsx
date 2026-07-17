@@ -1,10 +1,193 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useUserProfile } from '../../hooks/profile/useUserProfile';
+import type { UserProfile,UpdateUserProfileDTO } from '../../types/profile.types';
 import { User, Bell, Shield, Palette, Trash2, Mail, Phone, Calendar, MapPin, Lock, Eye, Check } from 'lucide-react';
 import '../../styles/UserSettings.css';
 
 const Settings: React.FC = () => {
-    const [cycleLength, setCycleLength] = useState(28);
-    const [periodLength, setPeriodLength] = useState(5);
+    const {getProfile,updateProfile,uploadAvatar,deleteAvatar,changePassword,deleteAccount,loading}=useUserProfile();
+    const [profile,setProfile]=useState<UserProfile|null>(null)
+    const [formData,setFormData]=useState<UpdateUserProfileDTO>({
+        firstName:"",
+        lastName:"",
+        bio:""
+    });
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+) => {
+    e.preventDefault();
+
+    try {
+        const updatedProfile = await updateProfile(formData);
+
+        setProfile(updatedProfile);
+
+        alert("Profile updated successfully!");
+    } catch (error) {
+        console.error(error);
+        alert("Failed to update profile.");
+    }
+};
+
+    useEffect(()=>{
+        const fetchData=async () => {
+            try {
+                const data=await getProfile();
+                setProfile(data)
+            } catch (error) {
+                console.log(error);
+                
+            }
+        }
+        fetchData();
+    },[])
+    useEffect(()=>{
+        if(!profile) return;
+        setFormData({
+            firstName:profile.firstName,
+            lastName:profile.lastName,
+            bio:profile.bio,
+            bodyDetails:{
+                height:profile.bodyDetails?.height || 0,
+                weight:profile.bodyDetails?.weight || 0,
+                biologicalSex:profile.bodyDetails?.biologicalSex || '',
+                dateOfBirth:profile.bodyDetails?.dateOfBirth || ''
+            },
+            cycleSetUp:{
+                averageCycleLength:profile.cycleSetUp?.averageCycleLength || 28,
+                averagePeriodLength:profile.cycleSetUp?.averagePeriodLength || 5,
+                birthControl:profile.cycleSetUp?.birthControl || 'none',
+                lastPeriodStart:profile.cycleSetUp?.lastPeriodStart || ''
+            },
+            goals:{
+                primaryGoal:profile.goals?.primaryGoal || 'general_health',
+                targetWeight:profile.goals?.targetWeight || 0,
+                activityLevel:profile.goals?.activityLevel || 'moderatelyActive'
+            }
+        })
+    }, [profile])
+    const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
+    const handleBodyDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            bodyDetails: {
+                height: prev.bodyDetails?.height || 0,
+                weight: prev.bodyDetails?.weight || 0,
+                biologicalSex: prev.bodyDetails?.biologicalSex || '',
+                dateOfBirth: prev.bodyDetails?.dateOfBirth || '',
+                [name]: value
+            }
+        }));
+    };
+
+    const handleCycleSetupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            cycleSetUp: {
+                ...prev.cycleSetUp,
+                [name]: parseInt(value)
+            }
+        }));
+    };
+
+    const handleCycleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            cycleSetUp: {
+                ...prev.cycleSetUp,
+                lastPeriodStart: value
+            }
+        }));
+    };
+
+    const handleSave = async () => {
+        try {
+            await updateProfile(formData);
+            alert("Profile updated successfully!");
+        } catch (error) {
+            console.error("Failed to update profile", error);
+            alert("Failed to update profile");
+        }
+    };
+
+    const handlePasswordDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setPasswordData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleUpdatePassword = async () => {
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+        try {
+            await changePassword({
+                currentPassword: passwordData.currentPassword,
+                newPassword: passwordData.newPassword
+            });
+            alert("Password updated successfully!");
+            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        } catch (error) {
+            console.error("Failed to update password", error);
+            alert("Failed to update password");
+        }
+    };
+
+    const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            const updatedProfile = await uploadAvatar(file);
+            setProfile(updatedProfile);
+            alert("Avatar uploaded successfully!");
+        } catch (error) {
+            console.error("Failed to upload avatar", error);
+            alert("Failed to upload avatar");
+        }
+    };
+
+    const handleAvatarDelete = async () => {
+        try {
+            const updatedProfile = await deleteAvatar();
+            setProfile(updatedProfile);
+            alert("Avatar removed successfully!");
+        } catch (error) {
+            console.error("Failed to remove avatar", error);
+            alert("Failed to remove avatar");
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        const password = prompt("Please enter your password to confirm account deletion:");
+        if (!password) return;
+        try {
+            await deleteAccount({ password });
+            alert("Account deleted successfully!");
+            window.location.href = '/login'; 
+        } catch (error) {
+            console.error("Failed to delete account", error);
+            alert("Failed to delete account");
+        }
+    };
 
     return (
         <div className="settings-container">
@@ -45,7 +228,7 @@ const Settings: React.FC = () => {
                         </div>
                     </button>
 
-                    <button className="settings-nav-item danger">
+                    <button className="settings-nav-item danger" onClick={handleDeleteAccount}>
                         <div className="nav-item-left">
                             <Trash2 size={16} />
                             Danger Zone
@@ -65,18 +248,25 @@ const Settings: React.FC = () => {
                         <div>
                             <h3 className="form-group-title">Profile Photo</h3>
                             <div className="profile-photo-section">
-                                <div className="photo-avatar">
-                                    JD
+                                <div className="photo-avatar" style={{ overflow: 'hidden' }}>
+                                    {profile?.avatarUrl ? (
+                                        <img src={profile.avatarUrl} alt="Avatar" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                                    ) : (
+                                        (profile?.firstName?.[0] || '') + (profile?.lastName?.[0] || 'U')
+                                    )}
                                     <div className="photo-badge">
                                         <Check size={12} />
                                     </div>
                                 </div>
                                 <div className="photo-info">
-                                    <span className="photo-name">Jane Doe</span>
+                                    <span className="photo-name">{profile?.firstName || 'User'} {profile?.lastName || ''}</span>
                                     <span className="photo-hint">JPG, PNG or GIF - Max 5 MB</span>
                                     <div className="photo-actions">
-                                        <button className="btn-upload">Upload Photo</button>
-                                        <button className="btn-remove">Remove</button>
+                                        <label className="btn-upload" style={{ cursor: 'pointer' }}>
+                                            Upload Photo
+                                            <input type="file" accept="image/png, image/jpeg, image/gif" style={{ display: 'none' }} onChange={handleAvatarUpload} />
+                                        </label>
+                                        <button className="btn-remove" onClick={handleAvatarDelete}>Remove</button>
                                     </div>
                                 </div>
                             </div>
@@ -88,47 +278,55 @@ const Settings: React.FC = () => {
                             <div className="form-grid">
                                 <div className="form-field">
                                     <label className="field-label">First Name</label>
-                                    <input type="text" className="form-input" defaultValue="Jane" />
+                                    <input type="text" className="form-input" name='firstName' value={formData.firstName} onChange={handleChange} />
                                 </div>
                                 <div className="form-field">
                                     <label className="field-label">Last Name</label>
-                                    <input type="text" className="form-input" defaultValue="Doe" />
+                                    <input type="text" className="form-input" name='lastName' value={formData.lastName} onChange={handleChange} />
                                 </div>
 
-                                <div className="form-field">
-                                    <label className="field-label">Email Address</label>
-                                    <div className="input-wrapper">
-                                        <Mail size={16} className="input-icon" />
-                                        <input type="email" className="form-input" defaultValue="jane.doe@example.com" />
-                                    </div>
-                                </div>
-                                <div className="form-field">
-                                    <label className="field-label">Phone Number</label>
-                                    <div className="input-wrapper">
-                                        <Phone size={16} className="input-icon" />
-                                        <input type="tel" className="form-input" defaultValue="+91 98765 43210" />
-                                    </div>
-                                </div>
 
                                 <div className="form-field">
                                     <label className="field-label">Date of Birth</label>
                                     <div className="input-wrapper">
                                         <Calendar size={16} className="input-icon" />
-                                        <input type="text" className="form-input" defaultValue="15-03-1996" />
+                                        <input type="date" className="form-input" name='dateOfBirth' value={formData.bodyDetails?.dateOfBirth || ''} onChange={handleBodyDetailsChange} />
                                     </div>
                                 </div>
-                                <div className="form-field">
-                                    <label className="field-label">Location</label>
-                                    <div className="input-wrapper">
-                                        <MapPin size={16} className="input-icon" />
-                                        <input type="text" className="form-input" defaultValue="Mumbai, India" />
-                                    </div>
-                                </div>
+                                
 
                                 <div className="form-field full-width">
                                     <label className="field-label">Bio</label>
-                                    <textarea className="form-textarea" defaultValue="Passionate about holistic wellness and cycle-synced living. 🌙"></textarea>
+                                    <textarea className="form-textarea" name='bio' value={formData.bio} onChange={handleChange}></textarea>
                                     <span className="field-hint">62/160 characters</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Goals Configuration */}
+                        <div>
+                            <h3 className="form-group-title">Goals & Activity</h3>
+                            <div className="form-grid">
+                                <div className="form-field">
+                                    <label className="field-label">Primary Goal</label>
+                                    <select className="form-input" name="primaryGoal" value={formData.goals?.primaryGoal || 'general_health'} onChange={(e) => setFormData(prev => ({...prev, goals: {...prev.goals, primaryGoal: e.target.value as any}}))}>
+                                        <option value="weight_loss">Weight Loss</option>
+                                        <option value="muscle_gain">Muscle Gain</option>
+                                        <option value="hormone_balance">Hormone Balance</option>
+                                        <option value="general_health">General Health</option>
+                                    </select>
+                                </div>
+                                <div className="form-field">
+                                    <label className="field-label">Activity Level</label>
+                                    <select className="form-input" name="activityLevel" value={formData.goals?.activityLevel || 'moderatelyActive'} onChange={(e) => setFormData(prev => ({...prev, goals: {...prev.goals, activityLevel: e.target.value as any}}))}>
+                                        <option value="sedentary">Sedentary</option>
+                                        <option value="lightActive">Lightly Active</option>
+                                        <option value="moderatelyActive">Moderately Active</option>
+                                    </select>
+                                </div>
+                                <div className="form-field">
+                                    <label className="field-label">Target Weight (kg)</label>
+                                    <input type="number" className="form-input" name="targetWeight" value={formData.goals?.targetWeight || 0} onChange={(e) => setFormData(prev => ({...prev, goals: {...prev.goals, targetWeight: parseFloat(e.target.value)}}))} />
                                 </div>
                             </div>
                         </div>
@@ -139,15 +337,24 @@ const Settings: React.FC = () => {
 
                             <div className="cycle-stats">
                                 <div className="cycle-stat-box">
-                                    <span className="cycle-stat-value">{cycleLength}</span>
+                                    <input
+                                        type="range"
+                                        name="averageCycleLength"
+                                        min="21"
+                                        max="35"
+                                        value={formData.cycleSetUp?.averageCycleLength ?? 28}
+                                        onChange={handleCycleSetupChange}
+                                        style={{display: 'none'}}
+                                    />
+                                    <span className="cycle-stat-value">{formData.cycleSetUp?.averageCycleLength ?? 28}</span>
                                     <span className="cycle-stat-label">Cycle Length (days)</span>
                                 </div>
                                 <div className="cycle-stat-box">
-                                    <span className="cycle-stat-value">{periodLength}</span>
+                                    <span className="cycle-stat-value">{formData.cycleSetUp?.averagePeriodLength ?? 5}</span>
                                     <span className="cycle-stat-label">Period Length (days)</span>
                                 </div>
                                 <div className="cycle-stat-box">
-                                    <span className="cycle-stat-value">2026-02-10</span>
+                                    <span className="cycle-stat-value">{formData.cycleSetUp?.lastPeriodStart || 'Not set'}</span>
                                     <span className="cycle-stat-label">Last Period Start</span>
                                 </div>
                             </div>
@@ -157,14 +364,15 @@ const Settings: React.FC = () => {
                                     <div className="slider-field">
                                         <div className="slider-header">
                                             <span className="slider-label">Average Cycle Length</span>
-                                            <span className="slider-value">{cycleLength}d</span>
+                                            <span className="slider-value">{formData.cycleSetUp?.averageCycleLength ?? 28}d</span>
                                         </div>
                                         <input
                                             type="range"
+                                            name="averageCycleLength"
                                             min="21"
                                             max="35"
-                                            value={cycleLength}
-                                            onChange={(e) => setCycleLength(parseInt(e.target.value))}
+                                            value={formData.cycleSetUp?.averageCycleLength ?? 28}
+                                            onChange={handleCycleSetupChange}
                                             className="form-slider"
                                         />
                                     </div>
@@ -172,7 +380,7 @@ const Settings: React.FC = () => {
                                         <label className="field-label">Last Period Start Date</label>
                                         <div className="input-wrapper">
                                             <Calendar size={16} className="input-icon" />
-                                            <input type="date" className="form-input" defaultValue="2026-02-10" />
+                                            <input type="date" className="form-input" value={formData.cycleSetUp?.lastPeriodStart || ''} onChange={handleCycleDateChange} />
                                         </div>
                                     </div>
                                 </div>
@@ -181,14 +389,15 @@ const Settings: React.FC = () => {
                                     <div className="slider-field">
                                         <div className="slider-header">
                                             <span className="slider-label">Period Length</span>
-                                            <span className="slider-value">{periodLength}d</span>
+                                            <span className="slider-value">{formData.cycleSetUp?.averagePeriodLength ?? 5}d</span>
                                         </div>
                                         <input
                                             type="range"
+                                            name="averagePeriodLength"
                                             min="3"
                                             max="10"
-                                            value={periodLength}
-                                            onChange={(e) => setPeriodLength(parseInt(e.target.value))}
+                                            value={formData.cycleSetUp?.averagePeriodLength ?? 5}
+                                            onChange={handleCycleSetupChange}
                                             className="form-slider"
                                         />
                                     </div>
@@ -204,26 +413,26 @@ const Settings: React.FC = () => {
                                     <label className="field-label">Current Password</label>
                                     <div className="input-wrapper">
                                         <Lock size={16} className="input-icon" />
-                                        <input type="password" className="form-input" defaultValue="********" />
+                                        <input type="password" name="currentPassword" value={passwordData.currentPassword} onChange={handlePasswordDataChange} className="form-input" placeholder="Current password" />
                                     </div>
                                 </div>
                                 <div className="form-field">
                                     <label className="field-label">New Password</label>
                                     <div className="input-wrapper">
                                         <Lock size={16} className="input-icon" />
-                                        <input type="password" className="form-input" placeholder="Min 8 characters" />
-                                        <Eye size={16} className="input-icon" style={{ left: 'auto', right: '12px', cursor: 'pointer' }} />
+                                        <input type={showPassword ? "text" : "password"} name="newPassword" value={passwordData.newPassword} onChange={handlePasswordDataChange} className="form-input" placeholder="Min 8 characters" />
+                                        <Eye size={16} className="input-icon" onClick={() => setShowPassword(!showPassword)} style={{ left: 'auto', right: '12px', cursor: 'pointer' }} />
                                     </div>
                                 </div>
                                 <div className="form-field">
                                     <label className="field-label">Confirm New Password</label>
                                     <div className="input-wrapper">
                                         <Lock size={16} className="input-icon" />
-                                        <input type="password" className="form-input" placeholder="Repeat new password" />
+                                        <input type="password" name="confirmPassword" value={passwordData.confirmPassword} onChange={handlePasswordDataChange} className="form-input" placeholder="Repeat new password" />
                                     </div>
                                 </div>
                             </div>
-                            <button className="btn-update-password">
+                            <button className="btn-update-password" onClick={handleUpdatePassword} disabled={loading}>
                                 <Lock size={14} /> Update Password
                             </button>
                         </div>
@@ -231,9 +440,30 @@ const Settings: React.FC = () => {
                     </div>
 
                     <div className="settings-footer">
-                        <button className="btn-cancel">Cancel</button>
-                        <button className="btn-save">
-                            <Check size={16} /> Save Changes
+                        <button className="btn-cancel" onClick={() => setFormData(profile ? {
+                            firstName: profile.firstName,
+                            lastName: profile.lastName,
+                            bio: profile.bio,
+                            bodyDetails: {
+                                height: profile.bodyDetails?.height || 0,
+                                weight: profile.bodyDetails?.weight || 0,
+                                biologicalSex: profile.bodyDetails?.biologicalSex || '',
+                                dateOfBirth: profile.bodyDetails?.dateOfBirth || ''
+                            },
+                            cycleSetUp: {
+                                averageCycleLength: profile.cycleSetUp?.averageCycleLength || 28,
+                                averagePeriodLength: profile.cycleSetUp?.averagePeriodLength || 5,
+                                birthControl: profile.cycleSetUp?.birthControl || 'none',
+                                lastPeriodStart: profile.cycleSetUp?.lastPeriodStart || ''
+                            },
+                            goals: {
+                                primaryGoal: profile.goals?.primaryGoal || 'general_health',
+                                targetWeight: profile.goals?.targetWeight || 0,
+                                activityLevel: profile.goals?.activityLevel || 'moderatelyActive'
+                            }
+                        } : formData)}>Cancel</button>
+                        <button className="btn-save" onClick={handleSave} disabled={loading}>
+                            <Check size={16} /> {loading ? 'Saving...' : 'Save Changes'}
                         </button>
                     </div>
                 </div>
