@@ -48,10 +48,10 @@ const Profile: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <button className="edit-profile-btn">
-                    <Edit2 size={16} />
-                    Edit Profile
-                </button>
+                <Link to="/app/settings" className="edit-profile-btn">
+    <Edit2 size={16} />
+    Edit Profile
+</Link>
             </div>
 
             {/* Stats Section */}
