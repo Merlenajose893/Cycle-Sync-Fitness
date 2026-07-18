@@ -3,6 +3,8 @@ import RegisterPage from "../pages/user/Register";
 import Home from "../pages/user/Home";
 import Login from "../pages/user/Login";
 import Dashboard from "../pages/user/Dashboard";
+import Profile from "../pages/user/Profile";
+import Settings from "../pages/user/Settings";
 import VerifyOtp from "../pages/user/VerifyOtp";
 import ForgotPasswordPage from "../pages/user/ForgotPassword";
 import ResetPasswordPage from "../pages/user/ResetPassword";
@@ -50,6 +52,8 @@ function AppRoutes() {
                 <Route element={<ProtectedUserRoute />}>
                     <Route element={<AppLayout />}>
                         <Route path="/app" element={<Dashboard />} />
+                        <Route path="/app/profile" element={<Profile />} />
+                        <Route path="/app/settings" element={<Settings />} />
                     </Route>
                 </Route>
 

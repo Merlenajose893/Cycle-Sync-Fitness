@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { userAuthService } from "../../services/auth/userAuthService";
 import type { RegisterUserPayload,LoginUserPayload,VerifyOtpPayload,User, ResendOTPPayload, ForgotPasswordPayload, ResetPasswordPayload,GoogleSignInPayload } from "../../types/auth.types";
 import axios from "axios";
@@ -85,7 +85,7 @@ export const useUserAuth=()=>{
         }
     }
 
-    const logoutUser=async () => {
+    const logoutUser = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
@@ -99,7 +99,7 @@ export const useUserAuth=()=>{
         finally{
             setLoading(false)
         }
-    }
+    }, []);
 
     const forgotPassword=async (data:ForgotPasswordPayload) => {
         try {
@@ -133,7 +133,7 @@ export const useUserAuth=()=>{
         }
     }
 
-    const getUser=async():Promise<User|null>  => {
+    const getUser = useCallback(async (): Promise<User | null> => {
         try {
             setLoading(true);
             setError(null);
@@ -155,7 +155,7 @@ export const useUserAuth=()=>{
         finally{
             setLoading(false)
         }
-    }
+    }, []);
     // console.log(getUser.);
     
     

@@ -35,6 +35,7 @@ import { TrainerOnboardingService } from "../services/TrainerOnbaordingService.j
 import { ImageService } from "../services/ImageService.js";
 import { AccountStatusService } from "../services/AccountStatusService.js";
 import { UserProfileService } from "../services/UserProfileService.js";
+import { UserAccountStatusService } from "../services/UserAccountService.js";
 
 container.register(
   TOKENS.IUserRepository,
@@ -133,6 +134,12 @@ container.register(
   TOKENS.IAccountStatusService,
   {
     useClass:AccountStatusService
+  }
+)
+container.register(
+  TOKENS.IUserStatusService,
+  {
+    useClass:UserAccountStatusService
   }
 )
 

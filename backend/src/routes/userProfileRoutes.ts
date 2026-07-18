@@ -12,3 +12,5 @@ router.get("/profile",authMiddleware,userprofilecontroller.getProfile);
 router.patch("/profile",authMiddleware,validate(updateUserProfileSchema),userprofilecontroller.updateProfile);
 router.patch("/profile/avatar",authMiddleware,upload.single("avatar"),userprofilecontroller.uploadAvatar);
 router.delete("/profile/avatar",authMiddleware,userprofilecontroller.deleteAvatar);
+
+export default router;
