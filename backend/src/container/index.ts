@@ -36,6 +36,7 @@ import { ImageService } from "../services/ImageService.js";
 import { AccountStatusService } from "../services/AccountStatusService.js";
 import { UserProfileService } from "../services/UserProfileService.js";
 import { UserAccountStatusService } from "../services/UserAccountService.js";
+import { GeminiProvider } from "../services/providers/GeminiProvider.js";
 
 container.register(
   TOKENS.IUserRepository,
@@ -140,6 +141,13 @@ container.register(
   TOKENS.IUserStatusService,
   {
     useClass:UserAccountStatusService
+  }
+)
+
+container.register(
+  TOKENS.IAIProvider,
+  {
+    useClass:GeminiProvider
   }
 )
 
