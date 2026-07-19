@@ -10,4 +10,4 @@ export interface IAIPlanRepository extends IBaseRepository<IAIPlan> {
 
     delete(userId: string): Promise<void>;
 
-}
+}   
