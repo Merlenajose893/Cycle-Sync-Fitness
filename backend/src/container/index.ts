@@ -39,6 +39,7 @@ import { UserAccountStatusService } from "../services/UserAccountService.js";
 import { GeminiProvider } from "../services/providers/GeminiProvider.js";
 import { AIPlanRepository } from "../repositories/AIPlanRepository.js";
 import { AIGeneratedService } from "../services/AIGeneratedService.js";
+import { AIPlanService } from "../services/AIPlanService.js";
 
 container.register(
   TOKENS.IUserRepository,
@@ -165,6 +166,13 @@ container.register(
   TOKENS.IAIGeneratorService,
   {
     useClass:AIGeneratedService
+  }
+)
+
+container.register(
+  TOKENS.IAIPlanService,
+  {
+    useClass:AIPlanService
   }
 )
 
