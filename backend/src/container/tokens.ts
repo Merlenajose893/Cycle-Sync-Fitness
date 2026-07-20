@@ -46,6 +46,7 @@ export const TOKENS = {
       Symbol.for("IAccountStatusService"),
 
       IUserStatusService:
+
       Symbol.for("IUserStatusService"),
 
         IAIProvider:
@@ -56,6 +57,9 @@ export const TOKENS = {
 
         IAIGeneratorService:
         Symbol.for("IAIGeneratorService"),
+
+      Symbol.for("IUserStatusService")
+
     // IAdminService: Symbol.for("IAdminService"),
 
         IAIPlanService:

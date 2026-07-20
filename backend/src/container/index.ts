@@ -41,6 +41,7 @@ import { AIPlanRepository } from "../repositories/AIPlanRepository.js";
 import { AIGeneratedService } from "../services/AIGeneratedService.js";
 import { AIPlanService } from "../services/AIPlanService.js";
 
+
 container.register(
   TOKENS.IUserRepository,
   {
@@ -147,6 +148,7 @@ container.register(
   }
 )
 
+
 container.register(
   TOKENS.IAIProvider,
   {
@@ -168,6 +170,7 @@ container.register(
     useClass:AIGeneratedService
   }
 )
+
 
 container.register(
   TOKENS.IAIPlanService,
