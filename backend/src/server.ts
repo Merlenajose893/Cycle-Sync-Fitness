@@ -14,6 +14,9 @@ import trainerRoutes from './routes/trainerAuth.routes.js'
 import onboardingRoutes from './routes/onBoardingRoutes.js'
 import adminRoutes from './routes/adminAuthRoutes.js'
 import userProfileRoutes from './routes/userProfileRoutes.js'
+
+import aiPlanRoutes from './routes/aiPlan.routes.js'
+
 import { errorHandler } from './middlewares/errorHandler.js'
 const app = express();
 connectDB();
@@ -41,6 +44,9 @@ app.use('/api/trainer', trainerRoutes)
 app.use("/api/onboarding", onboardingRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userProfileRoutes);
+
+app.use("/api/ai-plans", aiPlanRoutes);
+
 
 app.use(errorHandler);
 const PORT = process.env.PORT || 3000;

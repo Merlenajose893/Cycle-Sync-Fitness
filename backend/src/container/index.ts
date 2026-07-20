@@ -36,6 +36,11 @@ import { ImageService } from "../services/ImageService.js";
 import { AccountStatusService } from "../services/AccountStatusService.js";
 import { UserProfileService } from "../services/UserProfileService.js";
 import { UserAccountStatusService } from "../services/UserAccountService.js";
+import { GeminiProvider } from "../services/providers/GeminiProvider.js";
+import { AIPlanRepository } from "../repositories/AIPlanRepository.js";
+import { AIGeneratedService } from "../services/AIGeneratedService.js";
+import { AIPlanService } from "../services/AIPlanService.js";
+
 
 container.register(
   TOKENS.IUserRepository,
@@ -143,5 +148,35 @@ container.register(
   }
 )
 
+
+container.register(
+  TOKENS.IAIProvider,
+  {
+    useClass:GeminiProvider
+  }
+)
+
+container.register(
+  TOKENS.IAIPlanRepository,
+  {
+    useClass:AIPlanRepository
+  }
+)
+
+
+container.register(
+  TOKENS.IAIGeneratorService,
+  {
+    useClass:AIGeneratedService
+  }
+)
+
+
+container.register(
+  TOKENS.IAIPlanService,
+  {
+    useClass:AIPlanService
+  }
+)
 
 export { container };
