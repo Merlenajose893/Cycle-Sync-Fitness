@@ -44,9 +44,9 @@ export class AIPlanController{
     updatePlanStatus=async (req:Request,res:Response,next:NextFunction) => {
         try {
             const planId=req.params.id!;
-            const userId=req.user?.userId;
-            const result=await this.aiplanservice.updatePlanStatus(planId,userId);
-            successResponse(res,"Plan status are updated",result,HttpStatus.OK)
+            const { status }=req.body;
+            const result=await this.aiplanservice.updatePlanStatus(planId,status);
+            successResponse(res,"Plan status updated",result,HttpStatus.OK)
 
         } catch (error) {
             next(error)
