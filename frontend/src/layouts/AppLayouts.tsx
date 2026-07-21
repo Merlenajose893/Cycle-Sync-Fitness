@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Utensils, Dumbbell,
     BarChart3, BookOpen, MessageCircle,
     User, Settings, Users, LogOut,
-    ChevronRight, Menu, X, Bell, Sparkles
+    ChevronRight, Menu, X, Bell, Sparkles,Brain
 } from 'lucide-react';
 import '../styles/AppLayout.css'
 
@@ -16,9 +16,10 @@ const AppLayout: React.FC = () => {
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/app/dashboard' },
         { name: 'Food', icon: <Utensils size={20} />, path: '/app/food' },
         { name: 'Exercise', icon: <Dumbbell size={20} />, path: '/app/exercise' },
+        { name: 'AI Plans', icon: <Brain size={20} />, path: '/app/ai-plan' },
         { name: 'Reports', icon: <BarChart3 size={20} />, path: '/app/reports' },
         { name: 'Messages', icon: <MessageCircle size={20} />, path: '/app/messages' },
-        { name: 'Trainers', icon: <Users size={20} />, path: '/app/trainer' },
+        { name: 'Trainers', icon: <Users size={20} />, path: '/app/trainer' }
     ];
 
     const bottomItems = [

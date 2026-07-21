@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useUserProfile } from '../../hooks/profile/useUserProfile';
 import type { UserProfile,UpdateUserProfileDTO } from '../../types/profile.types';
 import { User, Bell, Shield, Palette, Trash2, Mail, Phone, Calendar, MapPin, Lock, Eye, Check } from 'lucide-react';
+import { showToast } from '../../components/common/Toast/Toast';
 import '../../styles/UserSettings.css';
 
 const Settings: React.FC = () => {
@@ -28,10 +29,10 @@ const Settings: React.FC = () => {
 
         setProfile(updatedProfile);
 
-        alert("Profile updated successfully!");
+        showToast.success("Profile updated successfully!");
     } catch (error) {
         console.error(error);
-        alert("Failed to update profile.");
+        showToast.error("Failed to update profile.");
     }
 };
 
@@ -122,10 +123,10 @@ const Settings: React.FC = () => {
     const handleSave = async () => {
         try {
             await updateProfile(formData);
-            alert("Profile updated successfully!");
+            showToast.success("Profile updated successfully!");
         } catch (error) {
             console.error("Failed to update profile", error);
-            alert("Failed to update profile");
+            showToast.error("Failed to update profile");
         }
     };
 
@@ -136,7 +137,7 @@ const Settings: React.FC = () => {
 
     const handleUpdatePassword = async () => {
         if (passwordData.newPassword !== passwordData.confirmPassword) {
-            alert("Passwords do not match");
+            showToast.error("Passwords do not match");
             return;
         }
         try {
@@ -144,11 +145,11 @@ const Settings: React.FC = () => {
                 currentPassword: passwordData.currentPassword,
                 newPassword: passwordData.newPassword
             });
-            alert("Password updated successfully!");
+            showToast.success("Password updated successfully!");
             setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         } catch (error) {
             console.error("Failed to update password", error);
-            alert("Failed to update password");
+            showToast.error("Failed to update password");
         }
     };
 
@@ -158,10 +159,10 @@ const Settings: React.FC = () => {
         try {
             const updatedProfile = await uploadAvatar(file);
             setProfile(updatedProfile);
-            alert("Avatar uploaded successfully!");
+            showToast.success("Avatar uploaded successfully!");
         } catch (error) {
             console.error("Failed to upload avatar", error);
-            alert("Failed to upload avatar");
+            showToast.error("Failed to upload avatar");
         }
     };
 
@@ -169,10 +170,10 @@ const Settings: React.FC = () => {
         try {
             const updatedProfile = await deleteAvatar();
             setProfile(updatedProfile);
-            alert("Avatar removed successfully!");
+            showToast.success("Avatar removed successfully!");
         } catch (error) {
             console.error("Failed to remove avatar", error);
-            alert("Failed to remove avatar");
+            showToast.error("Failed to remove avatar");
         }
     };
 
@@ -181,11 +182,11 @@ const Settings: React.FC = () => {
         if (!password) return;
         try {
             await deleteAccount({ password });
-            alert("Account deleted successfully!");
+            showToast.success("Account deleted successfully!");
             window.location.href = '/login'; 
         } catch (error) {
             console.error("Failed to delete account", error);
-            alert("Failed to delete account");
+            showToast.error("Failed to delete account");
         }
     };
 
