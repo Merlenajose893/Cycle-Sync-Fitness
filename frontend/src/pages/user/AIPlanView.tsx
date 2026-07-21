@@ -5,6 +5,7 @@ import '../../styles/AIPlan.css';
 /* ── Mock Data ── */
 const mockPlan = {
     inputs: { goal: 'MUSCLE_GAIN', fitnessLevel: 'INTERMEDIATE', daysPerWeek: 6, dietPreference: 'NO_RESTRICTION' },
+    dailyMacros: { calories: 2400, protein: 160, carbs: 260, fats: 70 },
     workoutPlan: [
         {
             day: 'MONDAY',
@@ -45,38 +46,47 @@ const mockPlan = {
     ],
     mealPlan: [
         {
-            day: 'MONDAY',
-            meals: [
-                { mealType: 'BREAKFAST', name: 'Protein Oatmeal Bowl', calories: 450, protein: 35, carbs: 55, fat: 12 },
-                { mealType: 'LUNCH', name: 'Grilled Chicken & Rice', calories: 620, protein: 45, carbs: 65, fat: 15 },
-                { mealType: 'DINNER', name: 'Salmon with Quinoa', calories: 550, protein: 40, carbs: 45, fat: 20 },
-            ],
+            mealType: 'BREAKFAST',
+            time: '7:00 - 8:00 AM',
+            name: 'Oats with Banana & Protein Shake',
+            ingredients: 'Rolled oats, banana, whey protein, almond milk, chia seeds',
+            calories: 520,
+            protein: 38,
+            carbs: 62,
+            fat: 9,
         },
         {
-            day: 'TUESDAY',
-            meals: [
-                { mealType: 'BREAKFAST', name: 'Egg & Avocado Toast', calories: 400, protein: 22, carbs: 35, fat: 22 },
-                { mealType: 'LUNCH', name: 'Turkey Wrap', calories: 520, protein: 38, carbs: 45, fat: 18 },
-                { mealType: 'DINNER', name: 'Lean Beef Stir-fry', calories: 580, protein: 42, carbs: 50, fat: 16 },
-            ],
+            mealType: 'LUNCH',
+            time: '12:30 - 1:30 PM',
+            name: 'Grilled Chicken Rice Bowl',
+            ingredients: 'Chicken breast, jasmine rice, broccoli, olive oil, garlic, soy sauce',
+            calories: 680,
+            protein: 52,
+            carbs: 74,
+            fat: 12,
         },
         {
-            day: 'WEDNESDAY',
-            meals: [
-                { mealType: 'BREAKFAST', name: 'Greek Yogurt Parfait', calories: 350, protein: 28, carbs: 40, fat: 10 },
-                { mealType: 'LUNCH', name: 'Tuna Salad Bowl', calories: 480, protein: 40, carbs: 30, fat: 20 },
-                { mealType: 'DINNER', name: 'Chicken Pasta', calories: 600, protein: 38, carbs: 65, fat: 14 },
-            ],
+            mealType: 'SNACK',
+            time: '4:00 - 4:30 PM',
+            name: 'Greek Yogurt + Mixed Nuts',
+            ingredients: 'Full-fat Greek yogurt, walnuts, almonds, honey, blueberries',
+            calories: 280,
+            protein: 18,
+            carbs: 20,
+            fat: 14,
         },
         {
-            day: 'THURSDAY',
-            meals: [
-                { mealType: 'BREAKFAST', name: 'Smoothie Bowl', calories: 380, protein: 30, carbs: 45, fat: 12 },
-                { mealType: 'LUNCH', name: 'Chicken Burrito Bowl', calories: 550, protein: 42, carbs: 55, fat: 16 },
-                { mealType: 'DINNER', name: 'Grilled Fish & Veggies', calories: 480, protein: 38, carbs: 35, fat: 18 },
-            ],
+            mealType: 'DINNER',
+            time: '7:30 - 8:30 PM',
+            name: 'Salmon with Quinoa & Vegetables',
+            ingredients: 'Atlantic salmon, quinoa, asparagus, cherry tomatoes, lemon, dill',
+            calories: 590,
+            protein: 48,
+            carbs: 48,
+            fat: 18,
         },
     ],
+    waterIntake: 3.5,
 };
 
 const DAY_ABBR: Record<string, string> = {
@@ -99,12 +109,11 @@ const LABEL_MAP: Record<string, string> = {
     ADVANCED: 'Advanced',
 };
 
-const MEAL_ICONS: Record<string, string> = {
-    BREAKFAST: '🌅',
-    MORNING_SNACK: '🍎',
-    LUNCH: '☀️',
-    EVENING_SNACK: '🍌',
-    DINNER: '🌙',
+const MEAL_TYPE_COLORS: Record<string, { bg: string; text: string }> = {
+    BREAKFAST: { bg: '#FEF3C7', text: '#92400E' },
+    LUNCH: { bg: '#DBEAFE', text: '#1E40AF' },
+    SNACK: { bg: '#F3E8FF', text: '#6B21A8' },
+    DINNER: { bg: '#DCFCE7', text: '#166534' },
 };
 
 const AIPlanView = () => {
@@ -211,33 +220,84 @@ const AIPlanView = () => {
 
                 {/* Diet Tab */}
                 {activeTab === 'diet' && (
-                    <div className="plan-days-list">
-                        {plan.mealPlan.map((day) => (
-                            <div key={day.day} className="day-card diet-day-card">
-                                <div className="day-card-left">
-                                    <div className="day-badge diet-badge">
-                                        <span className="day-abbr">{DAY_ABBR[day.day]}</span>
-                                        <span className="day-date">{DAY_DATES[day.day]}</span>
-                                    </div>
-                                    <div className="day-info">
-                                        <h3 className="day-title">{DAY_ABBR[day.day]}'s Meals</h3>
-                                        <div className="meals-list">
-                                            {day.meals.map((meal) => (
-                                                <div key={meal.mealType} className="meal-row">
-                                                    <span className="meal-icon">{MEAL_ICONS[meal.mealType] || '🍽️'}</span>
-                                                    <div className="meal-info">
-                                                        <span className="meal-name">{meal.name}</span>
-                                                        <span className="meal-macros">
-                                                            {meal.calories} cal · P {meal.protein}g · C {meal.carbs}g · F {meal.fat}g
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            ))}
+                    <div className="diet-plan-content">
+                        {/* Daily Macro Summary */}
+                        <div className="macro-summary-row">
+                            <div className="macro-summary-card macro-calories">
+                                <span className="macro-summary-value">{plan.dailyMacros.calories.toLocaleString()}</span>
+                                <span className="macro-summary-label">KCAL / DAY</span>
+                            </div>
+                            <div className="macro-summary-card">
+                                <span className="macro-summary-value">{plan.dailyMacros.protein}g</span>
+                                <span className="macro-summary-label">PROTEIN</span>
+                            </div>
+                            <div className="macro-summary-card">
+                                <span className="macro-summary-value">{plan.dailyMacros.carbs}g</span>
+                                <span className="macro-summary-label">CARBS</span>
+                            </div>
+                            <div className="macro-summary-card">
+                                <span className="macro-summary-value">{plan.dailyMacros.fats}g</span>
+                                <span className="macro-summary-label">FATS</span>
+                            </div>
+                        </div>
+
+                        {/* Daily Meals Section */}
+                        <label className="section-label">DAILY MEALS</label>
+
+                        <div className="diet-meals-list">
+                            {plan.mealPlan.map((meal, i) => {
+                                const mealColor = MEAL_TYPE_COLORS[meal.mealType] || { bg: '#F1F5F9', text: '#475569' };
+                                return (
+                                    <div
+                                        key={meal.mealType}
+                                        className="diet-meal-card"
+                                        style={{ animationDelay: `${i * 0.08}s` }}
+                                    >
+                                        <div className="diet-meal-header">
+                                            <span
+                                                className="meal-type-badge"
+                                                style={{ background: mealColor.bg, color: mealColor.text }}
+                                            >
+                                                {meal.mealType}
+                                            </span>
+                                            <span className="meal-calorie-badge">{meal.calories} kcal</span>
+                                        </div>
+
+                                        <div className="diet-meal-time">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <polyline points="12 6 12 12 16 14" />
+                                            </svg>
+                                            {meal.time}
+                                        </div>
+
+                                        <h4 className="diet-meal-name">{meal.name}</h4>
+                                        <p className="diet-meal-ingredients">{meal.ingredients}</p>
+
+                                        <div className="diet-meal-macros">
+                                            <span className="macro-pill macro-protein">P · {meal.protein}g</span>
+                                            <span className="macro-pill macro-carbs">C · {meal.carbs}g</span>
+                                            <span className="macro-pill macro-fat">F · {meal.fat}g</span>
                                         </div>
                                     </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Water Intake */}
+                        <div className="water-intake-card">
+                            <div className="water-intake-left">
+                                <span className="water-icon">💧</span>
+                                <div>
+                                    <strong className="water-title">Water intake</strong>
+                                    <p className="water-subtitle">Stay hydrated throughout the day</p>
                                 </div>
                             </div>
-                        ))}
+                            <div className="water-intake-value">
+                                <span className="water-amount">{plan.waterIntake} L</span>
+                                <span className="water-unit">/day</span>
+                            </div>
+                        </div>
                     </div>
                 )}
 

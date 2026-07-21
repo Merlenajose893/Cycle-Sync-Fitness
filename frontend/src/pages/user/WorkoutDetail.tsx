@@ -141,7 +141,11 @@ const WorkoutDetail = () => {
                     <label className="section-label">EXERCISES</label>
                     <div className="exercises-list">
                         {workout.exercises.map((ex, i) => (
-                            <div key={ex.name} className="exercise-card">
+                            <div
+                                key={ex.name}
+                                className="exercise-card"
+                                style={{ animationDelay: `${i * 0.06}s` }}
+                            >
                                 <div className="exercise-header">
                                     <span className="exercise-number">{i + 1}</span>
                                     <div>
@@ -151,15 +155,34 @@ const WorkoutDetail = () => {
                                 </div>
                                 <div className="exercise-stats">
                                     <div className="stat-box">
-                                        <span className="stat-label">SETS</span>
+                                        <span className="stat-label">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px', verticalAlign: 'middle' }}>
+                                                <path d="M4 12h16M4 6h16M4 18h16" />
+                                            </svg>
+                                            SETS
+                                        </span>
                                         <span className="stat-value">{ex.sets}</span>
                                     </div>
                                     <div className="stat-box">
-                                        <span className="stat-label">REPS</span>
+                                        <span className="stat-label">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px', verticalAlign: 'middle' }}>
+                                                <polyline points="17 1 21 5 17 9" />
+                                                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                                                <polyline points="7 23 3 19 7 15" />
+                                                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                                            </svg>
+                                            REPS
+                                        </span>
                                         <span className="stat-value">{ex.reps}</span>
                                     </div>
                                     <div className="stat-box">
-                                        <span className="stat-label">REST</span>
+                                        <span className="stat-label">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px', verticalAlign: 'middle' }}>
+                                                <circle cx="12" cy="12" r="10" />
+                                                <polyline points="12 6 12 12 16 14" />
+                                            </svg>
+                                            REST
+                                        </span>
                                         <span className="stat-value">
                                             {ex.rest > 0 ? `${ex.rest} sec` : '—'}
                                         </span>

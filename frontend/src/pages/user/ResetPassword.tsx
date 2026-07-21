@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Lock, ArrowRight, CheckCircle, Eye, EyeOff, ShieldCheck, RefreshCw } from 'lucide-react';
+import { showToast } from '../../components/common/Toast/Toast';
 import '../../styles/Auth.css';
 
 const ResetPasswordPage: React.FC = () => {
@@ -68,7 +69,7 @@ const ResetPasswordPage: React.FC = () => {
         // Mock verification
         try {
             await resetPassword({userId:searchParams.get("userId")!,otp:code,newPassword:password});
-            alert("Password reset successfully");
+            showToast.success("Password reset successfully");
             navigate("/login")
         } catch (error) {
             setError(true)

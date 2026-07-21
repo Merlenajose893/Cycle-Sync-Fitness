@@ -2,6 +2,7 @@ import React, { useState,useRef,useEffect } from 'react';
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
 import { useNavigate,useLocation } from 'react-router-dom';
 import { Mail, ShieldCheck, RefreshCw, Dumbbell } from 'lucide-react';
+import { showToast } from '../../components/common/Toast/Toast';
 import '../../styles/Auth.css';
 
 
@@ -60,7 +61,7 @@ const TrainerVerifyEmail: React.FC = () => {
         
         setIsResending(true);
       await resendOTP({trainerId})
-      alert("OTP resend successfully");
+      showToast.success("OTP resent successfully");
       setTimer(30);
     } catch (error) {
       console.error(error);

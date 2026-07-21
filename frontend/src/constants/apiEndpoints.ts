@@ -97,6 +97,14 @@ USER_ACCOUNT: {
   DELETE_ACCOUNT: "/api/users/account",
 },
 
+AI_PLAN:{
+  GENERATE:"/api/ai-plans/generate",
+  ACTIVE:"/api/ai-plans/active",
+  HISTORY:"/api/ai-plans/history",
+  STATUS:(id:string)=>`/api/ai-plans/${id}/status`,
+  DELETE:(id:string)=>`/api/ai-plans/${id}`
+}
+
 
 
 

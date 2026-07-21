@@ -800,6 +800,233 @@
 }
 
 /* ============================
+   DIET PLAN — DETAILED VIEW
+   ============================ */
+
+.diet-plan-content {
+    margin-bottom: 24px;
+}
+
+/* Macro Summary Row */
+.macro-summary-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.macro-summary-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: all var(--transition-fast);
+}
+
+.macro-summary-card:hover {
+    border-color: var(--primary-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.macro-calories {
+    background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+    border-color: transparent;
+    color: white;
+}
+
+.macro-calories:hover {
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+}
+
+.macro-calories .macro-summary-value,
+.macro-calories .macro-summary-label {
+    color: white;
+}
+
+.macro-summary-value {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.macro-summary-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* Diet Meals List */
+.diet-meals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.diet-meal-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    transition: all var(--transition-base);
+    animation: fadeIn 0.4s ease-out both;
+}
+
+.diet-meal-card:hover {
+    border-color: var(--primary-200);
+    box-shadow: var(--shadow-md);
+}
+
+.diet-meal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.meal-type-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+}
+
+.meal-calorie-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    background: var(--accent-green);
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+}
+
+.diet-meal-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.diet-meal-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.diet-meal-ingredients {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
+
+/* Macro Pills */
+.diet-meal-macros {
+    display: flex;
+    gap: 10px;
+}
+
+.macro-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.macro-protein {
+    background: #F3E8FF;
+    color: #7C3AED;
+}
+
+.macro-carbs {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.macro-fat {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+/* Water Intake */
+.water-intake-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.water-intake-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.water-icon {
+    font-size: 1.5rem;
+}
+
+.water-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
+}
+
+.water-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.water-intake-value {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.water-amount {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+.water-unit {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Exercise card staggered animation */
+.exercise-card {
+    animation: fadeIn 0.35s ease-out both;
+}
+
+/* ============================
    RESPONSIVE
    ============================ */
 
@@ -858,5 +1085,35 @@
     .workout-header {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .macro-summary-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .macro-summary-card {
+        min-width: calc(50% - 6px);
+        padding: 12px 8px;
+    }
+
+    .diet-meal-card {
+        padding: 16px 18px;
+    }
+
+    .diet-meal-macros {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .water-intake-card {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .water-intake-left {
+        flex-direction: column;
+        gap: 8px;
     }
 }
