@@ -1,93 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/AIPlan.css';
-
-/* ── Mock Data ── */
-const mockPlan = {
-    inputs: { goal: 'MUSCLE_GAIN', fitnessLevel: 'INTERMEDIATE', daysPerWeek: 6, dietPreference: 'NO_RESTRICTION' },
-    dailyMacros: { calories: 2400, protein: 160, carbs: 260, fats: 70 },
-    workoutPlan: [
-        {
-            day: 'MONDAY',
-            title: 'Push Day — Chest & Shoulders',
-            duration: 50,
-            tags: ['Strength', 'Upper Body'],
-            exercises: ['Barbell Bench Press', 'Overhead Press (OHP)', 'Incline DB Press'],
-            warmup: { title: 'Light cardio + arm circles', duration: 5 },
-            cooldown: { title: 'Chest & shoulder static stretches', duration: 5 },
-        },
-        {
-            day: 'TUESDAY',
-            title: 'Pull Day — Back & Biceps',
-            duration: 45,
-            tags: ['Strength', 'Upper Body'],
-            exercises: ['Conventional Deadlift', 'Pull-ups', 'Seated Cable Row', 'Single-Arm Curls'],
-            warmup: { title: 'Band pull-aparts + cat-cow', duration: 5 },
-            cooldown: { title: 'Back & bicep stretches', duration: 5 },
-        },
-        {
-            day: 'WEDNESDAY',
-            title: 'Active Recovery',
-            duration: 20,
-            tags: ['Rest', 'Mobility'],
-            exercises: ['Light Walk / Cycling', 'Hip Flexor Stretch', 'Thoracic Rotation'],
-            warmup: { title: 'Dynamic stretching', duration: 3 },
-            cooldown: { title: 'Deep breathing', duration: 5 },
-        },
-        {
-            day: 'THURSDAY',
-            title: 'Lower Body Power',
-            duration: 55,
-            tags: ['Strength', 'Legs'],
-            exercises: ['Back Squat', 'Romanian Deadlift', 'Leg Press', 'Walking Lunges'],
-            warmup: { title: 'Bodyweight squats + leg swings', duration: 5 },
-            cooldown: { title: 'Quad & hamstring stretches', duration: 5 },
-        },
-    ],
-    mealPlan: [
-        {
-            mealType: 'BREAKFAST',
-            time: '7:00 - 8:00 AM',
-            name: 'Oats with Banana & Protein Shake',
-            ingredients: 'Rolled oats, banana, whey protein, almond milk, chia seeds',
-            calories: 520,
-            protein: 38,
-            carbs: 62,
-            fat: 9,
-        },
-        {
-            mealType: 'LUNCH',
-            time: '12:30 - 1:30 PM',
-            name: 'Grilled Chicken Rice Bowl',
-            ingredients: 'Chicken breast, jasmine rice, broccoli, olive oil, garlic, soy sauce',
-            calories: 680,
-            protein: 52,
-            carbs: 74,
-            fat: 12,
-        },
-        {
-            mealType: 'SNACK',
-            time: '4:00 - 4:30 PM',
-            name: 'Greek Yogurt + Mixed Nuts',
-            ingredients: 'Full-fat Greek yogurt, walnuts, almonds, honey, blueberries',
-            calories: 280,
-            protein: 18,
-            carbs: 20,
-            fat: 14,
-        },
-        {
-            mealType: 'DINNER',
-            time: '7:30 - 8:30 PM',
-            name: 'Salmon with Quinoa & Vegetables',
-            ingredients: 'Atlantic salmon, quinoa, asparagus, cherry tomatoes, lemon, dill',
-            calories: 590,
-            protein: 48,
-            carbs: 48,
-            fat: 18,
-        },
-    ],
-    waterIntake: 3.5,
-};
+import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
+import { AIPlan } from '../../types/aiplan.types';
+import toast from 'react-hot-toast';
 
 const DAY_ABBR: Record<string, string> = {
     MONDAY: 'MON', TUESDAY: 'TUE', WEDNESDAY: 'WED',
@@ -111,19 +27,77 @@ const LABEL_MAP: Record<string, string> = {
 
 const MEAL_TYPE_COLORS: Record<string, { bg: string; text: string }> = {
     BREAKFAST: { bg: '#FEF3C7', text: '#92400E' },
+    MORNING_SNACK: { bg: '#F3E8FF', text: '#6B21A8' },
     LUNCH: { bg: '#DBEAFE', text: '#1E40AF' },
-    SNACK: { bg: '#F3E8FF', text: '#6B21A8' },
+    EVENING_SNACK: { bg: '#F3E8FF', text: '#6B21A8' },
     DINNER: { bg: '#DCFCE7', text: '#166534' },
+};
+
+const MEAL_TIMES: Record<string, string> = {
+    BREAKFAST: '7:00 - 8:00 AM',
+    MORNING_SNACK: '10:30 - 11:00 AM',
+    LUNCH: '1:00 - 2:00 PM',
+    EVENING_SNACK: '4:30 - 5:00 PM',
+    DINNER: '7:30 - 8:30 PM'
 };
 
 const AIPlanView = () => {
     const navigate = useNavigate();
+    const { getActivePlan, generatePlan, loading } = useAIPlan();
+    
     const [activeTab, setActiveTab] = useState<'workout' | 'diet'>('workout');
-    const plan = mockPlan;
+    const [plan, setPlan] = useState<AIPlan | null>(null);
+    const [fetching, setFetching] = useState(true);
+
+    useEffect(() => {
+        const fetchPlan = async () => {
+            try {
+                const activePlan = await getActivePlan();
+                if (!activePlan) {
+                    navigate('/app/ai-plan', { replace: true });
+                } else {
+                    setPlan(activePlan);
+                }
+            } catch (error) {
+                console.error(error);
+                navigate('/app/ai-plan', { replace: true });
+            } finally {
+                setFetching(false);
+            }
+        };
+        fetchPlan();
+    }, [getActivePlan, navigate]);
 
     const handleDayClick = (dayIndex: number) => {
         navigate(`/app/ai-plan/workout/${dayIndex}`);
     };
+
+    const handleRegenerate = async () => {
+        if (!plan) return;
+        try {
+            await generatePlan(plan.inputs);
+            const fresh = await getActivePlan();
+            setPlan(fresh);
+            toast.success("Plan regenerated!");
+        } catch (error) {
+            toast.error("Failed to regenerate plan");
+        }
+    };
+
+    if (fetching) {
+        return (
+            <div className="aiplan-page animate-fadeIn">
+                <div className="aiplan-header">
+                    <h2>Loading Plan...</h2>
+                </div>
+                <div className="plan-view-card" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+                    <span className="spinner" style={{ width: '40px', height: '40px', borderWidth: '4px' }} />
+                </div>
+            </div>
+        );
+    }
+
+    if (!plan) return null;
 
     return (
         <div className="aiplan-page animate-fadeIn">
@@ -149,8 +123,9 @@ const AIPlanView = () => {
 
                 <div className="plan-meta-row">
                     <span className="ai-generated-badge">✦ AI GENERATED</span>
-                    <button className="regenerate-btn" type="button">
-                        <span>↻</span> Regenerate
+                    <button className="regenerate-btn" onClick={handleRegenerate} disabled={loading} type="button">
+                        {loading ? <span className="spinner" /> : <span>↻</span>} 
+                        {loading ? ' Regenerating' : ' Regenerate'}
                     </button>
                 </div>
 
@@ -192,19 +167,17 @@ const AIPlanView = () => {
                             >
                                 <div className="day-card-left">
                                     <div className="day-badge">
-                                        <span className="day-abbr">{DAY_ABBR[day.day]}</span>
-                                        <span className="day-date">{DAY_DATES[day.day]}</span>
+                                        <span className="day-abbr">{DAY_ABBR[day.day] || day.day.slice(0,3)}</span>
+                                        <span className="day-date">{DAY_DATES[day.day] || 14}</span>
                                     </div>
                                     <div className="day-info">
                                         <h3 className="day-title">{day.title}</h3>
                                         <div className="day-tags">
-                                            {day.tags.map((tag) => (
-                                                <span key={tag} className="day-tag">{tag}</span>
-                                            ))}
+                                            <span className="day-tag">{day.exercises.length > 0 ? 'Workout' : 'Rest'}</span>
                                         </div>
                                         <div className="day-exercises-preview">
                                             {day.exercises.map((ex) => (
-                                                <span key={ex} className="exercise-tag">⊞ {ex}</span>
+                                                <span key={ex.name} className="exercise-tag">⊞ {ex.name}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -219,34 +192,37 @@ const AIPlanView = () => {
                 )}
 
                 {/* Diet Tab */}
-                {activeTab === 'diet' && (
+                {activeTab === 'diet' && plan.mealPlan.length > 0 && (
                     <div className="diet-plan-content">
                         {/* Daily Macro Summary */}
                         <div className="macro-summary-row">
                             <div className="macro-summary-card macro-calories">
-                                <span className="macro-summary-value">{plan.dailyMacros.calories.toLocaleString()}</span>
+                                <span className="macro-summary-value">{plan.summary.dailyCalories.toLocaleString()}</span>
                                 <span className="macro-summary-label">KCAL / DAY</span>
                             </div>
                             <div className="macro-summary-card">
-                                <span className="macro-summary-value">{plan.dailyMacros.protein}g</span>
+                                <span className="macro-summary-value">{plan.summary.protein}g</span>
                                 <span className="macro-summary-label">PROTEIN</span>
                             </div>
                             <div className="macro-summary-card">
-                                <span className="macro-summary-value">{plan.dailyMacros.carbs}g</span>
+                                <span className="macro-summary-value">{plan.summary.carbs}g</span>
                                 <span className="macro-summary-label">CARBS</span>
                             </div>
                             <div className="macro-summary-card">
-                                <span className="macro-summary-value">{plan.dailyMacros.fats}g</span>
+                                <span className="macro-summary-value">{plan.summary.fat}g</span>
                                 <span className="macro-summary-label">FATS</span>
                             </div>
                         </div>
 
                         {/* Daily Meals Section */}
-                        <label className="section-label">DAILY MEALS</label>
+                        <label className="section-label">DAILY MEALS (DAY 1)</label>
 
                         <div className="diet-meals-list">
-                            {plan.mealPlan.map((meal, i) => {
+                            {plan.mealPlan[0].meals.map((meal, i) => {
                                 const mealColor = MEAL_TYPE_COLORS[meal.mealType] || { bg: '#F1F5F9', text: '#475569' };
+                                const displayTime = MEAL_TIMES[meal.mealType] || 'Anytime';
+                                const displayIngredients = meal.ingredients ? meal.ingredients.join(', ') : '';
+
                                 return (
                                     <div
                                         key={meal.mealType}
@@ -258,7 +234,7 @@ const AIPlanView = () => {
                                                 className="meal-type-badge"
                                                 style={{ background: mealColor.bg, color: mealColor.text }}
                                             >
-                                                {meal.mealType}
+                                                {meal.mealType.replace('_', ' ')}
                                             </span>
                                             <span className="meal-calorie-badge">{meal.calories} kcal</span>
                                         </div>
@@ -268,11 +244,11 @@ const AIPlanView = () => {
                                                 <circle cx="12" cy="12" r="10" />
                                                 <polyline points="12 6 12 12 16 14" />
                                             </svg>
-                                            {meal.time}
+                                            {displayTime}
                                         </div>
 
                                         <h4 className="diet-meal-name">{meal.name}</h4>
-                                        <p className="diet-meal-ingredients">{meal.ingredients}</p>
+                                        <p className="diet-meal-ingredients">{displayIngredients}</p>
 
                                         <div className="diet-meal-macros">
                                             <span className="macro-pill macro-protein">P · {meal.protein}g</span>
@@ -294,7 +270,7 @@ const AIPlanView = () => {
                                 </div>
                             </div>
                             <div className="water-intake-value">
-                                <span className="water-amount">{plan.waterIntake} L</span>
+                                <span className="water-amount">{plan.summary.waterIntake} L</span>
                                 <span className="water-unit">/day</span>
                             </div>
                         </div>

@@ -16,10 +16,10 @@ const AppLayout: React.FC = () => {
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/app/dashboard' },
         { name: 'Food', icon: <Utensils size={20} />, path: '/app/food' },
         { name: 'Exercise', icon: <Dumbbell size={20} />, path: '/app/exercise' },
+        { name: 'AI Plans', icon: <Brain size={20} />, path: '/app/ai-plan' },
         { name: 'Reports', icon: <BarChart3 size={20} />, path: '/app/reports' },
         { name: 'Messages', icon: <MessageCircle size={20} />, path: '/app/messages' },
-        { name: 'Trainers', icon: <Users size={20} />, path: '/app/trainer' },
-        {name:'AI-Plan',icon:<Brain size={20}/>,path:'/app/ai-plan'}
+        { name: 'Trainers', icon: <Users size={20} />, path: '/app/trainer' }
     ];
 
     const bottomItems = [

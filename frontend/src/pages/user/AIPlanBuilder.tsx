@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-impprt {useAIPlan}
 import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
+import { Goal, FitnessLevel, DietPreference } from '../../types/aiplan.types';
+import toast from 'react-hot-toast';
 
 const GOALS = [
     { value: 'MUSCLE_GAIN', label: 'Muscle Gain', icon: '💪' },
@@ -29,18 +30,47 @@ const DIET_PREFERENCES = [
 
 const AIPlanBuilder = () => {
     const navigate = useNavigate();
-    const {generatePlan,getActivePlan,loading}=useAIPlan();
+    const { generatePlan, getActivePlan, loading } = useAIPlan();
+    
     const [goal, setGoal] = useState('');
     const [fitnessLevel, setFitnessLevel] = useState('');
     const [daysPerWeek, setDaysPerWeek] = useState<number | null>(null);
     const [dietPreference, setDietPreference] = useState('');
-    // const [loading, setLoading] = useState(false);
+
+    const [currentStep] = useState(3); // Progress indicator
+
+    useEffect(() => {
+        const checkActivePlan = async () => {
+            try {
+                const activePlan = await getActivePlan();
+                if (activePlan) {
+                    navigate('/app/ai-plan/view', { replace: true });
+                }
+            } catch (error) {
+                // If no plan, just stay on the builder
+                console.log(error);
+            }
+        };
+        checkActivePlan();
+    }, [getActivePlan, navigate]);
 
     const isFormValid = goal && fitnessLevel && daysPerWeek && dietPreference;
 
-    
-
-    const currentStep = [goal, fitnessLevel, daysPerWeek, dietPreference].filter(Boolean).length;
+    const handleGenerate = async () => {
+        if (!isFormValid) return;
+        try {
+            await generatePlan({
+                goal: goal as Goal,
+                fitnessLevel: fitnessLevel as FitnessLevel,
+                daysPerWeek: daysPerWeek!,
+                dietPreference: dietPreference as DietPreference,
+            });
+            toast.success("Plan generated successfully!");
+            navigate('/app/ai-plan/view');
+        } catch (error) {
+            toast.error("Failed to generate plan");
+        }
+    };
 
     return (
         <div className="aiplan-page animate-fadeIn">
@@ -138,7 +168,7 @@ const AIPlanBuilder = () => {
                 <button
                     className={`generate-btn ${isFormValid ? '' : 'generate-btn-disabled'}`}
                     onClick={handleGenerate}
-                    disabled={!isFormValid || }
+                    disabled={!isFormValid || loading}
                     type="button"
                 >
                     {loading ? (

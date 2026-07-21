@@ -55,6 +55,7 @@ function AppRoutes() {
                 <Route element={<ProtectedUserRoute />}>
                     <Route element={<AppLayout />}>
                         <Route path="/app" element={<Dashboard />} />
+                        <Route path="/app/dashboard" element={<Dashboard />} />
                         <Route path="/app/profile" element={<Profile />} />
                         <Route path="/app/settings" element={<Settings />} />
                         <Route path="/app/ai-plan" element={<AIPlanBuilder />} />
