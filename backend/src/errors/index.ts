@@ -43,3 +43,10 @@ export class ConflictError extends AppError{
         super(message,HttpStatus.CONFLICT)
     }
 }
+
+export class ServiceUnavailableError extends AppError{
+    constructor(message:string)
+    {
+        super(message,HttpStatus.SERVICE_UNAVAILABLE)
+    }
+}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
-import { AIPlan } from '../../types/aiplan.types';
+import type { AIPlan } from '../../types/aiplan.types';
 import toast from 'react-hot-toast';
 
 const DAY_ABBR: Record<string, string> = {

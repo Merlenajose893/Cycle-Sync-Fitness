@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/Dashboard.css';
 import { useUserContext } from '../../context/UserAuthContext';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
-import { AIPlan } from '../../types/aiplan.types';
-import { Sparkles, Brain, ArrowRight } from 'lucide-react';
+import type { AIPlan } from '../../types/aiplan.types';
+import { Sparkles, Brain, ArrowRight, LogOut } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user } = useUserContext();
+  const { user, logout } = useUserContext();
   const navigate = useNavigate();
   const { getActivePlan } = useAIPlan();
   
@@ -28,6 +28,15 @@ const Dashboard = () => {
     fetchPlan();
   }, [getActivePlan]);
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Failed to logout", error);
+    }
+  };
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
@@ -47,11 +56,38 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-content animate-fadeIn">
-      <div className="dashboard-header-premium">
+      <div className="dashboard-header-premium" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div className="header-greeting">
           <h1>{getGreeting()}, {user?.firstName || 'User'}</h1>
           <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Here is your daily summary</p>
         </div>
+        
+        <button 
+          onClick={handleLogout}
+          style={{ 
+            background: 'transparent', 
+            color: '#ef4444', 
+            border: '1px solid #ef4444', 
+            padding: '10px 20px', 
+            borderRadius: '12px', 
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontWeight: '600',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = '#ef4444';
+            e.currentTarget.style.color = 'white';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.color = '#ef4444';
+          }}
+        >
+          <LogOut size={18} /> Logout
+        </button>
       </div>
 
       {loading ? (

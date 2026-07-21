@@ -22,14 +22,16 @@ export class AIPlanService implements IAIPlanService {
 
         const generatedPlan = await this.aigeneratorService.generatePlan(inputs);
         const newPlan = await this.aiplanrepository.create({
-            userId,
-            status: PlanStatus.ACTIVE,
-            inputs,
-            summary: generatedPlan.plan,
-            workoutPlan: generatedPlan.workout,
-            mealPlan: generatedPlan.meal,
-            recommendations: generatedPlan.recommendation,
-        });
+    userId,
+    status: PlanStatus.ACTIVE,
+    inputs,
+    summary: generatedPlan.summary,
+    workoutPlan: generatedPlan.workoutPlan,
+    mealPlan: generatedPlan.mealPlan,
+    recommendations: generatedPlan.recommendations,
+});
+        console.log(newPlan);
+        
 
         return await this.aiplanrepository.save(newPlan);
     };

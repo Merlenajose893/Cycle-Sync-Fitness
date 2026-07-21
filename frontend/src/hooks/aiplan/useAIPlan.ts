@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { aiPlanService } from "../../services/aiplan/aiPlanService";
 import type { AIPlan, AIPlanInputs, PlanStatus } from "../../types/aiplan.types";
 import axios from "axios";
@@ -7,7 +7,7 @@ export const useAIPlan = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const generatePlan = async (inputs: AIPlanInputs): Promise<AIPlan | undefined> => {
+    const generatePlan = useCallback(async (inputs: AIPlanInputs): Promise<AIPlan | undefined> => {
         try {
             setLoading(true);
             setError(null);
@@ -16,15 +16,17 @@ export const useAIPlan = () => {
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data.message || "Failed to generate plan");
+                throw error;
             } else {
                 setError("Unexpected error");
+                throw error;
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const getActivePlan = async (): Promise<AIPlan | undefined> => {
+    const getActivePlan = useCallback(async (): Promise<AIPlan | undefined> => {
         try {
             setLoading(true);
             setError(null);
@@ -33,15 +35,17 @@ export const useAIPlan = () => {
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data.message || "Failed to fetch active plan");
+                throw error;
             } else {
                 setError("Unexpected error");
+                throw error;
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const getPlanHistory = async (): Promise<AIPlan[] | undefined> => {
+    const getPlanHistory = useCallback(async (): Promise<AIPlan[] | undefined> => {
         try {
             setLoading(true);
             setError(null);
@@ -50,15 +54,17 @@ export const useAIPlan = () => {
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data.message || "Failed to fetch plan history");
+                throw error;
             } else {
                 setError("Unexpected error");
+                throw error;
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const updatePlanStatus = async (planId: string, status: PlanStatus): Promise<AIPlan | undefined> => {
+    const updatePlanStatus = useCallback(async (planId: string, status: PlanStatus): Promise<AIPlan | undefined> => {
         try {
             setLoading(true);
             setError(null);
@@ -67,15 +73,17 @@ export const useAIPlan = () => {
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data.message || "Failed to update plan status");
+                throw error;
             } else {
                 setError("Unexpected error");
+                throw error;
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const deletePlan = async (planId: string): Promise<void> => {
+    const deletePlan = useCallback(async (planId: string): Promise<void> => {
         try {
             setLoading(true);
             setError(null);
@@ -83,13 +91,15 @@ export const useAIPlan = () => {
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data.message || "Failed to delete plan");
+                throw error;
             } else {
                 setError("Unexpected error");
+                throw error;
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     return { loading, error, generatePlan, getActivePlan, getPlanHistory, updatePlanStatus, deletePlan };
 };

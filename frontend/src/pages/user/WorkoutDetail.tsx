@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
-import { WorkoutDay } from '../../types/aiplan.types';
+import type { WorkoutDay } from '../../types/aiplan.types';
 
 const DAY_ABBR: Record<string, string> = {
     MONDAY: 'MON', TUESDAY: 'TUE', WEDNESDAY: 'WED',

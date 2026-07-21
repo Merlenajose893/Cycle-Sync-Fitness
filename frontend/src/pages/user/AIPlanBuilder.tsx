@@ -71,6 +71,8 @@ const AIPlanBuilder = () => {
             toast.error("Failed to generate plan");
         }
     };
+    console.log(handleGenerate);
+    
 
     return (
         <div className="aiplan-page animate-fadeIn">

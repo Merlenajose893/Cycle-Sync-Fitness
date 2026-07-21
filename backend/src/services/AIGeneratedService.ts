@@ -4,15 +4,19 @@ import type { AiPlanDTO } from "../dtos/aiPlan.dto.js";
 import type { AIPlanInputs } from "../models/AIPlan.js";
 import { TOKENS } from "../container/tokens.js";
 import type { IAIProvider } from "../interfaces/services/IAIProvider.js";
+import { WeekDay,WorkoutType,MealType } from "../constants/aiPlan.js";
 @injectable()
 export class AIGeneratedService implements IAIGeneratorService{
 constructor(@inject(TOKENS.IAIProvider) private aiprovider:IAIProvider)
 {
 
 }
+generatePlan = async (input: AIPlanInputs): Promise<AiPlanDTO> => {
+  const dayValues = Object.values(WeekDay).join(", ");
+  const workoutTypeValues = Object.values(WorkoutType).join(", ");
+  const mealTypeValues = Object.values(MealType).join(", ");
 
-generatePlan=async(input: AIPlanInputs): Promise<AiPlanDTO> =>{
-    const prompt=`
+  const prompt = `
 Generate a personalized fitness and nutrition plan.
 
 User Details:
@@ -21,9 +25,16 @@ User Details:
 - Workout Days Per Week: ${input.daysPerWeek}
 - Diet Preference: ${input.dietPreference}
 
-Return ONLY valid JSON.
+Return ONLY valid JSON. No markdown code fences, no explanations, no extra text before or after the JSON.
 
-The JSON must follow this structure:
+Rules:
+- "day" fields must use ONLY these exact values: ${dayValues}
+- "workoutType" fields must use ONLY these exact values: ${workoutTypeValues}
+- "mealType" fields must use ONLY these exact values: ${mealTypeValues}
+- Create exactly ${input.daysPerWeek} entries in "workoutPlan", one per training day.
+- "exercises" must be an array of OBJECTS (not strings), each with the exact fields shown below.
+
+The JSON must follow this EXACT structure:
 
 {
   "summary": {
@@ -34,23 +45,55 @@ The JSON must follow this structure:
     "waterIntake": number,
     "sleepHours": number
   },
-
-  "workoutPlan": [],
-
-  "mealPlan": [],
-
+  "workoutPlan": [
+    {
+      "day": "string, one of the allowed day values",
+      "title": "string",
+      "duration": number,
+      "warmup": { "title": "string", "description": "string", "duration": number },
+      "exercises": [
+        {
+          "name": "string",
+          "muscleGroup": "string",
+          "workoutType": "string, one of the allowed workoutType values",
+          "sets": number,
+          "reps": "string",
+          "rest": number,
+          "tip": "string"
+        }
+      ],
+      "cooldown": { "title": "string", "description": "string", "duration": number }
+    }
+  ],
+  "mealPlan": [
+    {
+      "day": "string, one of the allowed day values",
+      "meals": [
+        {
+          "mealType": "string, one of the allowed mealType values",
+          "name": "string",
+          "calories": number,
+          "protein": number,
+          "carbs": number,
+          "fat": number,
+          "ingredients": ["string"],
+          "notes": "string"
+        }
+      ]
+    }
+  ],
   "recommendations": {
-    "recovery": "",
-    "supplements": [],
-    "cycleAdvice": "",
-    "notes": ""
+    "recovery": "string",
+    "supplements": ["string"],
+    "cycleAdvice": "string",
+    "notes": "string"
   }
 }
 `;
 
-const response=await this.aiprovider.generateContent(prompt);
-  const aiPlan: AiPlanDTO = JSON.parse(response);
-
-    return aiPlan;
-}
+  const response = await this.aiprovider.generateContent(prompt);
+  const cleaned = response.replace(/```json|```/g, "").trim();
+  const aiPlan: AiPlanDTO = JSON.parse(cleaned);
+  return aiPlan;
+};
 }
