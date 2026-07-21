@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+impprt {useAIPlan}
 import '../../styles/AIPlan.css';
+import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 
 const GOALS = [
     { value: 'MUSCLE_GAIN', label: 'Muscle Gain', icon: '💪' },
@@ -27,23 +29,16 @@ const DIET_PREFERENCES = [
 
 const AIPlanBuilder = () => {
     const navigate = useNavigate();
+    const {generatePlan,getActivePlan,loading}=useAIPlan();
     const [goal, setGoal] = useState('');
     const [fitnessLevel, setFitnessLevel] = useState('');
     const [daysPerWeek, setDaysPerWeek] = useState<number | null>(null);
     const [dietPreference, setDietPreference] = useState('');
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     const isFormValid = goal && fitnessLevel && daysPerWeek && dietPreference;
 
-    const handleGenerate = async () => {
-        if (!isFormValid) return;
-        setLoading(true);
-        // TODO: replace with actual API call
-        setTimeout(() => {
-            setLoading(false);
-            navigate('/app/ai-plan/view');
-        }, 1500);
-    };
+    
 
     const currentStep = [goal, fitnessLevel, daysPerWeek, dietPreference].filter(Boolean).length;
 
@@ -143,7 +138,7 @@ const AIPlanBuilder = () => {
                 <button
                     className={`generate-btn ${isFormValid ? '' : 'generate-btn-disabled'}`}
                     onClick={handleGenerate}
-                    disabled={!isFormValid || loading}
+                    disabled={!isFormValid || }
                     type="button"
                 >
                     {loading ? (

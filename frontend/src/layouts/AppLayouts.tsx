@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Utensils, Dumbbell,
     BarChart3, BookOpen, MessageCircle,
     User, Settings, Users, LogOut,
-    ChevronRight, Menu, X, Bell, Sparkles Brain
+    ChevronRight, Menu, X, Bell, Sparkles,Brain
 } from 'lucide-react';
 import '../styles/AppLayout.css'
 
