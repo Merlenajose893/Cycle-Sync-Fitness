@@ -3,12 +3,14 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Dumbbell, ArrowRight, AlertCircle } from 'lucide-react';
 import '../../styles/Auth.css';
 import { useTrainerAuth } from '../../hooks/auth/useTrainerAuth';
+import { useTrainerContext } from '../../context/TrainerAuthContext';
 
 const TrainerLogin: React.FC = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const isBlocked = searchParams.get("blocked") === "true";
     const { loginTrainer, loading } = useTrainerAuth();
+    const { login } = useTrainerContext();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -78,6 +80,11 @@ const TrainerLogin: React.FC = () => {
 
 
             const trainer = response?.data.trainer;
+            
+            // Update auth context state before navigating
+            if (trainer) {
+                login(trainer);
+            }
 
             switch (trainer.status) {
                 case "REGISTERED":

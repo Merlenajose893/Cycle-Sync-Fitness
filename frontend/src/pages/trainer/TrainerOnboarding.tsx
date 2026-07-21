@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrainerOnboarding } from '../../hooks/onboarding/useTrainerOnboarding';
+import { useTrainerContext } from '../../context/TrainerAuthContext';
 import { showToast } from '../../components/common/Toast/Toast';
 import {
     ArrowRight,
@@ -53,6 +54,7 @@ const TrainerOnboarding: React.FC = () => {
 
     const totalSteps = 5;
     const { updateProfile, updateCertifications, updatePackages, completeOnboarding, uploadAvatar, uploadDocuments, loading, error } = useTrainerOnboarding();
+    const { login, trainer } = useTrainerContext();
 
     const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -134,6 +136,12 @@ const TrainerOnboarding: React.FC = () => {
                 }
 
                 await completeOnboarding();
+                
+                // Update global state so the ProtectedRoute knows we are no longer in ONBOARDING status
+                if (trainer) {
+                    login({ ...trainer, status: 'PENDING_APPROVAL' });
+                }
+
                 showToast.success("Application submitted successfully!"); // Success Toast
                 navigate('/trainer/pending');
             } catch (err: any) {
