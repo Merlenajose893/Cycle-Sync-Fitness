@@ -58,6 +58,8 @@ const ManageTrainersPage: React.FC = () => {
     useEffect(() => {
         fetchTrainers();
     }, [fetchTrainers]);
+    console.log(fetchTrainers);
+    
 
     const handleBlock = async (trainerId: string): Promise<void> => {
         try {

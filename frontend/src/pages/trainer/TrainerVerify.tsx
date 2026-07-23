@@ -17,7 +17,7 @@ const TrainerVerifyEmail: React.FC = () => {
     const email=location.state?.email;
     const navigate = useNavigate();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
-    const [timer, setTimer] = useState(30);
+    const [timer, setTimer] = useState(10);
     const [isResending, setIsResending] = useState(false);
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
