@@ -40,6 +40,8 @@ import { GeminiProvider } from "../services/providers/GeminiProvider.js";
 import { AIPlanRepository } from "../repositories/AIPlanRepository.js";
 import { AIGeneratedService } from "../services/AIGeneratedService.js";
 import { AIPlanService } from "../services/AIPlanService.js";
+import { MealLogRepository } from "../repositories/MealLogRepository.js";
+import { RecipeRepository } from "../repositories/RecipeRepository.js";
 
 
 container.register(
@@ -176,6 +178,20 @@ container.register(
   TOKENS.IAIPlanService,
   {
     useClass:AIPlanService
+  }
+)
+
+container.register(
+  TOKENS.IMealLogRepository,
+  {
+    useClass:MealLogRepository
+  }
+)
+
+container.register(
+  TOKENS.IRecipeRepository,
+  {
+    useClass:RecipeRepository
   }
 )
 
