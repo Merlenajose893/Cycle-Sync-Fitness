@@ -63,6 +63,12 @@ export const TOKENS = {
     // IAdminService: Symbol.for("IAdminService"),
 
         IAIPlanService:
-        Symbol.for("IAIPlanService")
+        Symbol.for("IAIPlanService"),
+
+        IMealLogRepository:
+        Symbol.for("IMealLogRepository"),
+
+        IRecipeRepository:
+        Symbol.for("IRecipeRepository")
 
 };
