@@ -1,0 +1,32 @@
+export enum WorkoutCategory{
+    STRENGTH="STRENGTH",
+    CARDIO="CARDIO",
+    HIIT="HIIT",
+    FLEXIBILITY="FLEXIBILITY",
+    CALLISTHENICS="CALLISTHENICS"
+}
+
+export enum WorkoutDifficulty{
+    BEGINNER="BEGINNER",
+    INTERMEDIATE="INTERMEDIATE",
+    ADVANCED="ADVANCED"
+}
+
+export enum WorkoutGoal{
+    MUSCLE_GAIN="MUSCLE_GAIN",
+    WEIGHT_LOSS="WEIGHT_LOSS",
+    ENDURANCE="ENDURANCE",
+    GENERAL_FITNESS="GENERAL_FITNESS"
+}
+export enum CyclePhase{
+    FOLLICULAR="FOLLICULAR",
+    OVULATORY="OVULATORY",
+    LUTEAL="LUTEAL",
+    MENSTRUAL="MENSTRUAL"
+}
+
+export enum WorkoutSource {
+    AI_PLAN = "AI_PLAN",
+    TRAINER_PROGRAM = "TRAINER_PROGRAM",
+    CUSTOM = "CUSTOM"
+}
