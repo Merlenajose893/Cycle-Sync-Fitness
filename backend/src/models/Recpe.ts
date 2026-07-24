@@ -1,4 +1,4 @@
-import { Types ,Schema,Document} from "mongoose";
+import mongoose, { Types ,Schema,Document} from "mongoose";
 import { Difficulty,DietType,RecipeCategory } from "../constants/food.constants.js";
 export interface IIngredient{
     name:string;
@@ -211,3 +211,5 @@ prepTime: {
     },
   
 },{timestamps:true})
+
+export const RecipeModel=mongoose.model<IRecipe>("Recipe",RecipeSchema)
