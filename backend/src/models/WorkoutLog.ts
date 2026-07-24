@@ -1,3 +1,5 @@
+import type { WorkoutSource } from "../constants/workout.js";
+import mongoose, { Schema,Document,Types } from "mongoose";
 export interface ILoggedSet {
 setNumber:number;
 repsCompleted:number;
@@ -150,6 +152,7 @@ required:true
 },
 
 
+
 programId:{
 type:Schema.Types.ObjectId,
 ref:"WorkoutProgram"
@@ -195,3 +198,5 @@ timestamps:true
 }
 
 );
+
+const WorkoutLog=mongoose.model<IWorkoutLog>("WorkoutLog",WorkoutLogSchema)
