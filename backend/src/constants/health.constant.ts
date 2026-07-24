@@ -1,0 +1,40 @@
+export enum FlowIntensity {
+    LIGHT = "LIGHT",
+    MEDIUM = "MEDIUM",
+    HEAVY = "HEAVY",
+    SPOTTING = "SPOTTING",
+}
+
+export enum CyclePhase {
+    MENSTRUAL = "MENSTRUAL",
+    FOLLICULAR = "FOLLICULAR",
+    OVULATORY = "OVULATORY",
+    LUTEAL = "LUTEAL",
+}
+
+export enum Mood {
+    HAPPY = "HAPPY",
+    ANXIOUS = "ANXIOUS",
+    IRRITABLE = "IRRITABLE",
+    CALM = "CALM",
+    TIRED = "TIRED",
+    ENERGETIC = "ENERGETIC",
+    CRAVINGS = "CRAVINGS",
+}
+
+export enum PhysicalSymptom {
+    CRAMPS = "CRAMPS",
+    BLOATING = "BLOATING",
+    HEADACHE = "HEADACHE",
+    ACNE = "ACNE",
+    BREAST_TENDERNESS = "BREAST_TENDERNESS",
+    BACK_PAIN = "BACK_PAIN",
+    NAUSEA = "NAUSEA",
+}
+
+export enum HealthMilestoneType {
+    WATER_GOAL_STREAK = "WATER_GOAL_STREAK",
+    CYCLE_LOGGED_3_MONTHS = "CYCLE_LOGGED_3_MONTHS",
+    WEIGHT_TARGET_REACHED = "WEIGHT_TARGET_REACHED",
+    CONSISTENT_LOGGER_7_DAYS = "CONSISTENT_LOGGER_7_DAYS",
+}
