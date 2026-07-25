@@ -1,5 +1,6 @@
 import { Schema, model, Types, Document } from "mongoose";
-import type { Mood, PhysicalSymptom } from "../constants/health.constant.js";
+import { Mood, PhysicalSymptom } from "../constants/health.constant.js";
+// import type { Mood, PhysicalSymptom } from "../constants/health.constant.js";
 
 export interface IBodyMeasurements {
   waistCm?: number;

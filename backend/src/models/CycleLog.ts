@@ -1,4 +1,4 @@
-import mongoose, { Schema,  Types } from "mongoose";
+import mongoose, { Schema,  Types,Document } from "mongoose";
 import { FlowIntensity } from "../constants/health.constant.js";
 
 
