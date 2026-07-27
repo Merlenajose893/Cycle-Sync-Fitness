@@ -42,6 +42,8 @@ import { AIGeneratedService } from "../services/AIGeneratedService.js";
 import { AIPlanService } from "../services/AIPlanService.js";
 import { MealLogRepository } from "../repositories/MealLogRepository.js";
 import { RecipeRepository } from "../repositories/RecipeRepository.js";
+import { MealLogService } from "../services/MeallogService.js";
+
 
 
 container.register(
@@ -192,6 +194,13 @@ container.register(
   TOKENS.IRecipeRepository,
   {
     useClass:RecipeRepository
+  }
+)
+
+container.register(
+  TOKENS.IMealLogService,
+  {
+    useClass:MealLogService
   }
 )
 
