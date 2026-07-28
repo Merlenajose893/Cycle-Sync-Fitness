@@ -11,6 +11,14 @@ export const aiPlanService = {
         return response.data.data;
     },
 
+    async createDraftPlan(inputs: AIPlanInputs): Promise<AIPlan> {
+        const response = await axiosInstance.post(
+            API_ENDPOINTS.AI_PLAN.DRAFT,
+            inputs
+        );
+        return response.data.data;
+    },
+
     async getActivePlan(): Promise<AIPlan> {
         const response = await axiosInstance.get(
             API_ENDPOINTS.AI_PLAN.ACTIVE
@@ -29,6 +37,14 @@ export const aiPlanService = {
         const response = await axiosInstance.patch(
             API_ENDPOINTS.AI_PLAN.STATUS(planId),
             { status }
+        );
+        return response.data.data;
+    },
+
+    async editPlan(planId: string, updates: Partial<AIPlan>): Promise<AIPlan> {
+        const response = await axiosInstance.patch(
+            API_ENDPOINTS.AI_PLAN.EDIT(planId),
+            updates
         );
         return response.data.data;
     },
