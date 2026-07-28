@@ -17,7 +17,11 @@ export class WorkoutLogRepository extends BaseRepository<IWorkoutLog> implements
     getExerciseHistory(userId: string, exerciseName: string, limit: number): Promise<IWorkoutLog[]> {
         return this.model.find({userId,"exercises.exerciseName":exerciseName}).sort({createdAt:-1});
     }
+    findByUser(userId: string, page: number, limit: number): Promise<IWorkoutLog[]> {
+        const skip = (page - 1) * limit;
+        return this.model.find({ userId }).sort({ date: -1 }).skip(skip).limit(limit);
+    }
     countByUser(userId: string): Promise<number> {
-        return this.model.countDocuments(userId);
+        return this.model.countDocuments({ userId });
     }
 }
