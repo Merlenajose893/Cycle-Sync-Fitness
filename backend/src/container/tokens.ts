@@ -1,81 +1,30 @@
 export const TOKENS = {
-
-  IUserRepository:
-    Symbol.for("IUserRepository"),
-    IUserProfileService:
-    Symbol.for("IUserProfileService"),
-
-  ITrainerRepository:
-    Symbol.for("ITrainerRepository"),
-
-  IOtpRepository:
-    Symbol.for("IOtpRepository"),
-
-  IRefreshTokenRepository:
-    Symbol.for("IRefreshTokenRepository"),
-
-  IEmailService:
-    Symbol.for("IEmailService"),
-
-  ITokenService:
-    Symbol.for("ITokenService"),
-
-  IUserAuthService:
-    Symbol.for("IUserAuthService"),
-
-    IOtpService:
-    Symbol.for("IOtpService"),
-
-  ITrainerAuthService:
-    Symbol.for("ITrainerAuthService"),
-
-  IAdminService:
-    Symbol.for("IAdminService"),
-
-
-    IUserOnboardingService:
-    Symbol.for("IUserOnboardingService"),
-
-    ITrainerOnboardingService:
-    Symbol.for("ITrainerOnboardingService"),
-
-    IImageService:
-    Symbol.for("IImageService"),
-
-      IAccountStatusService:
-      Symbol.for("IAccountStatusService"),
-
-      IUserStatusService:
-
-      Symbol.for("IUserStatusService"),
-
-        IAIProvider:
-        Symbol.for("IAIProvider"),
-
-        IAIPlanRepository:
-        Symbol.for("IAIPlanRepository"),
-
-        IAIGeneratorService:
-        Symbol.for("IAIGeneratorService"),
-
-      
-
-    // IAdminService: Symbol.for("IAdminService"),
-
-        IAIPlanService:
-        Symbol.for("IAIPlanService"),
-
-        IMealLogRepository:
-        Symbol.for("IMealLogRepository"),
-
-        IRecipeRepository:
-        Symbol.for("IRecipeRepository"),
-
-        
-          IMealLogService:
-          Symbol.for("IMealLogService"),
-
-            IRecipeService:
-            Symbol.for("IRecipeService")
-
+  IUserRepository: Symbol.for("IUserRepository"),
+  IUserProfileService: Symbol.for("IUserProfileService"),
+  ITrainerRepository: Symbol.for("ITrainerRepository"),
+  IOtpRepository: Symbol.for("IOtpRepository"),
+  IRefreshTokenRepository: Symbol.for("IRefreshTokenRepository"),
+  IEmailService: Symbol.for("IEmailService"),
+  ITokenService: Symbol.for("ITokenService"),
+  IUserAuthService: Symbol.for("IUserAuthService"),
+  IOtpService: Symbol.for("IOtpService"),
+  ITrainerAuthService: Symbol.for("ITrainerAuthService"),
+  IAdminService: Symbol.for("IAdminService"),
+  IUserOnboardingService: Symbol.for("IUserOnboardingService"),
+  ITrainerOnboardingService: Symbol.for("ITrainerOnboardingService"),
+  IImageService: Symbol.for("IImageService"),
+  IAccountStatusService: Symbol.for("IAccountStatusService"),
+  IUserStatusService: Symbol.for("IUserStatusService"),
+  IAIProvider: Symbol.for("IAIProvider"),
+  IAIPlanRepository: Symbol.for("IAIPlanRepository"),
+  IAIGeneratorService: Symbol.for("IAIGeneratorService"),
+  IAIPlanService: Symbol.for("IAIPlanService"),
+  IMealLogRepository: Symbol.for("IMealLogRepository"),
+  IRecipeRepository: Symbol.for("IRecipeRepository"),
+  IMealLogService: Symbol.for("IMealLogService"),
+  IRecipeService: Symbol.for("IRecipeService"),
+  IWorkoutLogRepository: Symbol.for("IWorkoutLogRepository"),
+  IWorkoutProgramRepository: Symbol.for("IWorkoutProgramRepository"),
+  IWorkoutLogService: Symbol.for("IWorkoutLogService"),
+  IWorkoutProgramService: Symbol.for("IWorkoutProgramService"),
 };

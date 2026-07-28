@@ -12,11 +12,7 @@
     max-width: 540px;
     margin: 0 auto;
 }
-<<<<<<< HEAD
-
 /* Error Styles */
-=======
->>>>>>> feature/admin-manage
 .error {
     border-color: #ef4444 !important;
 }
@@ -27,10 +23,6 @@
     margin-top: 4px;
     margin-bottom: 0;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/admin-manage
 .auth-brand {
     display: flex;
     align-items: center;

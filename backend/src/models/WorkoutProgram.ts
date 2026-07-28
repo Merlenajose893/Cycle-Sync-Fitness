@@ -1,5 +1,5 @@
 import { WorkoutCategory, CyclePhase,WorkoutDifficulty,WorkoutGoal, } from "../constants/workout.js";
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document,Types } from "mongoose";
 
 export interface ITargetExercise {
     exerciseName: string;
@@ -15,7 +15,7 @@ export interface IWorkoutProgramDay {
     dayNumber: number;
     title: string;
     focusPhase: CyclePhase;
-    exercise: ITargetExercise[];
+    exercises: ITargetExercise[];
 }
 
 export interface IWorkoutProgram extends Document {

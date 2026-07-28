@@ -199,4 +199,4 @@ timestamps:true
 
 );
 
-const WorkoutLog=mongoose.model<IWorkoutLog>("WorkoutLog",WorkoutLogSchema)
+export const WorkoutLog=mongoose.model<IWorkoutLog>("WorkoutLog",WorkoutLogSchema)
