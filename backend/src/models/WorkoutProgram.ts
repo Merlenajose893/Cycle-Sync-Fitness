@@ -15,7 +15,7 @@ export interface IWorkoutProgramDay {
     dayNumber: number;
     title: string;
     focusPhase: CyclePhase;
-    exercise: ITargetExercise[];
+    exercises: ITargetExercise[];
 }
 
 export interface IWorkoutProgram extends Document {
