@@ -75,6 +75,12 @@ export const TOKENS = {
         Symbol.for("IWorkoutLogRepository"),
 
         IWorkoutProgramRepository:
-        Symbol.for("IWorkoutProgramRepository")
+        Symbol.for("IWorkoutProgramRepository"),
+
+        IWorkoutLogService:
+        Symbol.for("IWorkoutLogService"),
+
+        IWorkoutProgramService:
+        Symbol.for("IWorkoutProgramService")
 
 };

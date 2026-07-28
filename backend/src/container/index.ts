@@ -44,6 +44,8 @@ import { MealLogRepository } from "../repositories/MealLogRepository.js";
 import { RecipeRepository } from "../repositories/RecipeRepository.js";
 import { WorkoutLogRepository } from "../repositories/WorkoutLogRepository.js";
 import { WorkoutProgramRepository } from "../repositories/WorkoutProgramRepository.js";
+import { WorkoutLogService } from "../services/WorkoutLogService.js";
+import { WorkoutProgramService } from "../services/WorkoutProgramService.js";
 
 
 container.register(
@@ -208,6 +210,20 @@ container.register(
   TOKENS.IWorkoutProgramRepository,
   {
     useClass:WorkoutProgramRepository
+  }
+)
+
+container.register(
+  TOKENS.IWorkoutLogService,
+  {
+    useClass:WorkoutLogService
+  }
+)
+
+container.register(
+  TOKENS.IWorkoutProgramService,
+  {
+    useClass:WorkoutProgramService
   }
 )
 
