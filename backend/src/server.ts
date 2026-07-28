@@ -16,6 +16,8 @@ import adminRoutes from './routes/adminAuthRoutes.js'
 import userProfileRoutes from './routes/userProfileRoutes.js'
 
 import aiPlanRoutes from './routes/aiPlan.routes.js'
+import mealLogRoutes from './routes/meal.log.routes.js'
+import recipeRoutes from './routes/recipe.routes.js'
 
 import { errorHandler } from './middlewares/errorHandler.js'
 const app = express();
@@ -46,6 +48,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/users", userProfileRoutes);
 
 app.use("/api/ai-plans", aiPlanRoutes);
+app.use("/api/meals",mealLogRoutes);
+app.use("/api/recipes",recipeRoutes);
 
 
 app.use(errorHandler);
