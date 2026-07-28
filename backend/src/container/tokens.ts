@@ -73,7 +73,7 @@ export const TOKENS = {
 
         
           IMealLogService:
-          Symbol.for("IMealLogRepository"),
+          Symbol.for("IMealLogService"),
 
             IRecipeService:
             Symbol.for("IRecipeService")

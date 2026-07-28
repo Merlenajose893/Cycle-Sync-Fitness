@@ -12,7 +12,7 @@ export class MealLogService implements IMealLogService{
     {
 
     }
-logMeal(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLog> {
+logMeal=async(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLog> =>{
     let mealLog=await this.mealRepository.findByUserAndDate(userId,date);
     const totalMeals=this.calculateMealTotals(mealData.food)
     const mealEntry:IMealEntry={
@@ -61,7 +61,7 @@ logMeal(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLog> {
 
 
     
-    getDayLog=async(userId: string, date: Date): Promise<IMealLog | null> {
+    getDayLog=async(userId: string, date: Date): Promise<IMealLog | null> =>{
         const mealLog=await this.mealRepository.findByUserAndDate(userId,date);
         if(!mealLog)
         {
@@ -70,12 +70,12 @@ logMeal(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLog> {
         return mealLog;
     }
 
-    getWeekLogs=async(userId: string, startDate: Date,endDate:Date): Promise<IMealLog[]> {
+    getWeekLogs=async(userId: string, startDate: Date,endDate:Date): Promise<IMealLog[]>=> {
         const mealLog=await this.mealRepository.findByUserDateRange(userId,startDate,endDate);
         return mealLog
     }
 
-    removeMeal=async(userId: string, mealType: string): Promise<IMealLog | null> {
+    removeMeal=async(userId: string, mealType: string): Promise<IMealLog | null> =>{
         const mealLog=await this.mealRepository.findByUserAndDate(userId,new Date());
         if(!mealLog)
         {
@@ -86,7 +86,7 @@ logMeal(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLog> {
         return this.mealRepository.save(mealLog);
     }
 
-    setDailyTarget=async(userId: string, date: Date, target: DailyTargetDTO): Promise<IMealLog> {
+    setDailyTarget=async(userId: string, date: Date, target: DailyTargetDTO): Promise<IMealLog> =>{
         let mealLog=await this.mealRepository.findByUserAndDate(userId,date);
         if(!mealLog)
         {

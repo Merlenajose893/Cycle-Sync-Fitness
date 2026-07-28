@@ -111,7 +111,7 @@ const mealEntrySchema=new Schema<IMealEntry>({
         min:0
     },
     loggedAt:{
-        type:Data,
+        type:Date,
         default:Date.now()
     }
 

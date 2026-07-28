@@ -12,7 +12,7 @@ export class RecipeService implements IRecipeService{
     {
 
     }
-    createRecipe=async(trainerId: string, data: CreateRecipeDTO): Promise<IRecipe> {
+    createRecipe=async(trainerId: string, data: CreateRecipeDTO): Promise<IRecipe> =>{
         const recipe=await this.reciperepository.create({
             trainerId,
             ...data,
@@ -24,7 +24,7 @@ export class RecipeService implements IRecipeService{
 
         return recipe 
     }
-    updateRecipe=async(trainerId: string, recipeId: string, data: UpdateRecipeDTO): Promise<IRecipe> {
+    updateRecipe=async(trainerId: string, recipeId: string, data: UpdateRecipeDTO): Promise<IRecipe> =>{
         const recipe=await this.reciperepository.findById(recipeId);
         if(!recipe)
         {
@@ -37,7 +37,7 @@ export class RecipeService implements IRecipeService{
         Object.assign(recipe,data);
         return await this.reciperepository.save(recipe)
     }
-    deleteRecipe=async(trainerId: string, recipeId: string): Promise<void> {
+    deleteRecipe=async(trainerId: string, recipeId: string): Promise<void>=> {
         const recipe=await this.reciperepository.findById(recipeId);
         if(!recipe)
         {
@@ -52,7 +52,7 @@ export class RecipeService implements IRecipeService{
         return this.reciperepository.deleteById(recipeId);
 
     }
-    getRecipeById=async(recipeId: string): Promise<IRecipe> {
+    getRecipeById=async(recipeId: string): Promise<IRecipe> =>{
         const recipe=await this.reciperepository.findById(recipeId);
         if(!recipe)
         {
@@ -60,7 +60,7 @@ export class RecipeService implements IRecipeService{
         }
         return recipe;
     }
-    searchRecipes=async(query: string, page: number, limit: number): Promise<PaginatedResult<IRecipe>> {
+    searchRecipes=async(query: string, page: number, limit: number): Promise<PaginatedResult<IRecipe>> =>{
         const recipes=await this.reciperepository.searchByTitle(query,page,limit);
         const totalItems=await this.reciperepository.countPublished({search:query});
          const totalPages =
@@ -83,11 +83,11 @@ export class RecipeService implements IRecipeService{
             
         }
     }
-    getTrainerRecipes=async(trainerId: string): Promise<IRecipe[]> {
+    getTrainerRecipes=async(trainerId: string): Promise<IRecipe[]> =>{
         const trainerRecipes=await this.reciperepository.findByTrainer(trainerId);
         return trainerRecipes;
     }
-    toggleFavourite=async(userId: string, recipeId: string): Promise<IRecipe> {
+    toggleFavourite=async(userId: string, recipeId: string): Promise<IRecipe> =>{
         const recipe=await this.reciperepository.findById(recipeId);
         if(!recipe)
         {
@@ -104,11 +104,11 @@ export class RecipeService implements IRecipeService{
         }
         return await this.reciperepository.save(recipe)
     }
-    getUsersFavourite=async(userId: string): Promise<IRecipe[]> {
+    getUsersFavourite=async(userId: string): Promise<IRecipe[]> =>{
         const favouritesByUser=await this.reciperepository.findFavouritesByUser(userId);
         return favouritesByUser;
     }
-    getPublishedRecipes=async(filters: RecipeFilters, page: number, limit: number): Promise<PaginatedResult<IRecipe>> {
+    getPublishedRecipes=async(filters: RecipeFilters, page: number, limit: number): Promise<PaginatedResult<IRecipe>> =>{
         const recipes=await this.reciperepository.findPublished(filters,page,limit)
         const totalItems=await this.reciperepository.countPublished(filters);
         const totalPages=Math.ceil(totalItems/limit);
@@ -124,7 +124,7 @@ export class RecipeService implements IRecipeService{
             }
         }
     }
-    addReview=async(userId: string, recipeId: string, data: ReviewDTO): Promise<IRecipe> {
+    addReview=async(userId: string, recipeId: string, data: ReviewDTO): Promise<IRecipe> =>{
         const recipe=await this.reciperepository.findById(recipeId);
         if(!recipe)
         {
