@@ -16,6 +16,8 @@ import adminRoutes from './routes/adminAuthRoutes.js'
 import userProfileRoutes from './routes/userProfileRoutes.js'
 
 import aiPlanRoutes from './routes/aiPlan.routes.js'
+import workoutProgramRoutes from './routes/workoutProgram.routes.js'
+import workoutLogRoutes from './routes/workoutLog.routes.js'
 
 import { errorHandler } from './middlewares/errorHandler.js'
 const app = express();
@@ -46,6 +48,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/users", userProfileRoutes);
 
 app.use("/api/ai-plans", aiPlanRoutes);
+app.use("/api/workout-programs", workoutProgramRoutes);
+app.use("/api/workout-logs", workoutLogRoutes);
 
 
 app.use(errorHandler);
