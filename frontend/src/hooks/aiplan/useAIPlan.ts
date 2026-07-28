@@ -26,6 +26,25 @@ export const useAIPlan = () => {
         }
     }, []);
 
+    const createDraftPlan = useCallback(async (inputs: AIPlanInputs): Promise<AIPlan | undefined> => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await aiPlanService.createDraftPlan(inputs);
+            return result;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data.message || "Failed to create draft plan");
+                throw error;
+            } else {
+                setError("Unexpected error");
+                throw error;
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
     const getActivePlan = useCallback(async (): Promise<AIPlan | undefined> => {
         try {
             setLoading(true);
@@ -83,6 +102,25 @@ export const useAIPlan = () => {
         }
     }, []);
 
+    const editPlan = useCallback(async (planId: string, updates: Partial<AIPlan>): Promise<AIPlan | undefined> => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await aiPlanService.editPlan(planId, updates);
+            return result;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data.message || "Failed to edit plan");
+                throw error;
+            } else {
+                setError("Unexpected error");
+                throw error;
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
     const deletePlan = useCallback(async (planId: string): Promise<void> => {
         try {
             setLoading(true);
@@ -101,5 +139,15 @@ export const useAIPlan = () => {
         }
     }, []);
 
-    return { loading, error, generatePlan, getActivePlan, getPlanHistory, updatePlanStatus, deletePlan };
+    return {
+        loading,
+        error,
+        generatePlan,
+        createDraftPlan,
+        getActivePlan,
+        getPlanHistory,
+        updatePlanStatus,
+        editPlan,
+        deletePlan
+    };
 };
