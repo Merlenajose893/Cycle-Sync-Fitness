@@ -1,8 +1,9 @@
+import { injectable } from "tsyringe";
 import type { RecipeFilters } from "../dtos/recipe.dto.js";
 import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.js";
 import { RecipeModel, type IRecipe } from "../models/Recpe.js";
 import { BaseRepository } from "./BaseRepository.js";
-
+@injectable()
 export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipeRepository{
     constructor()
     {
@@ -21,7 +22,7 @@ export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipe
 
         const skip=(page-1)*limit;
         const query:any={
-            isPublished:true;
+            isPublished:true
         }
         if(filters.category)
         {

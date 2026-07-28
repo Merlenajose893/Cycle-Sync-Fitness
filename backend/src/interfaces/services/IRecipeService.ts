@@ -3,9 +3,9 @@ import type { IRecipe } from "../../models/Recpe.js";
 import type { PaginatedResult } from "../../types/paginated.result.js";
 
 export interface IRecipeService{
-    createRecipe(userId:string,data:CreateRecipeDTO):Promise<IRecipe>;
+    createRecipe(trainerId:string,data:CreateRecipeDTO):Promise<IRecipe>;
     updateRecipe(trainerId:string,recipeId:string,data:UpdateRecipeDTO):Promise<IRecipe>;
-    deleteRecipe(trainerId:string,recipeId:string):Promise<IRecipe>;
+    deleteRecipe(trainerId:string,recipeId:string):Promise<void>;
     getTrainerRecipes(trainerId:string):Promise<IRecipe[]>;
     getPublishedRecipes(filters:RecipeFilters,page:number,limit:number):Promise<PaginatedResult<IRecipe>>
     getRecipeById(recipeId:string):Promise<IRecipe>;
