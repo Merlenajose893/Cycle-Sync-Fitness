@@ -21,7 +21,7 @@ export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipe
 
         const skip=(page-1)*limit;
         const query:any={
-            isPublished:true;
+            isPublished:true
         }
         if(filters.category)
         {

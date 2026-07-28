@@ -135,3 +135,11 @@ export interface LogWorkoutDTO {
     notes?:string;
 
 }
+
+export interface WorkoutProgramFilterDTO{
+    difficulty?:WorkoutDifficulty;
+    goals?:WorkoutGoal;
+    durationWeeks?:number;
+    daysPerWeek?:number;
+    trainerId?:string
+}
