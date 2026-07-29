@@ -1,4 +1,4 @@
-import type { WorkoutSource } from "../constants/workout.js";
+import { WorkoutSource } from "../constants/workout.js";
 import mongoose, { Schema,Document,Types } from "mongoose";
 export interface ILoggedSet {
 setNumber:number;

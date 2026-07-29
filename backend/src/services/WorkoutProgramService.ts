@@ -13,8 +13,8 @@ constructor(@inject(TOKENS.IWorkoutProgramRepository) private workoutrepository:
 }
 createProgram=async(trainerId: string, data: CreateProgramDTO): Promise<IWorkoutProgram> =>{
    const program= await this.workoutrepository.create({
+    trainerId:trainerId,
     ...data
-    trainerId
    })
    return program;
 }
@@ -48,7 +48,7 @@ assignProgramtoUser=async(trainerId: string, programId: string, userId: string):
     const updated=await this.workoutrepository.update(programId,{assignedUserId:userId});
     return updated
 }
-getTrainerPrograms=async(trainerId: string): Promise<IWorkoutProgram[]> {
+getTrainerPrograms=async(trainerId: string): Promise<IWorkoutProgram[]> =>{
     return this.workoutrepository.findByTrainer(trainerId);
 }
 
