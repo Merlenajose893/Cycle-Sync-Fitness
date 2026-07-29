@@ -20,16 +20,16 @@ private refreshTokenRepository:IRefreshTokenRepository
 
 async generateAndSetAccessToken(payload: TokenPayload, res: Response): Promise<string> {
 
-    const acessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
-    console.log(acessToken);
+    const accessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
+    console.log(accessToken);
     
-    res.cookie("access_token",acessToken,{
+    res.cookie("access_token",accessToken,{
         httpOnly:true,
         secure:process.env.NODE_ENV==="production",
         sameSite:"strict",
         maxAge:15*60*1000
     })
-    return acessToken;
+    return accessToken;
 }
 
 async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<string> {
@@ -113,7 +113,7 @@ async refreshTokens(refreshToken: string, res: Response): Promise<void> {
 
 async clearTokens(userId: string, res: Response): Promise<void> {
     await this.refreshTokenRepository.deleteByUserId(userId);
-    res.clearCookie("acess_token")
+    res.clearCookie("access_token")
 }
 
 

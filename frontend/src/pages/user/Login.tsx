@@ -86,7 +86,7 @@ const Login = () => {
             if (user) {
                 login(user);
             }
-            navigate("/app");
+            navigate("/app",{replace:true});
         } catch (error: any) {
             console.error(error);
             setErrors({
