@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard, Utensils, Dumbbell,
-    BarChart3, BookOpen, MessageCircle,
+    BarChart3, MessageCircle,
     User, Settings, Users, LogOut,
-    ChevronRight, Menu, X, Bell, Sparkles,Brain
+    ChevronRight, Menu, X, Bell, Sparkles, Brain
 } from 'lucide-react';
-import '../styles/AppLayout.css'
+import { useUserAuth } from '../hooks/auth/useUserAuth';
+import toast from 'react-hot-toast';
+import '../styles/AppLayout.css';
 
 const AppLayout: React.FC = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { logoutUser } = useUserAuth();
 
     const menuItems = [
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/app/dashboard' },
@@ -27,6 +31,17 @@ const AppLayout: React.FC = () => {
         { name: 'Subscription', icon: <Sparkles size={20} />, path: '/app/premium' },
         { name: 'Settings', icon: <Settings size={20} />, path: '/app/settings' },
     ];
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            toast.success("Logged out successfully");
+        } catch (error) {
+            console.error("Logout failed", error);
+        } finally {
+            navigate('/login');
+        }
+    };
 
     return (
         <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
@@ -70,7 +85,7 @@ const AppLayout: React.FC = () => {
                                 <span className="nav-text">{item.name}</span>
                             </Link>
                         ))}
-                        <button className="nav-item logout-btn">
+                        <button className="nav-item logout-btn" onClick={handleLogout} style={{ cursor: 'pointer', border: 'none', background: 'transparent', width: '100%', textAlign: 'left' }}>
                             <span className="nav-icon"><LogOut size={20} /></span>
                             <span className="nav-text">Logout</span>
                         </button>

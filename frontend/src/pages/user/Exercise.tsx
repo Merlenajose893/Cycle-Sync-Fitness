@@ -1,29 +1,37 @@
 import React, { useState } from 'react';
-import { Search, Plus, Dumbbell, Clock, Flame, TrendingUp, Calendar, ChevronRight, Play } from 'lucide-react';
+import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info } from 'lucide-react';
 import '../../styles/UserPages.css';
 
-const workouts = [
-  { id: '1', title: 'Upper Body Strength', type: 'Strength', duration: '45 min', calories: 320, muscles: ['Chest', 'Shoulders', 'Triceps'], exercises: 6, image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&h=300&fit=crop' },
-  { id: '2', title: 'HIIT Cardio Blast', type: 'Cardio', duration: '30 min', calories: 450, muscles: ['Full Body'], exercises: 8, image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&h=300&fit=crop' },
-  { id: '3', title: 'Yoga Flow - Recovery', type: 'Flexibility', duration: '40 min', calories: 180, muscles: ['Core', 'Hips', 'Back'], exercises: 12, image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=300&fit=crop' },
-  { id: '4', title: 'Leg Day Power', type: 'Strength', duration: '50 min', calories: 380, muscles: ['Quads', 'Hamstrings', 'Glutes'], exercises: 7, image: 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=600&h=300&fit=crop' },
-  { id: '5', title: 'Core & Abs Sculpt', type: 'Strength', duration: '25 min', calories: 200, muscles: ['Core', 'Obliques'], exercises: 10, image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=300&fit=crop' },
-  { id: '6', title: 'Morning Run Protocol', type: 'Cardio', duration: '35 min', calories: 350, muscles: ['Legs', 'Cardiovascular'], exercises: 1, image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&h=300&fit=crop' },
-];
+export interface ExerciseItem {
+  id: string;
+  title: string;
+  type: string;
+  duration: string;
+  calories: number;
+  muscles: string[];
+  exercisesCount: number;
+  image?: string;
+}
 
-const recentLogs = [
-  { date: 'Today', workout: 'Upper Body Strength', duration: '48 min', calories: 335 },
-  { date: 'Yesterday', workout: 'HIIT Cardio Blast', duration: '32 min', calories: 460 },
-  { date: 'Jul 26', workout: 'Yoga Flow - Recovery', duration: '40 min', calories: 175 },
-];
+export interface WorkoutLogItem {
+  id: string;
+  date: string;
+  workoutTitle: string;
+  duration: string;
+  caloriesBurned: number;
+}
 
 const Exercise: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'workouts' | 'history'>('workouts');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
 
-  const filtered = workouts.filter(w => {
-    const matchSearch = w.title.toLowerCase().includes(search.toLowerCase());
+  // Workouts and History start blank (populated dynamically when trainer assigns exercises)
+  const [workouts] = useState<ExerciseItem[]>([]);
+  const [historyLogs] = useState<WorkoutLogItem[]>([]);
+
+  const filteredWorkouts = workouts.filter((w) => {
+    const matchSearch = !search || w.title.toLowerCase().includes(search.toLowerCase());
     const matchFilter = filter === 'All' || w.type === filter;
     return matchSearch && matchFilter;
   });
@@ -31,88 +39,110 @@ const Exercise: React.FC = () => {
   return (
     <div className="up-page">
       <div className="up-page-header">
-        <div><h1>Exercise</h1><p>Browse workouts and track your progress</p></div>
-        <button className="up-btn up-btn-primary"><Plus size={16} /> Log Workout</button>
+        <div>
+          <h1>Exercise & Workouts</h1>
+          <p>View workouts created by your trainer and track your exercise logs</p>
+        </div>
       </div>
 
       <div className="up-tabs">
         <button className={`up-tab ${activeTab === 'workouts' ? 'active' : ''}`} onClick={() => setActiveTab('workouts')}>
-          <Dumbbell size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />Workouts
+          <Dumbbell size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />Trainer Workouts
         </button>
         <button className={`up-tab ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}>
-          <Calendar size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />History
+          <Calendar size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />Exercise History
         </button>
       </div>
 
+      {/* ═══════════ WORKOUTS TAB ═══════════ */}
       {activeTab === 'workouts' && (
         <>
           <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
             <div className="up-search" style={{ flex: 1, marginBottom: 0 }}>
               <Search size={18} className="up-search-icon" />
-              <input placeholder="Search workouts..." value={search} onChange={e => setSearch(e.target.value)} />
+              <input placeholder="Search trainer workouts..." value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
-            {['All', 'Strength', 'Cardio', 'Flexibility'].map(f => (
+            {['All', 'Strength', 'Cardio', 'Flexibility'].map((f) => (
               <button key={f} className={`up-btn up-btn-sm ${filter === f ? 'up-btn-primary' : ''}`} onClick={() => setFilter(f)}>{f}</button>
             ))}
           </div>
 
-          <div className="up-exercise-grid">
-            {filtered.map(w => (
-              <div key={w.id} className="up-card up-exercise-card">
-                <div style={{ height: 160, overflow: 'hidden' }}>
-                  <img src={w.image} alt={w.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
-                </div>
-                <div className="up-exercise-card-body">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <h3>{w.title}</h3>
-                    <span style={{ padding: '3px 10px', background: w.type === 'Strength' ? '#dbeafe' : w.type === 'Cardio' ? '#fef3c7' : '#ede9fe', color: w.type === 'Strength' ? '#2563eb' : w.type === 'Cardio' ? '#d97706' : '#7c3aed', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700 }}>{w.type}</span>
+          {filteredWorkouts.length === 0 ? (
+            <div className="up-card" style={{ textAlign: 'center', padding: '48px 24px', background: '#f8fafc', border: '1px dashed #cbd5e1' }}>
+              <Activity size={48} style={{ color: '#94a3b8', marginBottom: 12 }} />
+              <h3 style={{ margin: 0, color: '#334155', fontSize: '1.1rem', fontWeight: 700 }}>No Trainer Workouts Assigned Yet</h3>
+              <p style={{ margin: '8px 0 0', color: '#64748b', fontSize: '0.88rem', maxWidth: 460, marginInline: 'auto' }}>
+                Workouts and exercise routines created by your trainer will automatically appear here once assigned to your profile.
+              </p>
+            </div>
+          ) : (
+            <div className="up-exercise-grid">
+              {filteredWorkouts.map((w) => (
+                <div key={w.id} className="up-card up-exercise-card">
+                  {w.image && (
+                    <div style={{ height: 160, overflow: 'hidden' }}>
+                      <img src={w.image} alt={w.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  )}
+                  <div className="up-exercise-card-body">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <h3>{w.title}</h3>
+                      <span style={{ padding: '3px 10px', background: '#dbeafe', color: '#2563eb', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>{w.type}</span>
+                    </div>
+                    <div className="up-exercise-meta">
+                      <span><Dumbbell size={14} /> {w.duration}</span>
+                      <span><Flame size={14} /> {w.calories} kcal</span>
+                    </div>
                   </div>
-                  <div className="up-exercise-meta">
-                    <span><Clock size={14} /> {w.duration}</span>
-                    <span><Flame size={14} /> {w.calories} kcal</span>
-                    <span><Dumbbell size={14} /> {w.exercises} exercises</span>
-                  </div>
-                  <div className="up-exercise-tags">
-                    {w.muscles.map((m, i) => <span key={i} className="up-exercise-tag">{m}</span>)}
-                  </div>
                 </div>
-                <div className="up-exercise-footer">
-                  <button className="up-btn up-btn-sm"><Play size={14} /> Start</button>
-                  <button className="up-btn up-btn-sm up-btn-primary"><Plus size={14} /> Log</button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </>
       )}
 
+      {/* ═══════════ HISTORY TAB ═══════════ */}
       {activeTab === 'history' && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon blue"><Dumbbell size={24} /></div>
-              <div className="up-stat-content"><div className="label">This Week</div><div className="value">4</div><div className="change">+1 from last week</div></div>
+              <div className="up-stat-content"><div className="label">This Week</div><div className="value">{historyLogs.length}</div><div className="change">Workouts logged</div></div>
             </div>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon orange"><Flame size={24} /></div>
-              <div className="up-stat-content"><div className="label">Calories Burned</div><div className="value">1,430</div><div className="change">↑ 12%</div></div>
+              <div className="up-stat-content">
+                <div className="label">Calories Burned</div>
+                <div className="value">{historyLogs.reduce((acc, l) => acc + (l.caloriesBurned || 0), 0)}</div>
+                <div className="change">Total kcal</div>
+              </div>
             </div>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon green"><TrendingUp size={24} /></div>
-              <div className="up-stat-content"><div className="label">Streak</div><div className="value">7 days</div><div className="change">Personal best!</div></div>
+              <div className="up-stat-content"><div className="label">Streak</div><div className="value">{historyLogs.length > 0 ? 'Active' : '0 days'}</div></div>
             </div>
           </div>
 
-          {recentLogs.map((log, i) => (
-            <div key={i} className="up-card" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, cursor: 'pointer' }}>
-              <div className="up-stat-icon blue" style={{ width: 44, height: 44 }}><Dumbbell size={20} /></div>
-              <div style={{ flex: 1 }}>
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 2px' }}>{log.workout}</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>{log.date} • {log.duration} • {log.calories} kcal</p>
-              </div>
-              <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+          {historyLogs.length === 0 ? (
+            <div className="up-card" style={{ textAlign: 'center', padding: '40px 24px', background: '#f8fafc', border: '1px dashed #cbd5e1' }}>
+              <Info size={36} style={{ color: '#94a3b8', marginBottom: 8 }} />
+              <p style={{ fontWeight: 600, color: '#475569', margin: 0 }}>No Exercise History Logged</p>
+              <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: 4 }}>
+                Your completed workout logs will be listed here.
+              </p>
             </div>
-          ))}
+          ) : (
+            historyLogs.map((log) => (
+              <div key={log.id} className="up-card" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+                <div className="up-stat-icon blue" style={{ width: 44, height: 44 }}><Dumbbell size={20} /></div>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 2px' }}>{log.workoutTitle}</h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>{log.date} • {log.duration} • {log.caloriesBurned} kcal</p>
+                </div>
+                <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>

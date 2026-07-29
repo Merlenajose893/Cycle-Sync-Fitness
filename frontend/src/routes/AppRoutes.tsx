@@ -35,6 +35,7 @@ import ProtectedUserRoute from "../components/auth/ProtectedUserRoute";
 import ProtectedTrainerRoute from "../components/auth/ProtectedTrainerRoute";
 import AIPlanBuilder from "../pages/user/AIPlanBuilder";
 import AIPlanView from "../pages/user/AIPlanView";
+import AIPlanHistory from "../pages/user/AIPlanHistory";
 import WorkoutDetail from "../pages/user/WorkoutDetail";
 import Food from "../pages/user/Food";
 import Exercise from "../pages/user/Exercise";
@@ -67,7 +68,9 @@ function AppRoutes() {
                         <Route path="/app/profile" element={<Profile />} />
                         <Route path="/app/settings" element={<Settings />} />
                         <Route path="/app/ai-plan" element={<AIPlanBuilder />} />
+                        <Route path="/app/ai-plan/edit/:planId" element={<AIPlanBuilder />} />
                         <Route path="/app/ai-plan/view" element={<AIPlanView />} />
+                        <Route path="/app/ai-plan/history" element={<AIPlanHistory />} />
                         <Route path="/app/ai-plan/workout/:dayIndex" element={<WorkoutDetail />} />
                         <Route path="/app/food" element={<Food />} />
                         <Route path="/app/exercise" element={<Exercise />} />
