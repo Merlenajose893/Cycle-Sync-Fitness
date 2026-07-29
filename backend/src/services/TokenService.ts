@@ -106,8 +106,13 @@ async refreshTokens(refreshToken: string, res: Response): Promise<void> {
         throw new UnauthorizedError("Refresh token not recognized");
     }
 
-    await this.generateAndSetAccessToken(payload,res)
-    await this.generateAndSetRefreshToken(payload,res)
+    const newPayload = {
+    userId: payload.userId,
+    role: payload.role
+};
+
+    await this.generateAndSetAccessToken(newPayload,res)
+    await this.generateAndSetRefreshToken(newPayload,res)
     
 }
 

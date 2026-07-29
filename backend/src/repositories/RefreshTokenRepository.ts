@@ -14,7 +14,7 @@ constructor()
 }
 
 async findByUserId(userId: string): Promise<IRefreshToken[]|null> {
-    return this.model.findById({userId:new Types.ObjectId(userId)})
+    return this.model.find({userId:new Types.ObjectId(userId)})
 }
 async deleteByUserId(userId: string): Promise<void> {
     await  this.model.deleteMany({userId:new Types.ObjectId(userId)})

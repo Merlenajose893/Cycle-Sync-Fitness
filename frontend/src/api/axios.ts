@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -13,7 +14,7 @@ axiosInstance.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                await axiosInstance.post("/users/refresh-token");
+                await axiosInstance.post(API_ENDPOINTS.USER_AUTH.REFRESH);
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
                 // Reject the promise and let context/route-guards handle redirection
