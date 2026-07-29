@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RegisterPage from "../pages/user/Register";
 import Home from "../pages/user/Home";
@@ -25,6 +26,7 @@ import AppLayout from "../layouts/AppLayouts";
 import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
 import TrainerLayout from "../layouts/TrainerLayout";
+import FoodsAndRecipes from "../pages/trainer/FoodsAndRecipes";
 import BlockedPage from "../pages/common/BlockedPage";
 import About from "../pages/common/About";
 import TrainerPendingPage from "../pages/trainer/TrainerPending";
@@ -34,7 +36,12 @@ import ProtectedTrainerRoute from "../components/auth/ProtectedTrainerRoute";
 import AIPlanBuilder from "../pages/user/AIPlanBuilder";
 import AIPlanView from "../pages/user/AIPlanView";
 import WorkoutDetail from "../pages/user/WorkoutDetail";
-import AIPlanHistory from "../pages/user/AIPlanHistory";
+import Food from "../pages/user/Food";
+import Exercise from "../pages/user/Exercise";
+import Reports from "../pages/user/Reports";
+import Messages from "../pages/user/Messages";
+import Trainers from "../pages/user/Trainers";
+import Subscription from "../pages/user/Subscription";
 
 function AppRoutes() {
     return (
@@ -60,10 +67,14 @@ function AppRoutes() {
                         <Route path="/app/profile" element={<Profile />} />
                         <Route path="/app/settings" element={<Settings />} />
                         <Route path="/app/ai-plan" element={<AIPlanBuilder />} />
-                        <Route path="/app/ai-plan/edit/:planId" element={<AIPlanBuilder />} />
-                        <Route path="/app/ai-plan/history" element={<AIPlanHistory />} />
                         <Route path="/app/ai-plan/view" element={<AIPlanView />} />
                         <Route path="/app/ai-plan/workout/:dayIndex" element={<WorkoutDetail />} />
+                        <Route path="/app/food" element={<Food />} />
+                        <Route path="/app/exercise" element={<Exercise />} />
+                        <Route path="/app/reports" element={<Reports />} />
+                        <Route path="/app/messages" element={<Messages />} />
+                        <Route path="/app/trainer" element={<Trainers />} />
+                        <Route path="/app/premium" element={<Subscription />} />
                     </Route>
                 </Route>
 
@@ -91,6 +102,8 @@ function AppRoutes() {
                 <Route element={<ProtectedTrainerRoute allowedStatuses={["ACTIVE"]} />}>
                     <Route element={<TrainerLayout />}>
                         <Route path="/trainer" element={<TrainerDashboard />} />
+                        <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
+                        <Route path="/trainer/nutrition" element={<FoodsAndRecipes />} />
                     </Route>
                 </Route>
 
@@ -103,7 +116,8 @@ function AppRoutes() {
                 </Route>
             </Routes>
         </BrowserRouter>
-    );
+    )
 }
 
 export default AppRoutes;
+
