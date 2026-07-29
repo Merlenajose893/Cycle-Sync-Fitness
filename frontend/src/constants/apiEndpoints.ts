@@ -103,10 +103,47 @@ AI_PLAN:{
   HISTORY:"/api/ai-plans/history",
   STATUS:(id:string)=>`/api/ai-plans/${id}/status`,
   DELETE:(id:string)=>`/api/ai-plans/${id}`
-}
+},
 
 
 
+MEALS: {
+
+        LOG: "/api/meals/log",
+
+        DAY: (date: string) =>
+            `/api/meals/day/${date}`,
+
+        WEEK: (startDate: string) =>
+            `/api/meals/week/${startDate}`,
+
+        DELETE: (mealType: string) =>
+            `/api/meals/${mealType}`,
+
+        TARGET: "/api/meals/target",
+
+    },
+
+    RECIPES: {
+
+        BASE: "/api/recipes",
+
+        MINE: "/api/recipes/mine",
+
+        SEARCH: "/api/recipes/search",
+
+        FAVORITES: "/api/recipes/favorites",
+
+        BY_ID: (id: string) =>
+            `/api/recipes/${id}`,
+
+        FAVORITE: (id: string) =>
+            `/api/recipes/${id}/favorite`,
+
+        REVIEW: (id: string) =>
+            `/api/recipes/${id}/review`,
+
+    },
 
 
 
