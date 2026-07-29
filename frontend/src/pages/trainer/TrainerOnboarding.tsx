@@ -7,21 +7,16 @@ import {
     ArrowRight,
     ArrowLeft,
     User,
-    Dumbbell,
     Award,
-    Calendar,
     FileText,
     CheckCircle,
     Upload,
-    Clock,
-    MapPin,
-    Globe,
     Camera,
 } from 'lucide-react';
 import '../../styles/Auth.css';
 import '../../styles/TrainerPanel.css';
 
-const stepLabels = ['Profile', 'Expertise', 'Availability', 'Documents', 'Review'];
+const stepLabels = ['Profile', 'Expertise', 'Documents', 'Review'];
 
 const TrainerOnboarding: React.FC = () => {
     const navigate = useNavigate();
@@ -38,12 +33,6 @@ const TrainerOnboarding: React.FC = () => {
         certifications: '',
         qualifications: '',
         languages: [] as string[],
-        packageName: '',
-        packageSessions: '',
-        packagePrice: '',
-        preferredDays: [] as string[],
-        preferredTime: '',
-        sessionMode: '',
         location: '',
         idDocument: '',
         certFiles: '',
@@ -52,8 +41,8 @@ const TrainerOnboarding: React.FC = () => {
     const [idDocumentFile, setIdDocumentFile] = useState<File | null>(null);
     const [certificationFiles, setCertificationFiles] = useState<File[]>([]);
 
-    const totalSteps = 5;
-    const { updateProfile, updateCertifications, updatePackages, completeOnboarding, uploadAvatar, uploadDocuments, loading, error } = useTrainerOnboarding();
+    const totalSteps = 4;
+    const { updateProfile, updateCertifications, completeOnboarding, uploadAvatar, uploadDocuments, loading, error } = useTrainerOnboarding();
     const { login, trainer } = useTrainerContext();
 
     const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,14 +54,12 @@ const TrainerOnboarding: React.FC = () => {
                 setFormData(prev => ({ ...prev, profilePhoto: avatarUrl }));
                 showToast.success("Photo uploaded successfully");
             } catch (err) {
-                // error is already handled and potentially set by the hook, but we can also show a toast
                 showToast.error("Failed to upload photo");
             }
         }
     };
 
     const handleNext = async () => {
-        // --- Added Validation Checks ---
         if (step === 1 && (!formData.fullName || !formData.phone || !formData.gender)) {
             showToast.error("Please fill all required personal details");
             return;
@@ -81,15 +68,11 @@ const TrainerOnboarding: React.FC = () => {
             showToast.error("Please select at least one specialty and experience level");
             return;
         }
-        if (step === 3 && (!formData.packageName || !formData.packagePrice)) {
-            showToast.error("Please provide package details");
-            return;
-        }
-        if (step === 4 && (!idDocumentFile)) {
+        if (step === 3 && (!idDocumentFile)) {
             showToast.error("Please upload a valid ID document");
             return;
         }
-        if (step === 4 && !formData.agreeTerms) {
+        if (step === 3 && !formData.agreeTerms) {
             showToast.error("You must agree to the Terms of Service to proceed");
             return;
         }
@@ -118,18 +101,6 @@ const TrainerOnboarding: React.FC = () => {
                     });
                 }
 
-                if (formData.packageName && formData.packagePrice) {
-                    await updatePackages({
-                        packages: [{
-                            name: formData.packageName,
-                            sessions: Number(formData.packageSessions) || 1,
-                            duration: "1 Hour",
-                            price: Number(formData.packagePrice) || 0,
-                            popular: true
-                        }]
-                    });
-                }
-
                 if (idDocumentFile) {
                     const allDocs = [idDocumentFile, ...certificationFiles];
                     await uploadDocuments(allDocs);
@@ -142,11 +113,11 @@ const TrainerOnboarding: React.FC = () => {
                     login({ ...trainer, status: 'PENDING_APPROVAL' });
                 }
 
-                showToast.success("Application submitted successfully!"); // Success Toast
+                showToast.success("Application submitted successfully!");
                 navigate('/trainer/pending');
             } catch (err: any) {
                 console.error("Failed to submit onboarding data", err);
-                showToast.error(error || err.message || "Failed to submit application"); // Error Toast
+                showToast.error(error || err.message || "Failed to submit application");
             }
         }
     };
@@ -155,7 +126,7 @@ const TrainerOnboarding: React.FC = () => {
         if (step > 1) setStep(step - 1);
     };
 
-    const toggleArrayField = (field: 'specialty' | 'languages' | 'preferredDays', value: string) => {
+    const toggleArrayField = (field: 'specialty' | 'languages', value: string) => {
         setFormData((prev) => {
             const arr = prev[field];
             return {
@@ -167,7 +138,6 @@ const TrainerOnboarding: React.FC = () => {
 
     const specialties = ['Nutrition & Hormones', 'Fitness & Strength', 'Cycle Health', 'Mental Wellness', 'Yoga & Recovery', 'Weight Management'];
     const languages = ['English', 'Hindi', 'Spanish', 'French', 'German', 'Mandarin', 'Arabic'];
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     return (
         <div className="auth-wrapper" style={{ justifyContent: 'center', background: 'var(--bg-primary)' }}>
@@ -310,7 +280,7 @@ const TrainerOnboarding: React.FC = () => {
                                             background: formData.specialty.includes(s) ? '#f0fdfa' : 'white',
                                             cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s'
                                         }}>
-                                            {formData.specialty.includes(s) ? <CheckCircle size={18} color="#0d9488" /> : <Dumbbell size={18} color="var(--text-muted)" />}
+                                            {formData.specialty.includes(s) ? <CheckCircle size={18} color="#0d9488" /> : <div style={{ width: 18, height: 18, border: '1px solid var(--text-muted)', borderRadius: '50%' }} />}
                                             <span style={{ fontWeight: formData.specialty.includes(s) ? 600 : 400, fontSize: '0.9rem' }}>{s}</span>
                                         </div>
                                     ))}
@@ -359,87 +329,8 @@ const TrainerOnboarding: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Step 3: Availability */}
+                    {/* Step 3: Documents */}
                     {step === 3 && (
-                        <div className="animate-fadeIn">
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                                <Calendar size={24} color="#0d9488" />
-                                <h2 style={{ fontSize: '1.5rem', margin: 0 }}>Availability & Preferences</h2>
-                            </div>
-                            <p style={{ color: 'var(--text-secondary)', marginBottom: '28px' }}>Set your preferred schedule and session mode.</p>
-
-                            <div className="tp-form-row">
-                                <div className="tp-form-group">
-                                    <label>Starter Package Name</label>
-                                    <input type="text" placeholder="e.g. 1-Month Jumpstart"
-                                        value={formData.packageName}
-                                        onChange={(e) => setFormData({ ...formData, packageName: e.target.value })}
-                                    />
-                                </div>
-                                <div className="tp-form-group">
-                                    <label>Package Sessions</label>
-                                    <input type="number" placeholder="e.g. 12"
-                                        value={formData.packageSessions}
-                                        onChange={(e) => setFormData({ ...formData, packageSessions: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                            <div className="tp-form-group">
-                                <label>Package Price ($)</label>
-                                <input type="number" placeholder="e.g. 299"
-                                    value={formData.packagePrice}
-                                    onChange={(e) => setFormData({ ...formData, packagePrice: e.target.value })}
-                                />
-                            </div>
-                            <div className="tp-form-group">
-                                <label>Preferred Working Days</label>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
-                                    {days.map((day) => (
-                                        <span key={day} onClick={() => toggleArrayField('preferredDays', day)} style={{
-                                            padding: '8px 16px', borderRadius: 'var(--radius-full)', fontSize: '0.82rem',
-                                            fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                                            background: formData.preferredDays.includes(day) ? '#ccfbf1' : 'var(--bg-primary)',
-                                            color: formData.preferredDays.includes(day) ? '#0d9488' : 'var(--text-secondary)',
-                                            border: formData.preferredDays.includes(day) ? '1px solid #99f6e4' : '1px solid var(--border)',
-                                        }}>{day.slice(0, 3)}</span>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="tp-form-row">
-                                <div className="tp-form-group">
-                                    <label>Preferred Time Slot</label>
-                                    <select value={formData.preferredTime} onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}>
-                                        <option value="">Select...</option>
-                                        <option value="morning">Morning (6 AM - 12 PM)</option>
-                                        <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
-                                        <option value="evening">Evening (5 PM - 10 PM)</option>
-                                        <option value="flexible">Flexible</option>
-                                    </select>
-                                </div>
-                                <div className="tp-form-group">
-                                    <label>Session Mode</label>
-                                    <select value={formData.sessionMode} onChange={(e) => setFormData({ ...formData, sessionMode: e.target.value })}>
-                                        <option value="">Select...</option>
-                                        <option value="online">Online Only</option>
-                                        <option value="offline">In-Person Only</option>
-                                        <option value="both">Both</option>
-                                    </select>
-                                </div>
-                            </div>
-                            {(formData.sessionMode === 'offline' || formData.sessionMode === 'both') && (
-                                <div className="tp-form-group">
-                                    <label>Location / Gym Address</label>
-                                    <input type="text" placeholder="e.g. FitLife Gym, Koramangala, Bangalore"
-                                        value={formData.location}
-                                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Step 4: Documents */}
-                    {step === 4 && (
                         <div className="animate-fadeIn">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                                 <FileText size={24} color="#0d9488" />
@@ -515,8 +406,8 @@ const TrainerOnboarding: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Step 5: Review */}
-                    {step === 5 && (
+                    {/* Step 4: Review */}
+                    {step === 4 && (
                         <div className="animate-fadeIn">
                             <div style={{ textAlign: 'center', marginBottom: '28px' }}>
                                 <div style={{
@@ -534,7 +425,6 @@ const TrainerOnboarding: React.FC = () => {
                             {[
                                 { icon: User, title: 'Profile', items: [formData.fullName || 'Not set', formData.phone || 'Not set', formData.gender || 'Not set'] },
                                 { icon: Award, title: 'Expertise', items: [formData.specialty.join(', ') || 'Not set', `${formData.experience || 'Not set'} experience`, formData.certifications || 'No certifications'] },
-                                { icon: Calendar, title: 'Availability & Pricing', items: [`${formData.packageName || 'Starter Package'} ($${formData.packagePrice || '0'} for ${formData.packageSessions || '0'} sessions)`, formData.preferredDays.map(d => d.slice(0, 3)).join(', ') || 'Days not set', formData.sessionMode || 'Mode not set'] },
                             ].map((section, i) => {
                                 const Icon = section.icon;
                                 return (
