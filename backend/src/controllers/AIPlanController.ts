@@ -1,4 +1,4 @@
-import type {Request,Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../container/tokens.js";
 import type { IAIPlanService } from "../interfaces/services/IAIPlanService.js";
@@ -6,61 +6,80 @@ import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
 
 @injectable()
-export class AIPlanController{
-    constructor(@inject(TOKENS.IAIPlanService) private aiplanservice:IAIPlanService)
-    {
+export class AIPlanController {
+    constructor(@inject(TOKENS.IAIPlanService) private aiplanservice: IAIPlanService) {}
 
-    }
-
-    generatePlan=async (req:Request,res:Response,next:NextFunction) => {
+    generatePlan = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId=req.user?.userId!;
-            const result=await this.aiplanservice.generatePlans(userId,req.body);
-            successResponse(res,"Plan is generated",result,HttpStatus.OK)
+            const userId = req.user?.userId!;
+            const result = await this.aiplanservice.generatePlans(userId, req.body);
+            successResponse(res, "Plan generated successfully", result, HttpStatus.CREATED);
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
+    };
 
-    getActivePlan=async (req:Request,res:Response,next:NextFunction) => {
+    createDraftPlan = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId=req.user?.userId;
-            const result=await this.aiplanservice.getActivePlan(userId);
-            successResponse(res,"Avtive Plans are fetched",result,HttpStatus.OK)
+            const userId = req.user?.userId!;
+            const result = await this.aiplanservice.createDraftPlan(userId, req.body);
+            successResponse(res, "Draft plan created successfully", result, HttpStatus.CREATED);
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
-    getPlanHistory=async (req:Request,res:Response,next:NextFunction) => {
+    };
+
+    getActivePlan = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId=req.user?.userId;
-            const result=await this.aiplanservice.getPlanHistory(userId);
-            successResponse(res,"Plan History is fetched",result,HttpStatus.OK)
+            const userId = req.user?.userId!;
+            const result = await this.aiplanservice.getActivePlan(userId);
+            successResponse(res, "Active plan fetched successfully", result, HttpStatus.OK);
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
+    };
 
-    updatePlanStatus=async (req:Request,res:Response,next:NextFunction) => {
+    getPlanHistory = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const planId=req.params.id!;
-            const { status }=req.body;
-            const result=await this.aiplanservice.updatePlanStatus(planId,status);
-            successResponse(res,"Plan status updated",result,HttpStatus.OK)
-
+            const userId = req.user?.userId!;
+            const result = await this.aiplanservice.getPlanHistory(userId);
+            successResponse(res, "Plan history fetched successfully", result, HttpStatus.OK);
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
+    };
 
-    deletePlan=async (req:Request,res:Response,next:NextFunction) => {
+    updatePlanStatus = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const planId=req.params.id;
-            const result=await this.aiplanservice.deletePlan(planId);
-            successResponse(res,"Plans are deleted",result,HttpStatus.OK)
+            const userId = req.user?.userId!;
+            const planId = req.params.id!;
+            const { status } = req.body;
+            const result = await this.aiplanservice.updatePlanStatus(planId, userId, status);
+            successResponse(res, "Plan status updated successfully", result, HttpStatus.OK);
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
+    };
 
+    editPlan = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const userId = req.user?.userId!;
+            const planId = req.params.id!;
+            const result = await this.aiplanservice.editPlan(planId, userId, req.body);
+            successResponse(res, "Plan updated successfully", result, HttpStatus.OK);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    deletePlan = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const userId = req.user?.userId!;
+            const planId = req.params.id!;
+            await this.aiplanservice.deletePlan(planId, userId);
+            successResponse(res, "Plan deleted successfully", null, HttpStatus.OK);
+        } catch (error) {
+            next(error);
+        }
+    };
 }

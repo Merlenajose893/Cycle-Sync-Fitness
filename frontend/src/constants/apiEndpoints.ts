@@ -99,9 +99,11 @@ USER_ACCOUNT: {
 
 AI_PLAN:{
   GENERATE:"/api/ai-plans/generate",
+  DRAFT:"/api/ai-plans/draft",
   ACTIVE:"/api/ai-plans/active",
   HISTORY:"/api/ai-plans/history",
   STATUS:(id:string)=>`/api/ai-plans/${id}/status`,
+  EDIT:(id:string)=>`/api/ai-plans/${id}`,
   DELETE:(id:string)=>`/api/ai-plans/${id}`
 }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import { Goal, FitnessLevel, DietPreference } from '../../types/aiplan.types';
@@ -30,54 +30,96 @@ const DIET_PREFERENCES = [
 
 const AIPlanBuilder = () => {
     const navigate = useNavigate();
-    const { generatePlan, getActivePlan, loading } = useAIPlan();
-    
+    const { planId } = useParams<{ planId?: string }>();
+    const { generatePlan, createDraftPlan, editPlan, getActivePlan, getPlanHistory, loading } = useAIPlan();
+
     const [goal, setGoal] = useState('');
     const [fitnessLevel, setFitnessLevel] = useState('');
     const [daysPerWeek, setDaysPerWeek] = useState<number | null>(null);
     const [dietPreference, setDietPreference] = useState('');
+    const isEditMode = Boolean(planId);
 
-    const [currentStep] = useState(3); // Progress indicator
+    const [currentStep] = useState(3);
 
     useEffect(() => {
-        const checkActivePlan = async () => {
-            try {
-                const activePlan = await getActivePlan();
-                if (activePlan) {
-                    navigate('/app/ai-plan/view', { replace: true });
+        const checkOrLoadPlan = async () => {
+            if (isEditMode && planId) {
+                try {
+                    const history = await getPlanHistory();
+                    const target = history?.find(p => p._id === planId);
+                    if (target) {
+                        setGoal(target.inputs.goal);
+                        setFitnessLevel(target.inputs.fitnessLevel);
+                        setDaysPerWeek(target.inputs.daysPerWeek);
+                        setDietPreference(target.inputs.dietPreference);
+                    }
+                } catch (error) {
+                    console.error("Failed to load plan for editing", error);
                 }
-            } catch (error) {
-                // If no plan, just stay on the builder
-                console.log(error);
+            } else {
+                try {
+                    const activePlan = await getActivePlan();
+                    if (activePlan) {
+                        navigate('/app/ai-plan/view', { replace: true });
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
             }
         };
-        checkActivePlan();
-    }, [getActivePlan, navigate]);
+        checkOrLoadPlan();
+    }, [getActivePlan, getPlanHistory, isEditMode, navigate, planId]);
 
     const isFormValid = goal && fitnessLevel && daysPerWeek && dietPreference;
 
-    const handleGenerate = async () => {
+    const handleGenerateActive = async () => {
         if (!isFormValid) return;
         try {
-            await generatePlan({
+            if (isEditMode && planId) {
+                await editPlan(planId, {
+                    inputs: {
+                        goal: goal as Goal,
+                        fitnessLevel: fitnessLevel as FitnessLevel,
+                        daysPerWeek: daysPerWeek!,
+                        dietPreference: dietPreference as DietPreference,
+                    }
+                });
+                toast.success("Plan updated successfully!");
+            } else {
+                await generatePlan({
+                    goal: goal as Goal,
+                    fitnessLevel: fitnessLevel as FitnessLevel,
+                    daysPerWeek: daysPerWeek!,
+                    dietPreference: dietPreference as DietPreference,
+                });
+                toast.success("Active plan generated successfully!");
+            }
+            navigate('/app/ai-plan/view');
+        } catch (error) {
+            toast.error("Failed to process plan");
+        }
+    };
+
+    const handleSaveDraft = async () => {
+        if (!isFormValid) return;
+        try {
+            await createDraftPlan({
                 goal: goal as Goal,
                 fitnessLevel: fitnessLevel as FitnessLevel,
                 daysPerWeek: daysPerWeek!,
                 dietPreference: dietPreference as DietPreference,
             });
-            toast.success("Plan generated successfully!");
-            navigate('/app/ai-plan/view');
+            toast.success("Draft plan saved successfully!");
+            navigate('/app/ai-plan/history');
         } catch (error) {
-            toast.error("Failed to generate plan");
+            toast.error("Failed to save draft plan");
         }
     };
-    console.log(handleGenerate);
-    
 
     return (
         <div className="aiplan-page animate-fadeIn">
             <div className="aiplan-header">
-                <h2>AI Plan Builder</h2>
+                <h2>{isEditMode ? 'Edit AI Plan' : 'AI Plan Builder'}</h2>
                 <div className="aiplan-progress">
                     {[0, 1, 2, 3].map((i) => (
                         <span key={i} className={`progress-dot ${i < currentStep ? 'active' : ''}`} />
@@ -86,13 +128,13 @@ const AIPlanBuilder = () => {
             </div>
 
             <div className="aiplan-builder-card">
-                <div className="builder-badge">✦ AI PLAN BUILDER</div>
+                <div className="builder-badge">✦ {isEditMode ? 'EDIT MODE' : 'AI PLAN BUILDER'}</div>
                 <h1 className="builder-title">
-                    Build your <span className="text-gradient">plan</span>
+                    {isEditMode ? 'Update your ' : 'Build your '}
+                    <span className="text-gradient">plan</span>
                 </h1>
                 <p className="builder-subtitle">
-                    Tell us about yourself and our AI will craft a personalised workout and
-                    nutrition plan — just for you.
+                    Tell us about yourself and our AI will craft a personalised workout and nutrition plan.
                 </p>
 
                 {/* Goal */}
@@ -166,27 +208,51 @@ const AIPlanBuilder = () => {
                     </div>
                 </div>
 
-                {/* Generate Button */}
-                <button
-                    className={`generate-btn ${isFormValid ? '' : 'generate-btn-disabled'}`}
-                    onClick={handleGenerate}
-                    disabled={!isFormValid || loading}
-                    type="button"
-                >
-                    {loading ? (
-                        <>
-                            <span className="spinner" /> Generating...
-                        </>
-                    ) : (
-                        <>
-                            <span>+</span> Generate my plan
-                            <span className="ai-badge">AI</span>
-                        </>
-                    )}
-                </button>
+                {/* Action Buttons */}
+                <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+                    <button
+                        className={`generate-btn ${isFormValid ? '' : 'generate-btn-disabled'}`}
+                        onClick={handleGenerateActive}
+                        disabled={!isFormValid || loading}
+                        type="button"
+                        style={{ flex: 2 }}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="spinner" /> Processing...
+                            </>
+                        ) : (
+                            <>
+                                <span>+</span> {isEditMode ? 'Update & Activate' : 'Generate Active Plan'}
+                                <span className="ai-badge">AI</span>
+                            </>
+                        )}
+                    </button>
 
-                <p className="builder-footnote">
-                    ⓘ Your plan is generated by AI and updated weekly based on your progress.
+                    {!isEditMode && (
+                        <button
+                            className="btn-secondary"
+                            onClick={handleSaveDraft}
+                            disabled={!isFormValid || loading}
+                            type="button"
+                            style={{
+                                flex: 1,
+                                padding: '14px 20px',
+                                borderRadius: '14px',
+                                border: '1px solid #cbd5e1',
+                                background: '#f8fafc',
+                                color: '#334155',
+                                fontWeight: 600,
+                                cursor: isFormValid ? 'pointer' : 'not-allowed'
+                            }}
+                        >
+                            Save as Draft
+                        </button>
+                    )}
+                </div>
+
+                <p className="builder-footnote" style={{ marginTop: '16px' }}>
+                    ⓘ Your plan is generated by AI and updated based on your goals.
                 </p>
             </div>
         </div>

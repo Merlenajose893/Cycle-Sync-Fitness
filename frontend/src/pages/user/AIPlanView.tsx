@@ -4,6 +4,8 @@ import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import type { AIPlan } from '../../types/aiplan.types';
 import toast from 'react-hot-toast';
+import Modal from '../../components/common/Modal/Modal';
+import { Trash2, Archive, Edit, History, AlertCircle } from 'lucide-react';
 
 const DAY_ABBR: Record<string, string> = {
     MONDAY: 'MON', TUESDAY: 'TUE', WEDNESDAY: 'WED',
@@ -43,11 +45,13 @@ const MEAL_TIMES: Record<string, string> = {
 
 const AIPlanView = () => {
     const navigate = useNavigate();
-    const { getActivePlan, generatePlan, loading } = useAIPlan();
+    const { getActivePlan, generatePlan, updatePlanStatus, deletePlan, loading } = useAIPlan();
     
     const [activeTab, setActiveTab] = useState<'workout' | 'diet'>('workout');
     const [plan, setPlan] = useState<AIPlan | null>(null);
     const [fetching, setFetching] = useState(true);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchPlan = async () => {
@@ -77,10 +81,34 @@ const AIPlanView = () => {
         try {
             await generatePlan(plan.inputs);
             const fresh = await getActivePlan();
-            setPlan(fresh);
+            setPlan(fresh || null);
             toast.success("Plan regenerated!");
         } catch (error) {
             toast.error("Failed to regenerate plan");
+        }
+    };
+
+    const handleConfirmArchive = async () => {
+        if (!plan) return;
+        try {
+            await updatePlanStatus(plan._id, 'ARCHIVED');
+            toast.success("Plan archived");
+            setIsArchiveModalOpen(false);
+            navigate('/app/ai-plan/history');
+        } catch (error) {
+            toast.error("Failed to archive plan");
+        }
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!plan) return;
+        try {
+            await deletePlan(plan._id);
+            toast.success("Plan deleted successfully");
+            setIsDeleteModalOpen(false);
+            navigate('/app/ai-plan');
+        } catch (error) {
+            toast.error("Failed to delete plan");
         }
     };
 
@@ -99,6 +127,21 @@ const AIPlanView = () => {
 
     if (!plan) return null;
 
+    const getStatusStyle = (status: string) => {
+        switch (status) {
+            case 'ACTIVE':
+                return { bg: '#DCFCE7', text: '#15803D' };
+            case 'DRAFT':
+                return { bg: '#FEF3C7', text: '#B45309' };
+            case 'ARCHIVED':
+                return { bg: '#F1F5F9', text: '#64748B' };
+            default:
+                return { bg: '#E2E8F0', text: '#334155' };
+        }
+    };
+
+    const statusStyle = getStatusStyle(plan.status);
+
     return (
         <div className="aiplan-page animate-fadeIn">
             <div className="aiplan-header">
@@ -115,14 +158,59 @@ const AIPlanView = () => {
 
             <div className="plan-view-card">
                 {/* Top Bar */}
-                <div className="plan-top-bar">
+                <div className="plan-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <button className="back-link" onClick={() => navigate('/app/ai-plan')} type="button">
                         ← Back
                     </button>
+
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <button
+                            className="btn-secondary"
+                            onClick={() => navigate('/app/ai-plan/history')}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+                        >
+                            <History size={15} /> History
+                        </button>
+                        <button
+                            className="btn-secondary"
+                            onClick={() => navigate(`/app/ai-plan/edit/${plan._id}`)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+                        >
+                            <Edit size={15} /> Edit
+                        </button>
+                        {plan.status === 'ACTIVE' && (
+                            <button
+                                className="btn-secondary"
+                                onClick={() => setIsArchiveModalOpen(true)}
+                                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', color: '#64748b' }}
+                            >
+                                <Archive size={15} /> Archive
+                            </button>
+                        )}
+                        <button
+                            className="btn-danger"
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '8px', border: 'none', background: '#ef4444', color: '#fff', cursor: 'pointer' }}
+                        >
+                            <Trash2 size={15} /> Delete
+                        </button>
+                    </div>
                 </div>
 
                 <div className="plan-meta-row">
-                    <span className="ai-generated-badge">✦ AI GENERATED</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span className="ai-generated-badge">✦ AI GENERATED</span>
+                        <span style={{
+                            padding: '4px 10px',
+                            borderRadius: '12px',
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
+                            backgroundColor: statusStyle.bg,
+                            color: statusStyle.text
+                        }}>
+                            {plan.status}
+                        </span>
+                    </div>
                     <button className="regenerate-btn" onClick={handleRegenerate} disabled={loading} type="button">
                         {loading ? <span className="spinner" /> : <span>↻</span>} 
                         {loading ? ' Regenerating' : ' Regenerate'}
@@ -276,19 +364,33 @@ const AIPlanView = () => {
                         </div>
                     </div>
                 )}
-
-                {/* Upsell Banner */}
-                <div className="upsell-banner">
-                    <div className="upsell-icon">🔔</div>
-                    <div className="upsell-content">
-                        <h4>Want a nutritionist to review this?</h4>
-                        <p>Get personalised feedback from certified nutrition experts.</p>
-                    </div>
-                    <button className="upsell-btn" type="button">
-                        ⬆ Upgrade to Pro →
-                    </button>
-                </div>
             </div>
+
+            {/* Modal for Plan Archive */}
+            <Modal
+                isOpen={isArchiveModalOpen}
+                onClose={() => setIsArchiveModalOpen(false)}
+                title="Archive AI Plan"
+                confirmText="Archive Plan"
+                variant="primary"
+                onConfirm={handleConfirmArchive}
+                isLoading={loading}
+            >
+                <p>Are you sure you want to archive this AI plan? Archived plans will move to your plan history.</p>
+            </Modal>
+
+            {/* Modal for Plan Deletion */}
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Delete AI Plan"
+                confirmText="Delete Plan"
+                variant="danger"
+                onConfirm={handleConfirmDelete}
+                isLoading={loading}
+            >
+                <p>Are you sure you want to delete this AI plan? This action cannot be undone.</p>
+            </Modal>
         </div>
     );
 };

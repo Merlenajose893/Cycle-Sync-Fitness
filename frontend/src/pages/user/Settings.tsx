@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserProfile } from '../../hooks/profile/useUserProfile';
-import type { UserProfile,UpdateUserProfileDTO } from '../../types/profile.types';
-import { User, Bell, Shield, Palette, Trash2, Mail, Phone, Calendar, MapPin, Lock, Eye, Check } from 'lucide-react';
+import type { UserProfile, UpdateUserProfileDTO } from '../../types/profile.types';
+import { User, Bell, Shield, Palette, Trash2, Calendar, Lock, Eye, Check } from 'lucide-react';
 import { showToast } from '../../components/common/Toast/Toast';
+import Modal from '../../components/common/Modal/Modal';
 import '../../styles/UserSettings.css';
 
 const Settings: React.FC = () => {
-    const {getProfile,updateProfile,uploadAvatar,deleteAvatar,changePassword,deleteAccount,loading}=useUserProfile();
-    const [profile,setProfile]=useState<UserProfile|null>(null)
-    const [formData,setFormData]=useState<UpdateUserProfileDTO>({
-        firstName:"",
-        lastName:"",
-        bio:""
+    const navigate = useNavigate();
+    const { getProfile, updateProfile, uploadAvatar, deleteAvatar, changePassword, deleteAccount, loading } = useUserProfile();
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [formData, setFormData] = useState<UpdateUserProfileDTO>({
+        firstName: "",
+        lastName: "",
+        bio: ""
     });
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',
@@ -19,70 +22,51 @@ const Settings: React.FC = () => {
         confirmPassword: ''
     });
     const [showPassword, setShowPassword] = useState(false);
-    const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-) => {
-    e.preventDefault();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteConfirmPassword, setDeleteConfirmPassword] = useState('');
 
-    try {
-        const updatedProfile = await updateProfile(formData);
-
-        setProfile(updatedProfile);
-
-        showToast.success("Profile updated successfully!");
-    } catch (error) {
-        console.error(error);
-        showToast.error("Failed to update profile.");
-    }
-};
-
-    useEffect(()=>{
-        const fetchData=async () => {
+    useEffect(() => {
+        const fetchData = async () => {
             try {
-                const data=await getProfile();
-                setProfile(data)
+                const data = await getProfile();
+                setProfile(data);
             } catch (error) {
                 console.log(error);
-                
             }
-        }
+        };
         fetchData();
-    },[])
-    useEffect(()=>{
-        if(!profile) return;
-        setFormData({
-            firstName:profile.firstName,
-            lastName:profile.lastName,
-            bio:profile.bio,
-            bodyDetails:{
-                height:profile.bodyDetails?.height || 0,
-                weight:profile.bodyDetails?.weight || 0,
-                biologicalSex:profile.bodyDetails?.biologicalSex || '',
-                dateOfBirth:profile.bodyDetails?.dateOfBirth || ''
-            },
-            cycleSetUp:{
-                averageCycleLength:profile.cycleSetUp?.averageCycleLength || 28,
-                averagePeriodLength:profile.cycleSetUp?.averagePeriodLength || 5,
-                birthControl:profile.cycleSetUp?.birthControl || 'none',
-                lastPeriodStart:profile.cycleSetUp?.lastPeriodStart || ''
-            },
-            goals:{
-                primaryGoal:profile.goals?.primaryGoal || 'general_health',
-                targetWeight:profile.goals?.targetWeight || 0,
-                activityLevel:profile.goals?.activityLevel || 'moderatelyActive'
-            }
-        })
-    }, [profile])
-    const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-) => {
-  const { name, value } = e.target;
+    }, []);
 
-  setFormData((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
+    useEffect(() => {
+        if (!profile) return;
+        setFormData({
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            bio: profile.bio,
+            bodyDetails: {
+                height: profile.bodyDetails?.height || 0,
+                weight: profile.bodyDetails?.weight || 0,
+                biologicalSex: profile.bodyDetails?.biologicalSex || '',
+                dateOfBirth: profile.bodyDetails?.dateOfBirth || ''
+            },
+            cycleSetUp: {
+                averageCycleLength: profile.cycleSetUp?.averageCycleLength || 28,
+                averagePeriodLength: profile.cycleSetUp?.averagePeriodLength || 5,
+                birthControl: profile.cycleSetUp?.birthControl || 'none',
+                lastPeriodStart: profile.cycleSetUp?.lastPeriodStart || ''
+            },
+            goals: {
+                primaryGoal: profile.goals?.primaryGoal || 'general_health',
+                targetWeight: profile.goals?.targetWeight || 0,
+                activityLevel: profile.goals?.activityLevel || 'moderatelyActive'
+            }
+        });
+    }, [profile]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
     const handleBodyDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -124,6 +108,8 @@ const Settings: React.FC = () => {
         try {
             await updateProfile(formData);
             showToast.success("Profile updated successfully!");
+            // 5.2 Redirect to profile page after save
+            navigate('/app/profile');
         } catch (error) {
             console.error("Failed to update profile", error);
             showToast.error("Failed to update profile");
@@ -177,13 +163,15 @@ const Settings: React.FC = () => {
         }
     };
 
-    const handleDeleteAccount = async () => {
-        const password = prompt("Please enter your password to confirm account deletion:");
-        if (!password) return;
+    const confirmDeleteAccount = async () => {
+        if (!deleteConfirmPassword) {
+            showToast.error("Please enter your password to confirm");
+            return;
+        }
         try {
-            await deleteAccount({ password });
+            await deleteAccount({ password: deleteConfirmPassword });
             showToast.success("Account deleted successfully!");
-            window.location.href = '/login'; 
+            window.location.href = '/login';
         } catch (error) {
             console.error("Failed to delete account", error);
             showToast.error("Failed to delete account");
@@ -229,7 +217,7 @@ const Settings: React.FC = () => {
                         </div>
                     </button>
 
-                    <button className="settings-nav-item danger" onClick={handleDeleteAccount}>
+                    <button className="settings-nav-item danger" onClick={() => setIsDeleteModalOpen(true)}>
                         <div className="nav-item-left">
                             <Trash2 size={16} />
                             Danger Zone
@@ -251,7 +239,7 @@ const Settings: React.FC = () => {
                             <div className="profile-photo-section">
                                 <div className="photo-avatar" style={{ overflow: 'hidden' }}>
                                     {profile?.avatarUrl ? (
-                                        <img src={profile.avatarUrl} alt="Avatar" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                                        <img src={profile.avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
                                         (profile?.firstName?.[0] || '') + (profile?.lastName?.[0] || 'U')
                                     )}
@@ -286,7 +274,6 @@ const Settings: React.FC = () => {
                                     <input type="text" className="form-input" name='lastName' value={formData.lastName} onChange={handleChange} />
                                 </div>
 
-
                                 <div className="form-field">
                                     <label className="field-label">Date of Birth</label>
                                     <div className="input-wrapper">
@@ -294,12 +281,10 @@ const Settings: React.FC = () => {
                                         <input type="date" className="form-input" name='dateOfBirth' value={formData.bodyDetails?.dateOfBirth || ''} onChange={handleBodyDetailsChange} />
                                     </div>
                                 </div>
-                                
 
                                 <div className="form-field full-width">
                                     <label className="field-label">Bio</label>
                                     <textarea className="form-textarea" name='bio' value={formData.bio} onChange={handleChange}></textarea>
-                                    <span className="field-hint">62/160 characters</span>
                                 </div>
                             </div>
                         </div>
@@ -310,7 +295,7 @@ const Settings: React.FC = () => {
                             <div className="form-grid">
                                 <div className="form-field">
                                     <label className="field-label">Primary Goal</label>
-                                    <select className="form-input" name="primaryGoal" value={formData.goals?.primaryGoal || 'general_health'} onChange={(e) => setFormData(prev => ({...prev, goals: {...prev.goals, primaryGoal: e.target.value as any}}))}>
+                                    <select className="form-input" name="primaryGoal" value={formData.goals?.primaryGoal || 'general_health'} onChange={(e) => setFormData(prev => ({ ...prev, goals: { ...prev.goals, primaryGoal: e.target.value as any } }))}>
                                         <option value="weight_loss">Weight Loss</option>
                                         <option value="muscle_gain">Muscle Gain</option>
                                         <option value="hormone_balance">Hormone Balance</option>
@@ -319,7 +304,7 @@ const Settings: React.FC = () => {
                                 </div>
                                 <div className="form-field">
                                     <label className="field-label">Activity Level</label>
-                                    <select className="form-input" name="activityLevel" value={formData.goals?.activityLevel || 'moderatelyActive'} onChange={(e) => setFormData(prev => ({...prev, goals: {...prev.goals, activityLevel: e.target.value as any}}))}>
+                                    <select className="form-input" name="activityLevel" value={formData.goals?.activityLevel || 'moderatelyActive'} onChange={(e) => setFormData(prev => ({ ...prev, goals: { ...prev.goals, activityLevel: e.target.value as any } }))}>
                                         <option value="sedentary">Sedentary</option>
                                         <option value="lightActive">Lightly Active</option>
                                         <option value="moderatelyActive">Moderately Active</option>
@@ -327,7 +312,7 @@ const Settings: React.FC = () => {
                                 </div>
                                 <div className="form-field">
                                     <label className="field-label">Target Weight (kg)</label>
-                                    <input type="number" className="form-input" name="targetWeight" value={formData.goals?.targetWeight || 0} onChange={(e) => setFormData(prev => ({...prev, goals: {...prev.goals, targetWeight: parseFloat(e.target.value)}}))} />
+                                    <input type="number" className="form-input" name="targetWeight" value={formData.goals?.targetWeight || 0} onChange={(e) => setFormData(prev => ({ ...prev, goals: { ...prev.goals, targetWeight: parseFloat(e.target.value) } }))} />
                                 </div>
                             </div>
                         </div>
@@ -335,31 +320,6 @@ const Settings: React.FC = () => {
                         {/* Cycle Configuration */}
                         <div>
                             <h3 className="form-group-title">Cycle Configuration</h3>
-
-                            <div className="cycle-stats">
-                                <div className="cycle-stat-box">
-                                    <input
-                                        type="range"
-                                        name="averageCycleLength"
-                                        min="21"
-                                        max="35"
-                                        value={formData.cycleSetUp?.averageCycleLength ?? 28}
-                                        onChange={handleCycleSetupChange}
-                                        style={{display: 'none'}}
-                                    />
-                                    <span className="cycle-stat-value">{formData.cycleSetUp?.averageCycleLength ?? 28}</span>
-                                    <span className="cycle-stat-label">Cycle Length (days)</span>
-                                </div>
-                                <div className="cycle-stat-box">
-                                    <span className="cycle-stat-value">{formData.cycleSetUp?.averagePeriodLength ?? 5}</span>
-                                    <span className="cycle-stat-label">Period Length (days)</span>
-                                </div>
-                                <div className="cycle-stat-box">
-                                    <span className="cycle-stat-value">{formData.cycleSetUp?.lastPeriodStart || 'Not set'}</span>
-                                    <span className="cycle-stat-label">Last Period Start</span>
-                                </div>
-                            </div>
-
                             <div className="form-grid">
                                 <div className="slider-group">
                                     <div className="slider-field">
@@ -437,38 +397,39 @@ const Settings: React.FC = () => {
                                 <Lock size={14} /> Update Password
                             </button>
                         </div>
-
                     </div>
 
                     <div className="settings-footer">
-                        <button className="btn-cancel" onClick={() => setFormData(profile ? {
-                            firstName: profile.firstName,
-                            lastName: profile.lastName,
-                            bio: profile.bio,
-                            bodyDetails: {
-                                height: profile.bodyDetails?.height || 0,
-                                weight: profile.bodyDetails?.weight || 0,
-                                biologicalSex: profile.bodyDetails?.biologicalSex || '',
-                                dateOfBirth: profile.bodyDetails?.dateOfBirth || ''
-                            },
-                            cycleSetUp: {
-                                averageCycleLength: profile.cycleSetUp?.averageCycleLength || 28,
-                                averagePeriodLength: profile.cycleSetUp?.averagePeriodLength || 5,
-                                birthControl: profile.cycleSetUp?.birthControl || 'none',
-                                lastPeriodStart: profile.cycleSetUp?.lastPeriodStart || ''
-                            },
-                            goals: {
-                                primaryGoal: profile.goals?.primaryGoal || 'general_health',
-                                targetWeight: profile.goals?.targetWeight || 0,
-                                activityLevel: profile.goals?.activityLevel || 'moderatelyActive'
-                            }
-                        } : formData)}>Cancel</button>
+                        <button className="btn-cancel" onClick={() => navigate('/app/profile')}>Cancel</button>
                         <button className="btn-save" onClick={handleSave} disabled={loading}>
                             <Check size={16} /> {loading ? 'Saving...' : 'Save Changes'}
                         </button>
                     </div>
                 </div>
             </div>
+
+            {/* Custom Modal for Account Deletion (5.4) */}
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Delete Account"
+                confirmText="Delete Account"
+                variant="danger"
+                onConfirm={confirmDeleteAccount}
+                isLoading={loading}
+            >
+                <p style={{ marginBottom: '16px' }}>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '0.875rem', fontWeight: 600 }}>Enter your password to confirm:</label>
+                    <input
+                        type="password"
+                        className="form-input"
+                        value={deleteConfirmPassword}
+                        onChange={(e) => setDeleteConfirmPassword(e.target.value)}
+                        placeholder="Your current password"
+                    />
+                </div>
+            </Modal>
         </div>
     );
 };
