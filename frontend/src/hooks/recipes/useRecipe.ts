@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 
-import { recipeService } from "../../services/recipes/recipe.service";
+import { recipeService } from "../../services/recipes/recipeService";
 
 import type {
     Recipe,
