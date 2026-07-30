@@ -12,6 +12,8 @@ import {
     updateRecipeSchema,
     reviewSchema
 } from "../validators/recipe.validator.js";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
+import { upload } from "../middlewares/upload.js";
 
 const router = Router();
 
@@ -19,8 +21,7 @@ const recipeController = container.resolve(RecipeController);
 
 router.post(
     "/",
-    authMiddleware,
-    roleMiddleware("trainer"),
+    trainerAuthMiddleware,
     validate(createRecipeSchema),
     recipeController.createRecipe
 );

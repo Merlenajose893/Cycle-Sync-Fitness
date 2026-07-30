@@ -3,7 +3,7 @@ import type { IRecipe } from "../../models/Recpe.js";
 import type { PaginatedResult } from "../../types/paginated.result.js";
 
 export interface IRecipeService{
-    createRecipe(trainerId:string,data:CreateRecipeDTO):Promise<IRecipe>;
+    createRecipe(trainerId:string,data:CreateRecipeDTO,file:Express.Multer.File):Promise<IRecipe>;
     updateRecipe(trainerId:string,recipeId:string,data:UpdateRecipeDTO):Promise<IRecipe>;
     deleteRecipe(trainerId:string,recipeId:string):Promise<void>;
     getTrainerRecipes(trainerId:string):Promise<IRecipe[]>;

@@ -15,13 +15,18 @@ import type {
 export const recipeService = {
 
     async createRecipe(
-        data: CreateRecipePayload
+        data: CreateRecipePayload | FormData
     ): Promise<Recipe> {
+
+        const isFormData = data instanceof FormData;
 
         const response =
             await axiosInstance.post(
                 API_ENDPOINTS.RECIPES.BASE,
-                data
+                data,
+                isFormData
+                    ? { headers: { "Content-Type": "multipart/form-data" } }
+                    : undefined
             );
             console.log(response.data);
             
@@ -32,13 +37,18 @@ export const recipeService = {
 
     async updateRecipe(
         recipeId: string,
-        data: UpdateRecipePayload
+        data: UpdateRecipePayload | FormData
     ): Promise<Recipe> {
+
+        const isFormData = data instanceof FormData;
 
         const response =
             await axiosInstance.put(
                 API_ENDPOINTS.RECIPES.BY_ID(recipeId),
-                data
+                data,
+                isFormData
+                    ? { headers: { "Content-Type": "multipart/form-data" } }
+                    : undefined
             );
 
         return response.data;
