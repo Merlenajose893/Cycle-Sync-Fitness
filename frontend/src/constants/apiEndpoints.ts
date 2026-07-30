@@ -147,7 +147,18 @@ MEALS: {
 
     },
 
+    WORKOUT_PROGRAMS: {
+        BASE: "/api/workout-programs",
+        TRAINER: "/api/workout-programs/trainer",
+        ACTIVE: "/api/workout-programs/active",
+        BY_ID: (id: string) => `/api/workout-programs/${id}`,
+        ASSIGN: (id: string) => `/api/workout-programs/${id}/assign`,
+    },
 
-
-    
+    WORKOUT_LOGS: {
+        BASE: "/api/workout-logs",
+        DAILY: "/api/workout-logs/daily",
+        HISTORY: "/api/workout-logs/history",
+        BY_EXERCISE: (exerciseName: string) => `/api/workout-logs/exercise/${encodeURIComponent(exerciseName)}`,
+    },
 }

@@ -6,14 +6,13 @@ import { RecipeController } from "../controllers/RecipeController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
 import { validate } from "../middlewares/validate.js";
+import { upload } from "../middlewares/upload.js";
 
 import {
     createRecipeSchema,
     updateRecipeSchema,
     reviewSchema
 } from "../validators/recipe.validator.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { upload } from "../middlewares/upload.js";
 
 const router = Router();
 
@@ -21,7 +20,9 @@ const recipeController = container.resolve(RecipeController);
 
 router.post(
     "/",
-    trainerAuthMiddleware,
+    authMiddleware,
+    roleMiddleware("trainer"),
+    upload.single("image"),
     validate(createRecipeSchema),
     recipeController.createRecipe
 );
@@ -30,6 +31,7 @@ router.put(
     "/:id",
     authMiddleware,
     roleMiddleware("trainer"),
+    upload.single("image"),
     validate(updateRecipeSchema),
     recipeController.updateRecipe
 );

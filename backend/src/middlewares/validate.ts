@@ -1,19 +1,35 @@
-import type { Request,Response,NextFunction } from "express";
-import {z} from "zod"
+import type { Request, Response, NextFunction } from "express";
+import { z } from "zod";
 import { BadRequestError } from "../errors/index.js";
-export const validate=(schema:z.ZodSchema)=>{
-    return(req:Request,res:Response,next:NextFunction):void=>{
-        const result=schema.safeParse(req.body)
-        if(!result.success)
-        {
-            const errors=result.error.issues.map((err)=>({
-                field:err.path.join("."),
-                message:err.message,
-            }))
 
-            throw new BadRequestError(JSON.stringify(errors))
+export const validate = (schema: z.ZodSchema) => {
+    return (req: Request, res: Response, next: NextFunction): void => {
+        if (req.body && typeof req.body === "object") {
+            if (typeof req.body.data === "string") {
+                try {
+                    req.body = JSON.parse(req.body.data);
+                } catch (e) {}
+            } else {
+                Object.keys(req.body).forEach((key) => {
+                    if (typeof req.body[key] === "string") {
+                        try {
+                            req.body[key] = JSON.parse(req.body[key]);
+                        } catch (e) {}
+                    }
+                });
+            }
         }
-        req.body=result.data;
+
+        const result = schema.safeParse(req.body);
+        if (!result.success) {
+            const errors = result.error.issues.map((err) => ({
+                field: err.path.join("."),
+                message: err.message,
+            }));
+
+            throw new BadRequestError(JSON.stringify(errors));
+        }
+        req.body = result.data;
         next();
-    }
-}
+    };
+};

@@ -125,8 +125,6 @@ const FoodsAndRecipes: React.FC = () => {
   const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [recipeForm, setRecipeForm] = useState<RecipeFormState>(emptyRecipeForm);
-  const [selectedRecipeFile, setSelectedRecipeFile] = useState<File | null>(null);
-  const [recipeImagePreview, setRecipeImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -215,15 +213,11 @@ const FoodsAndRecipes: React.FC = () => {
   const openCreateRecipe = () => {
     setEditingRecipe(null);
     setRecipeForm(emptyRecipeForm);
-    setSelectedRecipeFile(null);
-    setRecipeImagePreview(null);
     setShowRecipeModal(true);
   };
 
   const openEditRecipe = (recipe: Recipe) => {
     setEditingRecipe(recipe);
-    setSelectedRecipeFile(null);
-    setRecipeImagePreview(recipe.imageUrl || null);
     setRecipeForm({
       title: recipe.title || '',
       description: recipe.description || '',
@@ -243,22 +237,6 @@ const FoodsAndRecipes: React.FC = () => {
       isPublished: recipe.isPublished ?? true,
     });
     setShowRecipeModal(true);
-  };
-
-  const handleRecipeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file');
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size exceeds 5MB limit');
-        return;
-      }
-      setSelectedRecipeFile(file);
-      setRecipeImagePreview(URL.createObjectURL(file));
-    }
   };
 
   const handleSaveRecipe = async () => {
@@ -306,17 +284,15 @@ const FoodsAndRecipes: React.FC = () => {
     let success = false;
     if (editingRecipe && (editingRecipe._id || (editingRecipe as any).id)) {
       const id = editingRecipe._id || (editingRecipe as any).id;
-      success = await updateRecipe(id, payload, selectedRecipeFile);
+      success = await updateRecipe(id, payload);
     } else {
-      success = await createRecipe(payload, selectedRecipeFile);
+      success = await createRecipe(payload);
     }
 
     setIsSubmitting(false);
 
     if (success) {
       setShowRecipeModal(false);
-      setSelectedRecipeFile(null);
-      setRecipeImagePreview(null);
       fetchRecipes({}, 1, 50);
     }
   };
@@ -625,23 +601,9 @@ const FoodsAndRecipes: React.FC = () => {
                 <div className="tp-form-group"><label>Fat (g)</label><input type="number" value={recipeForm.fat} onChange={(e) => setRecipeForm({ ...recipeForm, fat: Number(e.target.value) })} /></div>
               </div>
               <div className="tp-form-group">
-                <label>Upload Recipe Image</label>
-                <input type="file" accept="image/*" onChange={handleRecipeFileChange} />
+                <label>Image URL</label>
+                <input type="text" placeholder="https://images.unsplash.com/..." value={recipeForm.imageUrl} onChange={(e) => setRecipeForm({ ...recipeForm, imageUrl: e.target.value })} />
               </div>
-              <div className="tp-form-group">
-                <label>Or Image URL</label>
-                <input type="text" placeholder="https://images.unsplash.com/..." value={recipeForm.imageUrl} onChange={(e) => { setRecipeForm({ ...recipeForm, imageUrl: e.target.value }); setRecipeImagePreview(e.target.value); }} />
-              </div>
-              {(recipeImagePreview || recipeForm.imageUrl) && (
-                <div className="tp-form-group">
-                  <label>Image Preview</label>
-                  <img
-                    src={recipeImagePreview || recipeForm.imageUrl}
-                    alt="Recipe Preview"
-                    style={{ width: "100%", maxHeight: "160px", objectFit: "cover", borderRadius: "8px", border: "1px solid var(--border-color, #e5e7eb)" }}
-                  />
-                </div>
-              )}
               <div className="tp-form-group">
                 <label>Ingredients (one per line, e.g. "1 cup Oats")</label>
                 <textarea placeholder={'1 cup Oats\n200g Greek Yogurt\n1 scoop Protein Powder'} value={recipeForm.ingredients} onChange={(e) => setRecipeForm({ ...recipeForm, ingredients: e.target.value })} rows={4} />
