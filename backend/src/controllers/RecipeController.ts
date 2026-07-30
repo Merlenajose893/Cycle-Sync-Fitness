@@ -28,7 +28,8 @@ export class RecipeController {
             const result =
             await this.recipeService.createRecipe(
                 trainerId,
-                req.body
+                req.body,
+                req.file
             );
 
             successResponse(

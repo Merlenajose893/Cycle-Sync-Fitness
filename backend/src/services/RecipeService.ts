@@ -6,16 +6,24 @@ import type { PaginatedResult } from "../types/paginated.result.js";
 import { TOKENS } from "../container/tokens.js";
 import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.js";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/index.js";
+import type { IImageService } from "../interfaces/services/IImageService.js";
 @injectable()
 export class RecipeService implements IRecipeService{
-    constructor(@inject(TOKENS.IRecipeRepository) private reciperepository:IRecipeRepository)
+    constructor(@inject(TOKENS.IRecipeRepository) private reciperepository:IRecipeRepository ,@inject(TOKENS.IImageService) private imageService:IImageService)
     {
 
     }
-    createRecipe=async(trainerId: string, data: CreateRecipeDTO): Promise<IRecipe> =>{
+    createRecipe=async(trainerId: string, data: CreateRecipeDTO,file:Express.Multer.File): Promise<IRecipe> =>{
+        let imageUrl=data.imageUrl;
+        if(file)
+        {
+            const uploadImageResult=await this.imageService.uploadImage(file);
+            imageUrl=uploadImageResult.url
+        }
         const recipe=await this.reciperepository.create({
             trainerId,
             ...data,
+            imageUrl,
             favorites:[],
             reviews:[],
             averageRating:0

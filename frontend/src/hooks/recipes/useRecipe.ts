@@ -205,112 +205,139 @@ export const useRecipe = () => {
 
 
     const createRecipe = useCallback(
-        async(
-            payload:CreateRecipePayload
-        ):Promise<boolean>=>{
+        async (
+            payload: CreateRecipePayload | FormData,
+            imageFile?: File | null
+        ): Promise<boolean> => {
 
+            try {
 
-        try{
+                setLoading(true);
+                setError(null);
 
-            setLoading(true);
-            setError(null);
+                let requestData: CreateRecipePayload | FormData = payload;
 
+                if (imageFile) {
+                    const formData = new FormData();
+                    formData.append("image", imageFile);
 
-            await recipeService.createRecipe(
-                payload
-            );
+                    // Append all payload fields to FormData
+                    if (payload instanceof FormData) {
+                        requestData = payload;
+                    } else {
+                        Object.entries(payload).forEach(([key, value]) => {
+                            if (typeof value === "object") {
+                                formData.append(key, JSON.stringify(value));
+                            } else {
+                                formData.append(key, String(value));
+                            }
+                        });
+                        requestData = formData;
+                    }
+                }
 
+                await recipeService.createRecipe(requestData);
 
-            return true;
+                return true;
 
+            } catch (err: unknown) {
 
-        }catch(err:unknown){
+                if (axios.isAxiosError(err)) {
 
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.CREATE_FAILED
+                    );
 
-            if(axios.isAxiosError(err)){
+                } else {
 
-                setError(
-                    err.response?.data.message ||
-                    "Failed to create recipe"
-                );
+                    setError(
+                        RECIPE_MESSAGES.CREATE_UNEXPECTED
+                    );
 
-            }else{
+                }
 
-                setError(
-                    "Unexpected error occurred while creating recipe"
-                );
+                return false;
+
+            } finally {
+
+                setLoading(false);
 
             }
 
-
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
 
     const updateRecipe = useCallback(
-        async(
-            id:string,
-            payload:UpdateRecipePayload
-        ):Promise<boolean>=>{
+        async (
+            id: string,
+            payload: UpdateRecipePayload | FormData,
+            imageFile?: File | null
+        ): Promise<boolean> => {
 
+            try {
 
-        try{
+                setLoading(true);
+                setError(null);
 
-            setLoading(true);
-            setError(null);
+                let requestData: UpdateRecipePayload | FormData = payload;
 
+                if (imageFile) {
+                    const formData = new FormData();
+                    formData.append("image", imageFile);
 
-            await recipeService.updateRecipe(
-                id,
-                payload
-            );
+                    if (payload instanceof FormData) {
+                        requestData = payload;
+                    } else {
+                        Object.entries(payload).forEach(([key, value]) => {
+                            if (value !== undefined) {
+                                if (typeof value === "object") {
+                                    formData.append(key, JSON.stringify(value));
+                                } else {
+                                    formData.append(key, String(value));
+                                }
+                            }
+                        });
+                        requestData = formData;
+                    }
+                }
 
-
-            return true;
-
-
-        }catch(err:unknown){
-
-
-            if(axios.isAxiosError(err)){
-
-                setError(
-                    err.response?.data.message ||
-                    "Failed to update recipe"
+                await recipeService.updateRecipe(
+                    id,
+                    requestData
                 );
 
-            }else{
+                return true;
 
-                setError(
-                    "Unexpected error occurred while updating recipe"
-                );
+            } catch (err: unknown) {
+
+                if (axios.isAxiosError(err)) {
+
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.UPDATE_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.UPDATE_UNEXPECTED
+                    );
+
+                }
+
+                return false;
+
+            } finally {
+
+                setLoading(false);
 
             }
 
-
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
