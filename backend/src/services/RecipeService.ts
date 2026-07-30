@@ -119,8 +119,8 @@ export class RecipeService implements IRecipeService{
                 limit,
                 totalPages,
                 totalItems, 
-                hasNextPage,
-                hasPreviousPage
+                hasNextPage:true,
+                hasPreviousPage:true
             }
         }
     }

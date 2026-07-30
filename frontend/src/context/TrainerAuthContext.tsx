@@ -54,8 +54,13 @@ const login=(trainerData:Trainer)=>{
     setTrainer(trainerData);
 }
 const logout=async () => {
-    await logoutTrainer();
-    setTrainer(null);
+    try {
+        await logoutTrainer();
+    } catch (error) {
+        console.warn("Trainer server logout error, clearing session anyway:", error);
+    } finally {
+        setTrainer(null);
+    }
 }
 
 return (

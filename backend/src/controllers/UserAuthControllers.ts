@@ -54,13 +54,7 @@ export class UserAuthController {
         res: Response
     ): Promise<void> => {
 
-        const userId =
-            req.user?.userId;
-
-            if(!userId)
-            {
-                throw new UnauthorizedError("User ID is missing")
-            }
+        const userId = req.user?.userId || "";
 
         await this.userAuthService
             .logoutuser({userId},res);

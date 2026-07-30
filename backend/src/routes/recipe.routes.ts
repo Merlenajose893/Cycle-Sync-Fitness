@@ -4,7 +4,7 @@ import { container } from "tsyringe";
 import { RecipeController } from "../controllers/RecipeController.js";
 
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { trainerAuthMiddleware } from "../middlewares/trainerAuthMiddleware.js";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
 import { validate } from "../middlewares/validate.js";
 
 import {
@@ -19,27 +19,31 @@ const recipeController = container.resolve(RecipeController);
 
 router.post(
     "/",
-    trainerAuthMiddleware,
+    authMiddleware,
+    roleMiddleware("trainer"),
     validate(createRecipeSchema),
     recipeController.createRecipe
 );
 
 router.put(
     "/:id",
-    trainerAuthMiddleware,
+    authMiddleware,
+    roleMiddleware("trainer"),
     validate(updateRecipeSchema),
     recipeController.updateRecipe
 );
 
 router.delete(
     "/:id",
-    trainerAuthMiddleware,
+    authMiddleware,
+    roleMiddleware("trainer"),
     recipeController.deleteRecipe
 );
 
 router.get(
     "/mine",
-    trainerAuthMiddleware,
+    authMiddleware,
+    roleMiddleware("trainer"),
     recipeController.getTrainerRecipes
 );
 

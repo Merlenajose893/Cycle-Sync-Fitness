@@ -117,8 +117,11 @@ async refreshTokens(refreshToken: string, res: Response): Promise<void> {
 }
 
 async clearTokens(userId: string, res: Response): Promise<void> {
-    await this.refreshTokenRepository.deleteByUserId(userId);
-    res.clearCookie("access_token")
+    if (userId) {
+        await this.refreshTokenRepository.deleteByUserId(userId);
+    }
+    res.clearCookie("access_token");
+    res.clearCookie("refreshToken");
 }
 
 

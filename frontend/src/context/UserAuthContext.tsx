@@ -69,8 +69,13 @@ export const UserAuthProvider = ({
   };
 
   const logout = async () => {
-    await logoutUser();
-    setUser(null);
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.warn("Server logout returned an error, clearing local user session anyway:", error);
+    } finally {
+      setUser(null);
+    }
   };
 
   const googleAuth = async (credential: string) => {

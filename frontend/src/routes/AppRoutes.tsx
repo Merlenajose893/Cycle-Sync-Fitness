@@ -33,6 +33,8 @@ import TrainerPendingPage from "../pages/trainer/TrainerPending";
 import TrainerRejectedPage from "../pages/trainer/TrainerRejectd";
 import ProtectedUserRoute from "../components/auth/ProtectedUserRoute";
 import ProtectedTrainerRoute from "../components/auth/ProtectedTrainerRoute";
+import PublicUserRoute from "../components/auth/PublicUserRoute";
+import PublicTrainerRoute from "../components/auth/PublicTrainerRoute";
 import AIPlanBuilder from "../pages/user/AIPlanBuilder";
 import AIPlanView from "../pages/user/AIPlanView";
 import AIPlanHistory from "../pages/user/AIPlanHistory";
@@ -51,14 +53,18 @@ function AppRoutes() {
                 {/* ── Public Routes ── */}
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/verify-otp" element={<VerifyOtp />} />
-                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/reset-password" element={<ResetPasswordPage />} />
-                <Route path="/verification-success" element={<VerificationSuccess />} />
-                <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/blocked" element={<BlockedPage />} />
+
+                {/* ── Public Guest-Only User Routes ── */}
+                <Route element={<PublicUserRoute />}>
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/verify-otp" element={<VerifyOtp />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/verification-success" element={<VerificationSuccess />} />
+                    <Route path="/onboarding" element={<Onboarding />} />
+                </Route>
 
                 {/* ── Protected User Routes ── */}
                 <Route element={<ProtectedUserRoute />}>
@@ -81,13 +87,15 @@ function AppRoutes() {
                     </Route>
                 </Route>
 
-                {/* ── Trainer Public Routes ── */}
-                <Route path="/trainer/register" element={<TrainerRegister />} />
-                <Route path="/trainer/login" element={<TrainerLogin />} />
-                <Route path="/trainer/verify-otp" element={<TrainerVerifyEmail />} />
-                <Route path="/trainer/forgot-password" element={<TrainerForgotPassword />} />
-                <Route path="/trainer/reset-password" element={<TrainerResetPassword />} />
-                <Route path="/trainer/success" element={<TrainerVerificationSuccess />} />
+                {/* ── Trainer Public Guest-Only Routes ── */}
+                <Route element={<PublicTrainerRoute />}>
+                    <Route path="/trainer/register" element={<TrainerRegister />} />
+                    <Route path="/trainer/login" element={<TrainerLogin />} />
+                    <Route path="/trainer/verify-otp" element={<TrainerVerifyEmail />} />
+                    <Route path="/trainer/forgot-password" element={<TrainerForgotPassword />} />
+                    <Route path="/trainer/reset-password" element={<TrainerResetPassword />} />
+                    <Route path="/trainer/success" element={<TrainerVerificationSuccess />} />
+                </Route>
 
                 {/* ── Protected Trainer Routes ── */}
                 <Route element={<ProtectedTrainerRoute allowedStatuses={["ONBOARDING", "REJECTED"]} />}>

@@ -14,6 +14,7 @@ const TrainerRejectedPage = () => {
       await logoutTrainer();
     } catch {
       // Logout failed
+      
     }
     navigate("/trainer/login");
   };

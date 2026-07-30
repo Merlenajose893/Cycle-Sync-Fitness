@@ -111,7 +111,7 @@ const Login = () => {
             }
 
             showToast.success("Welcome back!");
-            navigate("/app"); 
+            navigate("/app", { replace: true }); 
         } catch (error: any) {
             showToast.error(
                 error.response?.data?.message || "Google Sign-In failed"

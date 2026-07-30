@@ -88,23 +88,23 @@ const TrainerLogin: React.FC = () => {
 
             switch (trainer.status) {
                 case "REGISTERED":
-                    navigate("/trainer/verify-otp");
+                    navigate("/trainer/verify-otp", { replace: true });
                     break;
 
                 case "ONBOARDING":
-                    navigate("/trainer/onboarding");
+                    navigate("/trainer/onboarding", { replace: true });
                     break;
 
                 case "PENDING_APPROVAL":
-                    navigate("/trainer/pending");
+                    navigate("/trainer/pending", { replace: true });
                     break;
 
                 case "ACTIVE":
-                    navigate("/trainer/dashboard");
+                    navigate("/trainer/dashboard", { replace: true });
                     break;
 
                 case "REJECTED":
-                    navigate("/trainer/rejected");
+                    navigate("/trainer/rejected", { replace: true });
                     break;
 
                 default:

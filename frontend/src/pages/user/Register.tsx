@@ -163,7 +163,7 @@ const Register = () => {
 
     showToast.success("Welcome!");
 
-    navigate("/app"); 
+    navigate("/app", { replace: true }); 
   } catch (error: any) {
     showToast.error(
       error.response?.data?.message || "Google Sign-In failed"

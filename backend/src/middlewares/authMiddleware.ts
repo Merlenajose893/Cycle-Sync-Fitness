@@ -14,12 +14,11 @@ export const authMiddleware=(req:Request,res:Response,next:NextFunction):void=>{
 
     try {
         const decoded=jwt.verify(token,process.env.JWT_SECRET as string) as TokenPayload;
-        if(decoded.role!=="user")
-        {
-            throw new UnauthorizedError("Insufficient Permissions")
-        }
+        
         req.user=decoded;
         next();
+
+
     } catch (error) {
         console.log(error);
         throw new UnauthorizedError("Invalid access token")

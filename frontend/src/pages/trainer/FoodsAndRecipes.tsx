@@ -137,9 +137,11 @@ const FoodsAndRecipes: React.FC = () => {
     plan.assignedTo.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const filteredRecipes = recipes.filter((recipe) =>
-    recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    recipe.category.toLowerCase().includes(searchQuery.toLowerCase())
+  const recipeList = Array.isArray(recipes) ? recipes : [];
+  const filteredRecipes = recipeList.filter((recipe) =>
+    recipe.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    recipe.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    recipe.dietType?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   /* Plan Handlers */

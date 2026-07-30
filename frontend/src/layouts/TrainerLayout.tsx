@@ -4,12 +4,14 @@ import {
     LayoutDashboard, Users, MessageSquare, Dumbbell,
     Package, Apple, Calendar, User, LogOut, Menu, X, Bell
 } from 'lucide-react';
+import { useTrainerContext } from '../context/TrainerAuthContext';
 import '../styles/TrainerLayout.css';
 
 const TrainerLayout: React.FC = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
+    const { logout } = useTrainerContext();
 
     const menuItems = [
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/trainer/dashboard' },
@@ -30,9 +32,14 @@ const TrainerLayout: React.FC = () => {
         return location.pathname.startsWith(path);
     };
 
-    const handleLogout = () => {
-        // Clear trainer auth state here later
-        navigate('/trainer/login');
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Trainer logout failed", error);
+        } finally {
+            navigate('/trainer/login', { replace: true });
+        }
     };
 
     return (

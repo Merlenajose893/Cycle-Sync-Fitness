@@ -190,7 +190,8 @@ const Food: React.FC = () => {
   const existingMealLog = dayLog?.meals?.find((m) => m.mealType === activeBackendMealType);
 
   // Filter trainer recipes based on search input
-  const filteredTrainerRecipes = recipes.filter((r) => {
+  const recipeList = Array.isArray(recipes) ? recipes : [];
+  const filteredTrainerRecipes = recipeList.filter((r) => {
     const matchesSearch = !search || r.title.toLowerCase().includes(search.toLowerCase()) || r.description?.toLowerCase().includes(search.toLowerCase());
     return matchesSearch;
   });
@@ -602,7 +603,7 @@ const Food: React.FC = () => {
               />
             )}
             <p style={{ color: '#64748b', fontSize: '0.9rem' }}>{selectedRecipeDetail.description}</p>
-            
+
             <div style={{ display: 'flex', gap: '16px', margin: '16px 0', background: '#f8fafc', padding: '12px', borderRadius: '8px' }}>
               <div><strong>Prep Time:</strong> {selectedRecipeDetail.prepTime || 15} mins</div>
               <div><strong>Servings:</strong> {selectedRecipeDetail.servings || 1}</div>

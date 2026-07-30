@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 
 import { recipeService } from "../../services/recipes/recipeService";
+import { RECIPE_MESSAGES } from "../../constants/messages";
 
 import type {
     Recipe,
@@ -36,448 +37,462 @@ export const useRecipe = () => {
     const fetchRecipes = useCallback(
         async (
             filters: RecipeFilters,
-            page:number = 1,
-            limit:number = 10
-        ):Promise<RecipeListResponse | undefined> => {
+            page: number = 1,
+            limit: number = 10
+        ): Promise<RecipeListResponse | undefined> => {
 
 
-        try {
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            const data =
-                await recipeService.getRecipes(
-                    filters,
-                    page,
-                    limit
-                );
+                setLoading(true);
+                setError(null);
 
 
-            setRecipes(data.data);
+                const data =
+                    await recipeService.getRecipes(
+                        filters,
+                        page,
+                        limit
+                    );
+
+                const recipeArray = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data?.data)
+                    ? data.data
+                    : Array.isArray(data?.data?.recipes)
+                    ? data.data.recipes
+                    : [];
+
+                setRecipes(recipeArray);
 
 
-            return data;
+                return data;
 
 
-        } catch(err:unknown){
+            } catch (err: unknown) {
 
 
-            if(axios.isAxiosError(err)){
+                if (axios.isAxiosError(err)) {
 
-                setError(
-                    err.response?.data.message ||
-                    "Failed to fetch recipes"
-                );
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.FETCH_FAILED
+                    );
 
-            }else{
+                } else {
 
-                setError(
-                    "Unexpected error occurred while fetching recipes"
-                );
+                    setError(
+                        RECIPE_MESSAGES.FETCH_UNEXPECTED
+                    );
+
+                }
+
+            } finally {
+
+                setLoading(false);
 
             }
 
-        } finally {
 
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
     const searchRecipes = useCallback(
-        async(
-            query:string,
-            page:number = 1,
-            limit:number = 10
-        ):Promise<RecipeListResponse | undefined> => {
+        async (
+            query: string,
+            page: number = 1,
+            limit: number = 10
+        ): Promise<RecipeListResponse | undefined> => {
 
 
-        try {
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            const data =
-                await recipeService.searchRecipes(
-                    query,
-                    page,
-                    limit
-                );
+                setLoading(true);
+                setError(null);
 
 
-            setRecipes(data.data);
+                const data =
+                    await recipeService.searchRecipes(
+                        query,
+                        page,
+                        limit
+                    );
+
+                const recipeArray = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data?.data)
+                    ? data.data
+                    : Array.isArray(data?.data?.recipes)
+                    ? data.data.recipes
+                    : [];
+
+                setRecipes(recipeArray);
 
 
-            return data;
+                return data;
 
 
-        }catch(err:unknown){
+            } catch (err: unknown) {
 
 
-            if(axios.isAxiosError(err)){
+                if (axios.isAxiosError(err)) {
 
-                setError(
-                    err.response?.data.message ||
-                    "Failed to search recipes"
-                );
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.SEARCH_FAILED
+                    );
 
-            }else{
+                } else {
 
-                setError(
-                    "Unexpected error occurred while searching recipes"
-                );
+                    setError(
+                        RECIPE_MESSAGES.SEARCH_UNEXPECTED
+                    );
+
+                }
+
+            } finally {
+
+                setLoading(false);
 
             }
 
-        }finally{
 
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
     const fetchRecipeById = useCallback(
-        async(
-            id:string
-        ):Promise<Recipe | undefined>=>{
+        async (
+            id: string
+        ): Promise<Recipe | undefined> => {
 
 
-        try{
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            const data =
-                await recipeService.getRecipeById(
-                    id
-                );
+                setLoading(true);
+                setError(null);
 
 
-            setRecipe(data);
+                const data =
+                    await recipeService.getRecipeById(
+                        id
+                    );
 
 
-            return data;
+                setRecipe(data);
 
 
-        }catch(err:unknown){
+                return data;
 
 
-            if(axios.isAxiosError(err)){
+            } catch (err: unknown) {
 
-                setError(
-                    err.response?.data.message ||
-                    "Failed to fetch recipe"
-                );
 
-            }else{
+                if (axios.isAxiosError(err)) {
 
-                setError(
-                    "Unexpected error occurred while fetching recipe"
-                );
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.FETCH_BY_ID_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.FETCH_BY_ID_UNEXPECTED
+                    );
+
+                }
+
+            } finally {
+
+                setLoading(false);
 
             }
 
-        }finally{
 
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
 
     const createRecipe = useCallback(
-        async(
-            payload:CreateRecipePayload
-        ):Promise<boolean>=>{
+        async (
+            payload: CreateRecipePayload
+        ): Promise<boolean> => {
 
 
-        try{
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            await recipeService.createRecipe(
-                payload
-            );
+                setLoading(true);
+                setError(null);
 
 
-            return true;
-
-
-        }catch(err:unknown){
-
-
-            if(axios.isAxiosError(err)){
-
-                setError(
-                    err.response?.data.message ||
-                    "Failed to create recipe"
+                await recipeService.createRecipe(
+                    payload
                 );
 
-            }else{
 
-                setError(
-                    "Unexpected error occurred while creating recipe"
-                );
+                return true;
+
+
+            } catch (err: unknown) {
+
+
+                if (axios.isAxiosError(err)) {
+
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.CREATE_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.CREATE_UNEXPECTED
+                    );
+
+                }
+
+
+                return false;
+
+
+            } finally {
+
+                setLoading(false);
 
             }
 
 
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
 
     const updateRecipe = useCallback(
-        async(
-            id:string,
-            payload:UpdateRecipePayload
-        ):Promise<boolean>=>{
+        async (
+            id: string,
+            payload: UpdateRecipePayload
+        ): Promise<boolean> => {
 
 
-        try{
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            await recipeService.updateRecipe(
-                id,
-                payload
-            );
+                setLoading(true);
+                setError(null);
 
 
-            return true;
-
-
-        }catch(err:unknown){
-
-
-            if(axios.isAxiosError(err)){
-
-                setError(
-                    err.response?.data.message ||
-                    "Failed to update recipe"
+                await recipeService.updateRecipe(
+                    id,
+                    payload
                 );
 
-            }else{
 
-                setError(
-                    "Unexpected error occurred while updating recipe"
-                );
+                return true;
+
+
+            } catch (err: unknown) {
+
+
+                if (axios.isAxiosError(err)) {
+
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.UPDATE_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.UPDATE_UNEXPECTED
+                    );
+
+                }
+
+
+                return false;
+
+
+            } finally {
+
+                setLoading(false);
 
             }
 
 
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
 
     const deleteRecipe = useCallback(
-        async(
-            id:string
-        ):Promise<boolean>=>{
+        async (
+            id: string
+        ): Promise<boolean> => {
 
 
-        try{
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            await recipeService.deleteRecipe(
-                id
-            );
+                setLoading(true);
+                setError(null);
 
 
-            return true;
-
-
-        }catch(err:unknown){
-
-
-            if(axios.isAxiosError(err)){
-
-                setError(
-                    err.response?.data.message ||
-                    "Failed to delete recipe"
+                await recipeService.deleteRecipe(
+                    id
                 );
 
-            }else{
 
-                setError(
-                    "Unexpected error occurred while deleting recipe"
-                );
+                return true;
+
+
+            } catch (err: unknown) {
+
+
+                if (axios.isAxiosError(err)) {
+
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.DELETE_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.DELETE_UNEXPECTED
+                    );
+
+                }
+
+
+                return false;
+
+
+            } finally {
+
+                setLoading(false);
 
             }
 
 
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
 
     const toggleFavorite = useCallback(
-        async(
-            id:string
-        ):Promise<boolean>=>{
+        async (
+            id: string
+        ): Promise<boolean> => {
 
 
-        try{
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            await recipeService.toggleFavorite(
-                id
-            );
+                setLoading(true);
+                setError(null);
 
 
-            return true;
-
-
-        }catch(err:unknown){
-
-
-            if(axios.isAxiosError(err)){
-
-                setError(
-                    err.response?.data.message ||
-                    "Failed to update favorite"
+                await recipeService.toggleFavorite(
+                    id
                 );
 
-            }else{
 
-                setError(
-                    "Unexpected error occurred while updating favorite"
-                );
+                return true;
+
+
+            } catch (err: unknown) {
+
+
+                if (axios.isAxiosError(err)) {
+
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.FAVORITE_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.FAVORITE_UNEXPECTED
+                    );
+
+                }
+
+
+                return false;
+
+
+            } finally {
+
+                setLoading(false);
 
             }
 
 
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 
 
 
     const addReview = useCallback(
-        async(
-            id:string,
-            payload:ReviewPayload
-        ):Promise<boolean>=>{
+        async (
+            id: string,
+            payload: ReviewPayload
+        ): Promise<boolean> => {
 
 
-        try{
+            try {
 
-            setLoading(true);
-            setError(null);
-
-
-            await recipeService.addReview(
-                id,
-                payload
-            );
+                setLoading(true);
+                setError(null);
 
 
-            return true;
-
-
-        }catch(err:unknown){
-
-
-            if(axios.isAxiosError(err)){
-
-                setError(
-                    err.response?.data.message ||
-                    "Failed to add review"
+                await recipeService.addReview(
+                    id,
+                    payload
                 );
 
-            }else{
 
-                setError(
-                    "Unexpected error occurred while adding review"
-                );
+                return true;
+
+
+            } catch (err: unknown) {
+
+
+                if (axios.isAxiosError(err)) {
+
+                    setError(
+                        err.response?.data.message ||
+                        RECIPE_MESSAGES.REVIEW_FAILED
+                    );
+
+                } else {
+
+                    setError(
+                        RECIPE_MESSAGES.REVIEW_UNEXPECTED
+                    );
+
+                }
+
+
+                return false;
+
+
+            } finally {
+
+                setLoading(false);
 
             }
 
 
-            return false;
-
-
-        }finally{
-
-            setLoading(false);
-
-        }
-
-
-    },[]);
+        }, []);
 
 
 

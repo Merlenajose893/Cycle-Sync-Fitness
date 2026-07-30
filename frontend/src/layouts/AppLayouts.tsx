@@ -6,7 +6,7 @@ import {
     User, Settings, Users, LogOut,
     ChevronRight, Menu, X, Bell, Sparkles, Brain
 } from 'lucide-react';
-import { useUserAuth } from '../hooks/auth/useUserAuth';
+import { useUserContext } from '../context/UserAuthContext';
 import toast from 'react-hot-toast';
 import '../styles/AppLayout.css';
 
@@ -14,7 +14,7 @@ const AppLayout: React.FC = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
-    const { logoutUser } = useUserAuth();
+    const { logout } = useUserContext();
 
     const menuItems = [
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/app/dashboard' },
@@ -34,12 +34,12 @@ const AppLayout: React.FC = () => {
 
     const handleLogout = async () => {
         try {
-            await logoutUser();
+            await logout();
             toast.success("Logged out successfully");
         } catch (error) {
             console.error("Logout failed", error);
         } finally {
-            navigate('/login');
+            navigate('/login', { replace: true });
         }
     };
 
