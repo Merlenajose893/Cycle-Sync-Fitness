@@ -19,6 +19,7 @@ import mealLogRoutes from './routes/meal.log.routes.js';
 import recipeRoutes from './routes/recipe.routes.js';
 import workoutProgramRoutes from './routes/workoutProgram.routes.js';
 import workoutLogRoutes from './routes/workoutLog.routes.js';
+import trainerPackageRoutes from './routes/trainerPackage.routes.js';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -51,6 +52,7 @@ app.use("/api/meals", mealLogRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/workout-programs", workoutProgramRoutes);
 app.use("/api/workout-logs", workoutLogRoutes);
+app.use("/api/trainer-packages",trainerPackageRoutes);
 
 app.use(errorHandler);
 
