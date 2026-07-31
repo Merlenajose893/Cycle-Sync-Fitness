@@ -27,4 +27,6 @@ export const TOKENS = {
   IWorkoutProgramRepository: Symbol.for("IWorkoutProgramRepository"),
   IWorkoutLogService: Symbol.for("IWorkoutLogService"),
   IWorkoutProgramService: Symbol.for("IWorkoutProgramService"),
+  ITrainerPackageRepository:Symbol.for("ITrainerPackageRepository"),
+  ITrainerPackageService:Symbol.for("ITrainerPackageService")
 };
