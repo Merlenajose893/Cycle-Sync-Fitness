@@ -1,116 +1,112 @@
 import { useState } from "react";
 import axios from "axios";
-// import { userOnboardingService } from "../../services/onboarding/useronboardingService";
-import type { updateBodyDetailsDTO,updateCycleSetUpDTO,updateGoalsDTO,useronboardingStatus } from "../../types/useronboarding.types";
+import type { updateBodyDetailsDTO, updateCycleSetUpDTO, updateGoalsDTO, useronboardingStatus } from "../../types/useronboarding.types";
 import { userOnboardingService } from "../../services/onboarding/useronboardingService";
-export const useUserOnboarding=()=>{
-    const [loading,setLoading]=useState(false);
-    const [error,setError]=useState<string|null>(null);
+import { parseErrorMessage } from "../../utils/errorParser";
 
-    const getOnboardingStatus=async ():Promise<useronboardingStatus> => {
+export const useUserOnboarding = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const getOnboardingStatus = async (): Promise<useronboardingStatus> => {
         try {
             setLoading(true)
             setError(null)
-            const response=await userOnboardingService.getOnboardingStatus();
+            const response = await userOnboardingService.getOnboardingStatus();
             return response.data;
-        } catch (error:unknown) {
-            if(axios.isAxiosError(error))
-            {
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
                 setError(error.response?.data?.message ?? "Failed to fetch onboarding status")
-            
+
             }
-            else{
+            else {
                 setError("Unexpected error occured");
             }
             throw error;
         }
-        finally{
+        finally {
             setLoading(false);
         }
     }
-    const updateBodyDetails=async (data:updateBodyDetailsDTO) => {
+    const updateBodyDetails = async (data: updateBodyDetailsDTO) => {
         try {
             setLoading(true);
             setError(null);
-            const response=await userOnboardingService.updateBodyDetails(data);
-        } catch (error:unknown) {
-            if(axios.isAxiosError(error))
-            {
-                setError(error.response?.data?.message??"Failed to update Body details")
+            const response = await userOnboardingService.updateBodyDetails(data);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data?.message ?? "Failed to update Body details")
             }
-            else{
+            else {
                 setError("Unexpected error occured")
             }
             throw error;
         }
 
-        finally{
+        finally {
             setLoading(false);
         }
     };
 
-    const updateCycleSetUp=async (data:updateCycleSetUpDTO) => {
+    const updateCycleSetUp = async (data: updateCycleSetUpDTO) => {
         try {
             setLoading(true);
             setError(null);
-            const response=await userOnboardingService.updateCycleSetUp(data);
+            const response = await userOnboardingService.updateCycleSetUp(data);
             return response.data;
-        } catch (error:unknown) {
-            if(axios.isAxiosError(error))
-            {
-                setError(error.response?.data?.message??"Failed to update cycel setup");
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data?.message ?? "Failed to update cycel setup");
             }
-            else{
+            else {
                 setError("Unexpected error occured");
             }
             throw error;
         }
-        finally{
+        finally {
             setLoading(false);
         }
     };
 
-    const updateGoals=async (data:updateGoalsDTO) => {
+    const updateGoals = async (data: updateGoalsDTO) => {
         try {
             setLoading(true);
             setError(null);
-            const response=await userOnboardingService.updateGoals(data);
-        } catch (error:unknown) {
-            if(axios.isAxiosError(error))
-            {
-                setError(error.response?.data.message??"Failed to update Goals");
+            const response = await userOnboardingService.updateGoals(data);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data.message ?? "Failed to update Goals");
             }
-            else{
+            else {
                 setError("Unexpected error occured")
             }
             throw error;
         }
-        finally{
+        finally {
             setLoading(false);
         }
     }
-    const completeOnboarding=async () => {
+    const completeOnboarding = async () => {
         try {
             setLoading(true);
             setError(null);
             return await userOnboardingService.completeOnboarding();
 
-        } catch (error:unknown) {
-            if(axios.isAxiosError(error))
-            {
-                setError(error.response?.data.message?? "Failed to complete onboarding")
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data.message ?? "Failed to complete onboarding")
             }
-            else{
+            else {
                 setError("Unexpected Error");
             }
             throw error;
-            
+
         }
 
-        finally{
+        finally {
             setLoading(false)
         }
     };
 
-    return{loading,error,getOnboardingStatus,updateBodyDetails,updateCycleSetUp,updateGoals,completeOnboarding}
+    return { loading, error, getOnboardingStatus, updateBodyDetails, updateCycleSetUp, updateGoals, completeOnboarding }
 }

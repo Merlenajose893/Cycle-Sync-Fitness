@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import {TOKENS}
+import {TOKENS} from "../container/tokens.js"
 import type { CreatePackageDTO, UpdatePackageDTO } from "../dtos/trainerPackage.dto.js";
 import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.js";
 import type { ITrainerPackage } from "../models/TrainerPackage.js";
@@ -11,7 +11,7 @@ export class TrainerPackageService implements ITrainerPackageService{
     {
         
     }
-    createPackage=async(trainerId: string, data: CreatePackageDTO): Promise<ITrainerPackage> {
+    createPackage=async(trainerId: string, data: CreatePackageDTO): Promise<ITrainerPackage> =>{
         
         const package=await this.trainerpackagerepository.create({
             trainerId,
@@ -21,7 +21,7 @@ export class TrainerPackageService implements ITrainerPackageService{
         return package;
 
     }
-    updatePackage=async(trainerId: string, data: UpdatePackageDTO, packageId: string): Promise<ITrainerPackage> {
+    updatePackage=async(trainerId: string, data: UpdatePackageDTO, packageId: string): Promise<ITrainerPackage> =>{
         const package=await this.trainerpackagerepository.findPackageById(packageId);
         if(!package)
         {
@@ -36,7 +36,7 @@ export class TrainerPackageService implements ITrainerPackageService{
         return updatedPackage;
     }
 
-    deletePackage=async(trainerId: string, packageId: string): Promise<void> {
+    deletePackage=async(trainerId: string, packageId: string): Promise<void> =>{
         const package=await this.trainerpackagerepository.findPackageById(packageId);
         if(!package)
         {
@@ -50,12 +50,12 @@ export class TrainerPackageService implements ITrainerPackageService{
         await this.trainerpackagerepository.save(package)
     }
 
-    getActivePackages=async(trainerId: string, isActive: true): Promise<ITrainerPackage[]> {
+    getActivePackages=async(trainerId: string, isActive: true): Promise<ITrainerPackage[]> =>{
         const packages=await this.trainerpackagerepository.findActiveByTrainer(trainerId);
         return packages;
     }
 
-    getPackageBtId=async(packageId: string): Promise<ITrainerPackage> {
+    getPackageBtId=async(packageId: string): Promise<ITrainerPackage>=> {
         const package=await this.trainerpackagerepository.findPackageById(packageId);
         if(!package)
         {
@@ -64,7 +64,7 @@ export class TrainerPackageService implements ITrainerPackageService{
         return package;
     }
 
-    getTrainerPackages=async(trainerId: string): Promise<ITrainerPackage[]> {
+    getTrainerPackages=async(trainerId: string): Promise<ITrainerPackage[]> =>{
         const trainer=await this.trainerpackagerepository.findPackageByTrainer(trainerId);
         return trainer;
     }

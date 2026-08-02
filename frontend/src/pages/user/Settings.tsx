@@ -30,38 +30,36 @@ const Settings: React.FC = () => {
             try {
                 const data = await getProfile();
                 setProfile(data);
+                if (data) {
+                    setFormData({
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        bio: data.bio,
+                        bodyDetails: {
+                            height: data.bodyDetails?.height || 0,
+                            weight: data.bodyDetails?.weight || 0,
+                            biologicalSex: data.bodyDetails?.biologicalSex || '',
+                            dateOfBirth: data.bodyDetails?.dateOfBirth || ''
+                        },
+                        cycleSetUp: {
+                            averageCycleLength: data.cycleSetUp?.averageCycleLength || 28,
+                            averagePeriodLength: data.cycleSetUp?.averagePeriodLength || 5,
+                            birthControl: data.cycleSetUp?.birthControl || 'none',
+                            lastPeriodStart: data.cycleSetUp?.lastPeriodStart || ''
+                        },
+                        goals: {
+                            primaryGoal: data.goals?.primaryGoal || 'general_health',
+                            targetWeight: data.goals?.targetWeight || 0,
+                            activityLevel: data.goals?.activityLevel || 'moderatelyActive'
+                        }
+                    });
+                }
             } catch (error) {
                 console.log(error);
             }
         };
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (!profile) return;
-        setFormData({
-            firstName: profile.firstName,
-            lastName: profile.lastName,
-            bio: profile.bio,
-            bodyDetails: {
-                height: profile.bodyDetails?.height || 0,
-                weight: profile.bodyDetails?.weight || 0,
-                biologicalSex: profile.bodyDetails?.biologicalSex || '',
-                dateOfBirth: profile.bodyDetails?.dateOfBirth || ''
-            },
-            cycleSetUp: {
-                averageCycleLength: profile.cycleSetUp?.averageCycleLength || 28,
-                averagePeriodLength: profile.cycleSetUp?.averagePeriodLength || 5,
-                birthControl: profile.cycleSetUp?.birthControl || 'none',
-                lastPeriodStart: profile.cycleSetUp?.lastPeriodStart || ''
-            },
-            goals: {
-                primaryGoal: profile.goals?.primaryGoal || 'general_health',
-                targetWeight: profile.goals?.targetWeight || 0,
-                activityLevel: profile.goals?.activityLevel || 'moderatelyActive'
-            }
-        });
-    }, [profile]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;

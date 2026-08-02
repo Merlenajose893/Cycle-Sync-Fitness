@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import '../../styles/TrainerPanel.css';
 import { useRecipe } from '../../hooks/recipes/useRecipe';
-import type { Recipe, RecipeCategory, DietType, Difficulty } from '../../types/recipe.types';
+import Modal from '../../components/common/Modal/Modal';
 
 /* ── Types ── */
 interface FoodPlan {
@@ -144,6 +144,10 @@ const FoodsAndRecipes: React.FC = () => {
     recipe.dietType?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  /* Delete Confirmation Modals state */
+  const [deletePlanId, setDeletePlanId] = useState<string | null>(null);
+  const [deleteRecipeTarget, setDeleteRecipeTarget] = useState<Recipe | null>(null);
+
   /* Plan Handlers */
   const openCreatePlan = () => {
     setEditingPlan(null);
@@ -204,8 +208,13 @@ const FoodsAndRecipes: React.FC = () => {
   };
 
   const handleDeletePlan = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this food plan?')) {
-      setPlans((prev) => prev.filter((p) => p.id !== id));
+    setDeletePlanId(id);
+  };
+
+  const confirmDeletePlan = () => {
+    if (deletePlanId) {
+      setPlans((prev) => prev.filter((p) => p.id !== deletePlanId));
+      setDeletePlanId(null);
     }
   };
 
@@ -297,15 +306,19 @@ const FoodsAndRecipes: React.FC = () => {
     }
   };
 
-  const handleDeleteRecipe = async (recipe: Recipe) => {
-    const id = recipe._id || (recipe as any).id;
+  const handleDeleteRecipe = (recipe: Recipe) => {
+    setDeleteRecipeTarget(recipe);
+  };
+
+  const confirmDeleteRecipe = async () => {
+    if (!deleteRecipeTarget) return;
+    const id = deleteRecipeTarget._id || (deleteRecipeTarget as any).id;
     if (!id) return;
-    if (window.confirm(`Are you sure you want to delete "${recipe.title}"?`)) {
-      const ok = await deleteRecipe(id);
-      if (ok) {
-        fetchRecipes({}, 1, 50);
-      }
+    const ok = await deleteRecipe(id);
+    if (ok) {
+      fetchRecipes({}, 1, 50);
     }
+    setDeleteRecipeTarget(null);
   };
 
   return (
@@ -430,7 +443,7 @@ const FoodsAndRecipes: React.FC = () => {
             </div>
           ) : (
             <div className="tp-food-grid">
-              {filteredRecipes.map((recipe) => {
+              {filteredRecipes.map((recipe, index) => {
                 const recipeId = recipe._id || (recipe as any).id;
                 const cal = recipe.macrosPerServing?.calories ?? 0;
                 const pro = recipe.macrosPerServing?.protein ?? 0;
@@ -438,7 +451,7 @@ const FoodsAndRecipes: React.FC = () => {
                 const fat = recipe.macrosPerServing?.fat ?? 0;
 
                 return (
-                  <div key={recipeId || Math.random()} className="tp-food-card animate-fadeIn">
+                  <div key={recipeId || index} className="tp-food-card animate-fadeIn">
                     <div className="tp-card-image">
                       <img
                         src={recipe.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'}
@@ -623,6 +636,36 @@ const FoodsAndRecipes: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* ═══ DELETE PLAN CONFIRMATION MODAL ═══ */}
+      <Modal
+        isOpen={!!deletePlanId}
+        onClose={() => setDeletePlanId(null)}
+        title="Delete Food Plan"
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={confirmDeletePlan}
+      >
+        <p style={{ margin: 0 }}>
+          Are you sure you want to delete this food plan? This action cannot be undone.
+        </p>
+      </Modal>
+
+      {/* ═══ DELETE RECIPE CONFIRMATION MODAL ═══ */}
+      <Modal
+        isOpen={!!deleteRecipeTarget}
+        onClose={() => setDeleteRecipeTarget(null)}
+        title="Delete Recipe"
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={confirmDeleteRecipe}
+      >
+        <p style={{ margin: 0 }}>
+          Are you sure you want to delete <strong>"{deleteRecipeTarget?.title}"</strong>? This action cannot be undone.
+        </p>
+      </Modal>
     </div>
   );
 };

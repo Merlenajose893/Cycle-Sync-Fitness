@@ -26,6 +26,7 @@ import '../../styles/AdminPage.css';
 import type { Trainer } from '../../types/auth.types';
 import { useAdminAuth } from '../../hooks/auth/useAdmin';
 import { showToast } from '../../components/common/Toast/Toast';
+import Modal from '../../components/common/Modal/Modal';
 
 const ManageTrainersPage: React.FC = () => {
     const [trainers, setTrainers] = useState<Trainer[]>([]);
@@ -35,6 +36,8 @@ const ManageTrainersPage: React.FC = () => {
     const [selectedTrainers, setSelectedTrainers] = useState<string[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [viewingDocumentsFor, setViewingDocumentsFor] = useState<Trainer | null>(null);
+    const [rejectingTrainerId, setRejectingTrainerId] = useState<string | null>(null);
+    const [rejectionReason, setRejectionReason] = useState('');
     const [activeTab, setActiveTab] = useState<'trainers' | 'packages'>('trainers');
     const filteredPackages: any[] = [];
 
@@ -92,16 +95,23 @@ const ManageTrainersPage: React.FC = () => {
         }
     };
 
-    const handleReject = async (trainerId: string): Promise<void> => {
-        const reason = prompt("Please enter the reason for rejection:");
-        if (reason === null) return;
+    const handleReject = (trainerId: string): void => {
+        setRejectingTrainerId(trainerId);
+        setRejectionReason('');
+    };
+
+    const handleConfirmReject = async (): Promise<void> => {
+        if (!rejectingTrainerId) return;
         try {
-            await rejectTrainer(trainerId, reason || "Does not meet requirements");
+            await rejectTrainer(rejectingTrainerId, rejectionReason || "Does not meet requirements");
             showToast.success("Trainer rejected successfully");
             fetchTrainers();
         } catch (error) {
             console.error(error);
             showToast.error("Failed to reject trainer");
+        } finally {
+            setRejectingTrainerId(null);
+            setRejectionReason('');
         }
     };
 
@@ -585,6 +595,39 @@ const ManageTrainersPage: React.FC = () => {
                     </table>
                 </div>
             )}
+
+            {/* Rejection Reason Modal */}
+            <Modal
+                isOpen={!!rejectingTrainerId}
+                onClose={() => setRejectingTrainerId(null)}
+                title="Reject Trainer Application"
+                confirmText="Reject Trainer"
+                cancelText="Cancel"
+                variant="danger"
+                onConfirm={handleConfirmReject}
+            >
+                <div>
+                    <p style={{ marginBottom: '12px', fontSize: '0.9rem', color: '#475569' }}>
+                        Please enter the reason for rejecting this trainer's application. An email notification will be sent to them.
+                    </p>
+                    <textarea
+                        value={rejectionReason}
+                        onChange={(e) => setRejectionReason(e.target.value)}
+                        placeholder="e.g. Incomplete credentials, certification not verified..."
+                        rows={3}
+                        style={{
+                            width: '100%',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: '1px solid #cbd5e1',
+                            fontSize: '0.9rem',
+                            outline: 'none',
+                            resize: 'vertical',
+                            boxSizing: 'border-box'
+                        }}
+                    />
+                </div>
+            </Modal>
         </div>
     );
 };

@@ -63,11 +63,11 @@ function AppRoutes() {
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/verification-success" element={<VerificationSuccess />} />
-                    <Route path="/onboarding" element={<Onboarding />} />
                 </Route>
 
                 {/* ── Protected User Routes ── */}
                 <Route element={<ProtectedUserRoute />}>
+                    <Route path="/onboarding" element={<Onboarding />} />
                     <Route element={<AppLayout />}>
                         <Route path="/app" element={<Dashboard />} />
                         <Route path="/app/dashboard" element={<Dashboard />} />

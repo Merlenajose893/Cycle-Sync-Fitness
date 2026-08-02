@@ -127,7 +127,7 @@ await this.tokenService.generateAndSetAccessToken({userId:user._id.toString(),ro
 await this.tokenService.generateAndSetRefreshToken({userId:user._id.toString(),role:user.role},res)
 return user;
 }
-resendOTP=async(data: ResendOTPDTO): Promise<void> =>{
+resendOTP=async(data: ResendOTPDTO,res:Response): Promise<void> =>{
     const user=await this.userRepository.findById(data.userId)
     if(!user)
     {

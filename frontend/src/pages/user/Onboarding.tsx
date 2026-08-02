@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-    ArrowRight, 
-    ArrowLeft, 
-    CheckCircle, 
-    User, 
-    Target, 
-    Activity, 
-    Zap, 
-    Dumbbell, 
-    Moon, 
-    TrendingUp, 
-    Heart, 
+import {
+    ArrowRight,
+    ArrowLeft,
+    CheckCircle,
+    User,
+    Target,
+    Activity,
+    Zap,
+    Dumbbell,
+    Moon,
+    TrendingUp,
+    Heart,
     Baby,
     Star
 } from 'lucide-react';
@@ -76,8 +76,8 @@ const Onboarding: React.FC = () => {
                 // Map the first selected goal to primaryGoal for the backend
                 const firstGoal = selectedGoals[0];
                 const primaryGoal = firstGoal ? goalToBackendMap[firstGoal] : undefined;
-                console.log(firstGoal,primaryGoal);
-                
+                console.log(firstGoal, primaryGoal);
+
 
                 await updateGoals({
                     primaryGoal: primaryGoal,
@@ -173,89 +173,89 @@ const Onboarding: React.FC = () => {
                                 <h1 className="onboarding-title">Welcome back</h1>
                                 <p className="onboarding-p"> Let's personalize your health journey by learning a little more about your body.</p>
                                 <div className="form-group-row">
-    <div className="form-group">
-        <label>Height (cm)</label>
+                                    <div className="form-group">
+                                        <label>Height (cm)</label>
 
-        <div className="input-wrapper">
-            <TrendingUp size={18} className="input-icon" />
+                                        <div className="input-wrapper">
+                                            <TrendingUp size={18} className="input-icon" />
 
-            <input
-                type="number"
-                placeholder="170"
-                value={bodyDetails.height}
-                onChange={(e) =>
-                    setBodyDetails({
-                        ...bodyDetails,
-                        height: e.target.value,
-                    })
-                }
-            />
-        </div>
-    </div>
+                                            <input
+                                                type="number"
+                                                placeholder="170"
+                                                value={bodyDetails.height}
+                                                onChange={(e) =>
+                                                    setBodyDetails({
+                                                        ...bodyDetails,
+                                                        height: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </div>
+                                    </div>
 
-    <div className="form-group">
-        <label>Weight (kg)</label>
+                                    <div className="form-group">
+                                        <label>Weight (kg)</label>
 
-        <div className="input-wrapper">
-            <Heart size={18} className="input-icon" />
+                                        <div className="input-wrapper">
+                                            <Heart size={18} className="input-icon" />
 
-            <input
-                type="number"
-                placeholder="60"
-                value={bodyDetails.weight}
-                onChange={(e) =>
-                    setBodyDetails({
-                        ...bodyDetails,
-                        weight: e.target.value,
-                    })
-                }
-            />
-        </div>
-    </div>
-</div>
+                                            <input
+                                                type="number"
+                                                placeholder="60"
+                                                value={bodyDetails.weight}
+                                                onChange={(e) =>
+                                                    setBodyDetails({
+                                                        ...bodyDetails,
+                                                        weight: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
 
-<div className="form-group-row">
-    <div className="form-group">
-        <label>Date of Birth</label>
+                                <div className="form-group-row">
+                                    <div className="form-group">
+                                        <label>Date of Birth</label>
 
-        <div className="input-wrapper">
-            <User size={18} className="input-icon" />
+                                        <div className="input-wrapper">
+                                            <User size={18} className="input-icon" />
 
-            <input
-                type="date"
-                value={bodyDetails.dateOfBirth}
-                onChange={(e) =>
-                    setBodyDetails({
-                        ...bodyDetails,
-                        dateOfBirth: e.target.value,
-                    })
-                }
-            />
-        </div>
-    </div>
+                                            <input
+                                                type="date"
+                                                value={bodyDetails.dateOfBirth}
+                                                onChange={(e) =>
+                                                    setBodyDetails({
+                                                        ...bodyDetails,
+                                                        dateOfBirth: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </div>
+                                    </div>
 
-    <div className="form-group">
-        <label>Biological Sex</label>
+                                    <div className="form-group">
+                                        <label>Biological Sex</label>
 
-        <div className="input-wrapper">
-            <select
-                className="select-input"
-                value={bodyDetails.biologicalSex}
-                onChange={(e) =>
-                    setBodyDetails({
-                        ...bodyDetails,
-                        biologicalSex: e.target.value,
-                    })
-                }
-            >
-                <option value="">Select</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-            </select>
-        </div>
-    </div>
-</div>
-                                
+                                        <div className="input-wrapper">
+                                            <select
+                                                className="select-input"
+                                                value={bodyDetails.biologicalSex}
+                                                onChange={(e) =>
+                                                    setBodyDetails({
+                                                        ...bodyDetails,
+                                                        biologicalSex: e.target.value,
+                                                    })
+                                                }
+                                            >
+                                                <option value="">Select</option>
+                                                <option value="female">Female</option>
+                                                <option value="male">Male</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         )}
 
@@ -270,8 +270,8 @@ const Onboarding: React.FC = () => {
                                         const Icon = goal.icon;
                                         const isActive = selectedGoals.includes(goal.id);
                                         return (
-                                            <div 
-                                                key={goal.id} 
+                                            <div
+                                                key={goal.id}
                                                 className={`goal-card ${isActive ? 'active' : ''}`}
                                                 onClick={() => toggleGoal(goal.id)}
                                             >
@@ -328,11 +328,11 @@ const Onboarding: React.FC = () => {
                                     <label>Average Cycle Length (Days)</label>
                                     <div className="input-wrapper">
                                         <Activity size={18} className="input-icon" />
-                                        <input 
-                                            type="number" 
-                                            placeholder="28" 
-                                            value={cycleSetup.averageCycleLength} 
-                                            onChange={(e) => setCycleSetUp({ ...cycleSetup, averageCycleLength: e.target.value })} 
+                                        <input
+                                            type="number"
+                                            placeholder="28"
+                                            value={cycleSetup.averageCycleLength}
+                                            onChange={(e) => setCycleSetUp({ ...cycleSetup, averageCycleLength: e.target.value })}
                                         />
                                     </div>
                                     <p className="input-hint">Most cycles are between 21 and 35 days.</p>
@@ -342,11 +342,11 @@ const Onboarding: React.FC = () => {
                                     <label>Average Period Duration (Days)</label>
                                     <div className="input-wrapper">
                                         <Activity size={18} className="input-icon" />
-                                        <input 
-                                            type="number" 
-                                            placeholder="5" 
-                                            value={cycleSetup.averagePeriodLength} 
-                                            onChange={(e) => setCycleSetUp({ ...cycleSetup, averagePeriodLength: e.target.value })} 
+                                        <input
+                                            type="number"
+                                            placeholder="5"
+                                            value={cycleSetup.averagePeriodLength}
+                                            onChange={(e) => setCycleSetUp({ ...cycleSetup, averagePeriodLength: e.target.value })}
                                         />
                                     </div>
                                 </div>
@@ -355,10 +355,10 @@ const Onboarding: React.FC = () => {
                                     <label>Last Period Start Date</label>
                                     <div className="input-wrapper">
                                         <User size={18} className="input-icon" />
-                                        <input 
-                                            type="date" 
-                                            value={cycleSetup.lastPeriodStart} 
-                                            onChange={(e) => setCycleSetUp({ ...cycleSetup, lastPeriodStart: e.target.value })} 
+                                        <input
+                                            type="date"
+                                            value={cycleSetup.lastPeriodStart}
+                                            onChange={(e) => setCycleSetUp({ ...cycleSetup, lastPeriodStart: e.target.value })}
                                         />
                                     </div>
                                 </div>
@@ -392,10 +392,10 @@ const Onboarding: React.FC = () => {
                                     <h1 className="onboarding-title" style={{ fontSize: '1.75rem' }}>AI Analysis Complete</h1>
                                     <p className="onboarding-p" style={{ marginBottom: '24px' }}>We've constructed your performance path. Choose a plan below to start syncing.</p>
                                 </div>
-                                
+
                                 <div className="plans-stack" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                    
-                                    <div 
+
+                                    <div
                                         className="stacked-plan-card selected"
                                         style={{
                                             position: 'relative',
@@ -442,21 +442,21 @@ const Onboarding: React.FC = () => {
                                             <strong>Day 8 onwards:</strong> A certified personal trainer will be assigned to take over your plan. At that point, a premium subscription will be required to continue.
                                         </p>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         )}
 
                         <div className="onboarding-footer">
-                            <button 
-                                onClick={handleBack} 
+                            <button
+                                onClick={handleBack}
                                 className={`btn btn-ghost ${step === 1 ? 'hidden' : ''}`}
                                 disabled={loading}
                             >
                                 <ArrowLeft size={18} /> Back
                             </button>
-                            <button 
-                                onClick={handleNext} 
+                            <button
+                                onClick={handleNext}
                                 className="btn btn-premium"
                                 style={{ minWidth: '160px' }}
                                 disabled={loading}
@@ -475,9 +475,9 @@ const Onboarding: React.FC = () => {
             </div>
 
             {/* Sidepanel with Dynamic Content */}
-            <div 
-                className="auth-side animate-fadeIn" 
-                style={{ 
+            <div
+                className="auth-side animate-fadeIn"
+                style={{
                     backgroundImage: `linear-gradient(135deg, rgba(13, 148, 136, 0.82) 0%, rgba(139, 92, 246, 0.5) 100%), url('${currentStepData.sideImage}')`
                 }}
             >
@@ -491,7 +491,7 @@ const Onboarding: React.FC = () => {
                     <p className="auth-side-subtitle">
                         {currentStepData.sideTitle}. We're tailoring your AI insights as we go.
                     </p>
-                    
+
                     <div className="step-preview-card">
                         <currentStepData.icon size={32} color="#0d9488" />
                         <div>

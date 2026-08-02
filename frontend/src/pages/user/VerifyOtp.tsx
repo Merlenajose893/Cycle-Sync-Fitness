@@ -33,30 +33,6 @@ const VerifyOtp = () => {
     }
 };
 
-{/* Inside the map */}
-{otp.map((digit, index) => (
-    <input
-        key={index}
-        id={`otp-${index}`}
-        type="text"
-        maxLength={1}
-        className="otp-field"
-        value={digit}
-        onChange={(e) => handleChange(e.target.value, index)}
-        onKeyDown={(e) => {
-            if (e.key === "Backspace") {
-                if (!otp[index] && index > 0) {
-                    document.getElementById(`otp-${index - 1}`)?.focus();
-                } else if (otp[index]) {
-                    const newOtp = [...otp];
-                    newOtp[index] = "";
-                    setOtp(newOtp);
-                }
-            }
-        }}
-    />
-))}
-  
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -76,7 +52,7 @@ const VerifyOtp = () => {
 
             if (response.success) {
                 showToast.success("Email verified successfully! 🎉");
-                navigate("/onboarding");
+                navigate("/onboarding",{replace:true});
             } else {
                 setError("Invalid OTP. Please try again.");
             }
