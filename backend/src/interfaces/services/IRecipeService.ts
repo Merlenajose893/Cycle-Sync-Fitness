@@ -9,7 +9,7 @@ export interface IRecipeService{
     getTrainerRecipes(trainerId:string):Promise<IRecipe[]>;
     getPublishedRecipes(filters:RecipeFilters,page:number,limit:number):Promise<PaginatedResult<IRecipe>>
     getRecipeById(recipeId:string):Promise<IRecipe>;
-    searchRecipes(query:string,page:number,limit:number):Promise<PaginatedResult<IRecipe>>:
+    searchRecipes(query:string,page:number,limit:number):Promise<PaginatedResult<IRecipe>>;
     toggleFavourite(userId:string,recipeId:string):Promise<IRecipe>;
     getUsersFavourite(userId:string):Promise<IRecipe[]>;
     addReview(userId:string,recipeId:string,data:ReviewDTO):Promise<IRecipe>;

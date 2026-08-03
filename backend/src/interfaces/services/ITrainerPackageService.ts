@@ -7,5 +7,5 @@ export interface ITrainerPackageService{
     deletePackage(trainerId:string,packageId:string):Promise<void>;
     getTrainerPackages(trainerId:string):Promise<ITrainerPackage[]>;
     getActivePackages(trainerId:string,isActive:true):Promise<ITrainerPackage[]>;
-    getPackageBtId(packageId:string):Promise<ITrainerPackage>;
+    getPackageById(packageId:string):Promise<ITrainerPackage>;
 }

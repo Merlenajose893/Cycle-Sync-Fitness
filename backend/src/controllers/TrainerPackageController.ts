@@ -1,13 +1,13 @@
-import type { Request,Response,NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
+import { injectable, inject } from "tsyringe";
 import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.js";
+import { TOKENS } from "../container/tokens.js";
 import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
-export class TrainerPackageController {
-    constructor(private trainerpackageservice:ITrainerPackageService)
-    
-    {
 
-    }
+@injectable()
+export class TrainerPackageController {
+    constructor(@inject(TOKENS.ITrainerPackageService) private trainerpackageservice: ITrainerPackageService) {}
 
     createPackage=async (req:Request,res:Response,next:NextFunction) => {
         try {
@@ -65,7 +65,7 @@ export class TrainerPackageController {
     getPackageById=async (req:Request,res:Response,next:NextFunction) => {
         try {
             const packageId=req.params.id;
-            const result=await this.trainerpackageservice.getPackageBtId(packageId);
+            const result=await this.trainerpackageservice.getPackageById(packageId);
             successResponse(res,"Package fetched successfully",HttpStatus.OK,result);
 
         } catch (error) {

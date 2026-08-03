@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import type { updateBodyDetailsDTO, updateCycleSetUpDTO, updateGoalsDTO, useronboardingStatus } from "../../types/useronboarding.types";
 import { userOnboardingService } from "../../services/onboarding/useronboardingService";
-import { parseErrorMessage } from "../../utils/errorParser";
+// import { parseErrorMessage } from "../../utils/errorParser";
 
 export const useUserOnboarding = () => {
     const [loading, setLoading] = useState(false);

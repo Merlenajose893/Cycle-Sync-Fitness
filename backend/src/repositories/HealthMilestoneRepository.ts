@@ -12,7 +12,8 @@ export class HealthMilestoneRepository extends BaseRepository<IHealthMilestone> 
     findByUser(userId: string): Promise<IHealthMilestone[]> {
         return this.model.find({userId}).sort({achievedAt:-1})
     }
-    hasMileStone(userId: string, milestone: HealthMilestoneType): Promise<boolean> {
-        return this.model.findOne(userId,milestone:HealthMilestoneType)
+    async hasMileStone(userId: string, milestone: HealthMilestoneType): Promise<boolean> {
+        const doc = await this.model.findOne({ userId, milestone });
+        return !!doc;
     }
 }
