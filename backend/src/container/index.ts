@@ -35,6 +35,7 @@ import { WorkoutProgramService } from "../services/WorkoutProgramService.js";
 import { TrainerPackageRepository } from "../repositories/TrainerPackageRepository.js";
 import { TrainerPackageService } from "../services/TrainerPackageService.js";
 import { PaymentRepository } from "../repositories/PaymentRepository.js";
+import { PaymentService } from "../services/PaymentService.js";
 
 container.register(TOKENS.IUserRepository, { useClass: UserRepository });
 container.register(TOKENS.IUserProfileService, { useClass: UserProfileService });
@@ -67,5 +68,6 @@ container.register(TOKENS.IWorkoutLogService, { useClass: WorkoutLogService });
 container.register(TOKENS.IWorkoutProgramService, { useClass: WorkoutProgramService });
 container.register(TOKENS.ITrainerPackageRepository,{useClass:TrainerPackageRepository})
 container.register(TOKENS.ITrainerPackageService,{useClass:TrainerPackageService})
-container.register(TOKENS.IPaymentRepository,{useClass:PaymentRepository})
+container.register(TOKENS.IPaymentRepository,{useClass:PaymentRepository});
+container.register(TOKENS.IPaymentService,{useClass:PaymentService})
 export { container };
