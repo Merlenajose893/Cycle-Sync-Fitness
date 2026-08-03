@@ -28,5 +28,8 @@ export const TOKENS = {
   IWorkoutLogService: Symbol.for("IWorkoutLogService"),
   IWorkoutProgramService: Symbol.for("IWorkoutProgramService"),
   ITrainerPackageRepository: Symbol.for("ITrainerPackageRepository"),
-  ITrainerPackageService: Symbol.for("ITrainerPackageService")
+  ITrainerPackageService: Symbol.for("ITrainerPackageService"),
+  IPaymentRepository:Symbol.for("IPaymentRepository"),
+  IPaymentService:Symbol.for("IPaymentService")
+
 };
