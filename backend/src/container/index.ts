@@ -64,6 +64,6 @@ container.register(TOKENS.IWorkoutLogRepository, { useClass: WorkoutLogRepositor
 container.register(TOKENS.IWorkoutProgramRepository, { useClass: WorkoutProgramRepository });
 container.register(TOKENS.IWorkoutLogService, { useClass: WorkoutLogService });
 container.register(TOKENS.IWorkoutProgramService, { useClass: WorkoutProgramService });
-container.register(TOKENS.ITrainerPackageRepository,{useClass:TrainerPackageRepository})
-container.register(TOKENS.ITrainerPackageService,{useClass:TrainerPackageService})
+container.register(TOKENS.ITrainerPackageRepository, { useClass: TrainerPackageRepository })
+container.register(TOKENS.ITrainerPackageService, { useClass: TrainerPackageService })
 export { container };
