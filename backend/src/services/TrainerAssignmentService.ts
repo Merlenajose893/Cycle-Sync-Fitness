@@ -30,6 +30,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         const assignment=await this.trainerassignrepository.create({
             userId:data.userId,
             trainerId:trainerPackage.trainerId,
+            paymentId:data.paymentId,
             packageId:trainerPackage._id,
             startDate,
             endDate,
