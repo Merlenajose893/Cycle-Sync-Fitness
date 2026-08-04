@@ -1,4 +1,4 @@
-import { Schema, Types ,Document} from "mongoose";
+import mongoose, { Schema, Types ,Document} from "mongoose";
 import { TrainerAssignmentStatus } from "../constants/trainerassign.js";
 export interface ITrainerAssignment extends Document{
 userId:Types.ObjectId;
@@ -48,3 +48,5 @@ type:Date,
 required:true
 }
 },{timestamps:true})
+
+export const TrainerAssignment=mongoose.model<ITrainerAssignment>('TrainerAssignment',TrainerAssignmentSchema)
