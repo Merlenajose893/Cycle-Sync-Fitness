@@ -161,4 +161,11 @@ MEALS: {
         HISTORY: "/api/workout-logs/history",
         BY_EXERCISE: (exerciseName: string) => `/api/workout-logs/exercise/${encodeURIComponent(exerciseName)}`,
     },
+
+    TRAINER_MARKETPLACE:{
+      BROWSE:"/api/trainers",
+      PROFILE:(trainerId:string)=>`/api/trainers/${trainerId}`,
+      PACKAGES:(trainerId:string)=>`/api/trainers/packages/${trainerId}`
+
+    }
 }

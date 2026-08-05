@@ -5,3 +5,4 @@ const router=express.Router();
 const trainerbrowsercontroler=container.resolve(TrainerBrowserController)
 router.get("/",trainerbrowsercontroler.browseTrainers);
 router.get("/:trainerId",trainerbrowsercontroler.getTrainerProfile);
+export default router;

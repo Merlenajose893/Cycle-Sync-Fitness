@@ -11,7 +11,7 @@ export class TrainerPackageController {
 
     createPackage=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.params.trainerId;
+            const trainerId=req.user?.userId;
             const result=await this.trainerpackageservice.createPackage(trainerId,req.body);
             successResponse(res,"Packages are created successfully",HttpStatus.OK,result);
         } catch (error) {
@@ -53,7 +53,7 @@ export class TrainerPackageController {
 
     getActivePackages=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.user?.userId;
+            const trainerId=req.params.trainerId;
             const result=await this.trainerpackageservice.getActivePackages(trainerId);
             successResponse(res,"Active packages fetched successfully",HttpStatus.OK,result);
 

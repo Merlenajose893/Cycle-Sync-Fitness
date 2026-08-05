@@ -20,6 +20,8 @@ export class TrainerBrowserService implements ITrainerBrowserService{
         {
             throw new NotFoundError("Trainer Not Found")
         }
-        return trainer;
+        // Strip sensitive fields before returning to public API
+        const { password, inviteToken, inviteExpiresAt, inviteAccepted, isDeleted, ...safeTrainer } = trainer.toObject();
+        return safeTrainer as ITrainer;
     }
 }

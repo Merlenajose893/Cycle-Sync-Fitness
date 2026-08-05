@@ -42,5 +42,6 @@ export class TrainerRepository extends BaseRepository<ITrainer> implements ITrai
 
     async findApprovedTrainers(): Promise<ITrainer[]> {
         return this.model.find({status:TrainerStatus.ACTIVE})
+            .select('-password -inviteToken -inviteExpiresAt -inviteAccepted -isDeleted');
     }
 }
