@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
-import { Search, Star, MapPin, Award, Users, MessageCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Search, Star, Users, RefreshCw } from 'lucide-react';
+import { useTrainerMarketplace } from '../../hooks/marketplace/useTrainerMarketPlace';
 import '../../styles/UserPages.css';
-
-const trainers = [
-  { id: '1', name: 'Sarah Miller', specialty: 'Strength & Conditioning', rating: 4.9, clients: 24, experience: '8 years', location: 'New York, NY', initials: 'SM', bio: 'Certified strength coach specializing in women\'s fitness and hormonal health optimization.' },
-  { id: '2', name: 'Dr. Emily Chen', specialty: 'Sports Nutrition', rating: 4.8, clients: 18, experience: '12 years', location: 'Los Angeles, CA', initials: 'EC', bio: 'PhD in Sports Science with focus on cycle-synced nutrition and performance.' },
-  { id: '3', name: 'Alex Rodriguez', specialty: 'HIIT & Cardio', rating: 4.7, clients: 32, experience: '6 years', location: 'Miami, FL', initials: 'AR', bio: 'High-intensity training expert helping women achieve peak cardiovascular fitness.' },
-  { id: '4', name: 'Priya Sharma', specialty: 'Yoga & Mobility', rating: 5.0, clients: 15, experience: '10 years', location: 'Austin, TX', initials: 'PS', bio: 'Yoga therapist integrating cycle awareness with traditional practices.' },
-  { id: '5', name: 'Jordan Williams', specialty: 'Weight Management', rating: 4.6, clients: 28, experience: '7 years', location: 'Chicago, IL', initials: 'JW', bio: 'Holistic approach to sustainable weight management and body composition.' },
-  { id: '6', name: 'Lisa Park', specialty: 'Pre/Postnatal Fitness', rating: 4.9, clients: 20, experience: '9 years', location: 'Seattle, WA', initials: 'LP', bio: 'Specialized in safe fitness programs for pregnancy and postpartum recovery.' },
-];
+import { useNavigate } from 'react-router-dom';
+import type { TrainerPublicProfile } from '../../types/marketplace.types';
 
 const gradients = [
   'linear-gradient(135deg, #2563eb, #06b6d4)',
@@ -22,45 +16,111 @@ const gradients = [
 
 const Trainers: React.FC = () => {
   const [search, setSearch] = useState('');
-  const filtered = trainers.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.specialty.toLowerCase().includes(search.toLowerCase()));
+  const navigate = useNavigate();
+  const { trainers, loading, error, fetchTrainers } = useTrainerMarketplace();
+
+  useEffect(() => {
+    fetchTrainers();
+  }, [fetchTrainers]);
+
+  const filtered = trainers.filter((t: TrainerPublicProfile) => {
+    const fullName = `${t.firstName || ''} ${t.lastName || ''}`.toLowerCase();
+    const spec = (t.specialization || '').toLowerCase();
+    return fullName.includes(search.toLowerCase()) || spec.includes(search.toLowerCase());
+  });
 
   return (
     <div className="up-page">
       <div className="up-page-header">
-        <div><h1>Find a Trainer</h1><p>Connect with certified fitness professionals</p></div>
+        <div>
+          <h1>Find a Trainer</h1>
+          <p>Connect with certified fitness professionals</p>
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <div className="up-search" style={{ flex: 1, marginBottom: 0 }}>
           <Search size={18} className="up-search-icon" />
-          <input placeholder="Search by name or specialty..." value={search} onChange={e => setSearch(e.target.value)} />
+          <input
+            placeholder="Search by name or specialty..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
       </div>
 
-      <div className="up-trainer-grid">
-        {filtered.map((t, i) => (
-          <div key={t.id} className="up-card up-trainer-card">
-            <div className="up-trainer-cover" style={{ background: gradients[i % gradients.length] }} />
-            <div className="up-trainer-avatar-lg" style={{ background: gradients[i % gradients.length] }}>{t.initials}</div>
-            <h3>{t.name}</h3>
-            <div className="specialty">{t.specialty}</div>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', padding: '8px 20px 0', lineHeight: 1.5 }}>{t.bio}</p>
+      {loading && (
+        <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-secondary)' }}>
+          <RefreshCw size={24} className="spin-icon" style={{ marginBottom: 8 }} />
+          <p>Loading trainers...</p>
+        </div>
+      )}
 
-            <div className="up-trainer-stats">
-              <div className="up-trainer-stat"><span className="val" style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Star size={14} style={{ color: '#f59e0b' }} />{t.rating}</span><span className="lbl">Rating</span></div>
-              <div className="up-trainer-stat"><span className="val">{t.clients}</span><span className="lbl">Clients</span></div>
-              <div className="up-trainer-stat"><span className="val">{t.experience}</span><span className="lbl">Experience</span></div>
-            </div>
+      {error && !loading && (
+        <div style={{ textAlign: 'center', padding: '40px 0', color: '#ef4444' }}>
+          <p style={{ marginBottom: 12 }}>{error}</p>
+          <button className="up-btn up-btn-sm up-btn-primary" onClick={fetchTrainers}>
+            Try Again
+          </button>
+        </div>
+      )}
 
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, margin: '0 0 4px' }}><MapPin size={13} />{t.location}</p>
+      {!loading && !error && filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
+          <p>No trainers found matching your search.</p>
+        </div>
+      )}
 
-            <div className="up-trainer-card-footer">
-              <button className="up-btn up-btn-sm"><MessageCircle size={14} /> Message</button>
-              <button className="up-btn up-btn-sm up-btn-primary"><Users size={14} /> Book Session</button>
-            </div>
-          </div>
-        ))}
-      </div>
+      {!loading && !error && (
+        <div className="up-trainer-grid">
+          {filtered.map((t: TrainerPublicProfile, i: number) => {
+            const initials = `${t.firstName?.[0] || ''}${t.lastName?.[0] || ''}`;
+            const gradient = gradients[i % gradients.length];
+
+            return (
+              <div key={t._id} className="up-card up-trainer-card">
+                <div className="up-trainer-cover" style={{ background: gradient }} />
+                {t.avatar ? (
+                  <img src={t.avatar} alt={t.firstName} className="up-trainer-avatar-lg" />
+                ) : (
+                  <div className="up-trainer-avatar-lg" style={{ background: gradient }}>
+                    {initials}
+                  </div>
+                )}
+                <h3>{t.firstName} {t.lastName}</h3>
+                <div className="specialty">{t.specialization || 'Fitness Coach'}</div>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', padding: '8px 20px 0', lineHeight: 1.5 }}>
+                  {t.bio || 'No bio provided.'}
+                </p>
+
+                <div className="up-trainer-stats">
+                  <div className="up-trainer-stat">
+                    <span className="val" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Star size={14} style={{ color: '#f59e0b' }} />
+                      {t.rating || 5.0}
+                    </span>
+                    <span className="lbl">Rating</span>
+                  </div>
+                  <div className="up-trainer-stat">
+                    <span className="val">{t.experience || 1} yrs</span>
+                    <span className="lbl">Experience</span>
+                  </div>
+                </div>
+
+                <div className="up-trainer-card-footer">
+                  <button
+                    className="up-btn up-btn-sm up-btn-primary"
+                    style={{ width: '100%', justifyContent: 'center' }}
+                    onClick={() => navigate(`/app/trainer/${t._id}`)}
+                  >
+                    <Users size={14} /> View Packages
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
