@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 import './container/index.js';
 import cors from 'cors';
 import connectDB from './config/db.js';
-
+import type { IAssignmentExpiryScheduler } from './interfaces/jobs/IAssignmentExpiryScheduler.js';
 import userAuthRoutes from './routes/userAuth.routes.js';
 import trainerRoutes from './routes/trainerAuth.routes.js';
 import onboardingRoutes from './routes/onBoardingRoutes.js';
@@ -23,6 +23,8 @@ import trainerPackageRoutes from './routes/trainerPackage.routes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 
 import { errorHandler } from './middlewares/errorHandler.js';
+import { container } from './container/index.js';
+import { TOKENS } from './container/tokens.js';
 
 const app = express();
 connectDB();
@@ -35,6 +37,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
+const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use((req, res, next) => {
@@ -59,7 +62,22 @@ app.use("/api/payment",paymentRoutes);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+async function startServer() {
+  try {
+    await connectDB();
+    const assignmentExpiry=container.resolve<IAssignmentExpiryScheduler>(TOKENS.IAssignmentExpiryScheduler);
+    assignmentExpiry.start();
+    console.log("Assignment expiry started");
+    app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
+    
+  } catch (error) {
+    console.error(error);
+    process.exit(1)
+    
+  }
+}
+startServer();
+
+

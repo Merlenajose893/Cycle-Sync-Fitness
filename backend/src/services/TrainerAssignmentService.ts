@@ -13,7 +13,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
     {
 
     }
-    createAssignment=async(data: CreateAssignmentDTO): Promise<ITrainerAssignment> {
+    createAssignment=async(data: CreateAssignmentDTO): Promise<ITrainerAssignment> =>{
         const trainerPackage=await this.trainerpackagerepository.findById(data.packageId);
         if(!trainerPackage)
         {
@@ -39,7 +39,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         })
         return assignment;
     }
-    getAssignmentById=async(assignmentId: string): Promise<ITrainerAssignment | null> {
+    getAssignmentById=async(assignmentId: string): Promise<ITrainerAssignment | null>=> {
         const assignment=await this.trainerassignrepository.findById(assignmentId);
         if(!assignment)
         {
@@ -47,7 +47,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         }
         return assignment;
     }
-    getActiveAssignmentByUser=async(userId: string): Promise<ITrainerAssignment | null> {
+    getActiveAssignmentByUser=async(userId: string): Promise<ITrainerAssignment | null> =>{
         const assignment=await this.trainerassignrepository.findActiveByUser(userId);
         if(!assignment)
         {
@@ -55,7 +55,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         }
         return assignment;
     }
-    getTrainerClients=async(trainerId: string): Promise<ITrainerAssignment[]> {
+    getTrainerClients=async(trainerId: string): Promise<ITrainerAssignment[]> =>{
         return await this.trainerassignrepository.findActiveByTrainer(trainerId);
     }
     processExpiredAssignments=async(): Promise<number> =>{
@@ -66,7 +66,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         }
         return expiredAssignments.length;
     }
-    updateAssignmentStatus=async(assignmentId: string, status: TrainerAssignmentStatus): Promise<ITrainerAssignment | null> {
+    updateAssignmentStatus=async(assignmentId: string, status: TrainerAssignmentStatus): Promise<ITrainerAssignment | null> =>{
         const assignment=await this.trainerassignrepository.findById(assignmentId);
         if(!assignment)
         {
