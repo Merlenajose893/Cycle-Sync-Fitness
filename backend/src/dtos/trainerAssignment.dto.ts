@@ -2,6 +2,7 @@ import type { TrainerAssignmentStatus } from "../constants/trainerassign.js";
 
 export interface CreateAssignmentDTO {
     userId: string;
+    trainerId:string;
     packageId: string;
     paymentId: string;
 }

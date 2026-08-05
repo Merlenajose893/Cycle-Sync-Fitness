@@ -8,6 +8,8 @@ import { TOKENS } from "../container/tokens.js";
 import type { IPayment } from "../models/Payment.js";
 import { PaymentStatus } from "../constants/payment.js";
 import { Types } from "mongoose";
+import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.js";
+import { NotFoundError } from "../errors/index.js";
 
 @injectable()
 export class PaymentService implements IPaymentService {
@@ -15,7 +17,8 @@ export class PaymentService implements IPaymentService {
 
     constructor(
         @inject(TOKENS.IPaymentRepository) private paymentRepository: IPaymentRepository,
-        @inject(TOKENS.ITrainerPackageRepository) private packageRepository: ITrainerPackageRepository
+        @inject(TOKENS.ITrainerPackageRepository) private packageRepository: ITrainerPackageRepository,
+        @inject(TOKENS.ITrainerAssignmentService) private trainerassignmentservice:ITrainerAssignmentService
     ) {
         const secretKey = process.env.STRIPE_SECRET_KEY;
         if (!secretKey) {
@@ -89,6 +92,18 @@ export class PaymentService implements IPaymentService {
                             PaymentStatus.COMPLETED
                         );
                     }
+                    const pkg=await this.packageRepository.findById(payment.packageId.toString())
+                    if(!pkg)
+                    {
+                        throw new NotFoundError("Package Not Found")
+                    }
+                    await this.trainerassignmentservice.createAssignment({
+                        userId:payment.userId.toString(),
+                        packageId:payment.packageId.toString(),
+                        paymentId:payment._id.toString()
+                        
+                    })
+
                 }
                 break;
             }
