@@ -10,5 +10,6 @@ export interface  ITrainerRepository extends IBaseRepository<ITrainer>{
     updateTrainerInvite(trainerId:string,inviteToken:string,inviteExpiresAt:Date):Promise<ITrainer|null>;
     acceptTrainer(trainerId:string,hashedPassword:string):Promise<ITrainer|null>;
     findByStatus(status: TrainerStatus): Promise<ITrainer[]>;
+    findApprovedTrainers():Promise<ITrainer[]>;
     
 }

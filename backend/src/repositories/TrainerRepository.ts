@@ -39,4 +39,8 @@ export class TrainerRepository extends BaseRepository<ITrainer> implements ITrai
     async findByStatus(status: TrainerStatus): Promise<ITrainer[]> {
         return this.model.find({status})
     }
+
+    async findApprovedTrainers(): Promise<ITrainer[]> {
+        return this.model.find({status:TrainerStatus.ACTIVE})
+    }
 }

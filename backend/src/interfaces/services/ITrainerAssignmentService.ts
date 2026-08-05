@@ -9,4 +9,5 @@ export interface ITrainerAssignmentService {
     getTrainerClients(trainerId: string): Promise<ITrainerAssignment[]>;
     updateAssignmentStatus(assignmentId: string, status: TrainerAssignmentStatus): Promise<ITrainerAssignment | null>;
     processExpiredAssignments(): Promise<number>;
+    
 }

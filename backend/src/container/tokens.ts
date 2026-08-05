@@ -33,5 +33,6 @@ export const TOKENS = {
   IPaymentService:Symbol.for("IPaymentService"),
   ITrainerAssignmentRepository:Symbol.for("ITrainerAssignmentRepository"),
   ITrainerAssignmentService:Symbol.for("ITrainerAssignmentService"),
-  IAssignmentExpiryScheduler:Symbol.for("IAssignmentExpiryScheduler")
+  IAssignmentExpiryScheduler:Symbol.for("IAssignmentExpiryScheduler"),
+  ITrainerBrowserService:Symbol.for("ITrainerBrowserService")
 };
