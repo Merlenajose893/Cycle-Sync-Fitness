@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/Dashboard.css';
 import { useUserContext } from '../../context/UserAuthContext';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
+import { useUserAssignment } from '../../hooks/assignment/useUserAssignment';
 import type { AIPlan } from '../../types/aiplan.types';
-import { Sparkles, Brain, ArrowRight, LogOut } from 'lucide-react';
+import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useUserContext();
   const navigate = useNavigate();
   const { getActivePlan } = useAIPlan();
+  const { assignment, fetchAssignment } = useUserAssignment();
   
   const [plan, setPlan] = useState<AIPlan | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,8 @@ const Dashboard = () => {
       }
     };
     fetchPlan();
-  }, [getActivePlan]);
+    fetchAssignment();
+  }, [getActivePlan, fetchAssignment]);
 
   const handleLogout = async () => {
     try {
@@ -101,6 +104,61 @@ const Dashboard = () => {
              <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Sparkles size={18} color="var(--primary-color)"/> Cycle Phase & Plan</h3>
              <p style={{ color: 'var(--text-secondary)' }}>You are currently following the <strong>{plan.inputs.goal.replace('_', ' ')}</strong> plan.</p>
           </div>
+
+          {/* ══════════ Personal Trainer Coaching Widget ══════════ */}
+          {assignment ? (
+            <div className="dashboard-card" style={{ background: 'linear-gradient(135deg, #1e293b, #0f172a)', color: '#fff', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                    <UserCheck size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#60a5fa', fontWeight: 'bold' }}>
+                      Active Personal Trainer
+                    </div>
+                    <h3 style={{ margin: '2px 0 0', fontSize: '1.15rem', color: '#fff' }}>
+                      {assignment.trainerId?.firstName} {assignment.trainerId?.lastName}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>
+                      Package: {assignment.packageId?.packageName || 'Custom Program'}
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+                    onClick={() => navigate('/app/exercise')}
+                  >
+                    View Workouts
+                  </button>
+                  <button 
+                    style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer' }}
+                    onClick={() => navigate('/app/messages')}
+                  >
+                    Message Trainer
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="dashboard-card" style={{ background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', padding: '20px 24px', borderRadius: '16px', border: '1px solid #bfdbfe', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Award size={28} style={{ color: '#2563eb' }} />
+                <div>
+                  <h4 style={{ margin: 0, color: '#1e3a8a', fontSize: '1rem', fontWeight: 700 }}>Want 1-on-1 Certified Coaching?</h4>
+                  <p style={{ margin: 0, color: '#1e40af', fontSize: '0.85rem' }}>Explore certified trainers tailored to your cycle phases.</p>
+                </div>
+              </div>
+              <button 
+                style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                onClick={() => navigate('/app/trainer')}
+              >
+                Browse Trainers <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
             {/* Today's Workout Card */}
