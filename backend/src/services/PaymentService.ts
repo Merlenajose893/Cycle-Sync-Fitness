@@ -8,6 +8,7 @@ import { TOKENS } from "../container/tokens.js";
 import type { IPayment } from "../models/Payment.js";
 import { PaymentStatus } from "../constants/payment.js";
 import { Types } from "mongoose";
+import { NotFoundError } from "../errors/index.js";
 
 @injectable()
 export class PaymentService implements IPaymentService {
@@ -83,6 +84,10 @@ export class PaymentService implements IPaymentService {
                 const session = event.data.object as Stripe.Checkout.Session;
                 if (session.id) {
                     const payment = await this.paymentRepository.findByStripeSessionId(session.id);
+                    if(!payment)
+                    {
+                        throw new NotFoundError("Payment not found")
+                    }
                     if (payment) {
                         await this.paymentRepository.updatePaymentStatus(
                             payment._id.toString(),
