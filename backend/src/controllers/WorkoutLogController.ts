@@ -55,4 +55,14 @@ export class WorkoutLogController {
             next(error);
         }
     };
+
+    getClientWorkoutLogs = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const clientId = req.params.clientId;
+            const result = await this.workoutLogService.getWorkoutHistory(clientId, 1, 50);
+            successResponse(res, "Client workout history fetched successfully", result, HttpStatus.OK);
+        } catch (error) {
+            next(error);
+        }
+    };
 }

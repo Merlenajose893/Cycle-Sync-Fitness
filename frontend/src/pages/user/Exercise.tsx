@@ -1,27 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info, RefreshCw, CheckCircle } from 'lucide-react';
+import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info, RefreshCw, Plus, CheckCircle } from 'lucide-react';
 import '../../styles/UserPages.css';
 import type { WorkoutProgram } from '../../types/workout.types';
 import { workoutProgramService } from '../../services/workout/workoutProgramService';
-
-export interface ExerciseItem {
-  id: string;
-  title: string;
-  type: string;
-  duration: string;
-  calories: number;
-  muscles: string[];
-  exercisesCount: number;
-  image?: string;
-}
-
-export interface WorkoutLogItem {
-  id: string;
-  date: string;
-  workoutTitle: string;
-  duration: string;
-  caloriesBurned: number;
-}
+import { workoutLogService } from '../../services/workout/workoutLogService';
 
 const Exercise: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'workouts' | 'history'>('workouts');
@@ -30,23 +12,76 @@ const Exercise: React.FC = () => {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
 
-  const [historyLogs] = useState<WorkoutLogItem[]>([]);
+  // History state
+  const [historyLogs, setHistoryLogs] = useState<any[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  // Logging Modal State
+  const [showLogModal, setShowLogModal] = useState(false);
+  const [selectedWorkoutTitle, setSelectedWorkoutTitle] = useState('');
+  const [durationMinutes, setDurationMinutes] = useState(30);
+  const [caloriesBurned, setCaloriesBurned] = useState(250);
+  const [notes, setNotes] = useState('');
+  const [submittingLog, setSubmittingLog] = useState(false);
+
+  const fetchActiveProgram = async () => {
+    setLoading(true);
+    try {
+      const program = await workoutProgramService.getActivePrograms();
+      setActiveProgram(program);
+    } catch (err) {
+      console.error("Failed to fetch active workout program:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const logs = await workoutLogService.getUserLogs();
+      setHistoryLogs(logs || []);
+    } catch (err) {
+      console.error("Failed to fetch workout history:", err);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchActiveProgram = async () => {
-      setLoading(true);
-      try {
-        const program = await workoutProgramService.getActivePrograms();
-        setActiveProgram(program);
-      } catch (err) {
-        console.error("Failed to fetch active workout program:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchActiveProgram();
+    fetchHistory();
   }, []);
+
+  const handleOpenLogModal = (title: string) => {
+    setSelectedWorkoutTitle(title);
+    setShowLogModal(true);
+  };
+
+  const handleLogWorkout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedWorkoutTitle) return;
+
+    setSubmittingLog(true);
+    try {
+      await workoutLogService.createLog({
+        workoutProgramId: activeProgram?._id,
+        workoutTitle: selectedWorkoutTitle,
+        durationMinutes,
+        caloriesBurned,
+        notes,
+      });
+      setShowLogModal(false);
+      setNotes('');
+      fetchHistory();
+      setActiveTab('history');
+      alert('Workout session logged successfully!');
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to log workout.');
+    } finally {
+      setSubmittingLog(false);
+    }
+  };
 
   return (
     <div className="up-page">
@@ -102,30 +137,42 @@ const Exercise: React.FC = () => {
               {/* Days list */}
               {activeProgram.days && activeProgram.days.length > 0 ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {activeProgram.days.map((day: any, idx: number) => (
-                    <div key={idx} style={{ padding: 16, borderRadius: 12, background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                      <h4 style={{ margin: '0 0 12px', fontSize: '1.05rem', color: 'var(--text-primary)' }}>
-                        Day {day.dayNumber || idx + 1}: {day.title || 'Routine'}
-                      </h4>
-                      {day.exercises && day.exercises.length > 0 ? (
-                        <div style={{ display: 'grid', gap: 10 }}>
-                          {day.exercises.map((ex: any, exIdx: number) => (
-                            <div key={exIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: 'rgba(0, 0, 0, 0.15)', borderRadius: 8 }}>
-                              <div>
-                                <span style={{ fontWeight: 600, color: 'var(--text-primary)', display: 'block' }}>{ex.name}</span>
-                                {ex.notes && <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ex.notes}</span>}
-                              </div>
-                              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb' }}>
-                                {ex.sets} sets × {ex.reps} reps
-                              </div>
-                            </div>
-                          ))}
+                  {activeProgram.days.map((day: any, idx: number) => {
+                    const dayTitle = day.title || `Day ${day.dayNumber || idx + 1} Routine`;
+                    return (
+                      <div key={idx} style={{ padding: 16, borderRadius: 12, background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                          <h4 style={{ margin: 0, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+                            Day {day.dayNumber || idx + 1}: {dayTitle}
+                          </h4>
+                          <button
+                            className="up-btn up-btn-primary up-btn-sm"
+                            onClick={() => handleOpenLogModal(dayTitle)}
+                          >
+                            <Plus size={14} style={{ marginRight: 4 }} /> Log Session
+                          </button>
                         </div>
-                      ) : (
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Rest day or custom mobility recovery.</p>
-                      )}
-                    </div>
-                  ))}
+
+                        {day.exercises && day.exercises.length > 0 ? (
+                          <div style={{ display: 'grid', gap: 10 }}>
+                            {day.exercises.map((ex: any, exIdx: number) => (
+                              <div key={exIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: 'rgba(0, 0, 0, 0.15)', borderRadius: 8 }}>
+                                <div>
+                                  <span style={{ fontWeight: 600, color: 'var(--text-primary)', display: 'block' }}>{ex.name}</span>
+                                  {ex.notes && <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ex.notes}</span>}
+                                </div>
+                                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb' }}>
+                                  {ex.sets} sets × {ex.reps} reps
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Rest day or custom mobility recovery.</p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Your trainer will be adding daily exercises to this program shortly.</p>
@@ -149,7 +196,7 @@ const Exercise: React.FC = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon blue"><Dumbbell size={24} /></div>
-              <div className="up-stat-content"><div className="label">This Week</div><div className="value">{historyLogs.length}</div><div className="change">Workouts logged</div></div>
+              <div className="up-stat-content"><div className="label">Total Logged</div><div className="value">{historyLogs.length}</div><div className="change">Workouts logged</div></div>
             </div>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon orange"><Flame size={24} /></div>
@@ -161,11 +208,16 @@ const Exercise: React.FC = () => {
             </div>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon green"><TrendingUp size={24} /></div>
-              <div className="up-stat-content"><div className="label">Streak</div><div className="value">{historyLogs.length > 0 ? 'Active' : '0 days'}</div></div>
+              <div className="up-stat-content"><div className="label">Status</div><div className="value">{historyLogs.length > 0 ? 'Active' : '0 logs'}</div></div>
             </div>
           </div>
 
-          {historyLogs.length === 0 ? (
+          {historyLoading ? (
+            <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-secondary)' }}>
+              <RefreshCw size={24} className="spin-icon" style={{ marginBottom: 8 }} />
+              <p>Loading history...</p>
+            </div>
+          ) : historyLogs.length === 0 ? (
             <div className="up-card" style={{ textAlign: 'center', padding: '40px 24px', background: '#f8fafc', border: '1px dashed #cbd5e1' }}>
               <Info size={36} style={{ color: '#94a3b8', marginBottom: 8 }} />
               <p style={{ fontWeight: 600, color: '#475569', margin: 0 }}>No Exercise History Logged</p>
@@ -174,17 +226,80 @@ const Exercise: React.FC = () => {
               </p>
             </div>
           ) : (
-            historyLogs.map((log) => (
-              <div key={log.id} className="up-card" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
-                <div className="up-stat-icon blue" style={{ width: 44, height: 44 }}><Dumbbell size={20} /></div>
+            historyLogs.map((log: any) => (
+              <div key={log._id || log.id} className="up-card" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, padding: 16 }}>
+                <div className="up-stat-icon blue" style={{ width: 44, height: 44 }}><CheckCircle size={20} /></div>
                 <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 2px' }}>{log.workoutTitle}</h4>
-                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>{log.date} • {log.duration} • {log.caloriesBurned} kcal</p>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>
+                    {log.createdAt ? new Date(log.createdAt).toLocaleDateString() : 'Today'} • {log.durationMinutes || 30} mins • {log.caloriesBurned || 250} kcal
+                  </p>
+                  {log.notes && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0 0', italic: true }}>"{log.notes}"</p>}
                 </div>
                 <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* Log Workout Modal */}
+      {showLogModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, zIndex: 1000 }}>
+          <div className="up-card" style={{ width: '100%', maxWidth: 440, padding: 28 }}>
+            <h3 style={{ margin: '0 0 16px' }}>Log Session: {selectedWorkoutTitle}</h3>
+            <form onSubmit={handleLogWorkout}>
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 6, fontWeight: 600 }}>
+                  Duration (Minutes)
+                </label>
+                <input
+                  type="number"
+                  required
+                  min={5}
+                  value={durationMinutes}
+                  onChange={(e) => setDurationMinutes(Number(e.target.value))}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-primary)' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 6, fontWeight: 600 }}>
+                  Estimated Calories Burned (kcal)
+                </label>
+                <input
+                  type="number"
+                  required
+                  min={10}
+                  value={caloriesBurned}
+                  onChange={(e) => setCaloriesBurned(Number(e.target.value))}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-primary)' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 6, fontWeight: 600 }}>
+                  Notes for Trainer (Optional)
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="How did the session feel? Any heavy PRs?"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-primary)' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: 12 }}>
+                <button type="button" className="up-btn" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setShowLogModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="up-btn up-btn-primary" style={{ flex: 1, justifyContent: 'center' }} disabled={submittingLog}>
+                  {submittingLog ? 'Submitting...' : 'Save Log'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
