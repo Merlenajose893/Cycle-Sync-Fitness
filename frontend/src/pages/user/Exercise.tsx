@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info } from 'lucide-react';
 import '../../styles/UserPages.css';
+import { WorkoutProgram } from '../../types/workout.types';
+import { userAssignmentService } from '../../services/assignment/userAssignmentService';
 
 export interface ExerciseItem {
   id: string;
@@ -22,7 +24,10 @@ export interface WorkoutLogItem {
 }
 
 const Exercise: React.FC = () => {
+  const {getActivePrograms}=userAssignmentService();
   const [activeTab, setActiveTab] = useState<'workouts' | 'history'>('workouts');
+  const [activeProgram,setActiveProgram]=useState<WorkoutProgram|null>(null);
+  const [loading,setLoading]=useState(false)
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
 
@@ -35,6 +40,9 @@ const Exercise: React.FC = () => {
     const matchFilter = filter === 'All' || w.type === filter;
     return matchSearch && matchFilter;
   });
+
+  useEffect
+
 
   return (
     <div className="up-page">
