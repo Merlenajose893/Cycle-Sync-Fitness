@@ -6,6 +6,8 @@ import { successResponse } from "../utils/response.js";
 import { HttpStatus } from "../constants/HttpStatus.js";
 import type Stripe from "stripe";
 
+import { BadRequestError } from "../errors/index.js";
+
 @injectable()
 export class PaymentController {
     constructor(
@@ -28,8 +30,11 @@ export class PaymentController {
 
     handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const signature=req.headers["stripe-signature"] as string;
-            const result = await this.paymentService.handleWebhook(req.body,signature);
+            const signature = req.headers["stripe-signature"] as string;
+            if (!signature) {
+                throw new BadRequestError("Missing stripe-signature header");
+            }
+            const result = await this.paymentService.handleWebhook(req.body, signature);
             successResponse(res, "Webhook processed successfully", result, HttpStatus.OK);
         } catch (error) {
             next(error);

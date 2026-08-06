@@ -46,6 +46,8 @@ import Messages from "../pages/user/Messages";
 import Trainers from "../pages/user/Trainers";
 import TrainerDetail from "../pages/user/TrainerDetail";
 import Subscription from "../pages/user/Subscription";
+import PaymentSuccess from "../pages/user/PaymentSuccess";
+import PaymentCancel from "../pages/user/PaymentCancel";
 
 function AppRoutes() {
     return (
@@ -86,6 +88,8 @@ function AppRoutes() {
                         <Route path="/app/trainer" element={<Trainers />} />
                         <Route path="/app/trainer/:trainerId" element={<TrainerDetail />} />
                         <Route path="/app/premium" element={<Subscription />} />
+                        <Route path="/payment/success" element={<PaymentSuccess />} />
+                        <Route path="/payment/cancel" element={<PaymentCancel />} />
                     </Route>
                 </Route>
 

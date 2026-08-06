@@ -85,71 +85,63 @@ export class PaymentService implements IPaymentService {
     }
 
     async handleWebhook(payload: Buffer | string, signature: string): Promise<void> {
-        const webhookSecret=process.env.STRIPE_WEBHOOK_SECRET;
-        if(!webhookSecret)
-        {
-            throw new NotFoundError("Stripe is missing")
-        }
-        let event:Stripe.Event;
-        try {
-            event=this.stripe.webhooks.constructEvent(payload,signature,webhookSecret);
-        } catch (error:unknown) {
-            throw new UnauthorizedError(`${error.message}`)
-        }
-        switch(event.type)
-        {
-            case "checkout.session.completed":{
-                const session=event.data.object as Stripe.Checkout.Session;
-                if(session.id)
-                {
-                    const payment=await this.paymentRepository.findByStripeSessionId(session.id);
-                    if(!payment)
-                    {
-                        throw new NotFoundError("Payment Not Found")
-                    }
-                    await this.paymentRepository.updatePaymentStatus(payment._id.toString(),PaymentStatus.COMPLETED);
-                    const pkg=await this.packageRepository.findById(payment.packageId.toString())
-                    {
-                        if(!pkg)
-                        {
-                            throw new NotFoundError("Package Not Found")
-                        }
-                    }
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+        throw new Error("STRIPE_WEBHOOK_SECRET environment variable is missing.");
+    }
 
-                    const pkg=await this.packageRepository.findById(payment.packageId.toString())
-                    if(!pkg)
-                    {
-                        throw new NotFoundError("Package Not Found")
-                    }
-                    await this.trainerassignmentservice.createAssignment({
-                        userId:payment.userId.toString(),
-                        packageId:payment.packageId.toString(),
-                        paymentId:payment._id.toString()
-                        
-                    });
+    let event: Stripe.Event;
+    try {
+        event = this.stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+    } catch (error: any) {
+        throw new UnauthorizedError(`Webhook Signature Verification Failed: ${error.message}`);
+    }
 
-
-                    
+    switch (event.type) {
+        case "checkout.session.completed": {
+            const session = event.data.object as Stripe.Checkout.Session;
+            if (session.id) {
+                const payment = await this.paymentRepository.findByStripeSessionId(session.id);
+                if (!payment) {
+                    throw new NotFoundError("Payment Not Found");
                 }
-                break;
 
-            }
-            case "checkout.session.expired":{
-                const session=event.data.object as Stripe.Checkout.Session;
-                if(session.id)
-                {
-                    const payment=await this.paymentRepository.findByStripeSessionId(session.id);
-                    if(payment)
-                    {
-                        await this.paymentRepository.updatePaymentStatus(payment._id.toString(),PaymentStatus.FAILED)
-                    }
+                await this.paymentRepository.updatePaymentStatus(
+                    payment._id.toString(),
+                    PaymentStatus.COMPLETED
+                );
+
+                const pkg = await this.packageRepository.findById(payment.packageId.toString());
+                if (!pkg) {
+                    throw new NotFoundError("Package Not Found");
                 }
-                break;
+
+                await this.trainerassignmentservice.createAssignment({
+                    userId: payment.userId.toString(),
+                    packageId: payment.packageId.toString(),
+                    paymentId: payment._id.toString()
+                });
             }
-            default;
             break;
         }
+        case "checkout.session.expired": {
+            const session = event.data.object as Stripe.Checkout.Session;
+            if (session.id) {
+                const payment = await this.paymentRepository.findByStripeSessionId(session.id);
+                if (payment) {
+                    await this.paymentRepository.updatePaymentStatus(
+                        payment._id.toString(),
+                        PaymentStatus.FAILED
+                    );
+                }
+            }
+            break;
+        }
+        default:
+            break;
     }
+}
+
 
     async getPaymentsByUser(userId: string): Promise<IPayment[]> {
         return this.paymentRepository.findByUser(userId);
