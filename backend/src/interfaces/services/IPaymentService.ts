@@ -4,7 +4,7 @@ import type { IPayment } from "../../models/Payment.js";
 
 export interface IPaymentService{
     createCheckoutSession(userId:string,data:CreateCheckoutDTO):Promise<CheckoutResponseDTO>;
-    handleWebhook(event:Stripe.Event):Promise<void>;
+    handleWebhook(payload:Buffer|string,signature:string):Promise<void>;
     getPaymentsByUser(userId:string):Promise<IPayment[]>;
     getPaymentById(paymentId:string):Promise<IPayment|null>;
 }

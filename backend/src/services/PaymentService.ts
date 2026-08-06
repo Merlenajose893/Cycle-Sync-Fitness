@@ -8,7 +8,7 @@ import { TOKENS } from "../container/tokens.js";
 import type { IPayment } from "../models/Payment.js";
 import { PaymentStatus } from "../constants/payment.js";
 import { Types } from "mongoose";
-import { NotFoundError } from "../errors/index.js";
+import { NotFoundError, UnauthorizedError } from "../errors/index.js";
 
 @injectable()
 export class PaymentService implements IPaymentService {
@@ -16,7 +16,8 @@ export class PaymentService implements IPaymentService {
 
     constructor(
         @inject(TOKENS.IPaymentRepository) private paymentRepository: IPaymentRepository,
-        @inject(TOKENS.ITrainerPackageRepository) private packageRepository: ITrainerPackageRepository
+        @inject(TOKENS.ITrainerPackageRepository) private packageRepository: ITrainerPackageRepository,
+        
     ) {
         const secretKey = process.env.STRIPE_SECRET_KEY;
         if (!secretKey) {
@@ -78,27 +79,41 @@ export class PaymentService implements IPaymentService {
         };
     }
 
-    async handleWebhook(event: Stripe.Event): Promise<void> {
-        switch (event.type) {
-            case "checkout.session.completed": {
-                const session = event.data.object as Stripe.Checkout.Session;
-                if (session.id) {
-                    const payment = await this.paymentRepository.findByStripeSessionId(session.id);
+    async handleWebhook(payload: Buffer | string, signature: string): Promise<void> {
+        const webhookSecret=process.env.STRIPE_WEBHOOK_SECRET;
+        if(!webhookSecret)
+        {
+            throw new NotFoundError("Stripe is missing")
+        }
+        let event:Stripe.Event;
+        try {
+            event=this.stripe.webhooks.constructEvent(payload,signature,webhookSecret);
+        } catch (error:unknown) {
+            throw new UnauthorizedError(`${error.message}`)
+        }
+        switch(event.type)
+        {
+            case "checkout.session.completed":{
+                const session=event.data.object as Stripe.Checkout.Session;
+                if(session.id)
+                {
+                    const payment=await this.paymentRepository.findByStripeSessionId(session.id);
                     if(!payment)
                     {
-                        throw new NotFoundError("Payment not found")
+                        throw new NotFoundError("Payment Not Found")
                     }
-                    if (payment) {
-                        await this.paymentRepository.updatePaymentStatus(
-                            payment._id.toString(),
-                            PaymentStatus.COMPLETED
-                        );
+                    await this.paymentRepository.updatePaymentStatus(payment._id.toString(),PaymentStatus.COMPLETED);
+                    const pkg=await this.packageRepository.findById(payment.packageId.toString())
+                    {
+                        if(!pkg)
+                        {
+                            throw new NotFoundError("Package Not Found")
+                        }
                     }
+
+                    
                 }
-                break;
             }
-            default:
-                break;
         }
     }
 
