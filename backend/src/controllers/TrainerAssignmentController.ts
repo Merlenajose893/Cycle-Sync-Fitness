@@ -31,8 +31,9 @@ getAssignmentById=async (req:Request,res:Response,next:NextFunction) => {
 }
 getTrainerClients=async (req:Request,res:Response,next:NextFunction) => {
     try {
-        const trainerId=req.user?.userId;
+        const trainerId=req.user?.userId!;
         const result=await this.trainerassignService.getTrainerClients(trainerId);
+        successResponse(res, "Trainer clients fetched successfully", HttpStatus.OK, result);
     } catch (error) {
         next(error)
     }
