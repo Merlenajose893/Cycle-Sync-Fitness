@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info } from 'lucide-react';
+import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info, RefreshCw, CheckCircle } from 'lucide-react';
 import '../../styles/UserPages.css';
-import { WorkoutProgram } from '../../types/workout.types';
-import { userAssignmentService } from '../../services/assignment/userAssignmentService';
+import type { WorkoutProgram } from '../../types/workout.types';
+import { workoutProgramService } from '../../services/workout/workoutProgramService';
 
 export interface ExerciseItem {
   id: string;
@@ -24,25 +24,29 @@ export interface WorkoutLogItem {
 }
 
 const Exercise: React.FC = () => {
-  const {getActivePrograms}=userAssignmentService();
   const [activeTab, setActiveTab] = useState<'workouts' | 'history'>('workouts');
-  const [activeProgram,setActiveProgram]=useState<WorkoutProgram|null>(null);
-  const [loading,setLoading]=useState(false)
+  const [activeProgram, setActiveProgram] = useState<WorkoutProgram | null>(null);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
 
-  // Workouts and History start blank (populated dynamically when trainer assigns exercises)
-  const [workouts] = useState<ExerciseItem[]>([]);
   const [historyLogs] = useState<WorkoutLogItem[]>([]);
 
-  const filteredWorkouts = workouts.filter((w) => {
-    const matchSearch = !search || w.title.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filter === 'All' || w.type === filter;
-    return matchSearch && matchFilter;
-  });
+  useEffect(() => {
+    const fetchActiveProgram = async () => {
+      setLoading(true);
+      try {
+        const program = await workoutProgramService.getActivePrograms();
+        setActiveProgram(program);
+      } catch (err) {
+        console.error("Failed to fetch active workout program:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect
-
+    fetchActiveProgram();
+  }, []);
 
   return (
     <div className="up-page">
@@ -75,35 +79,65 @@ const Exercise: React.FC = () => {
             ))}
           </div>
 
-          {filteredWorkouts.length === 0 ? (
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-secondary)' }}>
+              <RefreshCw size={28} className="spin-icon" style={{ marginBottom: 12 }} />
+              <p>Loading assigned workout program...</p>
+            </div>
+          ) : activeProgram ? (
+            <div className="up-card" style={{ padding: 24, marginBottom: 24 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+                <div>
+                  <span style={{ padding: '4px 10px', background: '#dbeafe', color: '#2563eb', borderRadius: 12, fontSize: '0.75rem', fontWeight: 700 }}>
+                    {activeProgram.phase || 'FOLLICULAR'} PHASE SYNC
+                  </span>
+                  <h2 style={{ margin: '8px 0 4px', fontSize: '1.4rem' }}>{activeProgram.title}</h2>
+                </div>
+              </div>
+
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.5, marginBottom: 24 }}>
+                {activeProgram.description || 'Customized workout program created by your personal trainer.'}
+              </p>
+
+              {/* Days list */}
+              {activeProgram.days && activeProgram.days.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  {activeProgram.days.map((day: any, idx: number) => (
+                    <div key={idx} style={{ padding: 16, borderRadius: 12, background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                      <h4 style={{ margin: '0 0 12px', fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+                        Day {day.dayNumber || idx + 1}: {day.title || 'Routine'}
+                      </h4>
+                      {day.exercises && day.exercises.length > 0 ? (
+                        <div style={{ display: 'grid', gap: 10 }}>
+                          {day.exercises.map((ex: any, exIdx: number) => (
+                            <div key={exIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: 'rgba(0, 0, 0, 0.15)', borderRadius: 8 }}>
+                              <div>
+                                <span style={{ fontWeight: 600, color: 'var(--text-primary)', display: 'block' }}>{ex.name}</span>
+                                {ex.notes && <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ex.notes}</span>}
+                              </div>
+                              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb' }}>
+                                {ex.sets} sets × {ex.reps} reps
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Rest day or custom mobility recovery.</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Your trainer will be adding daily exercises to this program shortly.</p>
+              )}
+            </div>
+          ) : (
             <div className="up-card" style={{ textAlign: 'center', padding: '48px 24px', background: '#f8fafc', border: '1px dashed #cbd5e1' }}>
               <Activity size={48} style={{ color: '#94a3b8', marginBottom: 12 }} />
               <h3 style={{ margin: 0, color: '#334155', fontSize: '1.1rem', fontWeight: 700 }}>No Trainer Workouts Assigned Yet</h3>
               <p style={{ margin: '8px 0 0', color: '#64748b', fontSize: '0.88rem', maxWidth: 460, marginInline: 'auto' }}>
                 Workouts and exercise routines created by your trainer will automatically appear here once assigned to your profile.
               </p>
-            </div>
-          ) : (
-            <div className="up-exercise-grid">
-              {filteredWorkouts.map((w) => (
-                <div key={w.id} className="up-card up-exercise-card">
-                  {w.image && (
-                    <div style={{ height: 160, overflow: 'hidden' }}>
-                      <img src={w.image} alt={w.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
-                  )}
-                  <div className="up-exercise-card-body">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3>{w.title}</h3>
-                      <span style={{ padding: '3px 10px', background: '#dbeafe', color: '#2563eb', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>{w.type}</span>
-                    </div>
-                    <div className="up-exercise-meta">
-                      <span><Dumbbell size={14} /> {w.duration}</span>
-                      <span><Flame size={14} /> {w.calories} kcal</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           )}
         </>
