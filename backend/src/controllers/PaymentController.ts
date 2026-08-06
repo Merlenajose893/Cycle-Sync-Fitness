@@ -28,8 +28,8 @@ export class PaymentController {
 
     handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const event = req.body as Stripe.Event;
-            const result = await this.paymentService.handleWebhook(event);
+            const signature=req.headers["stripe-signature"] as string;
+            const result = await this.paymentService.handleWebhook(req.body,signature);
             successResponse(res, "Webhook processed successfully", result, HttpStatus.OK);
         } catch (error) {
             next(error);
