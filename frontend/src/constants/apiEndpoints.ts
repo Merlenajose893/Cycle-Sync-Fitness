@@ -171,5 +171,8 @@ MEALS: {
 
     PAYMENT:{
       CHECKOUt_SESSION:(pakageId:string)=>`api/payment/checkout-session/${pakageId}`
+    },
+    TRAINER_ASSIGNMENT:{
+      TRAINERCLIENTS:"/api/trainer-assignments/trainer/clients"
     }
 }

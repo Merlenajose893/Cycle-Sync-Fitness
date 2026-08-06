@@ -27,6 +27,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
 import TrainerLayout from "../layouts/TrainerLayout";
 import FoodsAndRecipes from "../pages/trainer/FoodsAndRecipes";
+import TrainerClients from "../pages/trainer/TrainerClients";
+import TrainerWorkouts from "../pages/trainer/TrainerWorkouts";
 import BlockedPage from "../pages/common/BlockedPage";
 import About from "../pages/common/About";
 import TrainerPendingPage from "../pages/trainer/TrainerPending";
@@ -120,6 +122,8 @@ function AppRoutes() {
                     <Route element={<TrainerLayout />}>
                         <Route path="/trainer" element={<TrainerDashboard />} />
                         <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
+                        <Route path="/trainer/clients" element={<TrainerClients />} />
+                        <Route path="/trainer/workouts" element={<TrainerWorkouts />} />
                         <Route path="/trainer/nutrition" element={<FoodsAndRecipes />} />
                     </Route>
                 </Route>
