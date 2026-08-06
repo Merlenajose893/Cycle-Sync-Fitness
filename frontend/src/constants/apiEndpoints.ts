@@ -167,5 +167,9 @@ MEALS: {
       PROFILE:(trainerId:string)=>`/api/trainers/${trainerId}`,
       PACKAGES:(trainerId:string)=>`/api/trainers/packages/${trainerId}`
 
+    },
+
+    PAYMENT:{
+      CHECKOUt_SESSION:(pakageId:string)=>`api/payment/checkout-session/${pakageId}`
     }
 }

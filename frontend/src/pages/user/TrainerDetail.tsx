@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Award, Check, ShoppingBag, RefreshCw } from 'lucide-react';
 import { useTrainerMarketplace } from '../../hooks/marketplace/useTrainerMarketPlace';
+import { usePayment } from '../../hooks/payment/usePayment';
 import type { TrainerPackage } from '../../types/marketplace.types';
 import '../../styles/UserPages.css';
 
@@ -17,6 +18,8 @@ const TrainerDetail: React.FC = () => {
     fetchTrainerProfile,
     fetchPackages,
   } = useTrainerMarketplace();
+
+  const { checkout, purchasingId, error: paymentError } = usePayment();
 
   useEffect(() => {
     if (trainerId) {
@@ -123,6 +126,13 @@ const TrainerDetail: React.FC = () => {
         </div>
       </div>
 
+      {/* Payment Error banner */}
+      {paymentError && (
+        <div style={{ padding: '12px 16px', borderRadius: 8, background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', marginBottom: 20, fontSize: '0.9rem' }}>
+          {paymentError}
+        </div>
+      )}
+
       {/* Packages Section */}
       <div>
         <div style={{ marginBottom: 20 }}>
@@ -173,9 +183,11 @@ const TrainerDetail: React.FC = () => {
                 <button
                   className="up-btn up-btn-primary"
                   style={{ width: '100%', justifyContent: 'center' }}
-                  onClick={() => alert(`Starting purchase for ${pkg.packageName}... (Stripe Checkout in Phase 2)`)}
+                  disabled={purchasingId === pkg._id}
+                  onClick={() => checkout(pkg._id)}
                 >
-                  <ShoppingBag size={16} /> Buy Package
+                  <ShoppingBag size={16} />
+                  {purchasingId === pkg._id ? 'Redirecting to Stripe...' : 'Buy Package'}
                 </button>
               </div>
             ))}
