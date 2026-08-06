@@ -44,6 +44,7 @@ import Exercise from "../pages/user/Exercise";
 import Reports from "../pages/user/Reports";
 import Messages from "../pages/user/Messages";
 import Trainers from "../pages/user/Trainers";
+import TrainerDetail from "../pages/user/TrainerDetail";
 import Subscription from "../pages/user/Subscription";
 
 function AppRoutes() {
@@ -83,6 +84,7 @@ function AppRoutes() {
                         <Route path="/app/reports" element={<Reports />} />
                         <Route path="/app/messages" element={<Messages />} />
                         <Route path="/app/trainer" element={<Trainers />} />
+                        <Route path="/app/trainer/:trainerId" element={<TrainerDetail />} />
                         <Route path="/app/premium" element={<Subscription />} />
                     </Route>
                 </Route>
