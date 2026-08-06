@@ -1,4 +1,4 @@
-console.log("hello");
+
 
 import 'dotenv/config';
 
@@ -22,6 +22,7 @@ import workoutLogRoutes from './routes/workoutLog.routes.js';
 import trainerPackageRoutes from './routes/trainerPackage.routes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import trainerBrowseRoutes from './routes/trainerbrowse.routes.js';
+import trainerAssignmentRoutes from './routes/trainerassignment.routes.js'
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { container } from './container/index.js';
@@ -60,6 +61,7 @@ app.use("/api/workout-logs", workoutLogRoutes);
 app.use("/api/trainer-packages",trainerPackageRoutes);
 app.use("/api/payment",paymentRoutes);
 app.use("/api/trainers",trainerBrowseRoutes);
+app.use("/api/trainer-assignments",trainerAssignmentRoutes);
 
 
 app.use(errorHandler);
