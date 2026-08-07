@@ -1,4 +1,4 @@
-import { Schema, model, Types, Document } from "mongoose";
+import { Schema, model, Types, Document, SchemaType } from "mongoose";
 import { Mood, PhysicalSymptom } from "../constants/health.constant.js";
 // import type { Mood, PhysicalSymptom } from "../constants/health.constant.js";
 
@@ -119,6 +119,7 @@ const DailyHealthLogSchema = new Schema<IDailyHealthLog>(
   }
 );
 
+DailyHealthLogSchema.index({userId:1,date:1},{unique:true})
 
 
 export const DailyHealthLog = model<IDailyHealthLog>(

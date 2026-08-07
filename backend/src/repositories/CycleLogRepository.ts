@@ -9,12 +9,15 @@ export class CycleLogRepository extends BaseRepository<ICycleLog> implements ICy
     }
 
     findByUser(userId: string): Promise<ICycleLog[]> {
-        return this.model.find({userId}).sort({startedAt:-1});
+        return this.model.find({userId}).sort({startDate:-1});
     }
     findByLatest(userId: string): Promise<ICycleLog | null> {
         return this.model.findOne({userId})
     }
     findRecentCycles(userId: string, limit: number): Promise<ICycleLog[]> {
-        return this.model.find({userId}).sort({startedAt:-1}).limit(limit)
+        return this.model.find({userId}).sort({startDate:-1}).limit(limit)
+    }
+    countByUser(userId: string): Promise<number> {
+        return this.model.countDocuments({userId})
     }
 }
