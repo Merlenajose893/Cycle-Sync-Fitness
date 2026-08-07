@@ -17,4 +17,7 @@ export class CycleLogRepository extends BaseRepository<ICycleLog> implements ICy
     findRecentCycles(userId: string, limit: number): Promise<ICycleLog[]> {
         return this.model.find({userId}).sort({startDate:-1}).limit(limit)
     }
+    countByUser(userId: string): Promise<number> {
+        return this.model.countDocuments({userId})
+    }
 }

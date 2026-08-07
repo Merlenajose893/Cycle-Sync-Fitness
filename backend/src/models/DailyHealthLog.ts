@@ -119,7 +119,7 @@ const DailyHealthLogSchema = new Schema<IDailyHealthLog>(
   }
 );
 
-DailyHealthLogSchema.index({userId:1,date:1})
+DailyHealthLogSchema.index({userId:1,date:1},{unique:true})
 
 
 export const DailyHealthLog = model<IDailyHealthLog>(
