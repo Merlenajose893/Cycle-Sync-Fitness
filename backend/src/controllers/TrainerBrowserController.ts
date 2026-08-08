@@ -14,7 +14,7 @@ export class TrainerBrowserController{
     browseTrainers=async (req:Request,res:Response,next:NextFunction) => {
         try {
             const result=await this.trainerbrowserservice.getApprovedTrainers();
-            successResponse(res,"Trainers Fetched",HttpStatus.OK,result);
+            successResponse(res,"Trainers Fetched",result,HttpStatus.OK);
         } catch (error) {
             next(error)
         }
@@ -25,7 +25,7 @@ export class TrainerBrowserController{
         try {
            const trainerId=req.params.trainerId;
            const result=await this.trainerbrowserservice.getTrainerProfile(trainerId);
-           successResponse(res,"Trainer profile fetched",HttpStatus.OK,result); 
+           successResponse(res,"Trainer profile fetched",result,HttpStatus.OK); 
         } catch (error) {
             next(error)
         }

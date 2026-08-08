@@ -9,3 +9,4 @@ router.post("/webhook",express.raw({type:"application/json"}),paymenyController.
 router.post("/checkout-session",authMiddleware,paymenyController.createCheckoutSession);
 router.get("/my-payments",authMiddleware,paymenyController.getPaymentsByUser)
 router.get("/:id",authMiddleware,paymenyController.getPaymentById);
+export default router;
