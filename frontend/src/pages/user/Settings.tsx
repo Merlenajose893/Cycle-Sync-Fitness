@@ -102,15 +102,29 @@ const Settings: React.FC = () => {
         }));
     };
 
+import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
+
     const handleSave = async () => {
+        // Zod DOB Validation if DOB is entered
+        if (formData.bodyDetails?.dateOfBirth) {
+            const dateStr = typeof formData.bodyDetails.dateOfBirth === 'string'
+                ? formData.bodyDetails.dateOfBirth
+                : new Date(formData.bodyDetails.dateOfBirth).toISOString().split('T')[0];
+            const dobValidation = userDobSchema.safeParse(dateStr);
+            if (!dobValidation.success) {
+                showToast.error(dobValidation.error.issues[0]?.message || "Invalid Date of Birth");
+                return;
+            }
+        }
+
         try {
             await updateProfile(formData);
             showToast.success("Profile updated successfully!");
             // 5.2 Redirect to profile page after save
             navigate('/app/profile');
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to update profile", error);
-            showToast.error("Failed to update profile");
+            showToast.error(parseApiErrorMessage(error, "Failed to update profile"));
         }
     };
 
@@ -276,7 +290,14 @@ const Settings: React.FC = () => {
                                     <label className="field-label">Date of Birth</label>
                                     <div className="input-wrapper">
                                         <Calendar size={16} className="input-icon" />
-                                        <input type="date" className="form-input" name='dateOfBirth' value={formData.bodyDetails?.dateOfBirth || ''} onChange={handleBodyDetailsChange} />
+                                        <input
+                                            type="date"
+                                            className="form-input"
+                                            name="dateOfBirth"
+                                            max={getDobMaxDate(13)}
+                                            value={formData.bodyDetails?.dateOfBirth ? new Date(formData.bodyDetails.dateOfBirth).toISOString().split('T')[0] : ''}
+                                            onChange={handleBodyDetailsChange}
+                                        />
                                     </div>
                                 </div>
 

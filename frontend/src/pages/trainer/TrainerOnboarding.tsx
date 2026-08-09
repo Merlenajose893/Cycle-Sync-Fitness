@@ -59,22 +59,51 @@ const TrainerOnboarding: React.FC = () => {
         }
     };
 
+import { trainerDobSchema, trainerCertificationSchema, documentUploadSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
+
+    const [dobError, setDobError] = useState<string | null>(null);
+
     const handleNext = async () => {
-        if (step === 1 && (!formData.fullName || !formData.phone || !formData.gender)) {
-            showToast.error("Please fill all required personal details");
-            return;
+        if (step === 1) {
+            if (!formData.fullName || !formData.phone || !formData.gender) {
+                showToast.error("Please fill all required personal details");
+                return;
+            }
+            if (formData.dob) {
+                const dobValidation = trainerDobSchema.safeParse(formData.dob);
+                if (!dobValidation.success) {
+                    const msg = dobValidation.error.issues[0]?.message || "Invalid Date of Birth";
+                    setDobError(msg);
+                    showToast.error(msg);
+                    return;
+                }
+            }
+            setDobError(null);
         }
-        if (step === 2 && (formData.specialty.length === 0 || !formData.experience)) {
-            showToast.error("Please select at least one specialty and experience level");
-            return;
+
+        if (step === 2) {
+            const certValidation = trainerCertificationSchema.safeParse({
+                certifications: formData.certifications,
+                experience: formData.experience,
+                specialty: formData.specialty,
+            });
+            if (!certValidation.success) {
+                const msg = certValidation.error.issues[0]?.message || "Please check certification details";
+                showToast.error(msg);
+                return;
+            }
         }
-        if (step === 3 && (!idDocumentFile)) {
-            showToast.error("Please upload a valid ID document");
-            return;
-        }
-        if (step === 3 && !formData.agreeTerms) {
-            showToast.error("You must agree to the Terms of Service to proceed");
-            return;
+
+        if (step === 3) {
+            const docValidation = documentUploadSchema.safeParse({ idDocument: idDocumentFile });
+            if (!docValidation.success) {
+                showToast.error(docValidation.error.issues[0]?.message || "Please upload a valid ID document");
+                return;
+            }
+            if (!formData.agreeTerms) {
+                showToast.error("You must agree to the Terms of Service to proceed");
+                return;
+            }
         }
 
         if (step < totalSteps) {
@@ -235,9 +264,17 @@ const TrainerOnboarding: React.FC = () => {
                                 </div>
                                 <div className="tp-form-group">
                                     <label>Date of Birth</label>
-                                    <input type="date" value={formData.dob}
-                                        onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                                    <input
+                                        type="date"
+                                        max={getDobMaxDate(18)}
+                                        value={formData.dob}
+                                        onChange={(e) => {
+                                            setFormData({ ...formData, dob: e.target.value });
+                                            const res = trainerDobSchema.safeParse(e.target.value);
+                                            setDobError(res.success ? null : res.error.issues[0]?.message || null);
+                                        }}
                                     />
+                                    {dobError && <span style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{dobError}</span>}
                                 </div>
                             </div>
                             <div className="tp-form-group">

@@ -18,10 +18,12 @@ import {
 import '../../styles/Auth.css';
 
 import { useUserOnboarding } from '../../hooks/onboarding/useUserOnboarding';
+import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
+    const [dobError, setDobError] = useState<string | null>(null);
     const [bodyDetails, setBodyDetails] = useState({
         height: "",
         weight: "",
@@ -41,7 +43,8 @@ const Onboarding: React.FC = () => {
     });
 
     const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
-    const { loading, error, updateBodyDetails, updateCycleSetUp, updateGoals, completeOnboarding } = useUserOnboarding();
+    const { loading, error: apiError, updateBodyDetails, updateCycleSetUp, updateGoals, completeOnboarding } = useUserOnboarding();
+    const [customError, setCustomError] = useState<string | null>(null);
 
     const steps = [
         { id: 1, title: 'Identity', icon: User, sideTitle: 'Start your journey', sideQuote: '"The most important step is the first one."', sideImage: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=1200' },
@@ -63,8 +66,18 @@ const Onboarding: React.FC = () => {
     };
 
     const handleNext = async () => {
+        setCustomError(null);
         try {
             if (step === 1) {
+                // Validate Date of Birth using Zod schema
+                const dobValidation = userDobSchema.safeParse(bodyDetails.dateOfBirth);
+                if (!dobValidation.success) {
+                    const msg = dobValidation.error.issues[0]?.message || "Invalid Date of Birth";
+                    setDobError(msg);
+                    return;
+                }
+                setDobError(null);
+
                 await updateBodyDetails({
                     height: Number(bodyDetails.height),
                     weight: Number(bodyDetails.weight),
@@ -151,7 +164,7 @@ const Onboarding: React.FC = () => {
                     </div>
 
                     {/* Error display */}
-                    {error && (
+                    {(customError || apiError) && (
                         <div style={{
                             background: '#fef2f2',
                             border: '1px solid #fecaca',
@@ -162,7 +175,7 @@ const Onboarding: React.FC = () => {
                             fontSize: '0.9rem',
                             fontWeight: 500,
                         }}>
-                            {error}
+                            {customError || parseApiErrorMessage({ response: { data: { message: apiError } } }, apiError || "An error occurred")}
                         </div>
                     )}
 
@@ -223,15 +236,19 @@ const Onboarding: React.FC = () => {
 
                                             <input
                                                 type="date"
+                                                max={getDobMaxDate(13)}
                                                 value={bodyDetails.dateOfBirth}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
                                                     setBodyDetails({
                                                         ...bodyDetails,
                                                         dateOfBirth: e.target.value,
-                                                    })
-                                                }
+                                                    });
+                                                    const res = userDobSchema.safeParse(e.target.value);
+                                                    setDobError(res.success ? null : res.error.issues[0]?.message || null);
+                                                }}
                                             />
                                         </div>
+                                        {dobError && <span style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{dobError}</span>}
                                     </div>
 
                                     <div className="form-group">
