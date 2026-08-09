@@ -181,18 +181,24 @@ container.register(
   }
 )
 
-container.register(
-  TOKENS.IMealLogRepository,
-  {
-    useClass:MealLogRepository
-  }
-)
+import { CycleLogRepository } from "../repositories/CycleLogRepository.js";
+import { DailyHealthLogRepository } from "../repositories/DailyHealthLogRepository.js";
+import { HealthMilestoneRepository } from "../repositories/HealthMilestoneRepository.js";
+import { CycleLogService } from "../services/CycleLogService.js";
+import { CyclePredictionService } from "../services/CyclePredictionService.js";
+import { DailyHealthLogService } from "../services/DailyHealthLogService.js";
+import { HealthMilestoneService } from "../services/HealthMilestoneService.js";
 
-container.register(
-  TOKENS.IRecipeRepository,
-  {
-    useClass:RecipeRepository
-  }
-)
+container.register(TOKENS.IMealLogRepository, { useClass: MealLogRepository });
+container.register(TOKENS.IRecipeRepository, { useClass: RecipeRepository });
+
+container.register(TOKENS.ICycleLogRepository, { useClass: CycleLogRepository });
+container.register(TOKENS.IDailyHealthLogRepository, { useClass: DailyHealthLogRepository });
+container.register(TOKENS.IHealthMilestoneRepository, { useClass: HealthMilestoneRepository });
+
+container.register(TOKENS.ICycleLogService, { useClass: CycleLogService });
+container.register(TOKENS.ICyclePredictionService, { useClass: CyclePredictionService });
+container.register(TOKENS.IDailyHealthLogService, { useClass: DailyHealthLogService });
+container.register(TOKENS.IHealthMilestoneService, { useClass: HealthMilestoneService });
 
 export { container };

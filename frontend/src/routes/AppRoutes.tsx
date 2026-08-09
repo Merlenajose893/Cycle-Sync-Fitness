@@ -10,6 +10,7 @@ import ForgotPasswordPage from "../pages/user/ForgotPassword";
 import ResetPasswordPage from "../pages/user/ResetPassword";
 import VerificationSuccess from "../pages/user/VerificationSuccess";
 import Onboarding from "../pages/user/Onboarding";
+import HealthDashboard from "../pages/user/HealthDashboard";
 import TrainerRegister from "../pages/trainer/TrainerRegister";
 import TrainerLogin from "../pages/trainer/TrainerLogin";
 import TrainerVerifyEmail from "../pages/trainer/TrainerVerify";
@@ -61,6 +62,7 @@ function AppRoutes() {
                         <Route path="/app/ai-plan" element={<AIPlanBuilder />} />
                         <Route path="/app/ai-plan/view" element={<AIPlanView />} />
                         <Route path="/app/ai-plan/workout/:dayIndex" element={<WorkoutDetail />} />
+                        <Route path="/app/health" element={<HealthDashboard />} />
                     </Route>
                 </Route>
 

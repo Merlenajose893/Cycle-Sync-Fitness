@@ -17,6 +17,8 @@ import userProfileRoutes from './routes/userProfileRoutes.js'
 
 import aiPlanRoutes from './routes/aiPlan.routes.js'
 
+import healthTrackingRoutes from './routes/healthTrackingRoutes.js'
+
 import { errorHandler } from './middlewares/errorHandler.js'
 const app = express();
 connectDB();
@@ -46,6 +48,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/users", userProfileRoutes);
 
 app.use("/api/ai-plans", aiPlanRoutes);
+app.use("/api/health", healthTrackingRoutes);
 
 
 app.use(errorHandler);
