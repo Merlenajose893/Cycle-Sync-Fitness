@@ -11,6 +11,7 @@ import ForgotPasswordPage from "../pages/user/ForgotPassword";
 import ResetPasswordPage from "../pages/user/ResetPassword";
 import VerificationSuccess from "../pages/user/VerificationSuccess";
 import Onboarding from "../pages/user/Onboarding";
+import HealthDashboard from "../pages/user/HealthDashboard";
 import TrainerRegister from "../pages/trainer/TrainerRegister";
 import TrainerLogin from "../pages/trainer/TrainerLogin";
 import TrainerVerifyEmail from "../pages/trainer/TrainerVerify";
@@ -91,6 +92,7 @@ function AppRoutes() {
                         <Route path="/app/trainer" element={<Trainers />} />
                         <Route path="/app/trainer/:trainerId" element={<TrainerDetail />} />
                         <Route path="/app/premium" element={<Subscription />} />
+                        <Route path="/app/health" element={<HealthDashboard />} />
                         <Route path="/payment/success" element={<PaymentSuccess />} />
                         <Route path="/payment/cancel" element={<PaymentCancel />} />
                     </Route>

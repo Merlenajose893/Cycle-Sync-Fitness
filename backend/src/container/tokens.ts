@@ -1,3 +1,4 @@
+
 export const TOKENS = {
   IUserRepository: Symbol.for("IUserRepository"),
   IUserProfileService: Symbol.for("IUserProfileService"),
@@ -34,5 +35,27 @@ export const TOKENS = {
   ITrainerAssignmentRepository:Symbol.for("ITrainerAssignmentRepository"),
   ITrainerAssignmentService:Symbol.for("ITrainerAssignmentService"),
   IAssignmentExpiryScheduler:Symbol.for("IAssignmentExpiryScheduler"),
-  ITrainerBrowserService:Symbol.for("ITrainerBrowserService")
-};
+  ITrainerBrowserService:Symbol.for("ITrainerBrowserService"),
+    ICycleLogRepository:
+        Symbol.for("ICycleLogRepository"),
+
+        IDailyHealthLogRepository:
+        Symbol.for("IDailyHealthLogRepository"),
+
+        IHealthMilestoneRepository:
+        Symbol.for("IHealthMilestoneRepository"),
+
+        ICycleLogService:
+        Symbol.for("ICycleLogService"),
+
+        ICyclePredictionService:
+        Symbol.for("ICyclePredictionService"),
+
+        IDailyHealthLogService:
+        Symbol.for("IDailyHealthLogService"),
+
+        IHealthMilestoneService:
+        Symbol.for("IHealthMilestoneService")
+
+
+        }

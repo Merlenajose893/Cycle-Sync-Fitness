@@ -1,3 +1,4 @@
+
 import "reflect-metadata";
 
 import { container } from "tsyringe";
@@ -40,6 +41,14 @@ import { TrainerAssignmentRepository } from "../repositories/TrainerAssignmentRe
 import { TrainerAssignmentService } from "../services/TrainerAssignmentService.js";
 import { AssignmentExpiryScheduler } from "../jobs/assignmentExpiry.job.js";
 import { TrainerBrowserService } from "../services/TrainerBrowserService.js";
+import { CycleLogRepository } from "../repositories/CycleLogRepository.js";
+import { DailyHealthLogRepository } from "../repositories/DailyHealthLogRepository.js";
+import { HealthMilestoneRepository } from "../repositories/HealthMilestoneRepository.js";
+import { CycleLogService } from "../services/CycleLogService.js";
+import { CyclePredictionService } from "../services/CyclePredictionService.js";
+import { DailyHealthLogService } from "../services/DailyHealthLogService.js";
+import { HealthMilestoneService } from "../services/HealthMilestoneService.js";
+
 
 container.register(TOKENS.IUserRepository, { useClass: UserRepository });
 container.register(TOKENS.IUserProfileService, { useClass: UserProfileService });
@@ -79,5 +88,18 @@ container.register(TOKENS.ITrainerAssignmentRepository,{useClass:TrainerAssignme
 container.register(TOKENS.ITrainerAssignmentService,{useClass:TrainerAssignmentService});
 container.register(TOKENS.IAssignmentExpiryScheduler,{useClass:AssignmentExpiryScheduler});
 container.register(TOKENS.ITrainerBrowserService,{useClass:TrainerBrowserService})
+
+container.register(TOKENS.IMealLogRepository, { useClass: MealLogRepository });
+container.register(TOKENS.IRecipeRepository, { useClass: RecipeRepository });
+
+container.register(TOKENS.ICycleLogRepository, { useClass: CycleLogRepository });
+container.register(TOKENS.IDailyHealthLogRepository, { useClass: DailyHealthLogRepository });
+container.register(TOKENS.IHealthMilestoneRepository, { useClass: HealthMilestoneRepository });
+
+container.register(TOKENS.ICycleLogService, { useClass: CycleLogService });
+container.register(TOKENS.ICyclePredictionService, { useClass: CyclePredictionService });
+container.register(TOKENS.IDailyHealthLogService, { useClass: DailyHealthLogService });
+container.register(TOKENS.IHealthMilestoneService, { useClass: HealthMilestoneService });
+
 
 export { container };

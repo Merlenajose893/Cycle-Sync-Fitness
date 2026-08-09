@@ -1,0 +1,221 @@
+.hd-container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hd-header {
+  margin-bottom: 24px;
+}
+
+.hd-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: var(--text-primary, #0f172a);
+}
+
+.hd-subtitle {
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+}
+
+.hd-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.hd-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.hd-tab.active {
+  background: #f0fdf4;
+  color: #0d9488;
+}
+
+.hd-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.hd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.hd-status-box {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.hd-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.hd-badge.red {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.hd-badge.green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.hd-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.hd-btn-primary {
+  background: #0d9488;
+  color: white;
+}
+
+.hd-btn-secondary {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.hd-pred-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.hd-pred-item {
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 6px;
+
+}
+
+.hd-pred-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.hd-pred-val {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.hd-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.hd-chip {
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.hd-chip.active {
+  background: #0d9488;
+  color: white;
+  border-color: #0d9488;
+}
+
+.hd-water-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid #38bdf8;
+  margin: 24px auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hd-water-level {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(56, 189, 248, 0.3);
+  transition: height 0.4s ease;
+}
+
+.hd-water-text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.hd-water-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0369a1;
+}
+
+.hd-water-target {
+  font-size: 0.8rem;
+  color: #0284c7;
+}
+
+.hd-water-percent {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.hd-milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.hd-milestone-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
