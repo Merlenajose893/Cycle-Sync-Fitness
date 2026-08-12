@@ -24,22 +24,22 @@ const ingredientSchema = z.object({
 const macrosSchema = z.object({
 
   calories: z
-    .number()
+    .coerce.number()
     .min(0),
 
 
   protein: z
-    .number()
+    .coerce.number()
     .min(0),
 
 
   carbs: z
-    .number()
+    .coerce.number()
     .min(0),
 
 
   fat: z
-    .number()
+    .coerce.number()
     .min(0),
 
 });
@@ -89,19 +89,19 @@ export const createRecipeSchema = z.object({
 
 
   prepTime: z
-    .number()
+    .coerce.number()
     .nonnegative(),
 
 
 
   cookTime: z
-    .number()
+    .coerce.number()
     .nonnegative(),
 
 
 
   servings: z
-    .number()
+    .coerce.number()
     .positive(),
 
 

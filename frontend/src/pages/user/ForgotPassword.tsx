@@ -7,18 +7,20 @@ import '../../styles/Auth.css';
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const {forgotPassword,loading,error}=useUserAuth();
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     try {
-        await forgotPassword({email});
-        // setSubmitted(true);
-    } catch (error) {
-        console.error(error);
-        
+        const response = await forgotPassword({email});
+        if (response?.data?.userId) {
+          setUserId(response.data.userId);
+        }
+        setSubmitted(true);
+    } catch (err) {
+        console.error(err);
     }
-    setSubmitted(true);
   };
 
   return (
@@ -98,7 +100,7 @@ const ForgotPasswordPage: React.FC = () => {
                 <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>
               </p>
               
-              <Link to={`/reset-password?email=${encodeURIComponent(email)}`} className="btn btn-primary btn-full" style={{ padding: '14px', fontSize: '1rem', marginBottom: '16px' }}>
+              <Link to={`/reset-password?email=${encodeURIComponent(email)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`} className="btn btn-primary btn-full" style={{ padding: '14px', fontSize: '1rem', marginBottom: '16px' }}>
                 Enter Reset Code
               </Link>
               

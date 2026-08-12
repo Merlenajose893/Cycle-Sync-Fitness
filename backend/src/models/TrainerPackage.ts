@@ -1,4 +1,4 @@
-import { Schema, Types, Document, model } from "mongoose";
+import mongoose, { Schema, Types, Document, model } from "mongoose";
 
 export interface ITrainerPackage extends Document {
     trainerId: Types.ObjectId;
@@ -66,7 +66,6 @@ const TrainerPackageSchema = new Schema<ITrainerPackage>(
     }
 );
 
-export default model<ITrainerPackage>(
-    "TrainerPackage",
-    TrainerPackageSchema
-);
+export const TrainerPackage=mongoose.model<ITrainerPackage>(
+"TrainerPackage",TrainerPackageSchema
+)

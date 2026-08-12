@@ -31,11 +31,13 @@ export class MealLogController {
                 ...mealData
             } = req.body;
 
+            const parsedDate = date ? new Date(date) : new Date();
+            const validDate = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 
             const result =
                 await this.mealLogService.logMeal(
                     userId,
-                    new Date(date),
+                    validDate,
                     mealData
                 );
 
@@ -73,17 +75,38 @@ export class MealLogController {
                 new Date(req.params.date);
 
 
-            const result =
+            const log: any =
                 await this.mealLogService.getDayLog(
                     userId,
                     date
                 );
 
+            const doc = log?.toObject ? log.toObject() : log;
+            let totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+            if (doc && doc.meals && Array.isArray(doc.meals)) {
+                doc.meals.forEach((m: any) => {
+                    totalCalories += m.totalCalories || 0;
+                    totalProtein += m.totalProtein || 0;
+                    totalCarbs += m.totalCarbs || 0;
+                    totalFat += m.totalFat || 0;
+                });
+            }
+
+            const formattedResult = {
+                ...doc,
+                target: doc?.dailyTarget || { calories: 0, protein: 0, carbs: 0, fats: 0 },
+                summary: {
+                    totalCalories,
+                    totalProtein,
+                    totalCarbs,
+                    totalFat
+                }
+            };
 
             successResponse(
                 res,
                 "Day log fetched",
-                result,
+                formattedResult,
                 HttpStatus.OK
             );
 
@@ -154,13 +177,12 @@ export class MealLogController {
             const userId = req.user?.userId!;
 
 
-            const { mealType } = req.body;
-
+            const { mealType } = req.params;
 
             const result =
                 await this.mealLogService.removeMeal(
                     userId,
-                    mealType
+                    mealType 
                 );
 
 
@@ -198,11 +220,13 @@ export class MealLogController {
                 ...target
             } = req.body;
 
+            const parsedDate = date ? new Date(date) : new Date();
+            const validDate = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 
             const result =
                 await this.mealLogService.setDailyTarget(
                     userId,
-                    new Date(date),
+                    validDate,
                     target
                 );
 

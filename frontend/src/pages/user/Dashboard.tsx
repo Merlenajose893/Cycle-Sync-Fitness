@@ -4,32 +4,38 @@ import '../../styles/Dashboard.css';
 import { useUserContext } from '../../context/UserAuthContext';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import { useUserAssignment } from '../../hooks/assignment/useUserAssignment';
+import { useWorkoutProgram } from '../../hooks/workout/useWorkoutProgram';
 import type { AIPlan } from '../../types/aiplan.types';
-import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight } from 'lucide-react';
+import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight, Dumbbell, MessageSquare, Calendar } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useUserContext();
   const navigate = useNavigate();
   const { getActivePlan } = useAIPlan();
   const { assignment, fetchAssignment } = useUserAssignment();
+  const { activeProgram, fetchActiveProgram } = useWorkoutProgram();
   
   const [plan, setPlan] = useState<AIPlan | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPlan = async () => {
+    const loadDashboardData = async () => {
+      setLoading(true);
       try {
-        const activePlan = await getActivePlan();
+        const [activePlan] = await Promise.all([
+          getActivePlan().catch(() => null),
+          fetchAssignment().catch(() => null),
+          fetchActiveProgram().catch(() => null),
+        ]);
         setPlan(activePlan);
       } catch (error) {
-        console.error("Failed to fetch plan on dashboard", error);
+        console.error("Failed to fetch dashboard data", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchPlan();
-    fetchAssignment();
-  }, [getActivePlan, fetchAssignment]);
+    loadDashboardData();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -56,13 +62,14 @@ const Dashboard = () => {
   };
 
   const todayWorkoutData = getTodayWorkout();
+  const hasAnyPlanOrAssignment = !!(plan || assignment || activeProgram);
 
   return (
     <div className="dashboard-content animate-fadeIn">
       <div className="dashboard-header-premium" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div className="header-greeting">
           <h1>{getGreeting()}, {user?.firstName || 'User'}</h1>
-          <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Here is your daily summary</p>
+          <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Here is your daily training summary</p>
         </div>
         
         <button 
@@ -94,50 +101,46 @@ const Dashboard = () => {
       </div>
 
       {loading ? (
-        <div style={{ padding: '40px', textAlign: 'center' }}>
+        <div style={{ padding: '60px', textAlign: 'center' }}>
           <span className="spinner" style={{ width: '40px', height: '40px', borderWidth: '4px' }} />
+          <p style={{ marginTop: '12px', color: 'var(--text-secondary)' }}>Loading your dashboard...</p>
         </div>
-      ) : plan ? (
+      ) : (
         <div className="dashboard-plan-summary" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
-          <div className="dashboard-card" style={{ background: 'var(--surface-color)', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-             <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Sparkles size={18} color="var(--primary-color)"/> Cycle Phase & Plan</h3>
-             <p style={{ color: 'var(--text-secondary)' }}>You are currently following the <strong>{plan.inputs.goal.replace('_', ' ')}</strong> plan.</p>
-          </div>
-
-          {/* ══════════ Personal Trainer Coaching Widget ══════════ */}
+          {/* ══════════ Active Personal Trainer Coaching Widget (ALWAYS SHOWN IF PAID) ══════════ */}
           {assignment ? (
             <div className="dashboard-card" style={{ background: 'linear-gradient(135deg, #1e293b, #0f172a)', color: '#fff', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                    <UserCheck size={24} />
+                  <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                    <UserCheck size={28} />
                   </div>
                   <div>
                     <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#60a5fa', fontWeight: 'bold' }}>
-                      Active Personal Trainer
+                      Active Personal Trainer Assignment
                     </div>
-                    <h3 style={{ margin: '2px 0 0', fontSize: '1.15rem', color: '#fff' }}>
+                    <h3 style={{ margin: '2px 0 0', fontSize: '1.25rem', color: '#fff' }}>
                       {assignment.trainerId?.firstName} {assignment.trainerId?.lastName}
                     </h3>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>
-                      Package: {assignment.packageId?.packageName || 'Custom Program'}
+                    <p style={{ margin: 0, fontSize: '0.88rem', color: '#94a3b8' }}>
+                      Package: <strong>{assignment.packageId?.packageName || 'Custom Coaching Program'}</strong>
                     </p>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button 
-                    style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+                    style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
                     onClick={() => navigate('/app/exercise')}
                   >
-                    View Workouts
+                    <Dumbbell size={16} /> View Workouts
                   </button>
                   <button 
-                    style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer' }}
+                    style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                     onClick={() => navigate('/app/messages')}
                   >
-                    Message Trainer
+                    <MessageSquare size={16} /> Message Trainer
                   </button>
                 </div>
               </div>
@@ -160,76 +163,143 @@ const Dashboard = () => {
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-            {/* Today's Workout Card */}
+          {/* ══════════ Trainer Assigned Program Section ══════════ */}
+          {activeProgram && (
             <div className="dashboard-card" style={{ background: 'var(--surface-color)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-              <h3 style={{ marginBottom: '16px' }}>Today's Workout</h3>
-              {todayWorkoutData ? (
-                <div>
-                  <h4 style={{ fontSize: '18px', marginBottom: '8px' }}>{todayWorkoutData.workout.title}</h4>
-                  <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                    {todayWorkoutData.workout.duration} min • {todayWorkoutData.workout.exercises.length} exercises
-                  </p>
-                  <button 
-                    style={{ background: 'var(--primary-color)', color: 'white', border: 'none', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-                    onClick={() => navigate(`/app/ai-plan/workout/${todayWorkoutData.index}`)}
-                  >
-                    Start Workout <ArrowRight size={16} />
-                  </button>
-                </div>
-              ) : (
-                <p style={{ color: 'var(--text-muted)' }}>No workout scheduled for today. Rest up!</p>
-              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+                  <Dumbbell size={20} color="var(--primary-color)"/> Assigned Trainer Workout Program
+                </h3>
+                <span style={{ padding: '4px 12px', background: '#dbeafe', color: '#2563eb', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>
+                  {activeProgram.phase || 'CYCLE SYNCED'}
+                </span>
+              </div>
+              <h4 style={{ fontSize: '1.1rem', margin: '0 0 8px', color: 'var(--text-primary)' }}>{activeProgram.title}</h4>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '16px' }}>{activeProgram.description}</p>
+              <button 
+                className="up-btn up-btn-primary"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                onClick={() => navigate('/app/exercise')}
+              >
+                Start Trainer Workouts <ArrowRight size={16} />
+              </button>
             </div>
+          )}
 
-            {/* Macros Summary */}
-            <div className="dashboard-card" style={{ background: 'var(--surface-color)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-              <h3 style={{ marginBottom: '16px' }}>Daily Macros Target</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>CALORIES</div>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary-color)' }}>{plan.summary.dailyCalories}</div>
+          {/* ══════════ AI Plan Summary (If Available) ══════════ */}
+          {plan ? (
+            <>
+              <div className="dashboard-card" style={{ background: 'var(--surface-color)', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                 <h3 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Sparkles size={18} color="var(--primary-color)"/> Cycle Phase & AI Plan</h3>
+                 <p style={{ color: 'var(--text-secondary)' }}>You are currently following the <strong>{plan.inputs?.goal?.replace('_', ' ') || 'Cycle Sync'}</strong> plan.</p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+                {/* Today's Workout Card */}
+                <div className="dashboard-card" style={{ background: 'var(--surface-color)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                  <h3 style={{ marginBottom: '16px' }}>Today's AI Workout</h3>
+                  {todayWorkoutData ? (
+                    <div>
+                      <h4 style={{ fontSize: '18px', marginBottom: '8px' }}>{todayWorkoutData.workout.title}</h4>
+                      <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                        {todayWorkoutData.workout.duration} min • {todayWorkoutData.workout.exercises?.length || 0} exercises
+                      </p>
+                      <button 
+                        style={{ background: 'var(--primary-color)', color: 'white', border: 'none', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                        onClick={() => navigate(`/app/ai-plan/workout/${todayWorkoutData.index}`)}
+                      >
+                        Start Workout <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <p style={{ color: 'var(--text-muted)' }}>No AI workout scheduled for today. Rest up!</p>
+                  )}
                 </div>
-                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>PROTEIN</div>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{plan.summary.protein}g</div>
-                </div>
-                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>CARBS</div>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{plan.summary.carbs}g</div>
-                </div>
-                <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>FATS</div>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{plan.summary.fat}g</div>
+
+                {/* Macros Summary */}
+                <div className="dashboard-card" style={{ background: 'var(--surface-color)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                  <h3 style={{ marginBottom: '16px' }}>Daily Macros Target</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>CALORIES</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary-color)' }}>{plan.summary?.dailyCalories || '--'}</div>
+                    </div>
+                    <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>PROTEIN</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{plan.summary?.protein || '--'}g</div>
+                    </div>
+                    <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>CARBS</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{plan.summary?.carbs || '--'}g</div>
+                    </div>
+                    <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold' }}>FATS</div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{plan.summary?.fat || '--'}g</div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              
+              <button 
+                style={{ alignSelf: 'flex-start', background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                onClick={() => navigate('/app/ai-plan/view')}
+              >
+                View Full AI Plan <ArrowRight size={16} />
+              </button>
+            </>
+          ) : assignment && !activeProgram ? (
+            /* User has paid trainer package, but trainer hasn't published workout program yet */
+            <div className="dashboard-card" style={{ background: '#f8fafc', border: '1px dashed #cbd5e1', padding: '32px', borderRadius: '16px', textAlign: 'center' }}>
+              <Calendar size={40} style={{ color: '#2563eb', margin: '0 auto 12px' }} />
+              <h3 style={{ margin: '0 0 8px', color: '#1e293b' }}>Trainer Package Active!</h3>
+              <p style={{ color: '#64748b', fontSize: '0.92rem', maxWidth: '480px', margin: '0 auto 20px' }}>
+                Your personal trainer <strong>{assignment.trainerId?.firstName} {assignment.trainerId?.lastName}</strong> is currently reviewing your profile to construct your customized workout and nutrition plan.
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <button 
+                  style={{ background: '#2563eb', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  onClick={() => navigate('/app/messages')}
+                >
+                  <MessageSquare size={16} /> Chat with Trainer
+                </button>
+                <button 
+                  style={{ background: 'white', color: '#2563eb', border: '1px solid #bfdbfe', padding: '10px 20px', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  onClick={() => navigate('/app/ai-plan')}
+                >
+                  <Sparkles size={16} /> Generate Optional AI Plan
+                </button>
+              </div>
             </div>
-          </div>
-          
-          <button 
-            style={{ alignSelf: 'flex-start', background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-            onClick={() => navigate('/app/ai-plan/view')}
-          >
-            View Full AI Plan <ArrowRight size={16} />
-          </button>
-        </div>
-      ) : (
-        <div className="dashboard-empty-state" style={{ marginTop: '40px', padding: '48px', background: 'var(--surface-color)', borderRadius: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-          <Brain size={48} color="var(--primary-color)" style={{ margin: '0 auto 16px' }} />
-          <h2 style={{ marginBottom: '12px', fontSize: '24px' }}>No Active Plan Found</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', maxWidth: '400px', margin: '0 auto 24px' }}>
-            Get started by generating your personalized AI-driven workout and meal plan.
-          </p>
-          <button 
-            style={{ background: 'var(--primary-color)', color: 'white', border: 'none', padding: '14px 28px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-            onClick={() => navigate('/app/ai-plan')}
-          >
-            <Sparkles size={18} /> Generate your first AI plan
-          </button>
+          ) : null}
+
+          {/* ══════════ Empty State (Only if NO AI plan AND NO active Trainer assignment) ══════════ */}
+          {!hasAnyPlanOrAssignment && (
+            <div className="dashboard-empty-state" style={{ marginTop: '20px', padding: '48px', background: 'var(--surface-color)', borderRadius: '24px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+              <Brain size={48} color="var(--primary-color)" style={{ margin: '0 auto 16px' }} />
+              <h2 style={{ marginBottom: '12px', fontSize: '24px' }}>No Active Plan Found</h2>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', maxWidth: '440px', margin: '0 auto 24px' }}>
+                Get started by generating your personalized AI-driven workout and meal plan, or select a certified personal trainer.
+              </p>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button 
+                  style={{ background: 'var(--primary-color)', color: 'white', border: 'none', padding: '14px 28px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  onClick={() => navigate('/app/ai-plan')}
+                >
+                  <Sparkles size={18} /> Generate your AI plan
+                </button>
+                <button 
+                  style={{ background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)', padding: '14px 28px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  onClick={() => navigate('/app/trainer')}
+                >
+                  <Award size={18} /> Browse Trainers
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
-}
+};
 
 export default Dashboard;

@@ -142,6 +142,32 @@ export class PaymentService implements IPaymentService {
     }
 }
 
+    async confirmSession(sessionId: string): Promise<IPayment | null> {
+        const session = await this.stripe.checkout.sessions.retrieve(sessionId);
+        if (session.payment_status === "paid" || session.status === "complete") {
+            const payment = await this.paymentRepository.findByStripeSessionId(session.id);
+            if (payment) {
+                if (payment.paymentStatus !== PaymentStatus.COMPLETED) {
+                    await this.paymentRepository.updatePaymentStatus(
+                        payment._id.toString(),
+                        PaymentStatus.COMPLETED
+                    );
+                    try {
+                        await this.trainerassignmentservice.createAssignment({
+                            userId: payment.userId.toString(),
+                            packageId: payment.packageId.toString(),
+                            paymentId: payment._id.toString()
+                        });
+                    } catch (err) {
+                        // ignore if assignment already exists
+                    }
+                }
+                return payment;
+            }
+        }
+        return null;
+    }
+
 
     async getPaymentsByUser(userId: string): Promise<IPayment[]> {
         return this.paymentRepository.findByUser(userId);

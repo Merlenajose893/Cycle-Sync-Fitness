@@ -75,26 +75,35 @@ export const createProgramSchema = z.object({
 
     durationWeeks:
         z.number()
-        .min(1),
+        .min(1)
+        .optional()
+        .default(4),
 
 
     daysPerWeek:
         z.number()
         .min(1)
-        .max(7),
+        .max(7)
+        .optional()
+        .default(3),
 
 
     difficulty:
-        z.nativeEnum(WorkoutDifficulty),
+        z.nativeEnum(WorkoutDifficulty)
+        .optional()
+        .default(WorkoutDifficulty.INTERMEDIATE),
 
 
     goal:
-        z.nativeEnum(WorkoutGoal),
+        z.nativeEnum(WorkoutGoal)
+        .optional()
+        .default(WorkoutGoal.GENERAL_FITNESS),
 
 
     days:
         z.array(workoutDaySchema)
-        .min(1),
+        .optional()
+        .default([]),
 
 
     isTemplate:

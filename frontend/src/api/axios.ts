@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
             }
         }
 
-        if (error.response?.status === 403) {
+        if (error.response?.status === 403 && error.response?.data?.message?.toLowerCase().includes("blocked")) {
             window.dispatchEvent(new Event("auth-blocked"));
             return Promise.reject(error);
         }

@@ -36,7 +36,7 @@ export const userAuthService={
         const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.LOGOUT);
         return response.data;
     },
-    forgotPassword:async (data:ForgotPasswordPayload):Promise<AuthResponse<null>> => {
+    forgotPassword:async (data:ForgotPasswordPayload):Promise<AuthResponse<{ userId: string; email: string }>> => {
         const response=await axiosInstance.post(API_ENDPOINTS.USER_AUTH.FORGOTPASSWORD,data);
         return response.data
     },

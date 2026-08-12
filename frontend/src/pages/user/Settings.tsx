@@ -1,3 +1,4 @@
+import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserProfile } from '../../hooks/profile/useUserProfile';
@@ -102,7 +103,6 @@ const Settings: React.FC = () => {
         }));
     };
 
-import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 
     const handleSave = async () => {
         // Zod DOB Validation if DOB is entered

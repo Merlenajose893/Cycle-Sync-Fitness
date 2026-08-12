@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info, RefreshCw, Plus, CheckCircle } from 'lucide-react';
+import { Search, Dumbbell, Flame, TrendingUp, Calendar, ChevronRight, Activity, Info, RefreshCw, Plus, CheckCircle, Clock, X, FileText, Award } from 'lucide-react';
 import '../../styles/UserPages.css';
 import type { WorkoutProgram } from '../../types/workout.types';
 import { workoutProgramService } from '../../services/workout/workoutProgramService';
@@ -15,6 +15,7 @@ const Exercise: React.FC = () => {
   // History state
   const [historyLogs, setHistoryLogs] = useState<any[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [selectedDetailLog, setSelectedDetailLog] = useState<any | null>(null);
 
   // Logging Modal State
   const [showLogModal, setShowLogModal] = useState(false);
@@ -23,6 +24,9 @@ const Exercise: React.FC = () => {
   const [caloriesBurned, setCaloriesBurned] = useState(250);
   const [notes, setNotes] = useState('');
   const [submittingLog, setSubmittingLog] = useState(false);
+  // Image upload state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const fetchActiveProgram = async () => {
     setLoading(true);
@@ -55,7 +59,17 @@ const Exercise: React.FC = () => {
 
   const handleOpenLogModal = (title: string) => {
     setSelectedWorkoutTitle(title);
+    setSelectedFile(null);
+    setImagePreview(null);
     setShowLogModal(true);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleLogWorkout = async (e: React.FormEvent) => {
@@ -64,15 +78,34 @@ const Exercise: React.FC = () => {
 
     setSubmittingLog(true);
     try {
-      await workoutLogService.createLog({
-        workoutProgramId: activeProgram?._id,
-        workoutTitle: selectedWorkoutTitle,
-        durationMinutes,
-        caloriesBurned,
-        notes,
-      });
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+        formData.append('date', new Date().toISOString());
+        formData.append('source', 'TRAINER_PROGRAM');
+        if (activeProgram?._id) formData.append('workoutProgramId', activeProgram._id);
+        formData.append('workoutTitle', selectedWorkoutTitle);
+        formData.append('durationMinutes', String(durationMinutes));
+        formData.append('caloriesBurned', String(caloriesBurned));
+        formData.append('notes', notes);
+        await workoutLogService.createLog(formData);
+      } else {
+        await workoutLogService.createLog({
+          date: new Date().toISOString(),
+          source: 'TRAINER_PROGRAM',
+          workoutProgramId: activeProgram?._id,
+          workoutTitle: selectedWorkoutTitle,
+          durationMinutes,
+          caloriesBurned,
+          notes,
+          exercises: [],
+        });
+      }
+
       setShowLogModal(false);
       setNotes('');
+      setSelectedFile(null);
+      setImagePreview(null);
       fetchHistory();
       setActiveTab('history');
       alert('Workout session logged successfully!');
@@ -191,24 +224,26 @@ const Exercise: React.FC = () => {
       )}
 
       {/* ═══════════ HISTORY TAB ═══════════ */}
-      {activeTab === 'history' && (
+      {activeTab === 'history' && (() => {
+        const safeHistoryLogs = Array.isArray(historyLogs) ? historyLogs : [];
+        return (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon blue"><Dumbbell size={24} /></div>
-              <div className="up-stat-content"><div className="label">Total Logged</div><div className="value">{historyLogs.length}</div><div className="change">Workouts logged</div></div>
+              <div className="up-stat-content"><div className="label">Total Logged</div><div className="value">{safeHistoryLogs.length}</div><div className="change">Workouts logged</div></div>
             </div>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon orange"><Flame size={24} /></div>
               <div className="up-stat-content">
                 <div className="label">Calories Burned</div>
-                <div className="value">{historyLogs.reduce((acc, l) => acc + (l.caloriesBurned || 0), 0)}</div>
+                <div className="value">{safeHistoryLogs.reduce((acc, l) => acc + (l.caloriesBurned || 0), 0)}</div>
                 <div className="change">Total kcal</div>
               </div>
             </div>
             <div className="up-card up-stat-card">
               <div className="up-stat-icon green"><TrendingUp size={24} /></div>
-              <div className="up-stat-content"><div className="label">Status</div><div className="value">{historyLogs.length > 0 ? 'Active' : '0 logs'}</div></div>
+              <div className="up-stat-content"><div className="label">Status</div><div className="value">{safeHistoryLogs.length > 0 ? 'Active' : '0 logs'}</div></div>
             </div>
           </div>
 
@@ -226,22 +261,32 @@ const Exercise: React.FC = () => {
               </p>
             </div>
           ) : (
-            historyLogs.map((log: any) => (
-              <div key={log._id || log.id} className="up-card" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, padding: 16 }}>
-                <div className="up-stat-icon blue" style={{ width: 44, height: 44 }}><CheckCircle size={20} /></div>
+            safeHistoryLogs.map((log: any) => (
+              <div
+                key={log._id || log.id}
+                className="up-card"
+                onClick={() => setSelectedDetailLog(log)}
+                style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, padding: 16, cursor: 'pointer', transition: 'transform 0.15s ease, border-color 0.15s ease' }}
+              >
+                {log.imageUrl ? (
+                  <img src={log.imageUrl} alt="Workout Proof" style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid rgba(255,255,255,0.2)' }} />
+                ) : (
+                  <div className="up-stat-icon blue" style={{ width: 44, height: 44 }}><CheckCircle size={20} /></div>
+                )}
                 <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 2px' }}>{log.workoutTitle}</h4>
                   <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>
                     {log.createdAt ? new Date(log.createdAt).toLocaleDateString() : 'Today'} • {log.durationMinutes || 30} mins • {log.caloriesBurned || 250} kcal
                   </p>
-                  {log.notes && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0 0', italic: true }}>"{log.notes}"</p>}
+                  {log.notes && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0 0', fontStyle: 'italic' }}>"{log.notes}"</p>}
                 </div>
                 <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
               </div>
             ))
           )}
         </div>
-      )}
+        );
+      })()}
 
       {/* Log Workout Modal */}
       {showLogModal && (
@@ -277,6 +322,24 @@ const Exercise: React.FC = () => {
                 />
               </div>
 
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 6, fontWeight: 600 }}>
+                  Workout Photo / Progress Image (Optional)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-primary)', fontSize: '0.85rem' }}
+                />
+                {imagePreview && (
+                  <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <img src={imagePreview} alt="Preview" style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover', border: '1px solid #2563eb' }} />
+                    <span style={{ fontSize: '0.8rem', color: '#22c55e', fontWeight: 600 }}>Image ready to upload</span>
+                  </div>
+                )}
+              </div>
+
               <div style={{ marginBottom: 20 }}>
                 <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 6, fontWeight: 600 }}>
                   Notes for Trainer (Optional)
@@ -299,6 +362,108 @@ const Exercise: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Workout Detail Modal */}
+      {selectedDetailLog && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, zIndex: 1050, backdropFilter: 'blur(4px)' }}>
+          <div className="up-card" style={{ width: '100%', maxWidth: 540, maxHeight: '90vh', overflowY: 'auto', padding: 28, position: 'relative' }}>
+            <button
+              onClick={() => setSelectedDetailLog(null)}
+              style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(255,255,255,0.1)', border: 'none', color: 'var(--text-primary)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+            >
+              <X size={18} />
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <span style={{ padding: '4px 10px', background: '#dbeafe', color: '#2563eb', borderRadius: 12, fontSize: '0.75rem', fontWeight: 700 }}>
+                {selectedDetailLog.source || 'TRAINER_PROGRAM'}
+              </span>
+              <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                {selectedDetailLog.createdAt ? new Date(selectedDetailLog.createdAt).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) : 'Today'}
+              </span>
+            </div>
+
+            <h2 style={{ fontSize: '1.35rem', margin: '0 0 16px', fontWeight: 700 }}>{selectedDetailLog.workoutTitle}</h2>
+
+            {/* Quick stats grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}>
+              <div style={{ padding: 12, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+                <Clock size={18} style={{ color: '#3b82f6', marginBottom: 4 }} />
+                <div style={{ fontSize: '1.05rem', fontWeight: 700 }}>{selectedDetailLog.durationMinutes || 30} mins</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Duration</div>
+              </div>
+              <div style={{ padding: 12, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+                <Flame size={18} style={{ color: '#f59e0b', marginBottom: 4 }} />
+                <div style={{ fontSize: '1.05rem', fontWeight: 700 }}>{selectedDetailLog.caloriesBurned || 250} kcal</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Calories Burned</div>
+              </div>
+              <div style={{ padding: 12, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+                <Dumbbell size={18} style={{ color: '#10b981', marginBottom: 4 }} />
+                <div style={{ fontSize: '1.05rem', fontWeight: 700 }}>{selectedDetailLog.totalVolumeKg || 0} kg</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Total Volume</div>
+              </div>
+            </div>
+
+            {/* Uploaded session proof image */}
+            {selectedDetailLog.imageUrl && (
+              <div style={{ marginBottom: 20 }}>
+                <h4 style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Award size={16} style={{ color: '#3b82f6' }} /> Session Proof Photo
+                </h4>
+                <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.15)', maxHeight: 280, background: '#000' }}>
+                  <img src={selectedDetailLog.imageUrl} alt="Workout Proof" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+                </div>
+              </div>
+            )}
+
+            {/* Session Notes */}
+            {selectedDetailLog.notes && (
+              <div style={{ marginBottom: 20, padding: 14, borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <FileText size={14} /> Session / Trainer Notes
+                </h4>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-primary)', fontStyle: 'italic', lineHeight: 1.5 }}>
+                  "{selectedDetailLog.notes}"
+                </p>
+              </div>
+            )}
+
+            {/* Completed exercises list */}
+            {selectedDetailLog.exercises && selectedDetailLog.exercises.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: 10 }}>Completed Exercises</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {selectedDetailLog.exercises.map((ex: any, idx: number) => (
+                    <div key={idx} style={{ padding: 12, borderRadius: 8, background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{ex.exerciseName}</span>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>{ex.category}</span>
+                      </div>
+                      {ex.sets && ex.sets.length > 0 && (
+                        <div style={{ fontSize: '0.82rem', color: '#60a5fa' }}>
+                          {ex.sets.map((s: any, sIdx: number) => (
+                            <span key={sIdx} style={{ marginRight: 12 }}>
+                              Set {s.setNumber || sIdx + 1}: {s.repsCompleted} reps {s.weightKg ? `× ${s.weightKg}kg` : ''}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              className="up-btn up-btn-primary"
+              style={{ width: '100%', justifyContent: 'center', marginTop: 8 }}
+              onClick={() => setSelectedDetailLog(null)}
+            >
+              Close Details
+            </button>
           </div>
         </div>
       )}

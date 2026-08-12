@@ -45,5 +45,15 @@ export const dailyTargetSchema = z.object({
     fat: z
         .number()
         .min(0)
+        .optional(),
+
+    fats: z
+        .number()
+        .min(0)
+        .optional(),
+
+    date: z
+        .string()
+        .optional()
 
 });

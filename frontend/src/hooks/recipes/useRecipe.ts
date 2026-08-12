@@ -49,6 +49,8 @@ export const useRecipe = () => {
 
                 const recipeArray = Array.isArray(data)
                     ? data
+                    : Array.isArray(data?.data?.data)
+                    ? data.data.data
                     : Array.isArray(data?.data)
                     ? data.data
                     : Array.isArray(data?.data?.recipes)
@@ -99,6 +101,8 @@ export const useRecipe = () => {
 
                 const recipeArray = Array.isArray(data)
                     ? data
+                    : Array.isArray(data?.data?.data)
+                    ? data.data.data
                     : Array.isArray(data?.data)
                     ? data.data
                     : Array.isArray(data?.data?.recipes)

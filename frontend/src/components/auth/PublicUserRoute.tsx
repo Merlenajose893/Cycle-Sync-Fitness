@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useUserContext } from "../../context/UserAuthContext";
 
 const PublicUserRoute = () => {
-    const { isAuthenticated, loading } = useUserContext();
+    const { isAuthenticated, user, loading } = useUserContext();
 
     if (loading) {
         return (
@@ -13,6 +13,9 @@ const PublicUserRoute = () => {
     }
 
     if (isAuthenticated) {
+        if (user && !user.onboardingComplete) {
+            return <Navigate to="/onboarding" replace />;
+        }
         return <Navigate to="/app" replace />;
     }
 

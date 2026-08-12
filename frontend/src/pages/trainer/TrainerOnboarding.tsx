@@ -1,3 +1,4 @@
+import { trainerDobSchema, trainerCertificationSchema, documentUploadSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrainerOnboarding } from '../../hooks/onboarding/useTrainerOnboarding';
@@ -59,7 +60,6 @@ const TrainerOnboarding: React.FC = () => {
         }
     };
 
-import { trainerDobSchema, trainerCertificationSchema, documentUploadSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 
     const [dobError, setDobError] = useState<string | null>(null);
 

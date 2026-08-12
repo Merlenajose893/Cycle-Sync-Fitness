@@ -6,11 +6,13 @@ import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
 import { validate } from "../middlewares/validate.js";
 import { logWorkoutSchema } from "../validators/workoutLog.validator.js";
 
+import { upload } from "../middlewares/upload.js";
+
 const router = Router();
 const workoutLogController = container.resolve(WorkoutLogController);
 
 // POST   /api/workout-logs                        — Log a new workout
-router.post("/", authMiddleware, validate(logWorkoutSchema), workoutLogController.logWorkout);
+router.post("/", authMiddleware, upload.single("image"), validate(logWorkoutSchema), workoutLogController.logWorkout);
 
 // GET    /api/workout-logs/daily                  — Get daily workout log (?date=YYYY-MM-DD)
 router.get("/daily", authMiddleware, workoutLogController.getDailyLog);

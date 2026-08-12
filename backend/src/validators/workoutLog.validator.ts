@@ -57,34 +57,54 @@ export const logWorkoutSchema =
 z.object({
 
     date:
-        z.string(),
+        z.string()
+        .optional(),
 
 
     source:
-        z.nativeEnum(WorkoutSource),
+        z.nativeEnum(WorkoutSource)
+        .optional()
+        .default(WorkoutSource.TRAINER_PROGRAM),
 
 
     programId:
         z.string()
         .optional(),
 
+    workoutProgramId:
+        z.string()
+        .optional(),
+
 
     workoutTitle:
         z.string()
-        .min(2),
+        .min(1, "Workout title is required"),
 
 
     durationMinutes:
-        z.number()
+        z.coerce.number()
         .min(1),
+
+    caloriesBurned:
+        z.coerce.number()
+        .optional()
+        .default(0),
 
 
     exercises:
-        z.array(loggedExerciseSchema)
-        .min(1),
+        z.preprocess((val) => {
+            if (typeof val === "string") {
+                try { return JSON.parse(val); } catch (e) { return []; }
+            }
+            return val;
+        }, z.array(loggedExerciseSchema).optional().default([])),
 
 
     notes:
+        z.string()
+        .optional(),
+
+    imageUrl:
         z.string()
         .optional()
 

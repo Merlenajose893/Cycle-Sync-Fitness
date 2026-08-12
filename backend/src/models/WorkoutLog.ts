@@ -46,6 +46,9 @@ totalSetsCompleted:number;
 exercises:ILoggedExercise[];
 
 
+imageUrl?: string;
+
+
 notes?:string;
 
 
@@ -189,7 +192,9 @@ exercises:[
 ],
 
 
-notes:String
+notes:String,
+
+imageUrl:String
 
 
 },

@@ -12,12 +12,23 @@ export class MealLogService implements IMealLogService{
     {
 
     }
-logMeal=async(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLog> =>{
+logMeal=async(userId: string, date: Date, mealData: any): Promise<IMealLog> =>{
     let mealLog=await this.mealRepository.findByUserAndDate(userId,date);
-    const totalMeals=this.calculateMealTotals(mealData.food)
+    const rawFoods = mealData.foods || mealData.food || [];
+    const foodItems: IFoodItem[] = rawFoods.map((f: any) => ({
+        name: f.name || "Food Item",
+        quantity: Number(f.quantity || 1),
+        unit: f.unit || "serving",
+        calories: Number(f.calories || 0),
+        protein: Number(f.protein ?? f.proteins ?? 0),
+        carbs: Number(f.carbs || 0),
+        fat: Number(f.fat ?? f.fats ?? 0)
+    }));
+
+    const totalMeals=this.calculateMealTotals(foodItems)
     const mealEntry:IMealEntry={
         mealType:mealData.mealType,
-        foods:mealData.food,
+        foods:foodItems,
         totalCalories:totalMeals.calories,
         totalProtein:totalMeals.protein,
         totalCarbs:totalMeals.carbs,
@@ -65,7 +76,17 @@ logMeal=async(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLo
         const mealLog=await this.mealRepository.findByUserAndDate(userId,date);
         if(!mealLog)
         {
-            throw new NotFoundError("Meal Log Not Found");
+            return {
+                userId,
+                date,
+                meals: [],
+                dailyTarget: {
+                    calories: 0,
+                    protein: 0,
+                    carbs: 0,
+                    fats: 0
+                }
+            } as any;
         }
         return mealLog;
     }
@@ -77,6 +98,8 @@ logMeal=async(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLo
 
     removeMeal=async(userId: string, mealType: string): Promise<IMealLog | null> =>{
         const mealLog=await this.mealRepository.findByUserAndDate(userId,new Date());
+        console.log(mealLog);
+        
         if(!mealLog)
         {
             throw new NotFoundError("Meal log is not found")
@@ -86,29 +109,39 @@ logMeal=async(userId: string, date: Date, mealData: LogMealDTO): Promise<IMealLo
         return this.mealRepository.save(mealLog);
     }
 
-    setDailyTarget=async(userId: string, date: Date, target: DailyTargetDTO): Promise<IMealLog> =>{
+    setDailyTarget=async(userId: string, date: Date, target: any): Promise<IMealLog> =>{
         let mealLog=await this.mealRepository.findByUserAndDate(userId,date);
+        const fatVal = Number(target.fat ?? target.fats ?? 0);
+        const normalizedTarget = {
+            calories: Number(target.calories || 0),
+            protein: Number(target.protein || 0),
+            carbs: Number(target.carbs || 0),
+            fats: fatVal,
+            fat: fatVal
+        };
+
         if(!mealLog)
         {
             mealLog=await this.mealRepository.create({
                 userId,
                 date,
                 meals:[],
-                dailyTarget:target
+                dailyTarget:normalizedTarget
             } as Partial<IMealLog>)
             return mealLog;
         }
-        mealLog.dailyTarget=target;
+        mealLog.dailyTarget=normalizedTarget as any;
         return await this.mealRepository.save(mealLog);
     }
 
-    private calculateMealTotals(foods:IFoodItem[])
+    private calculateMealTotals(foods:any[])
     {
-        return foods.reduce((total,food)=>{
-            total.calories+=food.calories,
-            total.carbs+=food.carbs,
-            total.protein+=food.protein,
-            total.fat+=food.fat
+        const list = Array.isArray(foods) ? foods : [];
+        return list.reduce((total,food)=>{
+            total.calories += Number(food.calories || 0);
+            total.carbs += Number(food.carbs || 0);
+            total.protein += Number(food.protein ?? food.proteins ?? 0);
+            total.fat += Number(food.fat ?? food.fats ?? 0);
             return total;
 
         },{calories:0,carbs:0,protein:0,fat:0})

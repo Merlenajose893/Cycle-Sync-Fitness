@@ -22,7 +22,7 @@ export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipe
 
         const skip=(page-1)*limit;
         const query:any={
-            isPublished:true
+            isPublished: { $ne: false }
         }
         if(filters.category)
         {
@@ -42,7 +42,7 @@ export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipe
 
    async countPublished(filters: RecipeFilters): Promise<number> {
         const query:any={
-            isPublished:true
+            isPublished: { $ne: false }
         }
         if(filters.category)
         {
@@ -62,7 +62,10 @@ export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipe
 
    async searchByTitle(query: string, page: number, limit: number): Promise<IRecipe[]> {
         let skip=(page-1)*limit;
-        return this.model.find({query},{isPublished:true}).skip(skip).limit(limit)
+        return this.model.find({
+            title: { $regex: query, $options: "i" },
+            isPublished: { $ne: false }
+        }).skip(skip).limit(limit).sort({createdAt:-1})
     }
 
     async addFavourites(recipeId: string, userId: string): Promise<IRecipe | null> {

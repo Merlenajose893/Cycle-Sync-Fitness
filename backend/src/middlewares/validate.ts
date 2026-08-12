@@ -12,9 +12,15 @@ export const validate = (schema: z.ZodSchema) => {
             } else {
                 Object.keys(req.body).forEach((key) => {
                     if (typeof req.body[key] === "string") {
-                        try {
-                            req.body[key] = JSON.parse(req.body[key]);
-                        } catch (e) {}
+                        const trimmed = req.body[key].trim();
+                        if (
+                            (trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+                            (trimmed.startsWith("[") && trimmed.endsWith("]"))
+                        ) {
+                            try {
+                                req.body[key] = JSON.parse(req.body[key]);
+                            } catch (e) {}
+                        }
                     }
                 });
             }
@@ -27,7 +33,8 @@ export const validate = (schema: z.ZodSchema) => {
                 message: err.message,
             }));
 
-            throw new BadRequestError(JSON.stringify(errors));
+            const errorMessage = errors.map((e) => e.message).join(". ");
+            throw new BadRequestError(errorMessage);
         }
         req.body = result.data;
         next();

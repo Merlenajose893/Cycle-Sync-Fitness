@@ -41,6 +41,19 @@ export class PaymentController {
         }
     };
 
+    confirmSession = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { sessionId } = req.body;
+            if (!sessionId) {
+                throw new BadRequestError("Session ID is required");
+            }
+            const result = await this.paymentService.confirmSession(sessionId);
+            successResponse(res, "Payment confirmed successfully", result, HttpStatus.OK);
+        } catch (error) {
+            next(error);
+        }
+    };
+
     getPaymentsByUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?.userId;

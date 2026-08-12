@@ -85,8 +85,14 @@ const Login = () => {
             const user = await getUser();
             if (user) {
                 login(user);
+                if (!user.onboardingComplete) {
+                    navigate("/onboarding", { replace: true });
+                } else {
+                    navigate("/app", { replace: true });
+                }
+            } else {
+                navigate("/app", { replace: true });
             }
-            navigate("/app",{replace:true});
         } catch (error: any) {
             console.error(error);
             setErrors({
@@ -108,10 +114,16 @@ const Login = () => {
             const user = await getUser();
             if (user) {
                 login(user);
+                if (!user.onboardingComplete) {
+                    navigate("/onboarding", { replace: true });
+                } else {
+                    navigate("/app", { replace: true });
+                }
+            } else {
+                navigate("/app", { replace: true });
             }
 
             showToast.success("Welcome back!");
-            navigate("/app", { replace: true }); 
         } catch (error: any) {
             showToast.error(
                 error.response?.data?.message || "Google Sign-In failed"

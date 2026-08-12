@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Sparkles, RefreshCw } from 'lucide-react';
+import axiosInstance from '../../api/axios';
 import '../../styles/UserPages.css';
 
 const PaymentSuccess: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get('session_id');
+  const [confirming, setConfirming] = useState(true);
+
+  useEffect(() => {
+    if (sessionId) {
+      axiosInstance.post('/api/payment/confirm', { sessionId })
+        .catch(err => console.error("Error confirming payment session:", err))
+        .finally(() => setConfirming(false));
+    } else {
+      setConfirming(false);
+    }
+  }, [sessionId]);
 
   return (
     <div className="up-page" style={{ textAlign: 'center', padding: '60px 20px', maxWidth: 520, margin: '0 auto' }}>

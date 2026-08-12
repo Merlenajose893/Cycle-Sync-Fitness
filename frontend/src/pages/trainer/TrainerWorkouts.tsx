@@ -45,22 +45,48 @@ const TrainerWorkouts: React.FC = () => {
 
   const handleCreateProgram = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || title.length < 3) {
+      alert('Program title must be at least 3 characters.');
+      return;
+    }
 
     setCreating(true);
     try {
       await workoutProgramService.createProgram({
         title,
-        description,
-        phase: targetPhase,
-        days: [],
+        description: description || 'Custom Sync Workout Program',
+        durationWeeks: 4,
+        daysPerWeek: 3,
+        difficulty: 'INTERMEDIATE',
+        goal: 'GENERAL_FITNESS',
+        days: [
+          {
+            dayNumber: 1,
+            title: 'Day 1 - Core & Strength',
+            focusPhase: targetPhase,
+            exercises: [
+              {
+                exerciseName: 'Full Body Compound Circuit',
+                category: 'STRENGTH',
+                targetSets: 3,
+                targetReps: '12 reps',
+                restSeconds: 60,
+                notes: 'Focus on form and controlled movements',
+              },
+            ],
+          },
+        ],
       } as any);
       setShowCreateModal(false);
       setTitle('');
       setDescription('');
       loadPrograms();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to create program.');
+      const rawMsg = err.response?.data?.message;
+      const msg = Array.isArray(rawMsg)
+        ? rawMsg.map((m: any) => m.message || m.field || JSON.stringify(m)).join('\n')
+        : rawMsg || 'Failed to create program.';
+      alert(msg);
     } finally {
       setCreating(false);
     }

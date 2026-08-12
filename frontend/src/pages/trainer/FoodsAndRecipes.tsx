@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import '../../styles/TrainerPanel.css';
 import { useRecipe } from '../../hooks/recipes/useRecipe';
+import { useTrainerClients } from '../../hooks/trainer/useTrainerClients';
 import Modal from '../../components/common/Modal/Modal';
 
 /* ── Types ── */
@@ -111,6 +112,7 @@ const initialSamplePlans: FoodPlan[] = [
 
 const FoodsAndRecipes: React.FC = () => {
   const { recipes, loading, error, fetchRecipes, createRecipe, updateRecipe, deleteRecipe } = useRecipe();
+  const { clients, fetchClients } = useTrainerClients();
 
   const [activeTab, setActiveTab] = useState<'plans' | 'recipes'>('plans');
   const [searchQuery, setSearchQuery] = useState('');
@@ -126,10 +128,21 @@ const FoodsAndRecipes: React.FC = () => {
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [recipeForm, setRecipeForm] = useState<RecipeFormState>(emptyRecipeForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recipeFile, setRecipeFile] = useState<File | null>(null);
+  const [recipeFilePreview, setRecipeFilePreview] = useState<string | null>(null);
+
+  const handleRecipeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setRecipeFile(file);
+      setRecipeFilePreview(URL.createObjectURL(file));
+    }
+  };
 
   useEffect(() => {
     fetchRecipes({}, 1, 50);
-  }, [fetchRecipes]);
+    fetchClients();
+  }, [fetchRecipes, fetchClients]);
 
   /* Filtering */
   const filteredPlans = plans.filter((plan) =>
@@ -222,11 +235,15 @@ const FoodsAndRecipes: React.FC = () => {
   const openCreateRecipe = () => {
     setEditingRecipe(null);
     setRecipeForm(emptyRecipeForm);
+    setRecipeFile(null);
+    setRecipeFilePreview(null);
     setShowRecipeModal(true);
   };
 
   const openEditRecipe = (recipe: Recipe) => {
     setEditingRecipe(recipe);
+    setRecipeFile(null);
+    setRecipeFilePreview(recipe.imageUrl || null);
     setRecipeForm({
       title: recipe.title || '',
       description: recipe.description || '',
@@ -267,35 +284,68 @@ const FoodsAndRecipes: React.FC = () => {
       .split('\n')
       .filter((i) => i.trim().length > 0);
 
-    const payload = {
-      title: recipeForm.title,
-      description: recipeForm.description || recipeForm.title,
-      category: recipeForm.category,
-      dietType: recipeForm.dietType,
-      difficulty: recipeForm.difficulty,
-      prepTime: Number(recipeForm.prepTime),
-      cookTime: Number(recipeForm.cookTime),
-      servings: Number(recipeForm.servings),
-      imageUrl:
-        recipeForm.imageUrl ||
-        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
-      ingredients: parsedIngredients.length ? parsedIngredients : [{ name: 'Ingredients listed in details', quantity: '1' }],
-      instructions: parsedInstructions.length ? parsedInstructions : ['Follow standard preparation steps.'],
-      macrosPerServing: {
+    const finalIngredients = parsedIngredients.length ? parsedIngredients : [{ name: 'Ingredients listed in details', quantity: '1' }];
+    const finalInstructions = parsedInstructions.length ? parsedInstructions : ['Follow standard preparation steps.'];
+
+    let success = false;
+
+    if (recipeFile) {
+      const formData = new FormData();
+      formData.append('image', recipeFile);
+      formData.append('title', recipeForm.title);
+      formData.append('description', recipeForm.description || recipeForm.title);
+      formData.append('category', recipeForm.category);
+      formData.append('dietType', recipeForm.dietType);
+      formData.append('difficulty', recipeForm.difficulty);
+      formData.append('prepTime', String(recipeForm.prepTime));
+      formData.append('cookTime', String(recipeForm.cookTime));
+      formData.append('servings', String(recipeForm.servings));
+      formData.append('ingredients', JSON.stringify(finalIngredients));
+      formData.append('instructions', JSON.stringify(finalInstructions));
+      formData.append('macrosPerServing', JSON.stringify({
         calories: Number(recipeForm.calories),
         protein: Number(recipeForm.protein),
         carbs: Number(recipeForm.carbs),
         fat: Number(recipeForm.fat),
-      },
-      isPublished: recipeForm.isPublished,
-    };
+      }));
+      formData.append('isPublished', String(recipeForm.isPublished));
 
-    let success = false;
-    if (editingRecipe && (editingRecipe._id || (editingRecipe as any).id)) {
-      const id = editingRecipe._id || (editingRecipe as any).id;
-      success = await updateRecipe(id, payload);
+      if (editingRecipe && (editingRecipe._id || (editingRecipe as any).id)) {
+        const id = editingRecipe._id || (editingRecipe as any).id;
+        success = await updateRecipe(id, formData as any);
+      } else {
+        success = await createRecipe(formData as any);
+      }
     } else {
-      success = await createRecipe(payload);
+      const payload = {
+        title: recipeForm.title,
+        description: recipeForm.description || recipeForm.title,
+        category: recipeForm.category,
+        dietType: recipeForm.dietType,
+        difficulty: recipeForm.difficulty,
+        prepTime: Number(recipeForm.prepTime),
+        cookTime: Number(recipeForm.cookTime),
+        servings: Number(recipeForm.servings),
+        imageUrl:
+          recipeForm.imageUrl ||
+          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+        ingredients: finalIngredients,
+        instructions: finalInstructions,
+        macrosPerServing: {
+          calories: Number(recipeForm.calories),
+          protein: Number(recipeForm.protein),
+          carbs: Number(recipeForm.carbs),
+          fat: Number(recipeForm.fat),
+        },
+        isPublished: recipeForm.isPublished,
+      };
+
+      if (editingRecipe && (editingRecipe._id || (editingRecipe as any).id)) {
+        const id = editingRecipe._id || (editingRecipe as any).id;
+        success = await updateRecipe(id, payload as any);
+      } else {
+        success = await createRecipe(payload as any);
+      }
     }
 
     setIsSubmitting(false);
@@ -535,7 +585,29 @@ const FoodsAndRecipes: React.FC = () => {
               </div>
               <div className="tp-form-group">
                 <label>Assign to Client</label>
-                <input type="text" placeholder="e.g. Sarah Jenkins" value={planForm.assignedTo} onChange={(e) => setPlanForm({ ...planForm, assignedTo: e.target.value })} />
+                <select
+                  value={planForm.assignedTo}
+                  onChange={(e) => setPlanForm({ ...planForm, assignedTo: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: 8,
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <option value="">-- General Template (Unassigned) --</option>
+                  {clients.map((assignment: any) => {
+                    const u = assignment.userId;
+                    const clientName = u ? `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email : 'Client';
+                    return (
+                      <option key={assignment._id || u?._id} value={clientName}>
+                        {clientName} ({assignment.packageId?.packageName || 'Package'})
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
               <div className="tp-form-row">
                 <div className="tp-form-group"><label>Calories</label><input type="number" value={planForm.calories} onChange={(e) => setPlanForm({ ...planForm, calories: Number(e.target.value) })} /></div>
@@ -614,8 +686,42 @@ const FoodsAndRecipes: React.FC = () => {
                 <div className="tp-form-group"><label>Fat (g)</label><input type="number" value={recipeForm.fat} onChange={(e) => setRecipeForm({ ...recipeForm, fat: Number(e.target.value) })} /></div>
               </div>
               <div className="tp-form-group">
-                <label>Image URL</label>
-                <input type="text" placeholder="https://images.unsplash.com/..." value={recipeForm.imageUrl} onChange={(e) => setRecipeForm({ ...recipeForm, imageUrl: e.target.value })} />
+                <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Recipe Image</label>
+                <div style={{ marginBottom: 8 }}>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Upload Image File from Device</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleRecipeFileChange}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: 8,
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      color: 'var(--text-primary)',
+                      fontSize: '0.85rem'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Or Enter Image Web URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://images.unsplash.com/..."
+                    value={recipeForm.imageUrl}
+                    onChange={(e) => {
+                      setRecipeForm({ ...recipeForm, imageUrl: e.target.value });
+                      setRecipeFilePreview(e.target.value);
+                    }}
+                  />
+                </div>
+                {recipeFilePreview && (
+                  <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <img src={recipeFilePreview} alt="Recipe Preview" style={{ width: 64, height: 64, borderRadius: 8, objectFit: 'cover', border: '1px solid #0d9488' }} />
+                    <span style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>Image preview ready</span>
+                  </div>
+                )}
               </div>
               <div className="tp-form-group">
                 <label>Ingredients (one per line, e.g. "1 cup Oats")</label>

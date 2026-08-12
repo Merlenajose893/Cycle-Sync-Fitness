@@ -2,14 +2,21 @@ import { inject, injectable } from "tsyringe";
 import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.js";
 import { TOKENS } from "../container/tokens.js";
 import type { ITrainerAssignmentRepository } from "../interfaces/repositories/ITrainerAssignmentRepository.js";
+import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.js";
 import type { CreateAssignmentDTO } from "../dtos/trainerAssignment.dto.js";
 import type { ITrainerAssignment } from "../models/TrainerAssignment.js";
 import { TrainerAssignmentStatus } from "../constants/trainerassign.js";
+import { PaymentStatus } from "../constants/payment.js";
 import { ConflictError, NotFoundError } from "../errors/index.js";
 import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
+
 @injectable()
 export class TrainerAssignmentService implements ITrainerAssignmentService{
-    constructor(@inject(TOKENS.ITrainerAssignmentRepository) private trainerassignrepository:ITrainerAssignmentRepository,@inject(TOKENS.ITrainerPackageRepository) private trainerpackagerepository:ITrainerPackageRepository)
+    constructor(
+        @inject(TOKENS.ITrainerAssignmentRepository) private trainerassignrepository:ITrainerAssignmentRepository,
+        @inject(TOKENS.ITrainerPackageRepository) private trainerpackagerepository:ITrainerPackageRepository,
+        @inject(TOKENS.IPaymentRepository) private paymentRepository:IPaymentRepository
+    )
     {
 
     }
@@ -22,7 +29,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         const existingAssignment=await this.trainerassignrepository.findActiveByUser(data.userId);
         if(existingAssignment)
         {
-            throw new ConflictError("User already has an active trainer assignment")
+            return existingAssignment;
         }
         const startDate=new Date();
         const endDate=new Date(startDate);
@@ -56,6 +63,30 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         return assignment;
     }
     getTrainerClients=async(trainerId: string): Promise<ITrainerAssignment[]> =>{
+        try {
+            const payments = await this.paymentRepository.findByTrainer(trainerId);
+            if (payments && payments.length > 0) {
+                for (const payment of payments) {
+                    if (payment.paymentStatus === PaymentStatus.COMPLETED) {
+                        const existing = await this.trainerassignrepository.findActiveByUser(payment.userId.toString());
+                        if (!existing) {
+                            try {
+                                await this.createAssignment({
+                                    userId: payment.userId.toString(),
+                                    packageId: payment.packageId.toString(),
+                                    paymentId: payment._id.toString()
+                                });
+                            } catch (e) {
+                                // ignore
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Error auto-syncing trainer client assignments:", err);
+        }
+
         return await this.trainerassignrepository.findActiveByTrainer(trainerId);
     }
     processExpiredAssignments=async(): Promise<number> =>{

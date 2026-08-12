@@ -13,7 +13,9 @@ export class TrainerPackageController {
         try {
             const trainerId=req.user?.userId;
             const result=await this.trainerpackageservice.createPackage(trainerId,req.body);
-            successResponse(res,"Packages are created successfully",HttpStatus.OK,result);
+            console.log(result);
+            
+            successResponse(res,"Packages are created successfully",result,HttpStatus.OK);
         } catch (error) {
             next(error)
         }
@@ -45,7 +47,7 @@ export class TrainerPackageController {
         try {
             const trainerId=req.user?.userId;
             const result=await this.trainerpackageservice.getTrainerPackages(trainerId);
-            successResponse(res,"Trainer packages are fetched",HttpStatus.OK,result);
+            successResponse(res,"Trainer packages are fetched",result,HttpStatus.OK);
         } catch (error) {
             next(error)
         }
@@ -55,7 +57,7 @@ export class TrainerPackageController {
         try {
             const trainerId=req.params.trainerId;
             const result=await this.trainerpackageservice.getActivePackages(trainerId);
-            successResponse(res,"Active packages fetched successfully",HttpStatus.OK,result);
+            successResponse(res,"Active packages fetched successfully",result,HttpStatus.OK);
 
         } catch (error) {
             next(error)

@@ -13,7 +13,9 @@ export class TrainerAssignmentRepository extends BaseRepository<ITrainerAssignme
     }
 
     async findActiveByTrainer(trainerId: string): Promise<ITrainerAssignment[]> {
-        return this.model.find({ trainerId, assignmentStatus: TrainerAssignmentStatus.ACTIVE });
+        return this.model.find({ trainerId, assignmentStatus: TrainerAssignmentStatus.ACTIVE })
+            .populate("userId", "firstName lastName email avatar")
+            .populate("packageId", "packageName durationDays price");
     }
 
     async findExpired(): Promise<ITrainerAssignment[]> {

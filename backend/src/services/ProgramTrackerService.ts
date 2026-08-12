@@ -12,7 +12,7 @@ export class ProgramTrackerService implements IProgramTrackerService{
     {
 
     }
-    getMyProgram=async(userId: string): Promise<ProgramTrackerResponseDTO> {
-        
+    getMyProgram = async (userId: string): Promise<ProgramTrackerResponseDTO> => {
+        throw new Error("Method not implemented.");
     }
 }

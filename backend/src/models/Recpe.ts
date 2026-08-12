@@ -2,12 +2,13 @@ import mongoose, { Types ,Schema,Document} from "mongoose";
 import { Difficulty,DietType,RecipeCategory } from "../constants/food.constants.js";
 export interface IIngredient{
     name:string;
-    quantity:number;
+    quantity:string | number;
 }
 
 export interface IMacrosPerServing{
     calories:number;
-    fats:number;
+    fat:number;
+    fats?:number;
     protein:number;
     carbs:number;
 }
@@ -65,8 +66,8 @@ const ingredientSchema=new Schema<IIngredient>({
         required:true
     },
     quantity:{
-        type:Number,
-        default:0
+        type:Schema.Types.Mixed,
+        default:'1'
     }
 },{_id:false})
 
@@ -86,9 +87,16 @@ const macrosPerServingSchema=new Schema<IMacrosPerServing>({
         required:true,
         min:0
     },
+    fat:{
+        type:Number,
+        required:false,
+        default:0,
+        min:0
+    },
     fats:{
         type:Number,
-        required:true,
+        required:false,
+        default:0,
         min:0
     }
 },{_id:false})
@@ -207,7 +215,7 @@ prepTime: {
 
     isPublished: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   
 },{timestamps:true})

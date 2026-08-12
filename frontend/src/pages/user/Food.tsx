@@ -78,7 +78,7 @@ const Food: React.FC = () => {
       setMacros({
         protein: dayLog.target.protein || 0,
         carbs: dayLog.target.carbs || 0,
-        fats: dayLog.target.fat || 0,
+        fats: dayLog.target.fats ?? dayLog.target.fat ?? 0,
       });
     } else {
       setCalorieGoal(0);
@@ -141,6 +141,7 @@ const Food: React.FC = () => {
     const payload: LogMealPayload = {
       mealType: backendType,
       foods: stagedFoods,
+      date: formatISODate(selectedDate),
     };
 
     const success = await logMeal(payload);
@@ -176,6 +177,7 @@ const Food: React.FC = () => {
       protein: macros.protein,
       carbs: macros.carbs,
       fat: macros.fats,
+      date: formatISODate(selectedDate),
     });
     if (success) {
       toast.success('Macro targets updated!');

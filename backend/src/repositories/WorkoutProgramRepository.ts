@@ -12,7 +12,7 @@ async findByTrainer(trainerId: string): Promise<IWorkoutProgram[]> {
     return this.model.find({trainerId,isArchived:false})
 }
 async findActiveForUsers(userId: string): Promise<IWorkoutProgram | null> {
-    return this.model.find({assignedUserId:userId,isArchived:false})
+    return this.model.findOne({assignedUserId:userId,isArchived:false});
 }
 
 async findTemplates(filter?: WorkoutProgramFilterDTO): Promise<IWorkoutProgram> {

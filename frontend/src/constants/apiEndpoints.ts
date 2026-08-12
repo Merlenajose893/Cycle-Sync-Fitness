@@ -165,15 +165,28 @@ MEALS: {
     TRAINER_MARKETPLACE:{
       BROWSE:"/api/trainers",
       PROFILE:(trainerId:string)=>`/api/trainers/${trainerId}`,
-      PACKAGES:(trainerId:string)=>`/api/trainers/packages/${trainerId}`
+      PACKAGES:(trainerId:string)=>`/api/trainer-packages/trainer/${trainerId}`
 
     },
 
     PAYMENT:{
-      CHECKOUt_SESSION:(pakageId:string)=>`api/payment/checkout-session/${pakageId}`
+      CHECKOUt_SESSION:(packageId:string)=>`/api/payment/checkout-session/${packageId}`
     },
     TRAINER_ASSIGNMENT:{
       TRAINERCLIENTS:"/api/trainer-assignments/trainer/clients",
       ME:"/api/trainer-assignments/me"
+    },
+
+    HEALTH_TRACKING: {
+      CYCLE_START: "/api/health/cycle/start",
+      CYCLE_END: (logId: string) => `/api/health/cycle/${logId}/end`,
+      CYCLE_LOGS: "/api/health/cycle/logs",
+      CYCLE_PREDICTIONS: "/api/health/cycle/predictions",
+      CYCLE_DELETE: (logId: string) => `/api/health/cycle/${logId}`,
+      DAILY_LOG: "/api/health/daily",
+      DAILY_TODAY: "/api/health/daily/today",
+      DAILY_HISTORY: "/api/health/daily/history",
+      WATER_INTAKE: "/api/health/daily/water",
+      MILESTONES: "/api/health/milestones",
     }
 }

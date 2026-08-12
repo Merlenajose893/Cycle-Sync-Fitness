@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useUserContext } from "../../context/UserAuthContext";
 
 const ProtectedUserRoute = () => {
-    const { isAuthenticated, loading } = useUserContext();
+    const { isAuthenticated, user, loading } = useUserContext();
+    const location = useLocation();
 
     if (loading) {
         return (
@@ -14,6 +15,16 @@ const ProtectedUserRoute = () => {
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
+    }
+
+    if (user) {
+        const isOnboardingRoute = location.pathname === "/onboarding";
+        if (!user.onboardingComplete && !isOnboardingRoute) {
+            return <Navigate to="/onboarding" replace />;
+        }
+        if (user.onboardingComplete && isOnboardingRoute) {
+            return <Navigate to="/app" replace />;
+        }
     }
 
     return <Outlet />;

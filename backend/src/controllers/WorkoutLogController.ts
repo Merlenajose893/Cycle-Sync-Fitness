@@ -15,7 +15,8 @@ export class WorkoutLogController {
     logWorkout = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?.userId!;
-            const result = await this.workoutLogService.logWorkout(userId, req.body);
+            const file = req.file;
+            const result = await this.workoutLogService.logWorkout(userId, req.body, file);
             successResponse(res, "Workout logged successfully", result, HttpStatus.CREATED);
         } catch (error) {
             next(error);

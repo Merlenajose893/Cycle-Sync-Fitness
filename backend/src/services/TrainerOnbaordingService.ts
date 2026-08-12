@@ -1,5 +1,6 @@
 import { inject,injectable } from "tsyringe";
 import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
+import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
 import type { ITrainer } from "../models/Trainer.js";
 import type { ITrainerOnboardingService } from "../interfaces/services/ITrainerOnboardingService.js";
 import { TOKENS } from "../container/tokens.js";
@@ -11,7 +12,11 @@ import { TrainerStatus } from "../constants/TrainerStatus.js";
 
 @injectable()
 export class TrainerOnboardingService implements ITrainerOnboardingService{
-constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository, @inject(TOKENS.IImageService) private imageService:IImageService)
+constructor(
+    @inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository, 
+    @inject(TOKENS.IImageService) private imageService:IImageService,
+    @inject(TOKENS.ITrainerPackageRepository) private trainerPackageRepository:ITrainerPackageRepository
+)
 {
 
 }
@@ -55,7 +60,41 @@ updateTrainerPackages=async (trainerId: string, data: UpdateTrainerPackageDTO): 
         throw new NotFoundError("Trainer not found")
     }
     trainer.packages=TrainerOnboardingMapper.toTrainerPackages(data).packages;
-    return this.trainerRepository.save(trainer)
+    const savedTrainer = await this.trainerRepository.save(trainer);
+
+    try {
+        const existingPackages = await this.trainerPackageRepository.findPackageByTrainer(trainerId);
+        for (const pkg of existingPackages) {
+            await this.trainerPackageRepository.deletePackage(pkg._id.toString());
+        }
+
+        for (const pkg of trainer.packages) {
+            let durationDays = 30;
+            if (pkg.duration === "1_week") durationDays = 7;
+            else if (pkg.duration === "1_month") durationDays = 30;
+            else if (pkg.duration === "3_months") durationDays = 90;
+            else if (pkg.duration === "6_months") durationDays = 180;
+            else if (typeof (pkg as any).durationDays === "number") durationDays = (pkg as any).durationDays;
+
+            await this.trainerPackageRepository.create({
+                trainerId: trainer._id,
+                packageName: pkg.name,
+                description: `${pkg.sessions || 1} Sessions included (${(pkg as any).mode || 'online'})`,
+                durationDays,
+                price: pkg.price,
+                features: [
+                    `${pkg.sessions || 1} Sessions included`,
+                    `Mode: ${((pkg as any).mode || 'online').toUpperCase()}`,
+                    `Personalized workout & nutrition plan`
+                ],
+                isActive: true
+            });
+        }
+    } catch (err) {
+        console.error("Error syncing trainer packages to repository:", err);
+    }
+
+    return savedTrainer;
 }
 completeTrainerOnboardingStatus=async(trainerId: string): Promise<ITrainer> =>{
     const trainer=await this.trainerRepository.findById(trainerId);

@@ -10,22 +10,48 @@ export const parseApiErrorMessage = (err: any, fallbackMessage: string = "Someth
 
   const data = err.response.data;
 
-  // Case 1: Direct string message
-  if (typeof data.message === "string") {
-    return data.message;
+  // Helper function to extract text from a JSON string or object
+  const extractMessage = (msg: any): string => {
+    if (typeof msg === "string") {
+      const trimmed = msg.trim();
+      if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          return extractMessage(parsed);
+        } catch (e) {
+          return msg;
+        }
+      }
+      return msg;
+    }
+
+    if (Array.isArray(msg)) {
+      return msg
+        .map((e: any) => (typeof e === "string" ? extractMessage(e) : e.message || e.msg || String(e)))
+        .filter(Boolean)
+        .join(". ");
+    }
+
+    if (typeof msg === "object" && msg !== null) {
+      return msg.message || msg.msg || JSON.stringify(msg);
+    }
+
+    return String(msg);
+  };
+
+  // Case 1: Message property exists
+  if (data.message !== undefined && data.message !== null) {
+    return extractMessage(data.message);
   }
 
-  // Case 2: Array of validation errors (e.g. Zod backend validation)
+  // Case 2: Array of validation errors
   if (Array.isArray(data.errors)) {
-    return data.errors
-      .map((e: any) => (typeof e === "string" ? e : e.message || e.msg))
-      .filter(Boolean)
-      .join(", ");
+    return extractMessage(data.errors);
   }
 
   // Case 3: Error object
-  if (typeof data.error === "string") {
-    return data.error;
+  if (data.error) {
+    return extractMessage(data.error);
   }
 
   return fallbackMessage;

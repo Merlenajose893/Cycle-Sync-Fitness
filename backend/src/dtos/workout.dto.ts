@@ -134,6 +134,8 @@ export interface LogWorkoutDTO {
 
     notes?:string;
 
+    imageUrl?:string;
+
 }
 
 export interface WorkoutProgramFilterDTO{

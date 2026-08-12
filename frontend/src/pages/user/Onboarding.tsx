@@ -18,10 +18,12 @@ import {
 import '../../styles/Auth.css';
 
 import { useUserOnboarding } from '../../hooks/onboarding/useUserOnboarding';
+import { useUserContext } from '../../context/UserAuthContext';
 import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
+    const { user, login, refreshUser } = useUserContext();
     const [step, setStep] = useState(1);
     const [dobError, setDobError] = useState<string | null>(null);
     const [bodyDetails, setBodyDetails] = useState({
@@ -108,6 +110,10 @@ const Onboarding: React.FC = () => {
                 setStep(4);
             } else if (step === 4) {
                 await completeOnboarding();
+                if (user) {
+                    login({ ...user, onboardingComplete: true });
+                }
+                await refreshUser();
                 navigate('/app');
             }
         } catch (err) {

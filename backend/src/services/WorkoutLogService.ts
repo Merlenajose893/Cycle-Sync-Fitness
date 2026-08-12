@@ -5,27 +5,44 @@ import type { IWorkoutLogRepository } from "../interfaces/repositories/IWorkoutL
 import type { LogWorkoutDTO, LoggedExerciseDTO } from "../dtos/workout.dto.js";
 import type { IWorkoutLog } from "../models/WorkoutLog.js";
 
+import type { IImageService } from "../interfaces/services/IImageService.js";
+
 @injectable()
 export class WorkoutLogService implements IWorkoutLogService {
     constructor(
         @inject(TOKENS.IWorkoutLogRepository)
-        private readonly workoutLogRepository: IWorkoutLogRepository
+        private readonly workoutLogRepository: IWorkoutLogRepository,
+        @inject(TOKENS.IImageService)
+        private readonly imageService?: IImageService
     ) { }
 
-    logWorkout = async (userId: string, data: LogWorkoutDTO): Promise<IWorkoutLog> => {
-        const totalVolumeKg = this.calculateTotalVolume(data.exercises);
-        const totalSetsCompleted = this.calculateCompletedSets(data.exercises);
+    logWorkout = async (userId: string, data: any, file?: Express.Multer.File): Promise<IWorkoutLog> => {
+        let imageUrl = data.imageUrl || "";
+        if (file && this.imageService) {
+            try {
+                const uploadResult = await this.imageService.uploadImage(file);
+                imageUrl = uploadResult.url;
+            } catch (err) {
+                console.error("Failed to upload workout image:", err);
+            }
+        }
+
+        const exercises = Array.isArray(data.exercises) ? data.exercises : [];
+        const totalVolumeKg = this.calculateTotalVolume(exercises);
+        const totalSetsCompleted = this.calculateCompletedSets(exercises);
         const normalizedDate = this.normalizeDate(data.date);
 
         const workoutLog = await this.workoutLogRepository.create({
             userId,
             date: normalizedDate,
-            source: data.source,
-            programId: data.programId,
-            workoutTitle: data.workoutTitle,
-            durationMinutes: data.durationMinutes,
-            exercises: data.exercises,
-            notes: data.notes,
+            source: data.source || "TRAINER_PROGRAM",
+            programId: data.programId || data.workoutProgramId,
+            workoutTitle: data.workoutTitle || "Logged Workout",
+            durationMinutes: Number(data.durationMinutes || 30),
+            caloriesBurned: Number(data.caloriesBurned || 0),
+            exercises,
+            notes: data.notes || "",
+            imageUrl,
             totalVolumeKg,
             totalSetsCompleted,
         } as unknown as Partial<IWorkoutLog>);
@@ -63,13 +80,16 @@ export class WorkoutLogService implements IWorkoutLogService {
 
     private readonly DEFAULT_HISTORY_LIMIT = 50;
 
-    private calculateTotalVolume(exercises: LoggedExerciseDTO[]): number {
+    private calculateTotalVolume(exercises: any[]): number {
+        if (!Array.isArray(exercises)) return 0;
         let totalVolume = 0;
 
         for (const exercise of exercises) {
-            for (const set of exercise.sets) {
-                if (set.isCompleted) {
-                    totalVolume += set.repsCompleted * set.weightKg;
+            if (Array.isArray(exercise.sets)) {
+                for (const set of exercise.sets) {
+                    if (set.isCompleted) {
+                        totalVolume += (set.repsCompleted || 0) * (set.weightKg || 0);
+                    }
                 }
             }
         }
@@ -77,13 +97,16 @@ export class WorkoutLogService implements IWorkoutLogService {
         return totalVolume;
     }
 
-    private calculateCompletedSets(exercises: LoggedExerciseDTO[]): number {
+    private calculateCompletedSets(exercises: any[]): number {
+        if (!Array.isArray(exercises)) return 0;
         let completedSets = 0;
 
         for (const exercise of exercises) {
-            for (const set of exercise.sets) {
-                if (set.isCompleted) {
-                    completedSets += 1;
+            if (Array.isArray(exercise.sets)) {
+                for (const set of exercise.sets) {
+                    if (set.isCompleted) {
+                        completedSets += 1;
+                    }
                 }
             }
         }
@@ -93,6 +116,8 @@ export class WorkoutLogService implements IWorkoutLogService {
 
 
     private normalizeDate(date: string): Date {
-        return new Date(date);
+        if (!date) return new Date();
+        const d = new Date(date);
+        return isNaN(d.getTime()) ? new Date() : d;
     }
 }

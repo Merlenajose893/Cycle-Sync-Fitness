@@ -15,7 +15,7 @@ getActiveAssignmentByUser=async (req:Request,res:Response,next:NextFunction) => 
     try {
         const userId=req.user?.userId;
         const result=await this.trainerassignService.getActiveAssignmentByUser(userId);
-        successResponse(res,"Active users are fetched",HttpStatus.OK,result)
+        successResponse(res,"Active users are fetched",result,HttpStatus.OK)
     } catch (error) {
         next(error)
     }
@@ -24,7 +24,7 @@ getAssignmentById=async (req:Request,res:Response,next:NextFunction) => {
     try {
         const assignmentId=req.params.id;
         const result=await this.trainerassignService.getAssignmentById(assignmentId);
-        successResponse(res,"Fetched by the id",HttpStatus.OK,result)
+        successResponse(res,"Fetched by the id",result,HttpStatus.OK)
     } catch (error) {
         next(error)
     }
@@ -33,7 +33,7 @@ getTrainerClients=async (req:Request,res:Response,next:NextFunction) => {
     try {
         const trainerId=req.user?.userId!;
         const result=await this.trainerassignService.getTrainerClients(trainerId);
-        successResponse(res, "Trainer clients fetched successfully", HttpStatus.OK, result);
+        successResponse(res, "Trainer clients fetched successfully", result,HttpStatus.OK);
     } catch (error) {
         next(error)
     }
@@ -43,7 +43,7 @@ updateAssignmentStatus=async (req:Request,res:Response,next:NextFunction) => {
         const assignmentId=req.params.id;
         const status=req.body.status;
         const result=await this.trainerassignService.updateAssignmentStatus(assignmentId,status);
-        successResponse(res,"Updated the status",HttpStatus.OK,result)
+        successResponse(res,"Updated the status",result,HttpStatus.OK)
     } catch (error) {
         next(error)
     }

@@ -1,11 +1,17 @@
+import { injectable } from "tsyringe";
 import type { PaymentStatus } from "../constants/payment.js";
 import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.js";
-import type { IPayment } from "../models/Payment.js";
+import { Payment, type IPayment } from "../models/Payment.js";
 import { BaseRepository } from "./BaseRepository.js";
 
+@injectable()
 export class PaymentRepository
     extends BaseRepository<IPayment>
     implements IPaymentRepository {
+
+    constructor() {
+        super(Payment);
+    }
 
     findByStripeSessionId(
         stripeSessionId: string
@@ -17,6 +23,12 @@ export class PaymentRepository
         userId: string
     ): Promise<IPayment[]> {
         return this.model.find({ userId });
+    }
+
+    findByTrainer(
+        trainerId: string
+    ): Promise<IPayment[]> {
+        return this.model.find({ trainerId });
     }
 
     updatePaymentStatus(

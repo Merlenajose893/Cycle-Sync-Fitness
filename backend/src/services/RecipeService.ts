@@ -20,10 +20,21 @@ export class RecipeService implements IRecipeService{
             const uploadImageResult=await this.imageService.uploadImage(file);
             imageUrl=uploadImageResult.url
         }
+        if (data.macrosPerServing) {
+            const fatVal = data.macrosPerServing.fat ?? data.macrosPerServing.fats ?? 0;
+            data.macrosPerServing.fat = fatVal;
+            data.macrosPerServing.fats = fatVal;
+        }
+
+        const isPublished = data.isPublished !== undefined
+            ? (String(data.isPublished) === 'true' || data.isPublished === true)
+            : true;
+
         const recipe=await this.reciperepository.create({
             trainerId,
             ...data,
             imageUrl,
+            isPublished,
             favorites:[],
             reviews:[],
             averageRating:0

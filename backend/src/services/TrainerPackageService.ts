@@ -4,11 +4,15 @@ import type { CreatePackageDTO, UpdatePackageDTO } from "../dtos/trainerPackage.
 import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.js";
 import type { ITrainerPackage } from "../models/TrainerPackage.js";
 import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
 import { NotFoundError, UnauthorizedError } from "../errors/index.js";
 
 @injectable()
 export class TrainerPackageService implements ITrainerPackageService {
-    constructor(@inject(TOKENS.ITrainerPackageRepository) private trainerpackagerepository: ITrainerPackageRepository) {}
+    constructor(
+        @inject(TOKENS.ITrainerPackageRepository) private trainerpackagerepository: ITrainerPackageRepository,
+        @inject(TOKENS.ITrainerRepository) private trainerRepository: ITrainerRepository
+    ) {}
 
     createPackage = async (trainerId: string, data: CreatePackageDTO): Promise<ITrainerPackage> => {
         const pkg = await this.trainerpackagerepository.create({
@@ -42,8 +46,38 @@ export class TrainerPackageService implements ITrainerPackageService {
         await this.trainerpackagerepository.save(pkg);
     }
 
-    getActivePackages = async (trainerId: string, isActive: true): Promise<ITrainerPackage[]> => {
-        const packages = await this.trainerpackagerepository.findActiveByTrainer(trainerId);
+    getActivePackages = async (trainerId: string): Promise<ITrainerPackage[]> => {
+        let packages = await this.trainerpackagerepository.findActiveByTrainer(trainerId);
+
+        if (!packages || packages.length === 0) {
+            const trainer = await this.trainerRepository.findById(trainerId);
+            if (trainer && trainer.packages && trainer.packages.length > 0) {
+                for (const pkg of trainer.packages) {
+                    let durationDays = 30;
+                    if (pkg.duration === "1_week") durationDays = 7;
+                    else if (pkg.duration === "1_month") durationDays = 30;
+                    else if (pkg.duration === "3_months") durationDays = 90;
+                    else if (pkg.duration === "6_months") durationDays = 180;
+                    else if (typeof (pkg as any).durationDays === "number") durationDays = (pkg as any).durationDays;
+
+                    await this.trainerpackagerepository.create({
+                        trainerId: trainer._id,
+                        packageName: pkg.name,
+                        description: `${pkg.sessions || 1} Sessions included (${(pkg as any).mode || 'online'})`,
+                        durationDays,
+                        price: pkg.price,
+                        features: [
+                            `${pkg.sessions || 1} Sessions included`,
+                            `Mode: ${((pkg as any).mode || 'online').toUpperCase()}`,
+                            `Personalized workout & nutrition plan`
+                        ],
+                        isActive: true
+                    });
+                }
+                packages = await this.trainerpackagerepository.findActiveByTrainer(trainerId);
+            }
+        }
+
         return packages;
     }
 

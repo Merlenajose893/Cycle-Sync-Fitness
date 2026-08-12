@@ -223,8 +223,16 @@ forgotPassword=async (data: ForgotPasswordDTO, res: Response): Promise<ForgotPas
 }
 
 resetPassword=async(data: ResetPasswordDTO, res: Response): Promise<void>=> {
-    await this.otpService.verifyOtp(data.userId,"password-reset",data.otp);
-    const user=await this.userRepository.findById(data.userId);
+    let userId = data.userId;
+    if (data.userId && data.userId.includes("@")) {
+        const user = await this.userRepository.findByEmail(data.userId);
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
+        userId = user._id.toString();
+    }
+    await this.otpService.verifyOtp(userId,"password-reset",data.otp);
+    const user=await this.userRepository.findById(userId);
     if(!user)
     {
         throw new NotFoundError("User not found");

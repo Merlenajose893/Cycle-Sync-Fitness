@@ -53,7 +53,8 @@ export const updateCycleSetupSchema=z.object({
 export const updateGoalsSchema=z.object({
     primaryGoal:z.enum(["weight_loss","muscle_gain","hormone_balance","general_health"]).optional(),
     targetWeight:z.number().positive().optional(),
-    activityLevel:z.enum(["sedentary","lightActive","moderatelyActive"]).optional()
+    activityLevel:z.enum(["sedentary","lightActive","moderatelyActive"]).optional(),
+    currentWeight:z.number().positive().optional()
 }).superRefine((data,ctx)=>{
 
 
@@ -72,6 +73,7 @@ export const updateGoalsSchema=z.object({
   if(
     data.primaryGoal === "weight_loss" &&
     data.targetWeight &&
+    data.currentWeight &&
     data.targetWeight >= data.currentWeight
   ){
 
@@ -88,6 +90,7 @@ export const updateGoalsSchema=z.object({
   if(
     data.primaryGoal === "muscle_gain" &&
     data.targetWeight &&
+    data.currentWeight &&
     data.targetWeight <= data.currentWeight
   ){
 

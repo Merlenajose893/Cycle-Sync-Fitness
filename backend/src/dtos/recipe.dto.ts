@@ -2,7 +2,7 @@ import { DietType,RecipeCategory,Difficulty } from "../constants/food.constants.
 
 export interface IngredientDTO {
   name: string;
-  quantity: number;
+  quantity: string | number;
 }
 
 export interface MacrosPerServingDTO {
@@ -10,6 +10,7 @@ export interface MacrosPerServingDTO {
   protein: number;
   carbs: number;
   fat: number;
+  fats?: number;
 }
 
 export interface CreateRecipeDTO {

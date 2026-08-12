@@ -1,37 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Mail, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Mail, ShieldCheck, RefreshCw } from 'lucide-react';
 
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
+import { useUserContext } from '../../context/UserAuthContext';
 import { showToast } from '../../components/common/Toast/Toast';
+import { parseApiErrorMessage } from '../../utils/validationUtils';
 import '../../styles/Auth.css';
 
 
 const VerifyOtp = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { verifyOtp, loading, resendOTP } = useUserAuth();
+    const { verifyOtp, loading, resendOTP, getUser } = useUserAuth();
+    const { login } = useUserContext();
 
     const email = location.state?.email;
     const userId = location.state?.userId;
 
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [error, setError] = useState("");
+    const [timer, setTimer] = useState(60);
+    const [isResending, setIsResending] = useState(false);
 
+    useEffect(() => {
+        if (timer <= 0) return;
 
+        const interval = setInterval(() => {
+            setTimer(prev => prev - 1);
+        }, 1000);
 
-   const handleChange = (value: string, index: number) => {
-    if (!/^\d*$/.test(value)) return;
+        return () => clearInterval(interval);
+    }, [timer]);
 
-    const newOtp = [...otp];
-    newOtp[index] = value.slice(0, 1);
-    setOtp(newOtp);
+    const handleChange = (value: string, index: number) => {
+        if (!/^\d*$/.test(value)) return;
 
-    if (value && index < 5) {
-        document.getElementById(`otp-${index + 1}`)?.focus();
-    }
-};
+        const newOtp = [...otp];
+        newOtp[index] = value.slice(0, 1);
+        setOtp(newOtp);
+
+        if (value && index < 5) {
+            document.getElementById(`otp-${index + 1}`)?.focus();
+        }
+    };
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -51,26 +64,37 @@ const VerifyOtp = () => {
             });
 
             if (response.success) {
+                const user = response.data || (await getUser());
+                if (user) {
+                    login(user);
+                }
                 showToast.success("Email verified successfully! 🎉");
-                navigate("/onboarding",{replace:true});
+                navigate("/onboarding", { replace: true });
             } else {
                 setError("Invalid OTP. Please try again.");
             }
         } catch (error: any) {
-            const errorMessage = error.response?.data?.message || "OTP verification failed";
+            const errorMessage = parseApiErrorMessage(error, "OTP verification failed");
             setError(errorMessage);
             showToast.error(errorMessage);
         }
     };
 
     const handleResendOtp = async () => {
+        if (timer > 0 || isResending) return;
+
         try {
+            setIsResending(true);
             await resendOTP({ userId });
             showToast.success("New OTP has been sent to your email");
             setOtp(["", "", "", "", "", ""]); // Clear OTP fields
             setError("");
+            setTimer(60); // Reset timer
         } catch (error: any) {
-            showToast.error("Failed to resend OTP");
+            const errorMessage = parseApiErrorMessage(error, "Failed to resend OTP");
+            showToast.error(errorMessage);
+        } finally {
+            setIsResending(false);
         }
     };
 
@@ -145,17 +169,27 @@ const VerifyOtp = () => {
                     </form>
 
                     <div className="resend-container" style={{ marginTop: "32px" }}>
-                        <p>
-                            Didn't receive the code?{' '}
-                            <button 
-                                className="resend-btn" 
-                                onClick={handleResendOtp} 
-                                disabled={loading}
-                            >
-                                <RefreshCw size={14} style={{ marginRight: '5px' }} />
-                                Resend OTP
-                            </button>
-                        </p>
+                        {timer > 0 ? (
+                            <p>
+                                Resend verification code in{' '}
+                                <strong style={{ color: 'var(--primary)', fontWeight: '700' }}>
+                                    {Math.floor(timer / 60)}:{ (timer % 60).toString().padStart(2, '0') }
+                                </strong>
+                            </p>
+                        ) : (
+                            <p>
+                                Didn't receive the code?{' '}
+                                <button 
+                                    type="button"
+                                    className="resend-btn" 
+                                    onClick={handleResendOtp} 
+                                    disabled={loading || isResending}
+                                >
+                                    <RefreshCw size={14} style={{ marginRight: '5px' }} />
+                                    {isResending ? 'Sending...' : 'Resend OTP'}
+                                </button>
+                            </p>
+                        )}
                     </div>
 
                     <p className="auth-footer" style={{ marginTop: "48px" }}>

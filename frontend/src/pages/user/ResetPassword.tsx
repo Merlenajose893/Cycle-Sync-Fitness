@@ -20,7 +20,7 @@ const ResetPasswordPage: React.FC = () => {
     const [isResending, setIsResending] = useState(false);
     
     const [error, setError] = useState(false);
-    const {resetPassword}=useUserAuth();
+    const { resetPassword, forgotPassword, loading, error: apiError } = useUserAuth();
     
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -66,25 +66,32 @@ const ResetPasswordPage: React.FC = () => {
             return;
         }
 
-        // Mock verification
         try {
-            await resetPassword({userId:searchParams.get("userId")!,otp:code,newPassword:password});
+            const targetUserId = searchParams.get("userId") || searchParams.get("email") || "";
+            await resetPassword({ userId: targetUserId, otp: code, newPassword: password });
             showToast.success("Password reset successfully");
-            navigate("/login")
-        } catch (error) {
-            setError(true)
+            navigate("/login");
+        } catch (err) {
+            setError(true);
         }
     };
 
-    const handleResend = () => {
+    const handleResend = async () => {
+        const userEmail = searchParams.get("email");
+        if (!userEmail) return;
         setIsResending(true);
-        // Here you would call your backend endpoint (e.g., POST /api/v1/auth/forgot-password)
-        setTimeout(() => {
-            setIsResending(false);
+        try {
+            await forgotPassword({ email: userEmail });
             setTimer(30);
             setOtp(['', '', '', '', '', '']);
+            setError(false);
+            showToast.success("Reset code resent successfully");
             inputRefs.current[0]?.focus();
-        }, 1500);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsResending(false);
+        }
     };
 
     return (
@@ -136,9 +143,9 @@ const ResetPasswordPage: React.FC = () => {
                                             />
                                         ))}
                                     </div>
-                                    {error && (
+                                    {(error || apiError) && (
                                         <p style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: '600', marginTop: '8px', textAlign: 'center' }}>
-                                            Invalid code. For testing, use: 123456
+                                            {apiError || "Invalid verification code or password reset request failed."}
                                         </p>
                                     )}
                                 </div>
