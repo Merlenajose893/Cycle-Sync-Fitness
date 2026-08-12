@@ -4,6 +4,7 @@ import '../../styles/UserPages.css';
 import type { WorkoutProgram } from '../../types/workout.types';
 import { workoutProgramService } from '../../services/workout/workoutProgramService';
 import { workoutLogService } from '../../services/workout/workoutLogService';
+import { showToast } from '../../components/common/Toast/Toast';
 
 const Exercise: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'workouts' | 'history'>('workouts');
@@ -108,9 +109,9 @@ const Exercise: React.FC = () => {
       setImagePreview(null);
       fetchHistory();
       setActiveTab('history');
-      alert('Workout session logged successfully!');
+      showToast.success('Workout session logged successfully!');
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to log workout.');
+      showToast.error(err.response?.data?.message || 'Failed to log workout.');
     } finally {
       setSubmittingLog(false);
     }

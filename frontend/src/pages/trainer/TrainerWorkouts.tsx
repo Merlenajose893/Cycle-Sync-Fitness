@@ -4,6 +4,7 @@ import { Dumbbell, Plus, RefreshCw, CheckCircle, UserCheck } from 'lucide-react'
 import { workoutProgramService } from '../../services/workout/workoutProgramService';
 import { useTrainerClients } from '../../hooks/trainer/useTrainerClients';
 import type { WorkoutProgram } from '../../types/workout.types';
+import { showToast } from '../../components/common/Toast/Toast';
 import '../../styles/TrainerPanel.css';
 
 const TrainerWorkouts: React.FC = () => {
@@ -46,7 +47,7 @@ const TrainerWorkouts: React.FC = () => {
   const handleCreateProgram = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || title.length < 3) {
-      alert('Program title must be at least 3 characters.');
+      showToast.error('Program title must be at least 3 characters.');
       return;
     }
 
@@ -86,7 +87,7 @@ const TrainerWorkouts: React.FC = () => {
       const msg = Array.isArray(rawMsg)
         ? rawMsg.map((m: any) => m.message || m.field || JSON.stringify(m)).join('\n')
         : rawMsg || 'Failed to create program.';
-      alert(msg);
+      showToast.error(msg);
     } finally {
       setCreating(false);
     }
@@ -95,16 +96,16 @@ const TrainerWorkouts: React.FC = () => {
   const handleAssign = async (programId: string) => {
     const userIdToAssign = selectedClientForAssign || targetClientId;
     if (!userIdToAssign) {
-      alert('Please select a client to assign this program to.');
+      showToast.error('Please select a client to assign this program to.');
       return;
     }
 
     setAssigningProgramId(programId);
     try {
       await workoutProgramService.assignProgram(programId, userIdToAssign);
-      alert('Program assigned successfully!');
+      showToast.success('Program assigned successfully!');
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to assign program.');
+      showToast.error(err.response?.data?.message || 'Failed to assign program.');
     } finally {
       setAssigningProgramId(null);
     }
