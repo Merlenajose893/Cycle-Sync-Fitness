@@ -6,7 +6,7 @@ import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import { useUserAssignment } from '../../hooks/assignment/useUserAssignment';
 import { useWorkoutProgram } from '../../hooks/workout/useWorkoutProgram';
 import type { AIPlan } from '../../types/aiplan.types';
-import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight, Dumbbell, MessageSquare, Calendar } from 'lucide-react';
+import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight, Dumbbell, MessageSquare, Calendar, Heart } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useUserContext();
@@ -107,6 +107,38 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className="dashboard-plan-summary" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* ══════════ Health & Cycle Tracking Quick Widget ══════════ */}
+          <div 
+            className="dashboard-card" 
+            style={{ 
+              background: 'linear-gradient(135deg, #fdf2f8, #fce7f3)', 
+              padding: '20px 24px', 
+              borderRadius: '16px', 
+              border: '1px solid #fbcfe8', 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              flexWrap: 'wrap', 
+              gap: '16px' 
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ width: 44, height: 44, borderRadius: '12px', background: '#ec4899', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Heart size={24} />
+              </div>
+              <div>
+                <h4 style={{ margin: 0, color: '#831843', fontSize: '1.05rem', fontWeight: 700 }}>Health & Menstrual Cycle Tracking</h4>
+                <p style={{ margin: 0, color: '#9d174d', fontSize: '0.88rem' }}>Log daily symptoms, track period cycle, water intake & check predictions.</p>
+              </div>
+            </div>
+            <button 
+              style={{ background: '#ec4899', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '10px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
+              onClick={() => navigate('/app/health')}
+            >
+              Open Health Tracking <ChevronRight size={16} />
+            </button>
+          </div>
           
           {/* ══════════ Active Personal Trainer Coaching Widget (ALWAYS SHOWN IF PAID) ══════════ */}
           {assignment ? (

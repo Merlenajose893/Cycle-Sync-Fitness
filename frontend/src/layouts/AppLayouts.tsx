@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Utensils, Dumbbell,
     BarChart3, MessageCircle,
     User, Settings, Users, LogOut,
-    ChevronRight, Menu, X, Bell, Sparkles, Brain
+    ChevronRight, Menu, X, Bell, Sparkles, Brain, Heart
 } from 'lucide-react';
 import { useUserContext } from '../context/UserAuthContext';
 import toast from 'react-hot-toast';
@@ -18,6 +18,7 @@ const AppLayout: React.FC = () => {
 
     const menuItems = [
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/app/dashboard' },
+        { name: 'Health Tracking', icon: <Heart size={20} />, path: '/app/health' },
         { name: 'Food', icon: <Utensils size={20} />, path: '/app/food' },
         { name: 'Exercise', icon: <Dumbbell size={20} />, path: '/app/exercise' },
         { name: 'AI Plans', icon: <Brain size={20} />, path: '/app/ai-plan' },
@@ -102,7 +103,7 @@ const AppLayout: React.FC = () => {
                         </button>
 
                         {/* Cycle Phase indicator */}
-                        <div className="topbar-phase-indicator">
+                        <div className="topbar-phase-indicator" onClick={() => navigate('/app/health')} style={{ cursor: 'pointer' }} title="Open Health & Cycle Dashboard">
                             <div className="phase-pill">
                                 <Sparkles size={14} />
                                 <span>Luteal Phase</span>
