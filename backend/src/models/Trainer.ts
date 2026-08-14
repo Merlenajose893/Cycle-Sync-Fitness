@@ -41,7 +41,7 @@ export interface ITrainer extends Document {
   onboardingCompleted:boolean;
   onboardingSteps:number;
   tags: string[];
-  location: string;
+  location?: string;
   languages: string[];
   rating: number;
   reviews: number;

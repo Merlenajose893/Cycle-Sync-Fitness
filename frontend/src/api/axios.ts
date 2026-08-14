@@ -15,6 +15,7 @@ axiosInstance.interceptors.response.use(
             originalRequest?.url?.includes(API_ENDPOINTS.USER_AUTH.REFRESH) || 
             originalRequest?.url?.includes(API_ENDPOINTS.USER_AUTH.LOGOUT) ||
             originalRequest?.url?.includes(API_ENDPOINTS.TRAINER_AUTH.LOGOUT) ||
+            originalRequest?.url.includes(API_ENDPOINTS.ADMIN.LOGIN)
             originalRequest?.url?.includes('/login');
 
         if (error.response?.status === 401 && !originalRequest?._retry && !isAuthRequest) {

@@ -17,12 +17,11 @@ export const traineronboardingService={
         const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.CERTIFICATIONS,data);
         return response.data;
     },
-    updateTrainerPackages:async (data:UpdateTrainerPackageDTO):Promise<AuthResponse<TrainerOnboardingStatus>> => {
-        const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.PACKAGES,data);
-        return response.data;
-    },
+    
     completeOnboarding:async ():Promise<AuthResponse<TrainerOnboardingStatus>> => {
         const response=await axiosInstance.put(API_ENDPOINTS.TRAINER_ONBOARDING.COMPLETE);
+        console.log(response);
+        
         return response.data
     },
     uploadAvatar:async(file:File):Promise<AuthResponse<TrainerOnboardingStatus>>=>{

@@ -25,6 +25,8 @@ export class TrainerOnboardingController{
         try {
             const trainerId=req.user?.userId;
             const result=await this.trainerOnboardingService.updateTrainerProfile(trainerId!,req.body);
+            console.log(result);
+            
             successResponse(res,"Trainer profile updated successfully",result);
         } catch (error) {
             next(error)
