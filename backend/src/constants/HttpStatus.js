@@ -8,5 +8,6 @@ export var HttpStatus;
     HttpStatus[HttpStatus["NOT_FOUND"] = 404] = "NOT_FOUND";
     HttpStatus[HttpStatus["CONFLICT"] = 409] = "CONFLICT";
     HttpStatus[HttpStatus["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
+    HttpStatus[HttpStatus["SERVICE_UNAVAILABLE"] = 503] = "SERVICE_UNAVAILABLE";
 })(HttpStatus || (HttpStatus = {}));
 //# sourceMappingURL=HttpStatus.js.map

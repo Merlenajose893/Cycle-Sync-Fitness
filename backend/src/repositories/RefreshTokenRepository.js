@@ -16,7 +16,7 @@ let RefreshTokenRepository = class RefreshTokenRepository extends BaseRepository
         super(RefreshTokenModel);
     }
     async findByUserId(userId) {
-        return this.model.findById({ userId: new Types.ObjectId(userId) });
+        return this.model.find({ userId: new Types.ObjectId(userId) });
     }
     async deleteByUserId(userId) {
         await this.model.deleteMany({ userId: new Types.ObjectId(userId) });

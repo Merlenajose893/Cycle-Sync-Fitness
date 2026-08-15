@@ -244,6 +244,7 @@ const Onboarding: React.FC = () => {
                                                 type="date"
                                                 max={getDobMaxDate(13)}
                                                 value={bodyDetails.dateOfBirth}
+                                                style={dobError ? { borderColor: '#ef4444' } : {}}
                                                 onChange={(e) => {
                                                     setBodyDetails({
                                                         ...bodyDetails,

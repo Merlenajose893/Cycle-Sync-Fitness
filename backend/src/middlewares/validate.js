@@ -6,18 +6,19 @@ export const validate = (schema) => {
             if (typeof req.body.data === "string") {
                 try {
                     req.body = JSON.parse(req.body.data);
-                } catch (e) {}
-            } else {
+                }
+                catch (e) { }
+            }
+            else {
                 Object.keys(req.body).forEach((key) => {
                     if (typeof req.body[key] === "string") {
                         const trimmed = req.body[key].trim();
-                        if (
-                            (trimmed.startsWith("{") && trimmed.endsWith("}")) ||
-                            (trimmed.startsWith("[") && trimmed.endsWith("]"))
-                        ) {
+                        if ((trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+                            (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
                             try {
                                 req.body[key] = JSON.parse(req.body[key]);
-                            } catch (e) {}
+                            }
+                            catch (e) { }
                         }
                     }
                 });

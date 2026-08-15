@@ -13,9 +13,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { injectable, inject } from "tsyringe";
 import { TOKENS } from "../container/tokens.js";
 import bcrypt from "bcryptjs";
-import { ConflictError, NotFoundError } from "../errors/index.js";
+import { ConflictError, ForbiddenError, NotFoundError } from "../errors/index.js";
 // import type { IUser } from "../models/User.js";
 import { UnauthorizedError, BadRequestError } from "../errors/index.js";
+import { OAuth2Client } from "google-auth-library";
 let UserAuthService = class UserAuthService {
     userRepository;
     otpRepository;
@@ -58,7 +59,48 @@ let UserAuthService = class UserAuthService {
         await this.tokenService.generateAndSetRefreshToken({ userId: user._id.toString(), role: user.role }, res);
         return user;
     };
-    resendOTP = async (data) => {
+    googleSignIn = async (idToken, res) => {
+        const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+        const ticket = await client.verifyIdToken({
+            idToken, audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        if (!payload) {
+            throw new BadRequestError("Invalid Google token");
+        }
+        const { sub: googleId, email, given_name, family_name, picture, email_verified } = payload;
+        if (!email || !googleId) {
+            throw new BadRequestError("Google token missing email");
+        }
+        if (!email_verified) {
+            throw new BadRequestError("Google Email is not verified");
+        }
+        let user = await this.userRepository.findByGoogleId(googleId);
+        if (!user) {
+            user = await this.userRepository.findByEmail(email);
+            if (user) {
+                user.googleId = googleId;
+                user.isEmailVerified = true;
+                await this.userRepository.save(user);
+            }
+            else {
+                user = await this.userRepository.create({
+                    firstName: given_name || "User",
+                    lastName: family_name || "",
+                    email: email,
+                    googleId: googleId,
+                    isEmailVerified: true,
+                    avatarUrl: picture,
+                    onboardingStep: 1,
+                    onboardingComplete: false,
+                });
+            }
+        }
+        await this.tokenService.generateAndSetAccessToken({ userId: user._id.toString(), role: user.role }, res);
+        await this.tokenService.generateAndSetRefreshToken({ userId: user._id.toString(), role: user.role }, res);
+        return user;
+    };
+    resendOTP = async (data, res) => {
         const user = await this.userRepository.findById(data.userId);
         if (!user) {
             throw new NotFoundError("User not found");
@@ -76,7 +118,15 @@ let UserAuthService = class UserAuthService {
         if (!user.isEmailVerified) {
             throw new BadRequestError("Email not verified");
         }
+        if (!user.password) {
+            throw new UnauthorizedError("Password not found");
+        }
+        if (user.isDeleted) {
+            throw new ForbiddenError("Your account is blokced");
+        }
+        // const isPassword=await bcrypt.compare(data.password,user.password!);
         const isPassword = await bcrypt.compare(data.password, user.password);
+        // console.log(isPassword);
         if (!isPassword) {
             throw new UnauthorizedError("Password not valid");
         }
@@ -92,6 +142,44 @@ let UserAuthService = class UserAuthService {
             throw new UnauthorizedError("Refresh token missing");
         }
         await this.tokenService.refreshTokens(refreshToken, res);
+    };
+    forgotPassword = async (data, res) => {
+        const user = await this.userRepository.findByEmail(data.email);
+        if (!user) {
+            throw new NotFoundError("User not Found");
+        }
+        const ans = await this.otpService.createAndSentOtp(user._id.toString(), "user", user.email, "password-reset");
+        console.log(ans);
+        return {
+            userId: user._id.toString(),
+            email: user.email,
+            message: "Forgot Password sent successfully"
+        };
+    };
+    resetPassword = async (data, res) => {
+        let userId = data.userId;
+        if (data.userId && data.userId.includes("@")) {
+            const user = await this.userRepository.findByEmail(data.userId);
+            if (!user) {
+                throw new NotFoundError("User not found");
+            }
+            userId = user._id.toString();
+        }
+        await this.otpService.verifyOtp(userId, "password-reset", data.otp);
+        const user = await this.userRepository.findById(userId);
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
+        const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+        user.password = hashedPassword;
+        await this.userRepository.save(user);
+    };
+    getCurrentUser = async (userId) => {
+        const user = await this.userRepository.findById(userId);
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
+        return user;
     };
 };
 UserAuthService = __decorate([

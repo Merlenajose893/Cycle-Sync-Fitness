@@ -6,4 +6,12 @@ export interface PaginationDto {
     page: number;
     limit: number;
 }
+export interface InviteTrainerDTO {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    specialization: string;
+    experience: string;
+}
 //# sourceMappingURL=admin.dto.d.ts.map

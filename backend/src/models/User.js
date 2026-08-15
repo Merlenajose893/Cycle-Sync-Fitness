@@ -10,7 +10,10 @@ const userSchema = new mongoose.Schema({
         type: String, required: true
     },
     password: {
-        type: String, required: true
+        type: String, required: false
+    },
+    googleId: {
+        type: String, required: false
     },
     role: {
         type: String, enum: ['user', 'admin'], default: 'user'
@@ -18,16 +21,28 @@ const userSchema = new mongoose.Schema({
     avatarUrl: {
         type: String
     },
+    avatarPublicId: {
+        type: String
+    },
     isEmailVerified: {
         type: Boolean,
         default: false
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    bio: {
+        type: String,
+        required: false
     },
     onboardingComplete: {
         type: Boolean,
         default: false
     },
     onboardingStep: {
-        type: Number
+        type: Number,
+        default: 0
     },
     bodyDetails: {
         height: { type: Number },
@@ -56,7 +71,7 @@ const userSchema = new mongoose.Schema({
     subscription: {
         status: {
             type: String,
-            enum: ['active', 'inactive', 'trainling', 'cancelled'], default: 'inactive'
+            enum: ['active', 'inactive', 'trailing', 'cancelled'], default: 'inactive'
         },
         planId: {
             type: String
@@ -64,7 +79,11 @@ const userSchema = new mongoose.Schema({
         currentPeriodEnd: {
             type: Date
         },
+    },
+    deletedAt: {
+        type: Date,
+        default: null
     }
-});
+}, { timestamps: true });
 export const UserModel = mongoose.model('User', userSchema);
 //# sourceMappingURL=User.js.map

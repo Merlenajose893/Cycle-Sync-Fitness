@@ -32,4 +32,9 @@ export class ConflictError extends AppError {
         super(message, HttpStatus.CONFLICT);
     }
 }
+export class ServiceUnavailableError extends AppError {
+    constructor(message) {
+        super(message, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+}
 //# sourceMappingURL=index.js.map

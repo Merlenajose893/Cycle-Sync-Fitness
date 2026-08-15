@@ -1,1 +1,1 @@
-{"version":3,"file":"HttpStatus.d.ts","sourceRoot":"","sources":["HttpStatus.ts"],"names":[],"mappings":"AAAA,oBAAY,UAAU;IAClB,EAAE,MAAI;IACN,OAAO,MAAI;IACX,WAAW,MAAI;IACf,YAAY,MAAI;IAChB,SAAS,MAAI;IACb,SAAS,MAAI;IACb,QAAQ,MAAI;IACZ,qBAAqB,MAAI;CAE5B"}
+{"version":3,"file":"HttpStatus.d.ts","sourceRoot":"","sources":["HttpStatus.ts"],"names":[],"mappings":"AAAA,oBAAY,UAAU;IAClB,EAAE,MAAI;IACN,OAAO,MAAI;IACX,WAAW,MAAI;IACf,YAAY,MAAI;IAChB,SAAS,MAAI;IACb,SAAS,MAAI;IACb,QAAQ,MAAI;IACZ,qBAAqB,MAAI;IACzB,mBAAmB,MAAI;CAC1B"}

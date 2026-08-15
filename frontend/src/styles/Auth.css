@@ -391,16 +391,25 @@
 }
 
 .otp-field {
-    width: 50px;
-    height: 60px;
+    width: 48px;
+    height: 56px;
     border: 2px solid var(--border);
     border-radius: var(--radius-md);
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-primary);
     background: white;
+    appearance: textfield;
+    -moz-appearance: textfield;
+    box-sizing: border-box;
     transition: all var(--transition-fast);
+}
+
+.otp-field::-webkit-outer-spin-button,
+.otp-field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .otp-field:focus {

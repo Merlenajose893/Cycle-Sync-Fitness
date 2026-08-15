@@ -1,0 +1,15 @@
+import type { CyclePhase } from "../../constants/health.constant.js";
+export interface CyclePredictionResult {
+    currentPhase: CyclePhase;
+    currentCycleDay: number;
+    averageCycleLength: number;
+    nextPeriodStartDate: Date;
+    nextPeriodEndDate: Date;
+    fertileWindowStart: Date;
+    fertileWindowEnd: Date;
+    ovulationDate: Date;
+}
+export interface ICyclePredictionService {
+    predictCycle(userId: string): Promise<CyclePredictionResult>;
+}
+//# sourceMappingURL=ICyclePredictionService.d.ts.map

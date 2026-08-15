@@ -43,12 +43,53 @@ const TrainerOnboarding: React.FC = () => {
     const [certificationFiles, setCertificationFiles] = useState<File[]>([]);
 
     const totalSteps = 4;
-    const { updateProfile, updateCertifications, completeOnboarding, uploadAvatar, uploadDocuments, loading, error } = useTrainerOnboarding();
+    const { getOnboardingStatus, updateProfile, updateCertifications, completeOnboarding, uploadAvatar, uploadDocuments, loading, error } = useTrainerOnboarding();
     const { login, trainer } = useTrainerContext();
+
+    React.useEffect(() => {
+        const loadStatus = async () => {
+            try {
+                const statusData = await getOnboardingStatus();
+                if (statusData) {
+                    const { onboardingStep, profile, certifications } = statusData as any;
+                    if (profile) {
+                        setFormData(prev => ({
+                            ...prev,
+                            bio: profile.bio || prev.bio,
+                            experience: profile.experience || prev.experience,
+                            location: profile.location || prev.location,
+                            profilePhoto: profile.avatar || prev.profilePhoto,
+                            specialty: profile.speciality ? profile.speciality.split(',').map((s: string) => s.trim()) : prev.specialty,
+                            languages: profile.languages || prev.languages,
+                            certifications: certifications && Array.isArray(certifications) && certifications.length > 0
+                                ? certifications.map((c: any) => c.title).join(', ')
+                                : prev.certifications,
+                        }));
+                    }
+                    if (onboardingStep && onboardingStep > 1 && onboardingStep <= 4) {
+                        setStep(onboardingStep);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load onboarding status", err);
+            }
+        };
+        loadStatus();
+    }, []);
+
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
     const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            if (file.size > MAX_FILE_SIZE) {
+                showToast.error("File size exceeds 5MB limit");
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                showToast.error("Please upload an image file");
+                return;
+            }
             try {
                 const response = await uploadAvatar(file);
                 const avatarUrl = response?.data?.avatar || response?.avatar || URL.createObjectURL(file);
@@ -59,7 +100,6 @@ const TrainerOnboarding: React.FC = () => {
             }
         }
     };
-
 
     const [dobError, setDobError] = useState<string | null>(null);
 
@@ -387,7 +427,16 @@ const TrainerOnboarding: React.FC = () => {
                                         accept=".pdf,image/*"
                                         onChange={(e) => {
                                             if (e.target.files && e.target.files[0]) {
-                                                setIdDocumentFile(e.target.files[0]);
+                                                const file = e.target.files[0];
+                                                if (file.size > MAX_FILE_SIZE) {
+                                                    showToast.error("ID document size exceeds 5MB limit");
+                                                    return;
+                                                }
+                                                if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+                                                    showToast.error("ID document must be a PDF or image file");
+                                                    return;
+                                                }
+                                                setIdDocumentFile(file);
                                             }
                                         }}
                                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
@@ -413,7 +462,13 @@ const TrainerOnboarding: React.FC = () => {
                                         accept=".pdf,image/*"
                                         onChange={(e) => {
                                             if (e.target.files) {
-                                                setCertificationFiles(Array.from(e.target.files));
+                                                const files = Array.from(e.target.files);
+                                                const invalidFile = files.find(f => f.size > MAX_FILE_SIZE || (!f.type.startsWith('image/') && f.type !== 'application/pdf'));
+                                                if (invalidFile) {
+                                                    showToast.error(`File "${invalidFile.name}" exceeds 5MB or has invalid format`);
+                                                    return;
+                                                }
+                                                setCertificationFiles(files);
                                             }
                                         }}
                                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}

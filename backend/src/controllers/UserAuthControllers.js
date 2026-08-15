@@ -28,6 +28,11 @@ let UserAuthController = class UserAuthController {
         const result = await this.userAuthService.verifyEmailOTP(req.body, res);
         successResponse(res, "Email verified successfully", result, HttpStatus.OK);
     };
+    googleSignIn = async (req, res) => {
+        const { idToken } = req.body;
+        const result = await this.userAuthService.googleSignIn(idToken, res);
+        successResponse(res, "Google authentication working", result, HttpStatus.OK);
+    };
     loginUser = async (req, res) => {
         await this.userAuthService.loginUser(req.body, res);
         successResponse(res, "Login Successfull", null, HttpStatus.OK);
@@ -37,10 +42,7 @@ let UserAuthController = class UserAuthController {
         successResponse(res, "Otp resend Successfully", null, HttpStatus.OK);
     };
     logoutUser = async (req, res) => {
-        const userId = req.user?.userId;
-        if (!userId) {
-            throw new UnauthorizedError("User ID is missing");
-        }
+        const userId = req.user?.userId || "";
         await this.userAuthService
             .logoutuser({ userId }, res);
         successResponse(res, "Logout successful", null, HttpStatus.OK);
@@ -49,6 +51,26 @@ let UserAuthController = class UserAuthController {
         const refreshToken = req.cookies.refreshToken;
         await this.userAuthService.refreshToken(refreshToken, res);
         successResponse(res, "Token refreshed", null, HttpStatus.OK);
+    };
+    forgotPassword = async (req, res) => {
+        const { email } = req.body;
+        const result = await this.userAuthService.forgotPassword({ email }, res);
+        successResponse(res, "OTP sent to email for password reset", result, HttpStatus.OK);
+    };
+    verifyForgotPasword = async (req, res) => {
+        const { userId, otp } = req.body;
+        // await this.userAuthService.verifyResetOtp({userId,otp},res);
+        successResponse(res, "OTP verified successfully", null, HttpStatus.OK);
+    };
+    resetPassword = async (req, res) => {
+        const { userId, otp, newPassword } = req.body;
+        await this.userAuthService.resetPassword({ userId, otp, newPassword }, res);
+        successResponse(res, "Password reset successfully", null, HttpStatus.OK);
+    };
+    getCurrentUser = async (req, res, next) => {
+        const userId = req.user?.userId;
+        const result = await this.userAuthService.getCurrentUser(userId);
+        successResponse(res, "Current User is getting", result, HttpStatus.OK);
     };
 };
 UserAuthController = __decorate([

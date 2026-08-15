@@ -1,7 +1,7 @@
 export interface UpdateTrainerProfileDTO {
     bio?: string;
     experience?: string;
-    loaction?: string;
+    location?: string;
     avatar?: string;
     speciality?: string;
     languages?: string[];

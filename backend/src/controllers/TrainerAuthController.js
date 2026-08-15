@@ -34,16 +34,54 @@ let TrainerAuthController = class TrainerAuthController {
         successResponse(res, "OTP resent successfully", null, HttpStatus.OK);
     };
     loginTrainer = async (req, res) => {
-        await this.trainerAuthService.loginTrainer(req.body, res);
-        successResponse(res, "Trainer login successful", null, HttpStatus.OK);
+        const result = await this.trainerAuthService.loginTrainer(req.body, res);
+        successResponse(res, "Trainer login successful", result, HttpStatus.OK);
     };
     logoutTrainer = async (req, res) => {
-        const trainerId = req.user?.userId;
-        if (!trainerId) {
-            throw new UnauthorizedError("Trainer ID is missing");
-        }
+        const trainerId = req.user?.userId || "";
         await this.trainerAuthService.logoutTrainer(trainerId, res);
         successResponse(res, "Trainer logout successfull", null, HttpStatus.OK);
+    };
+    verifyTrainer = async (req, res, next) => {
+        try {
+            const token = req.query.token;
+            const result = await this.trainerAuthService.verifyTrainerInvite(token, res);
+            successResponse(res, "Trainer Invite is verified", result, HttpStatus.OK);
+        }
+        catch (error) {
+            next(error);
+        }
+    };
+    registerFromInvite = async (req, res, next) => {
+        const data = req.body;
+        const result = await this.trainerAuthService.registerTrainerInvite(data);
+        successResponse(res, "Registration invite done", result, HttpStatus.OK);
+    };
+    getCurrentTrainer = async (req, res, next) => {
+        const trainerId = req.user?.userId;
+        const result = await this.trainerAuthService.getCurrentTrainer(trainerId);
+        successResponse(res, "Current Trainer fetched", result, HttpStatus.OK);
+    };
+    forgotPassword = async (req, res, next) => {
+        try {
+            const { email } = req.body;
+            const result = await this.trainerAuthService.forgotPassword({ email }, res);
+            successResponse(res, "OTP sent to email for password reset", result, HttpStatus.OK);
+        }
+        catch (error) {
+            next(error);
+        }
+    };
+    resetPassword = async (req, res, next) => {
+        try {
+            const { userId, trainerId, otp, newPassword } = req.body;
+            const targetId = userId || trainerId;
+            await this.trainerAuthService.resetPassword({ userId: targetId, otp, newPassword }, res);
+            successResponse(res, "Password reset successfully", null, HttpStatus.OK);
+        }
+        catch (error) {
+            next(error);
+        }
     };
 };
 TrainerAuthController = __decorate([

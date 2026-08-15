@@ -1,14 +1,14 @@
 import { z } from "zod";
 export declare const updateBodyDetailsSchema: z.ZodObject<{
-    height: z.ZodNumber;
-    weight: z.ZodNumber;
-    dateOfBirth: z.ZodDate;
+    height: z.ZodCoercedNumber<unknown>;
+    weight: z.ZodCoercedNumber<unknown>;
+    dateOfBirth: z.ZodCoercedDate<unknown>;
     biologicalSex: z.ZodString;
 }, z.core.$strip>;
 export declare const updateCycleSetupSchema: z.ZodObject<{
     averageCycleLength: z.ZodOptional<z.ZodNumber>;
     averagePeriodLength: z.ZodOptional<z.ZodNumber>;
-    lastPeriodStart: z.ZodDate;
+    lastPeriodStart: z.ZodCoercedDate<unknown>;
     birthControl: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
 export declare const updateGoalsSchema: z.ZodObject<{
@@ -24,5 +24,6 @@ export declare const updateGoalsSchema: z.ZodObject<{
         lightActive: "lightActive";
         moderatelyActive: "moderatelyActive";
     }>>;
+    currentWeight: z.ZodOptional<z.ZodNumber>;
 }, z.core.$strip>;
 //# sourceMappingURL=useronboarding.validator.d.ts.map

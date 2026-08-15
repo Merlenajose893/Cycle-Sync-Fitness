@@ -46,6 +46,38 @@ export const AI_PLAN_MESSAGES = {
     DELETE_FAILED: "Failed to delete plan",
 } as const;
 
+export const ONBOARDING_MESSAGES = {
+    UPDATE_BODY_FAILED: "Failed to update body details",
+    UPDATE_CYCLE_FAILED: "Failed to update cycle setup",
+    UPDATE_GOALS_FAILED: "Failed to update goals",
+    COMPLETE_FAILED: "Failed to complete onboarding",
+    FETCH_STATUS_FAILED: "Failed to fetch onboarding status",
+} as const;
+
+export const TRAINER_AUTH_MESSAGES = {
+    REGISTER_FAILED: "Trainer registration failed.",
+    LOGIN_FAILED: "Trainer login failed.",
+    OTP_FAILED: "OTP verification failed.",
+    RESEND_OTP_FAILED: "Failed to resend OTP.",
+    LOGOUT_FAILED: "Trainer logout failed.",
+    FORGOT_PASSWORD_FAILED: "Failed to process forgot password.",
+    RESET_PASSWORD_FAILED: "Failed to reset password.",
+    FETCH_TRAINER_FAILED: "Unable to retrieve trainer details.",
+} as const;
+
+export const WORKOUT_MESSAGES = {
+    FETCH_PROGRAM_FAILED: "Failed to fetch workout program",
+    LOG_WORKOUT_FAILED: "Failed to log workout session",
+    FETCH_HISTORY_FAILED: "Failed to fetch workout history",
+} as const;
+
+export const HEALTH_MESSAGES = {
+    START_PERIOD_FAILED: "Failed to start period",
+    END_PERIOD_FAILED: "Failed to end period",
+    LOG_DAILY_FAILED: "Failed to save daily health log",
+    ADD_WATER_FAILED: "Failed to log water intake",
+} as const;
+
 export const PROFILE_MESSAGES = {
     FETCH_FAILED: "Failed to fetch user profile",
     UPDATE_FAILED: "Failed to update profile",
@@ -60,6 +92,10 @@ export const COMMON_MESSAGES = {
 export const MESSAGES = {
     RECIPES: RECIPE_MESSAGES,
     AUTH: AUTH_MESSAGES,
+    ONBOARDING: ONBOARDING_MESSAGES,
+    TRAINER_AUTH: TRAINER_AUTH_MESSAGES,
+    WORKOUT: WORKOUT_MESSAGES,
+    HEALTH: HEALTH_MESSAGES,
     NUTRITION: NUTRITION_MESSAGES,
     AI_PLAN: AI_PLAN_MESSAGES,
     PROFILE: PROFILE_MESSAGES,

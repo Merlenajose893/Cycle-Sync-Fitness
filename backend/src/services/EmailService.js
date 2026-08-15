@@ -12,6 +12,7 @@ import { injectable } from "tsyringe";
 let EmailService = class EmailService {
     transporter;
     constructor() {
+        // console.log(process.env.EMAIL_USER);
         if (!process.env.EMAIL_USER ||
             !process.env.EMAIL_PASS) {
             throw new Error("Invalid Email Configuration");
@@ -45,7 +46,7 @@ let EmailService = class EmailService {
       `,
         });
     }
-    async sendPasswordResetOTP(to, otp) {
+    async sendPasswordResetOtp(to, otp) {
         await this.transporter.sendMail({
             from: `"CycleSyncAI" <${process.env.EMAIL_USER}>`,
             to,
@@ -61,6 +62,34 @@ let EmailService = class EmailService {
           This OTP expires in 15 minutes.
         </p>
       `,
+        });
+    }
+    async sendTrainerInvitation(to, firstName, inviteLink) {
+        await this.transporter.sendMail({
+            from: `"CycleSyncAI" <${process.env.EMAIL_USER}>`,
+            to,
+            subject: "Trainer Invitation",
+            html: `
+      <h2>Welcome to CycleSync AI</h2>
+
+      <p>Hi ${firstName},</p>
+
+      <p>
+        You have been invited to join CycleSync AI as a Trainer.
+      </p>
+
+      <p>
+        Click the link below to activate your account and create your password.
+      </p>
+
+      <a href="${inviteLink}">
+        Accept Invitation
+      </a>
+
+      <p>
+        This invitation expires in 24 hours.
+      </p>
+    `,
         });
     }
 };

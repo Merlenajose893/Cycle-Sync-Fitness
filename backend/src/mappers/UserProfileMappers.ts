@@ -1,7 +1,14 @@
-import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../dtos/userprofile.dto.js"
+import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../dtos/userprofile.dto.js";
 import type { IUser } from "../models/User.js";
 
+/**
+ * Mapper for transforming user profile DTOs and domain entities.
+ */
 export class UserProfileMapper {
+    /**
+     * Converts a profile update DTO to a partial user entity.
+     * @param dto - Update profile data transfer object
+     */
     static toUpdateEntity(dto: UpdateUserProfileDTO): Partial<IUser> {
         return {
             ...(dto.firstName !== undefined && { firstName: dto.firstName }),
@@ -60,6 +67,10 @@ export class UserProfileMapper {
         };
     }
 
+    /**
+     * Converts a user entity to a user profile response DTO.
+     * @param user - User domain entity
+     */
     static toResponseDTO(user: IUser): UserProfileResponseDTO {
         return {
             id: user.id,

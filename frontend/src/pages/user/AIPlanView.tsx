@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import type { AIPlan } from '../../types/aiplan.types';
-import toast from 'react-hot-toast';
+import { showToast } from '../../components/common/Toast/Toast';
 import Modal from '../../components/common/Modal/Modal';
 import { Trash2, Archive, Edit, History, AlertCircle } from 'lucide-react';
 
@@ -82,9 +82,9 @@ const AIPlanView = () => {
             await generatePlan(plan.inputs);
             const fresh = await getActivePlan();
             setPlan(fresh || null);
-            toast.success("Plan regenerated!");
+            showToast.success("Plan regenerated!");
         } catch (error) {
-            toast.error("Failed to regenerate plan");
+            showToast.error("Failed to regenerate plan");
         }
     };
 
@@ -92,11 +92,11 @@ const AIPlanView = () => {
         if (!plan) return;
         try {
             await updatePlanStatus(plan._id, 'ARCHIVED');
-            toast.success("Plan archived");
+            showToast.success("Plan archived");
             setIsArchiveModalOpen(false);
             navigate('/app/ai-plan/history');
         } catch (error) {
-            toast.error("Failed to archive plan");
+            showToast.error("Failed to archive plan");
         }
     };
 
@@ -104,11 +104,11 @@ const AIPlanView = () => {
         if (!plan) return;
         try {
             await deletePlan(plan._id);
-            toast.success("Plan deleted successfully");
+            showToast.success("Plan deleted successfully");
             setIsDeleteModalOpen(false);
             navigate('/app/ai-plan');
         } catch (error) {
-            toast.error("Failed to delete plan");
+            showToast.error("Failed to delete plan");
         }
     };
 

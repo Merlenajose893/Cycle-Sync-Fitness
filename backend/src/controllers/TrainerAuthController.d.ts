@@ -8,5 +8,10 @@ export declare class TrainerAuthController {
     resendTrainerOTP: (req: Request, res: Response) => Promise<void>;
     loginTrainer: (req: Request, res: Response) => Promise<void>;
     logoutTrainer: (req: Request, res: Response) => Promise<void>;
+    verifyTrainer: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    registerFromInvite: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    getCurrentTrainer: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    forgotPassword: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    resetPassword: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 }
 //# sourceMappingURL=TrainerAuthController.d.ts.map

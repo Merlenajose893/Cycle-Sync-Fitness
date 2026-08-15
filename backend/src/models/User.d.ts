@@ -4,12 +4,15 @@ export interface IUser extends Document {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    password?: string;
     role: 'user' | 'admin';
     avatarUrl?: string;
+    avatarPublicId?: string;
     isEmailVerified: boolean;
-    onboardingComplete: boolean;
+    googleId?: string;
     onboardingStep: number;
+    onboardingComplete: boolean;
+    bio?: string;
     bodyDetails?: {
         height: number;
         weight: number;
@@ -32,8 +35,10 @@ export interface IUser extends Document {
         planId?: string;
         currentPeriodEnd?: Date;
     };
+    isDeleted: boolean;
     createdAt: Date;
     updatedAt: Date;
+    deletedAt?: Date;
 }
 export declare const UserModel: mongoose.Model<IUser, {}, {}, {}, mongoose.Document<unknown, {}, IUser, {}, mongoose.DefaultSchemaOptions> & IUser & Required<{
     _id: mongoose.Types.ObjectId;

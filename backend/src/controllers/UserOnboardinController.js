@@ -11,8 +11,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { inject, injectable } from "tsyringe";
-import { Request, Response, NextFunction } from "express";
-import { IUserOnboardingService } from "../interfaces/services/IUserOnboardingService.js";
 import { TOKENS } from "../container/tokens.js";
 import { successResponse, } from "../utils/response.js";
 let UserOnboardingControlling = class UserOnboardingControlling {
@@ -23,12 +21,13 @@ let UserOnboardingControlling = class UserOnboardingControlling {
     async getOnboardingStatus(req, res, next) {
         try {
             const userId = req.user?.userId;
+            console.log(userId);
             const result = await this.useronboardingService.getOnboardingStatus(userId);
             successResponse(res, "Onboarding status fetched success", result);
         }
         catch (error) {
             next(error);
-            console.log(error);
+            console.log("message", error);
         }
     }
     async updateBodyDetails(req, res, next) {
@@ -42,33 +41,38 @@ let UserOnboardingControlling = class UserOnboardingControlling {
             console.log(error);
         }
     }
-    async updateCycleDetails(req, res, next) {
+    updateCycleDetails = async (req, res, next) => {
         try {
             const userId = req.user?.userId;
             const result = await this.useronboardingService.updateCycleSetUp(userId, req.body);
+            console.log(result);
             successResponse(res, "Cycle details are updated", result);
         }
         catch (error) {
             next(error);
             console.log(error);
         }
-    }
-    async updateGoals(req, res, next) {
+    };
+    updateGoals = async (req, res, next) => {
         try {
             const userId = req.user?.userId;
+            console.log(userId);
+            console.log(req.body);
             const result = await this.useronboardingService.updateGoals(userId, req.body);
+            console.log(result);
             successResponse(res, "Goals are updated", result);
         }
         catch (error) {
             next(error);
             console.log(error);
         }
-    }
-    async completeOnboarding(req, res, next) {
+    };
+    completeOnboarding = async (req, res, next) => {
         const userId = req.user?.userId;
+        console.log(userId);
         const result = await this.useronboardingService.completeOnboarding(userId);
         successResponse(res, "Completed Onboarding", result);
-    }
+    };
 };
 UserOnboardingControlling = __decorate([
     injectable(),

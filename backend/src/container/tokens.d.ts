@@ -1,5 +1,6 @@
 export declare const TOKENS: {
     IUserRepository: symbol;
+    IUserProfileService: symbol;
     ITrainerRepository: symbol;
     IOtpRepository: symbol;
     IRefreshTokenRepository: symbol;
@@ -11,5 +12,35 @@ export declare const TOKENS: {
     IAdminService: symbol;
     IUserOnboardingService: symbol;
     ITrainerOnboardingService: symbol;
+    IImageService: symbol;
+    IAccountStatusService: symbol;
+    IUserStatusService: symbol;
+    IAIProvider: symbol;
+    IAIPlanRepository: symbol;
+    IAIGeneratorService: symbol;
+    IAIPlanService: symbol;
+    IMealLogRepository: symbol;
+    IRecipeRepository: symbol;
+    IMealLogService: symbol;
+    IRecipeService: symbol;
+    IWorkoutLogRepository: symbol;
+    IWorkoutProgramRepository: symbol;
+    IWorkoutLogService: symbol;
+    IWorkoutProgramService: symbol;
+    ITrainerPackageRepository: symbol;
+    ITrainerPackageService: symbol;
+    IPaymentRepository: symbol;
+    IPaymentService: symbol;
+    ITrainerAssignmentRepository: symbol;
+    ITrainerAssignmentService: symbol;
+    IAssignmentExpiryScheduler: symbol;
+    ITrainerBrowserService: symbol;
+    ICycleLogRepository: symbol;
+    IDailyHealthLogRepository: symbol;
+    IHealthMilestoneRepository: symbol;
+    ICycleLogService: symbol;
+    ICyclePredictionService: symbol;
+    IDailyHealthLogService: symbol;
+    IHealthMilestoneService: symbol;
 };
 //# sourceMappingURL=tokens.d.ts.map

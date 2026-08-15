@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
 export interface ITrainerPackage {
     name: string;
     sessions: number;
@@ -11,20 +12,32 @@ export interface ICertificate {
     issuedBy: string;
     year: string;
 }
+export interface IDocument {
+    type: 'ID' | 'CERTIFICATE';
+    url: string;
+    name?: string;
+}
 export interface ITrainer extends Document {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    password?: string;
     speciality: string;
     isEmailVerified: boolean;
+    isDeleted: boolean;
     avatar?: string;
+    status: TrainerStatus;
+    inviteToken?: string | null;
+    inviteExpiresAt?: Date | null;
+    inviteAccepted?: boolean;
+    rejectionReason?: string | null;
+    avatarPublicId?: string;
     bio?: string;
     experience: string;
     onboardingCompleted: boolean;
     onboardingSteps: number;
     tags: string[];
-    location: string;
+    location?: string;
     languages: string[];
     rating: number;
     reviews: number;
@@ -34,6 +47,7 @@ export interface ITrainer extends Document {
     featured: boolean;
     packages: ITrainerPackage[];
     certifications: ICertificate[];
+    documents?: IDocument[];
     createdAt: Date;
     updatedAt: Date;
 }

@@ -28,9 +28,10 @@ useEffect(()=>{
             {
                 setTrainer(currentTrainer);
             }
-        } catch (error) {
-            console.log(error);
-            
+        } catch (error: any) {
+            if (error?.response?.status !== 401) {
+                console.log(error);
+            }
         }
         finally{
             setLoading(false)

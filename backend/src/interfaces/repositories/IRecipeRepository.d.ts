@@ -1,0 +1,14 @@
+import type { RecipeFilters, ReviewData } from "../../dtos/recipe.dto.js";
+import type { IRecipe } from "../../models/Recpe.js";
+import type { IBaseRepository } from "./IBaseRepository.js";
+export interface IRecipeRepository extends IBaseRepository<IRecipe> {
+    findByTrainer(trainerId: string): Promise<IRecipe[]>;
+    findPublished(filters: RecipeFilters, page: number, limit: number): Promise<IRecipe[]>;
+    countPublished(filters: RecipeFilters): Promise<number>;
+    searchByTitle(query: string, page: number, limit: number): Promise<IRecipe[]>;
+    findFavouritesByUser(userId: string): Promise<IRecipe[]>;
+    addFavourites(recipeId: string, userId: string): Promise<IRecipe | null>;
+    removeFavourites(recipeId: string, userId: string): Promise<IRecipe | null>;
+    addRecipe(recipeId: string, review: ReviewData): Promise<IRecipe | null>;
+}
+//# sourceMappingURL=IRecipeRepository.d.ts.map

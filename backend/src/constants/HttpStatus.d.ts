@@ -6,6 +6,7 @@ export declare enum HttpStatus {
     FORBIDDEN = 403,
     NOT_FOUND = 404,
     CONFLICT = 409,
-    INTERNAL_SERVER_ERROR = 500
+    INTERNAL_SERVER_ERROR = 500,
+    SERVICE_UNAVAILABLE = 503
 }
 //# sourceMappingURL=HttpStatus.d.ts.map

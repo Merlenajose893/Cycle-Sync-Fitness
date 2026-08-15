@@ -10,12 +10,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { injectable } from "tsyringe";
 import { TrainerModel } from "../models/Trainer.js";
 import { BaseRepository } from "./BaseRepository.js";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
+// import { tr } from "zod/locales";
 let TrainerRepository = class TrainerRepository extends BaseRepository {
     constructor() {
         super(TrainerModel);
     }
     async findByEmail(email) {
         return this.model.findOne({ email });
+    }
+    async blockTrainer(trainerId) {
+        return this.model.findByIdAndUpdate(trainerId, { isDeleted: true }, { new: true });
+    }
+    async unblockTrainer(trainerId) {
+        return this.model.findByIdAndUpdate(trainerId, { isDeleted: false }, { new: true });
+    }
+    async findByInviteToken(token) {
+        return this.model.findOne({ inviteToken: token });
+    }
+    async updateTrainerInvite(trainerId, inviteToken, inviteExpiresAt) {
+        return this.model.findByIdAndUpdate(trainerId, { inviteToken, inviteExpiresAt, inviteAccepted: false }, { new: true });
+    }
+    async acceptTrainer(trainerId, hashedPassword) {
+        return this.model.findByIdAndUpdate(trainerId, { password: hashedPassword, inviteToken: null, inviteExpiresAt: null, inviteAccepted: true }, { new: true });
+    }
+    async findByStatus(status) {
+        return this.model.find({ status });
+    }
+    async findApprovedTrainers() {
+        return this.model.find({ status: TrainerStatus.ACTIVE })
+            .select('-password -inviteToken -inviteExpiresAt -inviteAccepted -isDeleted');
     }
 };
 TrainerRepository = __decorate([

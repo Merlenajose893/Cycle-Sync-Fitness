@@ -37,6 +37,7 @@ const ManageTrainersPage: React.FC = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [viewingDocumentsFor, setViewingDocumentsFor] = useState<Trainer | null>(null);
     const [rejectingTrainerId, setRejectingTrainerId] = useState<string | null>(null);
+    const [approvingTrainerId, setApprovingTrainerId] = useState<string | null>(null);
     const [rejectionReason, setRejectionReason] = useState('');
     const [activeTab, setActiveTab] = useState<'trainers' | 'packages'>('trainers');
     const filteredPackages: any[] = [];
@@ -61,7 +62,6 @@ const ManageTrainersPage: React.FC = () => {
     useEffect(() => {
         fetchTrainers();
     }, [fetchTrainers]);
-    console.log(fetchTrainers);
     
 
     const handleBlock = async (trainerId: string): Promise<void> => {
@@ -84,14 +84,21 @@ const ManageTrainersPage: React.FC = () => {
         }
     };
 
-    const handleApprove = async (trainerId: string): Promise<void> => {
+    const handleApprove = (trainerId: string): void => {
+        setApprovingTrainerId(trainerId);
+    };
+
+    const handleConfirmApprove = async (): Promise<void> => {
+        if (!approvingTrainerId) return;
         try {
-            await approveTrainer(trainerId);
+            await approveTrainer(approvingTrainerId);
             showToast.success("Trainer approved successfully");
             fetchTrainers();
         } catch (error) {
             console.error(error);
             showToast.error("Failed to approve trainer");
+        } finally {
+            setApprovingTrainerId(null);
         }
     };
 
@@ -595,6 +602,21 @@ const ManageTrainersPage: React.FC = () => {
                     </table>
                 </div>
             )}
+
+            {/* Approval Confirmation Modal */}
+            <Modal
+                isOpen={!!approvingTrainerId}
+                onClose={() => setApprovingTrainerId(null)}
+                title="Approve Trainer Application"
+                confirmText="Approve Trainer"
+                cancelText="Cancel"
+                variant="primary"
+                onConfirm={handleConfirmApprove}
+            >
+                <p style={{ fontSize: '0.9rem', color: '#475569', margin: 0 }}>
+                    Are you sure you want to approve this trainer's application? They will gain access to trainer features and be listed for clients.
+                </p>
+            </Modal>
 
             {/* Rejection Reason Modal */}
             <Modal

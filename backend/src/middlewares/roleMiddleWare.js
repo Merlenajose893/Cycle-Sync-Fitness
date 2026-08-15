@@ -4,8 +4,8 @@ export const roleMiddleware = (...allowedroles) => {
         if (!req.user) {
             throw new UnauthorizedError("User not authenticated");
         }
-        const userRole = (req.user?.role || "").toLowerCase();
-        const allowed = allowedroles.map((r) => String(r).toLowerCase());
+        const userRole = (req.user.role || "").toLowerCase();
+        const allowed = allowedroles.map((r) => r.toLowerCase());
         if (!allowed.includes(userRole)) {
             throw new ForbiddenError("Access denied");
         }

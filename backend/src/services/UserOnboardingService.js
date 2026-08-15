@@ -46,15 +46,18 @@ let UserOnboardingService = class UserOnboardingService {
     };
     updateGoals = async (userId, data) => {
         const user = await this.userRepository.findById(userId);
+        console.log(user);
         if (!user) {
             throw new NotFoundError("User not found");
         }
         user.goals = UserOnboardingMapper.toGoals(data);
+        console.log(user.goals.primaryGoal);
         user.onboardingStep = 4;
         return this.userRepository.save(user);
     };
     completeOnboarding = async (userId) => {
-        const user = await this.userRepository.findByEmail(userId);
+        const user = await this.userRepository.findById(userId);
+        console.log(user);
         if (!user) {
             throw new NotFoundError("User Not found");
         }
@@ -63,6 +66,7 @@ let UserOnboardingService = class UserOnboardingService {
     };
 };
 UserOnboardingService = __decorate([
+    injectable(),
     __param(0, inject(TOKENS.IUserRepository)),
     __metadata("design:paramtypes", [Object])
 ], UserOnboardingService);

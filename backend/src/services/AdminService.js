@@ -13,15 +13,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { inject, injectable } from "tsyringe";
 import bcrypt from "bcryptjs";
 import { TOKENS } from "../container/tokens.js";
-import { UnauthorizedError } from "../errors/index.js";
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "../errors/index.js";
+import crypto from "crypto";
+import { TrainerStatus } from "../constants/TrainerStatus.js";
+// import { tr } from "zod/locales";
 let AdminService = class AdminService {
     userRepository;
     trainerRepository;
     tokenService;
-    constructor(userRepository, trainerRepository, tokenService) {
+    emailService;
+    constructor(userRepository, trainerRepository, tokenService, emailService) {
         this.userRepository = userRepository;
         this.trainerRepository = trainerRepository;
         this.tokenService = tokenService;
+        this.emailService = emailService;
     }
     adminLogin = async (data, res) => {
         const admin = await this.userRepository.findByEmail(data.email);
@@ -44,13 +49,94 @@ let AdminService = class AdminService {
     listTrainer(pagination) {
         return this.trainerRepository.findAll(pagination.page, pagination.limit);
     }
+    blockUser = async (userId) => {
+        const user = await this.userRepository.blockUser(userId);
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
+        return user;
+    };
+    unblockUser = async (userId) => {
+        const user = await this.userRepository.unblockUser(userId);
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
+        return user;
+    };
+    blockTrainer = async (trainerId) => {
+        const trainer = await this.trainerRepository.blockTrainer(trainerId);
+        if (!trainer) {
+            throw new NotFoundError("Trainer not found");
+        }
+        return trainer;
+    };
+    unblockTrainer = async (trainerId) => {
+        const trainer = await this.trainerRepository.unblockTrainer(trainerId);
+        if (!trainer) {
+            throw new NotFoundError("Trainer not Found");
+        }
+        return trainer;
+    };
+    inviteTrainer = async (data) => {
+        const existingTrainer = await this.trainerRepository.findByEmail(data.email);
+        if (existingTrainer) {
+            throw new BadRequestError("Trainer with this email already exists.");
+        }
+        const inviteToken = crypto.randomBytes(32).toString("hex");
+        const inviteExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        const trainer = await this.trainerRepository.create({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            speciality: data.specialization,
+            experience: data.experience,
+            inviteToken,
+            inviteExpiresAt,
+            inviteAccepted: false,
+            onboardingCompleted: false,
+            isEmailVerified: false,
+            isDeleted: false
+        });
+        if (!trainer) {
+            throw new Error("Failed to create trainer.");
+        }
+        const inviteLink = `${process.env.FRONTEND_URL}/trainer/register?token=${inviteToken}`;
+        await this.emailService.sendTrainerInvitation(trainer.email, trainer.firstName, inviteLink);
+    };
+    getPendingTrainers = async () => {
+        return this.trainerRepository.findByStatus(TrainerStatus.PENDING_APPROVAL);
+    };
+    approveTrainer = async (trainerId) => {
+        const trainer = await this.trainerRepository.findById(trainerId);
+        if (!trainer) {
+            throw new NotFoundError("Trainer not found");
+        }
+        if (trainer.status !== TrainerStatus.PENDING_APPROVAL) {
+            throw new BadRequestError("Trainer is not pending approval.");
+        }
+        trainer.status = TrainerStatus.ACTIVE;
+        return await this.trainerRepository.save(trainer);
+    };
+    rejectTrainer = async (trainerId, reason) => {
+        const trainer = await this.trainerRepository.findById(trainerId);
+        if (!trainer) {
+            throw new NotFoundError("Trainer Not Found");
+        }
+        if (trainer.status !== TrainerStatus.PENDING_APPROVAL) {
+            throw new BadRequestError("Trainer is not in pending");
+        }
+        trainer.status = TrainerStatus.REJECTED;
+        trainer.rejectionReason = reason;
+        await this.trainerRepository.save(trainer);
+    };
 };
 AdminService = __decorate([
     injectable(),
     __param(0, inject(TOKENS.IUserRepository)),
     __param(1, inject(TOKENS.ITrainerRepository)),
     __param(2, inject(TOKENS.ITokenService)),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, inject(TOKENS.IEmailService)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], AdminService);
 export { AdminService };
 //# sourceMappingURL=AdminService.js.map

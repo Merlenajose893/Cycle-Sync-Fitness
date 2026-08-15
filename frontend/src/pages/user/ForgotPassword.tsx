@@ -100,9 +100,14 @@ const ForgotPasswordPage: React.FC = () => {
                 <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>
               </p>
               
-              <Link to={`/reset-password?email=${encodeURIComponent(email)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`} className="btn btn-primary btn-full" style={{ padding: '14px', fontSize: '1rem', marginBottom: '16px' }}>
+              <button
+                type="button"
+                onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`, { replace: true })}
+                className="btn btn-primary btn-full"
+                style={{ padding: '14px', fontSize: '1rem', marginBottom: '16px' }}
+              >
                 Enter Reset Code
-              </Link>
+              </button>
               
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 Didn't receive the email? Check your spam folder or{' '}

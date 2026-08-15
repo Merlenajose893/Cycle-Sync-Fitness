@@ -17,4 +17,7 @@ export declare class NotFoundError extends AppError {
 export declare class ConflictError extends AppError {
     constructor(message: string);
 }
+export declare class ServiceUnavailableError extends AppError {
+    constructor(message: string);
+}
 //# sourceMappingURL=index.d.ts.map

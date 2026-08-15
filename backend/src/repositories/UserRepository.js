@@ -17,6 +17,24 @@ let UserRepository = class UserRepository extends BaseRepository {
     async findByEmail(email) {
         return this.model.findOne({ email });
     }
+    async findByGoogleId(googleId) {
+        return this.model.findOne({ googleId });
+    }
+    async blockUser(userId) {
+        return this.model.findByIdAndUpdate(userId, { isDeleted: true }, { new: true });
+    }
+    async unblockUser(userId) {
+        return this.model.findByIdAndUpdate(userId, { isDeleted: false }, { new: true });
+    }
+    async updateProfile(userId, data) {
+        return this.model.findByIdAndUpdate(userId, data, { new: true });
+    }
+    async softDelete(userId) {
+        return this.model.findByIdAndUpdate(userId, { isDeleted: true, deletedAt: new Date() }, { new: true });
+    }
+    async hardDelete(userId) {
+        return this.model.findByIdAndDelete(userId);
+    }
 };
 UserRepository = __decorate([
     injectable(),

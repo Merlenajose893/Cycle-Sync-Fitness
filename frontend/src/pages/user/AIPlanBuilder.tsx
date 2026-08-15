@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../../styles/AIPlan.css';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import { Goal, FitnessLevel, DietPreference } from '../../types/aiplan.types';
-import toast from 'react-hot-toast';
+import { showToast } from '../../components/common/Toast/Toast';
 
 const GOALS = [
     { value: 'MUSCLE_GAIN', label: 'Muscle Gain', icon: '💪' },
@@ -84,7 +84,7 @@ const AIPlanBuilder = () => {
                         dietPreference: dietPreference as DietPreference,
                     }
                 });
-                toast.success("Plan updated successfully!");
+                showToast.success("Plan updated successfully!");
             } else {
                 await generatePlan({
                     goal: goal as Goal,
@@ -92,11 +92,11 @@ const AIPlanBuilder = () => {
                     daysPerWeek: daysPerWeek!,
                     dietPreference: dietPreference as DietPreference,
                 });
-                toast.success("Active plan generated successfully!");
+                showToast.success("Active plan generated successfully!");
             }
             navigate('/app/ai-plan/view');
         } catch (error) {
-            toast.error("Failed to process plan");
+            showToast.error("Failed to process plan");
         }
     };
 
@@ -109,10 +109,10 @@ const AIPlanBuilder = () => {
                 daysPerWeek: daysPerWeek!,
                 dietPreference: dietPreference as DietPreference,
             });
-            toast.success("Draft plan saved successfully!");
+            showToast.success("Draft plan saved successfully!");
             navigate('/app/ai-plan/history');
         } catch (error) {
-            toast.error("Failed to save draft plan");
+            showToast.error("Failed to save draft plan");
         }
     };
 

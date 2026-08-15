@@ -5,8 +5,10 @@ import { useUserContext } from '../../context/UserAuthContext';
 import { useAIPlan } from '../../hooks/aiplan/useAIPlan';
 import { useUserAssignment } from '../../hooks/assignment/useUserAssignment';
 import { useWorkoutProgram } from '../../hooks/workout/useWorkoutProgram';
+import { useFoodInsights } from '../../hooks/nutrition/useFoodInsights';
+import { useExerciseInsights } from '../../hooks/workout/useExerciseInsights';
 import type { AIPlan } from '../../types/aiplan.types';
-import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight, Dumbbell, MessageSquare, Calendar, Heart } from 'lucide-react';
+import { Sparkles, Brain, ArrowRight, LogOut, Award, UserCheck, ChevronRight, Dumbbell, MessageSquare, Calendar, Heart, Utensils, Activity, Flame } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useUserContext();
@@ -14,6 +16,8 @@ const Dashboard = () => {
   const { getActivePlan } = useAIPlan();
   const { assignment, fetchAssignment } = useUserAssignment();
   const { activeProgram, fetchActiveProgram } = useWorkoutProgram();
+  const foodInsights = useFoodInsights();
+  const exerciseInsights = useExerciseInsights();
   
   const [plan, setPlan] = useState<AIPlan | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,7 +73,7 @@ const Dashboard = () => {
       <div className="dashboard-header-premium" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div className="header-greeting">
           <h1>{getGreeting()}, {user?.firstName || 'User'}</h1>
-          <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Here is your daily training summary</p>
+          <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Here is your daily training & health summary</p>
         </div>
         
         <button 
@@ -108,36 +112,125 @@ const Dashboard = () => {
       ) : (
         <div className="dashboard-plan-summary" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
-          {/* ══════════ Health & Cycle Tracking Quick Widget ══════════ */}
-          <div 
-            className="dashboard-card" 
-            style={{ 
-              background: 'linear-gradient(135deg, #fdf2f8, #fce7f3)', 
-              padding: '20px 24px', 
-              borderRadius: '16px', 
-              border: '1px solid #fbcfe8', 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center', 
-              flexWrap: 'wrap', 
-              gap: '16px' 
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ width: 44, height: 44, borderRadius: '12px', background: '#ec4899', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Heart size={24} />
+          {/* ══════════ Daily Insights Snapshot ══════════ */}
+          <div>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+              <Activity size={20} color="var(--primary)" /> Daily Snapshot & Tracking
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+              
+              {/* Nutrition Snapshot Card */}
+              <div 
+                className="dashboard-card" 
+                style={{ 
+                  background: 'linear-gradient(135deg, #fff7ed, #ffedd5)', 
+                  padding: '20px', 
+                  borderRadius: '16px', 
+                  border: '1px solid #fed7aa',
+                  cursor: 'pointer'
+                }}
+                onClick={() => navigate('/app/nutrition')}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: 38, height: 38, borderRadius: '10px', background: '#ea580c', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Utensils size={20} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, color: '#9a3412', fontSize: '0.95rem', fontWeight: 700 }}>Food & Nutrition</h4>
+                      <span style={{ fontSize: '0.78rem', color: '#c2410c' }}>Daily Goal: {foodInsights.targetCalories} kcal</span>
+                    </div>
+                  </div>
+                  <ChevronRight size={18} color="#ea580c" />
+                </div>
+                
+                <div style={{ margin: '14px 0 8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600, color: '#7c2d12', marginBottom: '6px' }}>
+                    <span>{foodInsights.consumedCalories} consumed</span>
+                    <span>{foodInsights.remainingCalories} remaining</span>
+                  </div>
+                  <div style={{ height: '8px', background: '#ffedd5', border: '1px solid #fdba74', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${foodInsights.percentage}%`, background: 'linear-gradient(90deg, #ea580c, #f97316)', borderRadius: '10px', transition: 'width 0.4s' }} />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', marginTop: '12px', fontSize: '0.78rem', color: '#9a3412' }}>
+                  <span>P: <strong>{foodInsights.protein}g</strong></span>
+                  <span>C: <strong>{foodInsights.carbs}g</strong></span>
+                  <span>F: <strong>{foodInsights.fat}g</strong></span>
+                </div>
               </div>
-              <div>
-                <h4 style={{ margin: 0, color: '#831843', fontSize: '1.05rem', fontWeight: 700 }}>Health & Menstrual Cycle Tracking</h4>
-                <p style={{ margin: 0, color: '#9d174d', fontSize: '0.88rem' }}>Log daily symptoms, track period cycle, water intake & check predictions.</p>
+
+              {/* Exercise Snapshot Card */}
+              <div 
+                className="dashboard-card" 
+                style={{ 
+                  background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)', 
+                  padding: '20px', 
+                  borderRadius: '16px', 
+                  border: '1px solid #bbf7d0',
+                  cursor: 'pointer'
+                }}
+                onClick={() => navigate('/app/exercise')}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: 38, height: 38, borderRadius: '10px', background: '#16a34a', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Dumbbell size={20} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, color: '#14532d', fontSize: '0.95rem', fontWeight: 700 }}>Exercise & Workouts</h4>
+                      <span style={{ fontSize: '0.78rem', color: '#15803d' }}>This Week: {exerciseInsights.workoutsThisWeek} sessions</span>
+                    </div>
+                  </div>
+                  <ChevronRight size={18} color="#16a34a" />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '16px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#166534', textTransform: 'uppercase', fontWeight: 600 }}>Weekly Volume</div>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#14532d' }}>{exerciseInsights.weeklyVolumeKg.toLocaleString()} <span style={{ fontSize: '0.85rem' }}>kg</span></div>
+                  </div>
+                  {exerciseInsights.lastWorkoutTitle && (
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#166534', textTransform: 'uppercase', fontWeight: 600 }}>Last Workout</div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#14532d' }}>{exerciseInsights.lastWorkoutTitle}</div>
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Health Tracking Quick Card */}
+              <div 
+                className="dashboard-card" 
+                style={{ 
+                  background: 'linear-gradient(135deg, #fdf2f8, #fce7f3)', 
+                  padding: '20px', 
+                  borderRadius: '16px', 
+                  border: '1px solid #fbcfe8',
+                  cursor: 'pointer'
+                }}
+                onClick={() => navigate('/app/health')}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: 38, height: 38, borderRadius: '10px', background: '#ec4899', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Heart size={20} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, color: '#831843', fontSize: '0.95rem', fontWeight: 700 }}>Cycle & Health Log</h4>
+                      <span style={{ fontSize: '0.78rem', color: '#be185d' }}>Track symptoms, period & water</span>
+                    </div>
+                  </div>
+                  <ChevronRight size={18} color="#ec4899" />
+                </div>
+
+                <p style={{ margin: '14px 0 0', color: '#9d174d', fontSize: '0.82rem', lineHeight: '1.4' }}>
+                  Log daily physical symptoms, period dates, and stay hydrated with personalized phase predictions.
+                </p>
+              </div>
+
             </div>
-            <button 
-              style={{ background: '#ec4899', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '10px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
-              onClick={() => navigate('/app/health')}
-            >
-              Open Health Tracking <ChevronRight size={16} />
-            </button>
           </div>
           
           {/* ══════════ Active Personal Trainer Coaching Widget (ALWAYS SHOWN IF PAID) ══════════ */}

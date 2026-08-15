@@ -6,5 +6,7 @@ export interface ITrainerOnboardingService {
     updateTrainerCertifications(trainerId: string, data: UpdateTrainerCertificateDTO): Promise<ITrainer>;
     updateTrainerPackages(trainerId: string, data: UpdateTrainerPackageDTO): Promise<ITrainer>;
     completeTrainerOnboardingStatus(trainerId: string): Promise<ITrainer>;
+    uploadAvatar(trainerId: string, file: Express.Multer.File): Promise<ITrainer>;
+    uploadDocuments(trainerId: string, files: Express.Multer.File[]): Promise<ITrainer>;
 }
 //# sourceMappingURL=ITrainerOnboardingService.d.ts.map

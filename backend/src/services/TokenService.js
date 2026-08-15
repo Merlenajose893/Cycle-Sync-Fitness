@@ -23,14 +23,15 @@ let TokenService = class TokenService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
     async generateAndSetAccessToken(payload, res) {
-        const acessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
-        res.cookie("access_token", acessToken, {
+        const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
+        console.log(accessToken);
+        res.cookie("access_token", accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 15 * 60 * 1000
         });
-        return acessToken;
+        return accessToken;
     }
     async generateAndSetRefreshToken(payload, res) {
         const refreshToken = jwt.sign(payload, process.env.JWT_REFRESHTOKEN, { expiresIn: "7d" });
@@ -39,7 +40,7 @@ let TokenService = class TokenService {
             tokenHash,
             userId: new Types.ObjectId(payload.userId),
             userType: payload.role,
-            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         });
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -84,12 +85,19 @@ let TokenService = class TokenService {
         if (!validTokenFound) {
             throw new UnauthorizedError("Refresh token not recognized");
         }
-        await this.generateAndSetAccessToken(payload, res);
-        await this.generateAndSetRefreshToken(payload, res);
+        const newPayload = {
+            userId: payload.userId,
+            role: payload.role
+        };
+        await this.generateAndSetAccessToken(newPayload, res);
+        await this.generateAndSetRefreshToken(newPayload, res);
     }
     async clearTokens(userId, res) {
-        await this.refreshTokenRepository.deleteByUserId(userId);
-        res.clearCookie("acess_token");
+        if (userId) {
+            await this.refreshTokenRepository.deleteByUserId(userId);
+        }
+        res.clearCookie("access_token");
+        res.clearCookie("refreshToken");
     }
 };
 TokenService = __decorate([
