@@ -8,7 +8,7 @@ export class TrainerOnboardingMapper{
             experience:dto.experience,
             avatar:dto.avatar,
             speciality:dto.speciality,
-            location:dto.loaction,
+            location:dto.location,
             languages:dto.languages,
             tags:dto.tags
         }
