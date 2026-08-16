@@ -36,8 +36,8 @@ export class HealthMilestoneService implements IHealthMilestoneService {
       const alreadyHas = await this.milestoneRepository.hasMileStone(userId, type);
       if (!alreadyHas) {
         const milestone = await this.milestoneRepository.create({
-          userId: userId as any,
-          milestoneType: type,
+          userId: userId ,
+          milestoneType: HealthMilestoneType.CYCLE_LOOGED_FIRST_TIME,
           title,
           description,
           badgeIcon,

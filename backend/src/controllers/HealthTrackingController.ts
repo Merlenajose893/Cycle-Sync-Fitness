@@ -22,7 +22,11 @@ export class HealthTrackingController {
   startPeriod = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
-      const result = await this.cycleLogService.startPeriod(userId, req.body);
+      console.log(userId);
+      
+      const result = await this.cycleLogService.startPeriodDate(userId, req.body);
+      console.log(result);
+      
       // Auto check milestones when cycle is logged
       await this.healthMilestoneService.checkAndAwardMilestones(userId);
       successResponse(res, "Period started successfully", result, HttpStatus.CREATED);

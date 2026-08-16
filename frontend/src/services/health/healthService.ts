@@ -14,6 +14,8 @@ export const healthService = {
   // Cycle Tracking
   async startPeriod(dto: StartPeriodDTO): Promise<CycleLog> {
     const res = await axiosInstance.post(API_ENDPOINTS.HEALTH_TRACKING.CYCLE_START, dto);
+    console.log(res);
+    
     return res.data.data;
   },
 

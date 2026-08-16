@@ -1,8 +1,8 @@
 export enum FlowIntensity {
-  LIGHT = 'light',
-  MEDIUM = 'medium',
-  HEAVY = 'heavy',
-  SPOTTING = 'spotting'
+  LIGHT = 'LIGHT',
+  MEDIUM = 'MEDIUM',
+  HEAVY = 'HEAVY',
+  SPOTTING = 'SPOTTING'
 }
 
 export enum Mood {

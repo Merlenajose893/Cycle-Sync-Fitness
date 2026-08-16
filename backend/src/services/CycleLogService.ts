@@ -12,7 +12,7 @@ export class CycleLogService implements ICycleLogService {
     private cycleLogRepository: ICycleLogRepository
   ) {}
 
-  async startPeriod(userId: string, dto: CreateCycleLogDTO): Promise<ICycleLog> {
+  async startPeriodDate(userId: string, dto: CreateCycleLogDTO): Promise<ICycleLog> {
     const latest = await this.cycleLogRepository.findByLatest(userId);
     if (latest && !latest.endDate) {
       throw new Error("An active period is already logged. Please end it before starting a new one.");

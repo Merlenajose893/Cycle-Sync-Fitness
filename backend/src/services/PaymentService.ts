@@ -119,7 +119,9 @@ export class PaymentService implements IPaymentService {
                 await this.trainerassignmentservice.createAssignment({
                     userId: payment.userId.toString(),
                     packageId: payment.packageId.toString(),
-                    paymentId: payment._id.toString()
+                    paymentId: payment._id.toString(),
+                    startDate:Date.now(),
+                    endDate:Date.now()+payment.packageId.durationDays
                 });
             }
             break;
