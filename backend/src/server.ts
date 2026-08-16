@@ -2,6 +2,7 @@
 import 'dotenv/config';
 
 import "reflect-metadata";
+import http from "http"
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import './container/index.js';
@@ -29,6 +30,7 @@ import { container } from './container/index.js';
 import { TOKENS } from './container/tokens.js';
 
 const app = express();
+const server=http.createServer(app);
 connectDB();
 console.log(connectDB());
 
@@ -73,7 +75,7 @@ async function startServer() {
     const assignmentExpiry=container.resolve<IAssignmentExpiryScheduler>(TOKENS.IAssignmentExpiryScheduler);
     assignmentExpiry.start();
     console.log("Assignment expiry started");
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
     
