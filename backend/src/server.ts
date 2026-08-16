@@ -4,6 +4,7 @@ import 'dotenv/config';
 import "reflect-metadata";
 import http from "http"
 import express from 'express';
+import {Server} from "socket.io";
 import cookieParser from 'cookie-parser';
 import './container/index.js';
 import cors from 'cors';
@@ -31,6 +32,21 @@ import { TOKENS } from './container/tokens.js';
 
 const app = express();
 const server=http.createServer(app);
+const io=new Server(server,{
+  cors:{
+    origin:process.env.FRONTEND_URL,
+    methods:["GET","POST"]
+  }
+})
+
+io.on("connection",(socket)=>{
+  console.log(socket.id);
+  socket.on("disconnect",()=>{
+    console.log("Socket disconnected",socket.id);
+    
+  })
+  
+})
 connectDB();
 console.log(connectDB());
 
