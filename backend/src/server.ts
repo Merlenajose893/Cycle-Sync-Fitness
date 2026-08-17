@@ -5,6 +5,7 @@ import "reflect-metadata";
 import http from "http"
 import express from 'express';
 import {Server} from "socket.io";
+import { registervideoCallSocket } from './sockets/videoCallSocket.js';
 import cookieParser from 'cookie-parser';
 import './container/index.js';
 import cors from 'cors';
@@ -41,6 +42,7 @@ const io=new Server(server,{
 
 io.on("connection",(socket)=>{
   console.log(socket.id);
+  registervideoCallSocket(io,socket)
   socket.on("disconnect",()=>{
     console.log("Socket disconnected",socket.id);
     
