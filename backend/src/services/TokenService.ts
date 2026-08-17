@@ -23,10 +23,13 @@ async generateAndSetAccessToken(payload: TokenPayload, res: Response): Promise<s
     const accessToken=jwt.sign(payload,process.env.JWT_SECRET as string,{expiresIn:"15m"})
     console.log(accessToken);
     
+    const isSecure = process.env.NODE_ENV === "production" && process.env.SECURE_COOKIES === "true";
+    const sameSiteOption = isSecure ? "none" : "lax";
+
     res.cookie("access_token",accessToken,{
         httpOnly:true,
-        secure:process.env.NODE_ENV==="production",
-        sameSite:"strict",
+        secure:isSecure,
+        sameSite:sameSiteOption,
         maxAge:15*60*1000
     })
     return accessToken;
@@ -45,10 +48,13 @@ async generateAndSetRefreshToken(payload: TokenPayload, res: Response): Promise<
 
     });
 
+    const isSecure = process.env.NODE_ENV === "production" && process.env.SECURE_COOKIES === "true";
+    const sameSiteOption = isSecure ? "none" : "lax";
+
     res.cookie("refreshToken",refreshToken,{
         httpOnly:true ,
-        secure:process.env.NODE_ENV==="production",
-        sameSite:"strict",
+        secure:isSecure,
+        sameSite:sameSiteOption,
         maxAge:7*24*60*60*1000
     })
 

@@ -6,6 +6,7 @@ import http from "http"
 import express from 'express';
 import {Server} from "socket.io";
 import { registervideoCallSocket } from './sockets/videoCallSocket.js';
+import { addUserSocket,removeUserSocket } from './sockets/socketRegistry.js';
 import cookieParser from 'cookie-parser';
 import './container/index.js';
 import cors from 'cors';
@@ -30,20 +31,32 @@ import healthTrackingRoutes from './routes/healthTrackingRoutes.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { container } from './container/index.js';
 import { TOKENS } from './container/tokens.js';
+import { socketAuth } from './middlewares/socketAuth.js';
 
 const app = express();
 const server=http.createServer(app);
-const io=new Server(server,{
-  cors:{
-    origin:process.env.FRONTEND_URL,
-    methods:["GET","POST"]
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST"]
   }
-})
+});
+io.use(socketAuth);
 
 io.on("connection",(socket)=>{
+  const userId=socket.data.user?.userId;
+  console.log(socket.data.user);
+  
+  addUserSocket(userId,socket.id)
+  console.log(`User ${userId} connected with socket ${socket.id}`);
+  
   console.log(socket.id);
   registervideoCallSocket(io,socket)
   socket.on("disconnect",()=>{
+    removeUserSocket(userId);
+    console.log(`User ${userId} disconnected`);
+    
     console.log("Socket disconnected",socket.id);
     
   })

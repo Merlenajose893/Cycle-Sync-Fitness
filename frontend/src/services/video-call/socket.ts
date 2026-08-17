@@ -1,15 +1,17 @@
-import {io} from "socket.io-client";
-const token=localStorage.getItem("accessToken");
-export const socket=io("http://localhost:3000",{
-    auth:{
-        token
-    }
-})
-socket.on("connect",()=>{
-    console.log("Socket connected",socket.id);
-    
-})
-socket.on("connect-error",(error)=>{
-    console.error(error.message);
-    
-})
+import { io } from "socket.io-client";
+
+export const socket = io("http://localhost:3000", {
+  withCredentials: true,
+  auth: (cb) => {
+    const token = localStorage.getItem("access_token");
+    cb({ token });
+  },
+});
+
+socket.on("connect", () => {
+  console.log("Socket connected:", socket.id);
+});
+
+socket.on("connect_error", (error) => {
+  console.error("Socket connection error:", error.message);
+});
