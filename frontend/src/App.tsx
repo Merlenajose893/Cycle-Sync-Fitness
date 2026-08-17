@@ -1,6 +1,7 @@
 
 import React from 'react'
 import AppRoutes from './routes/AppRoutes'
+import { socket } from './services/video-call/socket';
 import { Toaster } from 'react-hot-toast'
 console.log(Toaster);
 
