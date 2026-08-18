@@ -15,14 +15,14 @@ async findActiveForUsers(userId: string): Promise<IWorkoutProgram | null> {
     return this.model.findOne({assignedUserId:userId,isArchived:false});
 }
 
-async findTemplates(filter?: WorkoutProgramFilterDTO): Promise<IWorkoutProgram> {
+async findTemplates(filter?: WorkoutProgramFilterDTO): Promise<IWorkoutProgram[]> {
     return this.model.find({isTemplate:true,isArchived:true,...filter});
 }
 
 async update(programId: string, data: Partial<IWorkoutProgram>): Promise<IWorkoutProgram | null> {
     return this.model.findByIdAndUpdate(programId,data,{new:true})
 }
-async delete(programId: string): Promise<void> {
+async delete(programId: string) {
     return this.model.findByIdAndUpdate(programId,{isArchived:true},{new:true})
 }
 }

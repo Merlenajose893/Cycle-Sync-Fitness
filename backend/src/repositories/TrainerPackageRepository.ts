@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import type { UpdatePackageDTO } from "../dtos/trainerPackage.dto.js";
 import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
-import type { ITrainerPackage } from "../models/Trainer.js";
+import type { ITrainerPackage } from "../models/TrainerPackage.js";
 import { TrainerPackage} from "../models/TrainerPackage.js";
 import { BaseRepository } from "./BaseRepository.js";
 
