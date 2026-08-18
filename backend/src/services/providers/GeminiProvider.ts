@@ -16,7 +16,7 @@ constructor()
     this.ai=new GoogleGenAI({
         apiKey
     })
-    this.model=process.env.GEMINI_MODEL;
+    this.model=process.env.GEMINI_MODEL!;
     console.log(this.model);
     
 }

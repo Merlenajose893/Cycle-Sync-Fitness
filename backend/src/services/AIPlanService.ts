@@ -6,6 +6,7 @@ import type { IAIPlanRepository } from "../interfaces/repositories/IAIPlanReposi
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors/index.js";
 import { PlanStatus } from "../constants/aiPlan.js";
 import type { IAIGeneratorService } from "../interfaces/services/IAIGeneratorService.js";
+import { Types } from "mongoose";
 
 @injectable()
 export class AIPlanService implements IAIPlanService {
@@ -26,7 +27,7 @@ export class AIPlanService implements IAIPlanService {
 
         const generatedPlan = await this.aigeneratorService.generatePlan(inputs);
         const newPlan = await this.aiplanrepository.create({
-            userId,
+            userId:new Types.ObjectId(userId),
             status: PlanStatus.ACTIVE,
             inputs,
             summary: generatedPlan.summary,
@@ -41,7 +42,7 @@ export class AIPlanService implements IAIPlanService {
     createDraftPlan = async (userId: string, inputs: AIPlanInputs): Promise<IAIPlan | null> => {
         const generatedPlan = await this.aigeneratorService.generatePlan(inputs);
         const draftPlan = await this.aiplanrepository.create({
-            userId,
+            userId:new Types.ObjectId(userId),
             status: PlanStatus.DRAFT,
             inputs,
             summary: generatedPlan.summary,

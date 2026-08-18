@@ -6,6 +6,7 @@ import type { ITrainerPackage } from "../models/TrainerPackage.js";
 import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
 import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
 import { NotFoundError, UnauthorizedError } from "../errors/index.js";
+import { Types } from "mongoose";
 
 @injectable()
 export class TrainerPackageService implements ITrainerPackageService {
@@ -16,13 +17,13 @@ export class TrainerPackageService implements ITrainerPackageService {
 
     createPackage = async (trainerId: string, data: CreatePackageDTO): Promise<ITrainerPackage> => {
         const pkg = await this.trainerpackagerepository.create({
-            trainerId,
+            trainerId:new Types.ObjectId(trainerId),
             ...data
         });
         return pkg;
     }
 
-    updatePackage = async (trainerId: string, data: UpdatePackageDTO, packageId: string): Promise<ITrainerPackage> => {
+    updatePackage = async (trainerId: string, data: UpdatePackageDTO, packageId: string): Promise<ITrainerPackage|null> => {
         const pkg = await this.trainerpackagerepository.findPackageById(packageId);
         if (!pkg) {
             throw new NotFoundError("Package Not Found");
