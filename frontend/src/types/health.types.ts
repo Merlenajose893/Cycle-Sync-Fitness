@@ -6,25 +6,25 @@ export enum FlowIntensity {
 }
 
 export enum Mood {
-  HAPPY = 'happy',
-  CALM = 'calm',
-  ENERGETIC = 'energetic',
-  ANXIOUS = 'anxious',
-  SAD = 'sad',
-  IRRITABLE = 'irritable',
-  FATIGUED = 'fatigued',
-  MOODY = 'moody'
+  HAPPY = 'HAPPY',
+  CALM = 'CALM',
+  ENERGETIC = 'ENERGETIC',
+  ANXIOUS = 'ANXIOUS',
+  SAD = 'SAD',
+  IRRITABLE = 'IRRITABLE',
+  FATIGUED = 'FATIGUED',
+  MOODY = 'MOODY'
 }
 
 export enum PhysicalSymptom {
-  CRAMPS = 'cramps',
-  BLOATING = 'bloating',
-  HEADACHE = 'headache',
-  BREAST_TENDERNESS = 'breast_tenderness',
-  ACNE = 'acne',
-  BACKACHE = 'backache',
-  NAUSEA = 'nausea',
-  CRAVINGS = 'cravings'
+  CRAMPS = 'CRAMPS',
+  BLOATING = 'BLOATING',
+  HEADACHE = 'HEADACHE',
+  BREAST_TENDERNESS = 'BREAST_TENDERNESS',
+  ACNE = 'ACNE',
+  BACKACHE = 'BACKACHE',
+  NAUSEA = 'NAUSEA',
+  CRAVINGS = 'CRAVINGS'
 }
 
 export enum CyclePhase {
