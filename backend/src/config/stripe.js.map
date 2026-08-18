@@ -1,1 +1,0 @@
-{"version":3,"file":"stripe.js","sourceRoot":"","sources":["stripe.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,QAAQ,CAAC;AAC5B,MAAM,MAAM,GAAC,IAAI,MAAM,CAAC,OAAO,CAAC,GAAG,CAAC,iBAA2B,EAAC;IAC5D,UAAU,EAAC,mBAAmB;CACjC,CAAC,CAAC;AACH,eAAe,MAAM,CAAC"}

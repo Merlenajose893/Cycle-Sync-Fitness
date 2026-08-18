@@ -1,1 +1,0 @@
-{"version":3,"file":"aiPlan.dto.d.ts","sourceRoot":"","sources":["aiPlan.dto.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,WAAW,EAAC,UAAU,EAAC,IAAI,EAAC,cAAc,EAAE,MAAM,qBAAqB,CAAC;AACtF,MAAM,WAAW,SAAS;IACtB,OAAO,EAAC,WAAW,CAAC;IACpB,WAAW,EAAC,UAAU,EAAE,CAAC;IACzB,QAAQ,EAAC,IAAI,EAAE,CAAC;IAChB,eAAe,EAAC,cAAc,CAAA;CACjC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"IAccountStatusService.d.ts","sourceRoot":"","sources":["IAccountStatusService.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,2BAA2B,CAAC;AAE1D,MAAM,WAAW,qBAAqB;IAClC,aAAa,CAAC,MAAM,EAAC,MAAM,EAAC,IAAI,EAAC,QAAQ,GAAE,OAAO,CAAC,IAAI,CAAC,CAAC;CAC5D"}

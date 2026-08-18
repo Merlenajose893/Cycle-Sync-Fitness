@@ -1,1 +1,0 @@
-{"version":3,"file":"ITrainerBrowserService.d.ts","sourceRoot":"","sources":["ITrainerBrowserService.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,yBAAyB,CAAC;AAExD,MAAM,WAAW,sBAAsB;IACnC,mBAAmB,IAAG,OAAO,CAAC,QAAQ,EAAE,CAAC,CAAC;IAC1C,iBAAiB,CAAC,SAAS,EAAC,MAAM,GAAE,OAAO,CAAC,QAAQ,GAAC,IAAI,CAAC,CAAC;CAC9D"}
