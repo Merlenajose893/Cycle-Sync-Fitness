@@ -5,6 +5,7 @@ import type { IWorkorkoutProgramRepository } from "../interfaces/repositories/IW
 import type { CreateProgramDTO, UpdateProgramDTO } from "../dtos/workout.dto.js";
 import type { IWorkoutProgram } from "../models/WorkoutProgram.js";
 import { NotFoundError, UnauthorizedError } from "../errors/index.js";
+import { Types } from "mongoose";
 @injectable()
 export class WorkoutProgramService implements IWorkoutProgramService{
 constructor(@inject(TOKENS.IWorkoutProgramRepository) private workoutrepository:IWorkorkoutProgramRepository)
@@ -13,7 +14,7 @@ constructor(@inject(TOKENS.IWorkoutProgramRepository) private workoutrepository:
 }
 createProgram=async(trainerId: string, data: CreateProgramDTO): Promise<IWorkoutProgram> =>{
    const program= await this.workoutrepository.create({
-    trainerId:trainerId,
+    trainerId:new Types.ObjectId(trainerId),
     ...data
    })
    return program;
@@ -45,7 +46,7 @@ assignProgramtoUser=async(trainerId: string, programId: string, userId: string):
     {
         throw new UnauthorizedError("Trainer not authorised")
     }
-    const updated=await this.workoutrepository.update(programId,{assignedUserId:userId});
+    const updated=await this.workoutrepository.update(programId,{assignedUserId:new Types.ObjectId(userId)});
     return updated
 }
 getTrainerPrograms=async(trainerId: string): Promise<IWorkoutProgram[]> =>{

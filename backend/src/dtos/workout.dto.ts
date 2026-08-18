@@ -1,4 +1,5 @@
 import type { CyclePhase, WorkoutCategory,WorkoutDifficulty,WorkoutGoal } from "../constants/workout.js";
+import type { IWorkoutProgramDay } from "../models/WorkoutProgram.js";
 
 export interface CreateWorkoutProgramDTO{
     exerciseName:string;
@@ -66,7 +67,7 @@ export interface UpdateProgramDTO {
     goal?:WorkoutGoal;
 
 
-    days?:unknown[];
+    days?:IWorkoutProgramDay[];
 
 
 }
