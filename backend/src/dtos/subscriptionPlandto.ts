@@ -13,3 +13,16 @@ export interface CreateSubscriptionPlanDTO{
     maxDailyFoodLogs: number;
   };
 }
+
+export interface UpdateSubscriptionPlanDTO {
+  name?: string;
+  price?: number;
+  currency?: string;
+  features?: {
+    aiPlanGeneration?: boolean;
+    unlimitedFoodTracking?: boolean;
+    trainerMatching?: boolean;
+    cycleSyncInsights?: boolean;
+    maxDailyFoodLogs?: number;
+  };
+}
