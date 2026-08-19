@@ -58,7 +58,10 @@ export const TOKENS = {
         Symbol.for("IHealthMilestoneService"),
 
         ISubscriptionPlanRepository:
-        Symbol.for("ISubscriptionPlanRepository")
+        Symbol.for("ISubscriptionPlanRepository"),
+
+        IStripeBillingGateway:
+        Symbol.for("IStripeBillingGateway")
 
 
         }
