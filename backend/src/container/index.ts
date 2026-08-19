@@ -48,6 +48,7 @@ import { CycleLogService } from "../services/CycleLogService.js";
 import { CyclePredictionService } from "../services/CyclePredictionService.js";
 import { DailyHealthLogService } from "../services/DailyHealthLogService.js";
 import { HealthMilestoneService } from "../services/HealthMilestoneService.js";
+import { SubscriptionPlanRepository } from "../repositories/SubscriptionPlanRepository.js";
 
 
 container.register(TOKENS.IUserRepository, { useClass: UserRepository });
@@ -100,6 +101,5 @@ container.register(TOKENS.ICycleLogService, { useClass: CycleLogService });
 container.register(TOKENS.ICyclePredictionService, { useClass: CyclePredictionService });
 container.register(TOKENS.IDailyHealthLogService, { useClass: DailyHealthLogService });
 container.register(TOKENS.IHealthMilestoneService, { useClass: HealthMilestoneService });
-
-
+container.register(TOKENS.ISubscriptionPlanRepository,{useClass:SubscriptionPlanRepository})
 export { container };
