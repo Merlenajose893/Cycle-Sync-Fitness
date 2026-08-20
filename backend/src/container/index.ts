@@ -50,6 +50,7 @@ import { DailyHealthLogService } from "../services/DailyHealthLogService.js";
 import { HealthMilestoneService } from "../services/HealthMilestoneService.js";
 import { SubscriptionPlanRepository } from "../repositories/SubscriptionPlanRepository.js";
 import { StripeBillingGateway } from "../gateways/StripeBillingGateway.js";
+import { SubscriptionPlanService } from "../services/SubscriptionPlanService.js";
 
 
 container.register(TOKENS.IUserRepository, { useClass: UserRepository });
@@ -103,5 +104,6 @@ container.register(TOKENS.ICyclePredictionService, { useClass: CyclePredictionSe
 container.register(TOKENS.IDailyHealthLogService, { useClass: DailyHealthLogService });
 container.register(TOKENS.IHealthMilestoneService, { useClass: HealthMilestoneService });
 container.register(TOKENS.ISubscriptionPlanRepository,{useClass:SubscriptionPlanRepository});
-container.register(TOKENS.IStripeBillingGateway,{useClass:StripeBillingGateway})
+container.register(TOKENS.IStripeBillingGateway,{useClass:StripeBillingGateway});
+container.register(TOKENS.ISubscriptionplanService,{useClass:SubscriptionPlanService})
 export { container };

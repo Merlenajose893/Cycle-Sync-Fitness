@@ -3,27 +3,24 @@ import { injectable, inject } from "tsyringe";
 import type {
   CreateSubscriptionPlanDTO,
   UpdateSubscriptionPlanDTO,
-} from "../dtos/subscriptionPlan.dto.js";
+} from "../dtos/subscriptionPlandto.js";
 
 import type { ISubscriptionPlan } from "../models/SubscriptionPlan.js";
-
 import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
-
 import type { IStripeBillingGateway } from "../interfaces/gateways/IStripeBillingGateway.js";
-
-import { TOKENS } from "../constants/tokens.js";
-
+import { TOKENS } from "../container/tokens.js";
 import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.js";
+import { ConflictError } from "../errors/index.js";
 
 @injectable()
 export class SubscriptionPlanService
   implements ISubscriptionPlanService
 {
   constructor(
-    @inject(TOKENS.SUBSCRIPTION_PLAN_REPOSITORY)
+    @inject(TOKENS.ISubscriptionPlanRepository)
     private readonly subscriptionPlanRepository: ISubscriptionPlanRepository,
 
-    @inject(TOKENS.STRIPE_BILLING_GATEWAY)
+    @inject(TOKENS.IStripeBillingGateway)
     private readonly stripeBillingGateway: IStripeBillingGateway
   ) {}
 
@@ -34,7 +31,7 @@ export class SubscriptionPlanService
       await this.subscriptionPlanRepository.findByCode(data.code);
 
     if (existingPlan) {
-      throw new Error("Subscription plan code already exists");
+      throw new ConflictError("Subscription plan code already exists");
     }
 
     const interval =

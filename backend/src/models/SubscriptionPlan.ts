@@ -82,11 +82,11 @@ const subscriptionPlan=new Schema<ISubscriptionPlan>({
             type:Number,
             default:5,
             min:0
-        },
-        isActive:{
-            type:Boolean,
-            default:true
         }
+    },
+    isActive:{
+        type:Boolean,
+        default:true
     }
 },{timestamps:true})
 

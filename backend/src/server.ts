@@ -23,6 +23,8 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import trainerBrowseRoutes from './routes/trainerbrowse.routes.js';
 import trainerAssignmentRoutes from './routes/trainerassignment.routes.js';
 import healthTrackingRoutes from './routes/healthTrackingRoutes.js';
+import subscriptionPlanRoutes from './routes/subscriptionplan.routes.js';
+
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { container } from './container/index.js';
@@ -63,6 +65,8 @@ app.use("/api/payment",paymentRoutes);
 app.use("/api/trainers",trainerBrowseRoutes);
 app.use("/api/trainer-assignments",trainerAssignmentRoutes);
 app.use("/api/health", healthTrackingRoutes);
+app.use("/api/subscription-plans", subscriptionPlanRoutes);
+
 
 
 app.use(errorHandler);

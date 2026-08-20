@@ -22,8 +22,8 @@ export abstract class BaseRepository <T extends Document>implements IBaseReposit
         await this.model.findByIdAndDelete(id)
     }
 
-    async findAll(page: number, limit: number): Promise<T[]> {
-        const skip=(page-1)*limit;
-        return this.model.find().skip(skip).limit(limit)
+    async findAll(page: number = 1, limit: number = 100): Promise<T[]> {
+        const skip = (page - 1) * limit;
+        return this.model.find().skip(skip).limit(limit);
     }
 } 

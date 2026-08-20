@@ -61,7 +61,14 @@ export const TOKENS = {
         Symbol.for("ISubscriptionPlanRepository"),
 
         IStripeBillingGateway:
-        Symbol.for("IStripeBillingGateway")
+        Symbol.for("IStripeBillingGateway"),
+
+        ISubscriptionplanService:
+        Symbol.for("ISubscriptionPlanService"),
+
+        ISubscriptionPlanService:
+        Symbol.for("ISubscriptionPlanService")
+
 
 
         }
