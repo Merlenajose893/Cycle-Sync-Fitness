@@ -1,64 +1,105 @@
-import { inject, injectable } from "tsyringe";
-import type { CreateSubscriptionPlanDTO, UpdateSubscriptionPlanDTO } from "../dtos/subscriptionPlandto.js";
-import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.js";
-import type { ISubscriptionPlan } from "../models/SubscriptionPlan.js";
-import { TOKENS } from "../container/tokens.js";
-import type { ISubscriptionplanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
-import type { IStripeBillingGateway } from "../interfaces/gateways/IStripeBillingGateway.js";
-import { ConflictError, NotFoundError } from "../errors/index.js";
-@injectable()
-export class SubscriptionPlanService implements ISubscriptionPlanService{
-    constructor(@inject(TOKENS.ISubscriptionPlanRepository) private subscriptionplan:ISubscriptionplanRepository,@inject(TOKENS.IStripeBillingGateway) private gateway:IStripeBillingGateway)
-    {
+import { injectable, inject } from "tsyringe";
 
+import type {
+  CreateSubscriptionPlanDTO,
+  UpdateSubscriptionPlanDTO,
+} from "../dtos/subscriptionPlan.dto.js";
+
+import type { ISubscriptionPlan } from "../models/SubscriptionPlan.js";
+
+import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
+
+import type { IStripeBillingGateway } from "../interfaces/gateways/IStripeBillingGateway.js";
+
+import { TOKENS } from "../constants/tokens.js";
+
+import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.js";
+
+@injectable()
+export class SubscriptionPlanService
+  implements ISubscriptionPlanService
+{
+  constructor(
+    @inject(TOKENS.SUBSCRIPTION_PLAN_REPOSITORY)
+    private readonly subscriptionPlanRepository: ISubscriptionPlanRepository,
+
+    @inject(TOKENS.STRIPE_BILLING_GATEWAY)
+    private readonly stripeBillingGateway: IStripeBillingGateway
+  ) {}
+
+  async createPlan(
+    data: CreateSubscriptionPlanDTO
+  ): Promise<ISubscriptionPlan> {
+    const existingPlan =
+      await this.subscriptionPlanRepository.findByCode(data.code);
+
+    if (existingPlan) {
+      throw new Error("Subscription plan code already exists");
     }
-    createPlan=async(data: CreateSubscriptionPlanDTO): Promise<ISubscriptionPlan> =>{
-       const existing=await this.subscriptionplan.findByCode(data.code);
-       if(existing)
-       {
-        throw new ConflictError("Subscription plan already exists")
-       }
-       const interval=data.billingCycle==="annual"?"year":"month";
-       const stripeResult=await this.gateway.createProductAndPrice(
+
+    const interval =
+      data.billingCycle === "monthly"
+        ? "month"
+        : "year";
+
+    const stripeData =
+      await this.stripeBillingGateway.createProductAndPrice(
         data.name,
         data.price,
-        data.currency||"INR",
+        data.currency ?? "INR",
         interval
-       )
-       return this.subscriptionplan.create({
+      );
+
+    const plan =
+      await this.subscriptionPlanRepository.create({
         ...data,
-        stripeProductId:stripeResult.stripeProductId,
-        stripePriceId:stripeResult.stripePriceId,
-        isActive:true
-       })
-    }
-    getPlanById=async(id: string): Promise<ISubscriptionPlan>=> {
-        const plan=await this.subscriptionplan.findById(id);
-        if(!plan)
-        {
-            throw new NotFoundError("Plan not found")
-        }
-        return plan;
-    }
-    updatePlan=async(id: string, data: UpdateSubscriptionPlanDTO): Promise<ISubscriptionPlan | null> =>{
-        const plan=await this.subscriptionplan.findById(id);
-        const updated=await this.subscriptionplan.update
-    }
-    getPlanByCode=async(code: string): Promise<ISubscriptionPlan> =>{
-        const plan=await this.subscriptionplan.findByCode(code);
-        if(!plan)
-        {
-            throw new NotFoundError("Plan code not found")
-        }
-        return plan
-    }
-    getAllPlans=async(): Promise<ISubscriptionPlan[]> =>{
-        return this.subscriptionplan.findAll();
-    }
-    deactivatePlan=async(id: string): Promise<ISubscriptionPlan | null> =>{
-        
-    }
-    getActivePlans=async(): Promise<ISubscriptionPlan[]> =>{
-        
-    }
+        currency: data.currency ?? "INR",
+        stripeProductId: stripeData.stripeProductId,
+        stripePriceId: stripeData.stripePriceId,
+        isActive: true,
+      });
+
+    return plan;
+  }
+
+  async getPlanById(
+    id: string
+  ): Promise<ISubscriptionPlan | null> {
+    return await this.subscriptionPlanRepository.findById(id);
+  }
+
+  async getPlanByCode(
+    code: string
+  ): Promise<ISubscriptionPlan | null> {
+    return await this.subscriptionPlanRepository.findByCode(code);
+  }
+
+  async getActivePlans(): Promise<ISubscriptionPlan[]> {
+    return await this.subscriptionPlanRepository.findAllActive();
+  }
+
+  async getAllPlans(): Promise<ISubscriptionPlan[]> {
+    return await this.subscriptionPlanRepository.findAll();
+  }
+
+  async updatePlan(
+    id: string,
+    data: UpdateSubscriptionPlanDTO
+  ): Promise<ISubscriptionPlan | null> {
+    return await this.subscriptionPlanRepository.update(
+      id,
+      data
+    );
+  }
+
+  async deactivatePlan(
+    id: string
+  ): Promise<ISubscriptionPlan | null> {
+    return await this.subscriptionPlanRepository.update(
+      id,
+      {
+        isActive: false,
+      }
+    );
+  }
 }
