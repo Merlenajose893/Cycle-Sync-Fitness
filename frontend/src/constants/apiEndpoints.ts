@@ -196,5 +196,10 @@ MEALS: {
       DAILY_HISTORY: "/api/health/daily/history",
       WATER_INTAKE: "/api/health/daily/water",
       MILESTONES: "/api/health/milestones",
+    },
+
+    REPORTS: {
+      ANALYTICS: (range: string) => `/api/reports/analytics?range=${range}`,
+      EXPORT: (range: string) => `/api/reports/export?range=${range}`,
     }
 }

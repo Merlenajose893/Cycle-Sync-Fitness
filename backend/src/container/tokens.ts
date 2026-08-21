@@ -67,8 +67,12 @@ export const TOKENS = {
         Symbol.for("ISubscriptionPlanService"),
 
         ISubscriptionPlanService:
-        Symbol.for("ISubscriptionPlanService")
+        Symbol.for("ISubscriptionPlanService"),
 
+        IReportService:
+        Symbol.for("IReportService"),
 
+        IReportController:
+        Symbol.for("IReportController")
 
         }

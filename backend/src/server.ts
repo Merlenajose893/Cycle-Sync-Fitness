@@ -24,6 +24,7 @@ import trainerBrowseRoutes from './routes/trainerbrowse.routes.js';
 import trainerAssignmentRoutes from './routes/trainerassignment.routes.js';
 import healthTrackingRoutes from './routes/healthTrackingRoutes.js';
 import subscriptionPlanRoutes from './routes/subscriptionplan.routes.js';
+import reportRoutes from './routes/report.routes.js';
 
 
 import { errorHandler } from './middlewares/errorHandler.js';
@@ -66,6 +67,7 @@ app.use("/api/trainers",trainerBrowseRoutes);
 app.use("/api/trainer-assignments",trainerAssignmentRoutes);
 app.use("/api/health", healthTrackingRoutes);
 app.use("/api/subscription-plans", subscriptionPlanRoutes);
+app.use("/api/reports", reportRoutes);
 
 
 
