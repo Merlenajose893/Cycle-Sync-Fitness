@@ -170,7 +170,15 @@ MEALS: {
     },
 
     PAYMENT:{
-      CHECKOUt_SESSION:(packageId:string)=>`/api/payment/checkout-session/${packageId}`
+      CHECKOUt_SESSION:(packageId:string)=>`/api/payment/checkout-session/${packageId}`,
+      SUBSCRIPTION_CHECKOUT: "/api/payment/subscription-checkout",
+    },
+    SUBSCRIPTION_PLANS: {
+      ACTIVE: "/api/subscription-plans/active",
+      ALL: "/api/subscription-plans",
+      BY_ID: (id: string) => `/api/subscription-plans/${id}`,
+      BY_CODE: (code: string) => `/api/subscription-plans/code/${code}`,
+      DEACTIVATE: (id: string) => `/api/subscription-plans/${id}/deactivate`,
     },
     TRAINER_ASSIGNMENT:{
       TRAINERCLIENTS:"/api/trainer-assignments/trainer/clients",

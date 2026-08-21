@@ -7,6 +7,7 @@ const paymenyController=container.resolve(PaymentController);
 const router=Router();
 router.post("/webhook",express.raw({type:"application/json"}),paymenyController.handleWebhook);
 router.post("/checkout-session",authMiddleware,paymenyController.createCheckoutSession);
+router.post("/subscription-checkout",authMiddleware,paymenyController.createSubscriptionCheckoutSession);
 router.post("/confirm",authMiddleware,paymenyController.confirmSession);
 router.get("/my-payments",authMiddleware,paymenyController.getPaymentsByUser)
 router.get("/:id",authMiddleware,paymenyController.getPaymentById);

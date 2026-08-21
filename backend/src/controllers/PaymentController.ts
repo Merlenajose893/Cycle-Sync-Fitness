@@ -28,6 +28,20 @@ export class PaymentController {
         }
     };
 
+    createSubscriptionCheckoutSession = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const userId = req.user?.userId;
+            if (!userId) {
+                throw new Error("Unauthorized: User ID is required");
+            }
+
+            const result = await this.paymentService.createSubscriptionCheckoutSession(userId, req.body);
+            successResponse(res, "Subscription checkout session created successfully", result, HttpStatus.OK);
+        } catch (error) {
+            next(error);
+        }
+    };
+
     handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const signature = req.headers["stripe-signature"] as string;

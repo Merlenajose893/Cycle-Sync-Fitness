@@ -23,6 +23,7 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboardPage from "../pages/admin/AdminDashboard";
 import ManageUsersPage from "../pages/admin/ManageUsers";
 import ManageTrainersPage from "../pages/admin/ManageTrainer";
+import ManageSubscriptionPlans from "../pages/admin/ManageSubscriptionPlans";
 import AppLayout from "../layouts/AppLayouts";
 import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
@@ -138,6 +139,7 @@ function AppRoutes() {
                     <Route path="/admin" element={<AdminDashboardPage />} />
                     <Route path="/admin/users" element={<ManageUsersPage />} />
                     <Route path="/admin/trainers" element={<ManageTrainersPage />} />
+                    <Route path="/admin/subscriptions" element={<ManageSubscriptionPlans />} />
                 </Route>
             </Routes>
         </BrowserRouter>
