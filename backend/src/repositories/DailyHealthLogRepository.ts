@@ -1,7 +1,9 @@
+import { injectable } from "tsyringe";
 import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.js";
 import { DailyHealthLog, type IDailyHealthLog } from "../models/DailyHealthLog.js";
 import { BaseRepository } from "./BaseRepository.js";
 
+@injectable()
 export class DailyHealthLogRepository extends BaseRepository<IDailyHealthLog> implements IDailyHealthLogRepository{
     constructor()
     {

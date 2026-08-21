@@ -19,10 +19,15 @@ export class ReportController implements IReportController {
       const userId = req.user?.userId || (req.user as any)?.id;
       const range: ReportRange = (req.query.range as ReportRange) || "week";
 
+      console.log(`[ReportController] 📊 Analytics requested for User: ${userId} | Range: ${range}`);
+
       const report = await this.reportService.generateUserReport(userId, range);
+
+      console.log(`[ReportController] ✅ Analytics generated successfully for User: ${userId}`);
 
       successResponse(res, "User report analytics generated successfully", report, HttpStatus.OK);
     } catch (error) {
+      console.error("ReportController getUserReport Error:", error);
       next(error);
     }
   };
@@ -32,12 +37,17 @@ export class ReportController implements IReportController {
       const userId = req.user?.userId || (req.user as any)?.id;
       const range: ReportRange = (req.query.range as ReportRange) || "week";
 
+      console.log(`[ReportController] 📥 CSV Export requested for User: ${userId} | Range: ${range}`);
+
       const csvData = await this.reportService.exportUser(userId, range);
+
+      console.log(`[ReportController] ✅ CSV Export generated successfully for User: ${userId}`);
 
       res.setHeader("Content-Type", "text/csv");
       res.setHeader("Content-Disposition", `attachment; filename=health_report_${range}.csv`);
       res.status(HttpStatus.OK).send(csvData);
     } catch (error) {
+      console.error("ReportController exportUserReport Error:", error);
       next(error);
     }
   };

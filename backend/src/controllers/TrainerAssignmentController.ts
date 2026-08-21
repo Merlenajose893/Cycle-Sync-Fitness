@@ -13,7 +13,7 @@ constructor(@inject(TOKENS.ITrainerAssignmentService) private trainerassignServi
 }
 getActiveAssignmentByUser=async (req:Request,res:Response,next:NextFunction) => {
     try {
-        const userId=req.user?.userId;
+        const userId=req.user?.userId || "";
         const result=await this.trainerassignService.getActiveAssignmentByUser(userId);
         successResponse(res,"Active users are fetched",result,HttpStatus.OK)
     } catch (error) {
@@ -22,7 +22,7 @@ getActiveAssignmentByUser=async (req:Request,res:Response,next:NextFunction) => 
 }
 getAssignmentById=async (req:Request,res:Response,next:NextFunction) => {
     try {
-        const assignmentId=req.params.id;
+        const assignmentId=req.params.id as string;
         const result=await this.trainerassignService.getAssignmentById(assignmentId);
         successResponse(res,"Fetched by the id",result,HttpStatus.OK)
     } catch (error) {
@@ -40,7 +40,7 @@ getTrainerClients=async (req:Request,res:Response,next:NextFunction) => {
 }
 updateAssignmentStatus=async (req:Request,res:Response,next:NextFunction) => {
     try {
-        const assignmentId=req.params.id;
+        const assignmentId=req.params.id as string;
         const status=req.body.status;
         const result=await this.trainerassignService.updateAssignmentStatus(assignmentId,status);
         successResponse(res,"Updated the status",result,HttpStatus.OK)

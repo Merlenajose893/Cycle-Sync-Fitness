@@ -1,7 +1,9 @@
+import { injectable } from "tsyringe";
 import type { IWorkoutLogRepository } from "../interfaces/repositories/IWorkoutLogRepository.js";
 import { WorkoutLog, type IWorkoutLog } from "../models/WorkoutLog.js";
 import { BaseRepository } from "./BaseRepository.js";
 
+@injectable()
 export class WorkoutLogRepository extends BaseRepository<IWorkoutLog> implements IWorkoutLogRepository{
     constructor()
     {

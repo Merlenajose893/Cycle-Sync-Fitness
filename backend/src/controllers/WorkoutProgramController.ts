@@ -25,7 +25,7 @@ export class WorkoutProgramController {
     updateProgram = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const trainerId = req.user?.userId!;
-            const programId = req.params.id;
+            const programId = req.params.id as string;
             const result = await this.workoutprogramservice.updateProgram(trainerId, programId, req.body);
             successResponse(res, "Program updated successfully", result, HttpStatus.OK);
         } catch (error) {
@@ -36,7 +36,7 @@ export class WorkoutProgramController {
     deleteProgram = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const trainerId = req.user?.userId!;
-            const programId = req.params.id;
+            const programId = req.params.id as string;
             await this.workoutprogramservice.deleteProgram(trainerId, programId);
             successResponse(res, "Program deleted successfully", null, HttpStatus.OK);
         } catch (error) {
@@ -47,7 +47,7 @@ export class WorkoutProgramController {
     assignProgramToUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const trainerId = req.user?.userId!;
-            const programId = req.params.id;
+            const programId = req.params.id as string;
             const { userId } = req.body;
             const result = await this.workoutprogramservice.assignProgramtoUser(trainerId, programId, userId);
             successResponse(res, "Program assigned to user successfully", result, HttpStatus.OK);

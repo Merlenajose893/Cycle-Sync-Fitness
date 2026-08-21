@@ -38,7 +38,7 @@ export class HealthTrackingController {
   endPeriod = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
-      const { logId } = req.params;
+      const logId = (req.params.logId || req.params.id || "") as string;
       const result = await this.cycleLogService.endPeriod(userId, logId, req.body);
       successResponse(res, "Period ended successfully", result, HttpStatus.OK);
     } catch (error) {
@@ -69,7 +69,7 @@ export class HealthTrackingController {
   deleteCycleLog = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
-      const { logId } = req.params;
+      const logId = (req.params.logId || req.params.id || "") as string;
       await this.cycleLogService.deleteCycleLog(userId, logId);
       successResponse(res, "Cycle log deleted successfully", null, HttpStatus.OK);
     } catch (error) {

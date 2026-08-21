@@ -17,19 +17,23 @@ export class CyclePredictionService implements ICyclePredictionService {
     let averageCycleLength = 28; // Default standard length
     let lastPeriodStart = new Date();
 
-    if (recentCycles.length > 0) {
+    if (recentCycles.length > 0 && recentCycles[0]) {
       lastPeriodStart = new Date(recentCycles[0].startDate);
 
       if (recentCycles.length > 1) {
         let totalDays = 0;
         let intervals = 0;
         for (let i = 0; i < recentCycles.length - 1; i++) {
-          const currentStart = new Date(recentCycles[i].startDate).getTime();
-          const prevStart = new Date(recentCycles[i + 1].startDate).getTime();
-          const diffDays = Math.round((currentStart - prevStart) / (1000 * 60 * 60 * 24));
-          if (diffDays > 15 && diffDays < 45) { // Sanity check for valid cycle range
-            totalDays += diffDays;
-            intervals++;
+          const curr = recentCycles[i];
+          const prev = recentCycles[i + 1];
+          if (curr && prev) {
+            const currentStart = new Date(curr.startDate).getTime();
+            const prevStart = new Date(prev.startDate).getTime();
+            const diffDays = Math.round((currentStart - prevStart) / (1000 * 60 * 60 * 24));
+            if (diffDays > 15 && diffDays < 45) { // Sanity check for valid cycle range
+              totalDays += diffDays;
+              intervals++;
+            }
           }
         }
         if (intervals > 0) {

@@ -14,7 +14,7 @@ export interface ITargetExercise {
 export interface IWorkoutProgramDay {
     dayNumber: number;
     title: string;
-    focusPhase: CyclePhase;
+    focusPhase?: CyclePhase;
     exercises: ITargetExercise[];
 }
 
@@ -90,7 +90,7 @@ const WorkoutDaySchema =
             },
 
 
-            exercise: [
+            exercises: [
                 targetExerciseSchema
             ]
 

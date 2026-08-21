@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { reportService, ReportAnalytics } from '../services/reportService';
+import { reportService } from '../services/reportService';
+import type { ReportAnalytics } from '../services/reportService';
 
 export const useReports = (initialRange: 'week' | 'month' | '3months' = 'week') => {
   const [range, setRange] = useState<'week' | 'month' | '3months'>(initialRange);

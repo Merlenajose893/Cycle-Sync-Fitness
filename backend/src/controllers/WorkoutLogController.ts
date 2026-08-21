@@ -15,8 +15,7 @@ export class WorkoutLogController {
     logWorkout = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?.userId!;
-            const file = req.file;
-            const result = await this.workoutLogService.logWorkout(userId, req.body, file);
+            const result = await this.workoutLogService.logWorkout(userId, req.body);
             successResponse(res, "Workout logged successfully", result, HttpStatus.CREATED);
         } catch (error) {
             next(error);
@@ -59,7 +58,7 @@ export class WorkoutLogController {
 
     getClientWorkoutLogs = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const clientId = req.params.clientId;
+            const clientId = (req.params.clientId as string) || (req.params.id as string) || "";
             const result = await this.workoutLogService.getWorkoutHistory(clientId, 1, 50);
             successResponse(res, "Client workout history fetched successfully", result, HttpStatus.OK);
         } catch (error) {

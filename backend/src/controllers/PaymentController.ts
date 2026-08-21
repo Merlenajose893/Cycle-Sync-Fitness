@@ -84,7 +84,7 @@ export class PaymentController {
 
     getPaymentById = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const paymentId = req.params.id!;
+            const paymentId = req.params.id as string;
             const result = await this.paymentService.getPaymentById(paymentId);
             successResponse(res, "Payment retrieved successfully", result, HttpStatus.OK);
         } catch (error) {

@@ -1,4 +1,4 @@
-import { Schema ,Document} from "mongoose";
+import { Schema, Document, Types } from "mongoose";
 import mongoose from "mongoose";
 import { MealType } from "../constants/food.constants.js";
 

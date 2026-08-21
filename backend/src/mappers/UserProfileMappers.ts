@@ -64,7 +64,7 @@ export class UserProfileMapper {
                     }),
                 },
             }),
-        };
+        } as unknown as Partial<IUser>;
     }
 
     /**
@@ -73,7 +73,7 @@ export class UserProfileMapper {
      */
     static toResponseDTO(user: IUser): UserProfileResponseDTO {
         return {
-            id: user.id,
+            id: user._id?.toString() || (user as any).id || "",
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
@@ -89,6 +89,6 @@ export class UserProfileMapper {
 
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
-        };
+        } as unknown as UserProfileResponseDTO;
     }
 }

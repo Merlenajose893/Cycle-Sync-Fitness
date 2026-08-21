@@ -33,32 +33,38 @@ export class ReportService implements IReportService {
     userId: string,
     range: ReportRange
   ): Promise<ReportAnalytics> => {
-    const { startDate, endDate } = this.getDateRange(range);
+    const dateStrings = this.generateDateStrings(range);
+    const startDateStr = dateStrings[0];
+    const endDateStr = dateStrings[dateStrings.length - 1];
 
-    const [mealLogs, workoutLogs, healthLogs, cycleLogs] = await Promise.all([
+    const startDate = new Date(`${startDateStr}T00:00:00.000Z`);
+    const endDate = new Date(`${endDateStr}T23:59:59.999Z`);
+
+    const [rawMealLogs, rawWorkoutLogs, rawHealthLogs, rawCycleLogs] = await Promise.all([
       this.meallogrepository.findByUserDateRange(userId, startDate, endDate),
       this.workoutlogrepository.findByUserDateRange(userId, startDate, endDate),
       this.dailyhealthlogrepository.findByDateRange(userId, startDate, endDate),
       this.cyclelogrepository.findByUser(userId),
     ]);
 
-    const daysList = this.generateDaysList(startDate, endDate);
+    const mealLogs = Array.isArray(rawMealLogs) ? rawMealLogs : [];
+    const workoutLogs = Array.isArray(rawWorkoutLogs) ? rawWorkoutLogs : [];
+    const healthLogs = Array.isArray(rawHealthLogs) ? rawHealthLogs : [];
+    const cycleLogs = Array.isArray(rawCycleLogs) ? rawCycleLogs : [];
 
     const calorieSeries: CalorieDataPoint[] = [];
     const macroSeries: MacroDataPoint[] = [];
     const workoutSeries: WorkoutDataPoint[] = [];
     const weightCycleSeries: WeightCycleDataPoint[] = [];
 
-    // Sort cycle logs descending by startDate for fast lookup
-    const sortedCycleLogs = [...cycleLogs].sort(
-      (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-    );
+    // Sort cycle logs descending by startDate for lookup
+    const sortedCycleLogs = [...cycleLogs]
+      .filter((c) => c && c.startDate)
+      .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
 
-    for (const d of daysList) {
-      const dateStr = d.toISOString().substring(0, 10);
-
+    for (const dateStr of dateStrings) {
       // 1. Meal Log aggregation
-      const dayMealLog = mealLogs.find((m) => this.isSameDay(new Date(m.date), d));
+      const dayMealLog = mealLogs.find((m) => this.toYYYYMMDD(m.date) === dateStr);
       let dayCalories = 0;
       let dayTarget = 2000;
       let dayProtein = 0;
@@ -91,8 +97,8 @@ export class ReportService implements IReportService {
       });
 
       // 2. Workout Log aggregation
-      const dayWorkouts = workoutLogs.filter((w) =>
-        this.isSameDay(new Date(w.date), d)
+      const dayWorkouts = workoutLogs.filter(
+        (w) => this.toYYYYMMDD(w.date) === dateStr
       );
       let dayVolume = 0;
       let daySets = 0;
@@ -110,14 +116,14 @@ export class ReportService implements IReportService {
       });
 
       // 3. Daily Health Log (Weight) aggregation
-      const dayHealthLog = healthLogs.find((h) =>
-        this.isSameDay(new Date(h.date), d)
+      const dayHealthLog = healthLogs.find(
+        (h) => this.toYYYYMMDD(h.date) === dateStr
       );
       const weight = dayHealthLog?.weightKg ?? null;
 
       // 4. Cycle Day & Phase calculation
       const { cycleDay, cyclePhase } = this.calculateCyclePhaseForDate(
-        d,
+        dateStr,
         sortedCycleLogs
       );
 
@@ -135,13 +141,13 @@ export class ReportService implements IReportService {
       0
     );
     const averageDailyCalories =
-      daysList.length > 0 ? Math.round(totalCalories / daysList.length) : 0;
+      dateStrings.length > 0 ? Math.round(totalCalories / dateStrings.length) : 0;
 
     const daysWithAdherence = calorieSeries.filter(
       (c) => c.caloriesConsumed >= c.calorieTarget * 0.85 && c.caloriesConsumed <= c.calorieTarget * 1.15
     ).length;
     const calorieTargetAdherence =
-      daysList.length > 0 ? Math.round((daysWithAdherence / daysList.length) * 100) : 0;
+      dateStrings.length > 0 ? Math.round((daysWithAdherence / dateStrings.length) * 100) : 0;
 
     const completedWorkouts = workoutSeries.filter((w) => w.workoutCompleted);
     const totalWorkoutSessions = completedWorkouts.length;
@@ -154,7 +160,7 @@ export class ReportService implements IReportService {
       0
     );
     const workoutConsistency =
-      daysList.length > 0 ? Math.round((totalWorkoutSessions / daysList.length) * 100) : 0;
+      dateStrings.length > 0 ? Math.round((totalWorkoutSessions / dateStrings.length) * 100) : 0;
 
     const weightsLogged = weightCycleSeries
       .filter((w) => w.weight !== null)
@@ -183,8 +189,8 @@ export class ReportService implements IReportService {
 
     return {
       range,
-      startDate: startDate.toISOString().substring(0, 10),
-      endDate: endDate.toISOString().substring(0, 10),
+      startDate: startDateStr || new Date().toISOString().split('T')[0]!,
+      endDate: endDateStr || new Date().toISOString().split('T')[0]!,
       summary,
       calorieSeries,
       macroSeries,
@@ -242,62 +248,55 @@ export class ReportService implements IReportService {
     return rows.join("\n");
   };
 
-  private getDateRange(range: ReportRange): { startDate: Date; endDate: Date } {
-    const endDate = new Date();
-    endDate.setHours(23, 59, 59, 999);
+  private generateDateStrings(range: ReportRange): string[] {
+    const dates: string[] = [];
+    const now = new Date();
+    const numDays = range === "week" ? 7 : range === "month" ? 30 : 90;
 
-    const startDate = new Date();
-    startDate.setHours(0, 0, 0, 0);
-
-    if (range === "week") {
-      startDate.setDate(startDate.getDate() - 6);
-    } else if (range === "month") {
-      startDate.setDate(startDate.getDate() - 29);
-    } else if (range === "3months") {
-      startDate.setDate(startDate.getDate() - 89);
+    for (let i = numDays - 1; i >= 0; i--) {
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i));
+      dates.push(d.toISOString().substring(0, 10));
     }
 
-    return { startDate, endDate };
+    return dates;
   }
 
-  private generateDaysList(startDate: Date, endDate: Date): Date[] {
-    const days: Date[] = [];
-    const current = new Date(startDate);
-
-    while (current <= endDate) {
-      days.push(new Date(current));
-      current.setDate(current.getDate() + 1);
+  private toYYYYMMDD(dateInput: any): string {
+    if (!dateInput) return "";
+    if (typeof dateInput === "string" && dateInput.length >= 10 && dateInput.includes("-")) {
+      return dateInput.substring(0, 10);
     }
-
-    return days;
-  }
-
-  private isSameDay(d1: Date, d2: Date): boolean {
-    return (
-      d1.getUTCFullYear() === d2.getUTCFullYear() &&
-      d1.getUTCMonth() === d2.getUTCMonth() &&
-      d1.getUTCDate() === d2.getUTCDate()
-    );
+    const d = new Date(dateInput);
+    if (isNaN(d.getTime())) return "";
+    return d.toISOString().substring(0, 10);
   }
 
   private calculateCyclePhaseForDate(
-    date: Date,
+    dateStr: string,
     sortedCycleLogs: any[]
   ): { cycleDay: number | null; cyclePhase: string | null } {
-    if (!sortedCycleLogs || sortedCycleLogs.length === 0) {
+    if (!sortedCycleLogs || !Array.isArray(sortedCycleLogs) || sortedCycleLogs.length === 0) {
       return { cycleDay: null, cyclePhase: null };
     }
 
-    const matchingLog = sortedCycleLogs.find(
-      (log) => new Date(log.startDate) <= date
-    );
+    const targetDate = new Date(`${dateStr}T00:00:00.000Z`);
+
+    const matchingLog = sortedCycleLogs.find((log) => {
+      if (!log || !log.startDate) return false;
+      const formatted = this.toYYYYMMDD(log.startDate);
+      if (!formatted) return false;
+      return new Date(`${formatted}T00:00:00.000Z`) <= targetDate;
+    });
 
     if (!matchingLog) {
       return { cycleDay: null, cyclePhase: null };
     }
 
-    const cycleStart = new Date(matchingLog.startDate);
-    const diffTime = date.getTime() - cycleStart.getTime();
+    const cycleStartStr = this.toYYYYMMDD(matchingLog.startDate);
+    if (!cycleStartStr) return { cycleDay: null, cyclePhase: null };
+
+    const cycleStart = new Date(`${cycleStartStr}T00:00:00.000Z`);
+    const diffTime = targetDate.getTime() - cycleStart.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     const cycleDay = diffDays > 0 ? ((diffDays - 1) % 28) + 1 : 1;
 

@@ -127,7 +127,7 @@ uploadDocuments=async(trainerId: string, files: Express.Multer.File[]): Promise<
     for (const file of files) {
         const image = await this.imageService.uploadImage(file);
         newDocuments.push({
-            type: file.originalname.toLowerCase().includes('cert') ? 'CERTIFICATE' : 'ID',
+            type: (file.originalname.toLowerCase().includes('cert') ? 'CERTIFICATE' : 'ID') as 'ID' | 'CERTIFICATE',
             url: image.url,
             name: file.originalname
         });

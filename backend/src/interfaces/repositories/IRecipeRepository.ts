@@ -1,4 +1,4 @@
-import type { RecipeFilters, ReviewData } from "../../dtos/recipe.dto.js";
+import type { RecipeFilters, ReviewDTO } from "../../dtos/recipe.dto.js";
 import type { IRecipe } from "../../models/Recpe.js";
 import type { IBaseRepository } from "./IBaseRepository.js";
 
@@ -10,5 +10,5 @@ export interface IRecipeRepository extends IBaseRepository<IRecipe>{
     findFavouritesByUser(userId:string):Promise<IRecipe[]>;
     addFavourites(recipeId:string,userId:string):Promise<IRecipe|null>
     removeFavourites(recipeId:string,userId:string):Promise<IRecipe|null>;
-    addRecipe(recipeId:string,review:ReviewData):Promise<IRecipe|null>;
+    addReview?(recipeId:string,review:ReviewDTO):Promise<IRecipe|null>;
 }

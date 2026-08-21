@@ -13,9 +13,9 @@ export class UserAccountController{
 
     changePassword=async (req:Request,res:Response,next:NextFunction) => {
         try {
-             const userId=req.user?.userId;
-        const result=await this.userstatusservice.changePassword(userId,req.body);
-        successResponse(res,"Password is changed successfully",HttpStatus.OK,result);
+            const userId=req.user?.userId || "";
+            const result=await this.userstatusservice.changePassword(userId,req.body);
+            successResponse(res,"Password is changed successfully",result,HttpStatus.OK);
         } catch (error) {
             next(error)
         }
@@ -25,9 +25,9 @@ export class UserAccountController{
 
     deleteAccount=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const userId=req.user?.userId;
+            const userId=req.user?.userId || "";
             const result=await this.userstatusservice.deleteAccount(userId,req.body);
-            successResponse(res,"Account deleted successfully",HttpStatus.OK,result);
+            successResponse(res,"Account deleted successfully",result,HttpStatus.OK);
         } catch (error) {
             next(error)
         }

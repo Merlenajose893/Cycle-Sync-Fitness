@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, Sparkles, Zap, Crown, Loader2, AlertCircle } from 'lucide-react';
-import { subscriptionPlanService, ISubscriptionPlanFrontend } from '../../services/subscriptionPlanService';
+import type { subscriptionPlanService, ISubscriptionPlanFrontend } from '../../services/subscriptionPlanService';
 import '../../styles/UserPages.css';
 
 const defaultFallbackPlans = [

@@ -52,7 +52,7 @@ export class AIPlanController {
     updatePlanStatus = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?.userId!;
-            const planId = req.params.id!;
+            const planId = req.params.id as string;
             const { status } = req.body;
             const result = await this.aiplanservice.updatePlanStatus(planId, userId, status);
             successResponse(res, "Plan status updated successfully", result, HttpStatus.OK);
@@ -64,7 +64,7 @@ export class AIPlanController {
     editPlan = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?.userId!;
-            const planId = req.params.id!;
+            const planId = req.params.id as string;
             const result = await this.aiplanservice.editPlan(planId, userId, req.body);
             successResponse(res, "Plan updated successfully", result, HttpStatus.OK);
         } catch (error) {
@@ -75,7 +75,7 @@ export class AIPlanController {
     deletePlan = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?.userId!;
-            const planId = req.params.id!;
+            const planId = req.params.id as string;
             await this.aiplanservice.deletePlan(planId, userId);
             successResponse(res, "Plan deleted successfully", null, HttpStatus.OK);
         } catch (error) {

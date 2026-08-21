@@ -57,6 +57,8 @@ export const reportService = {
     const response = await axiosInstance.get(API_ENDPOINTS.REPORTS.ANALYTICS(range));
     return response.data.data;
   },
+  
+  
 
   async downloadReportExport(range: string): Promise<void> {
     const response = await axiosInstance.get(API_ENDPOINTS.REPORTS.EXPORT(range), {
@@ -74,3 +76,4 @@ export const reportService = {
     window.URL.revokeObjectURL(url);
   },
 };
+console.log(reportService);

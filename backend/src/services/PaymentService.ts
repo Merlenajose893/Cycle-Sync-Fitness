@@ -170,10 +170,9 @@ export class PaymentService implements IPaymentService {
 
                         await this.trainerassignmentservice.createAssignment({
                             userId: payment.userId.toString(),
+                            trainerId: payment.trainerId.toString(),
                             packageId: payment.packageId.toString(),
-                            paymentId: payment._id.toString(),
-                            startDate: Date.now(),
-                            endDate: Date.now() + payment.packageId.durationDays
+                            paymentId: payment._id.toString()
                         });
                     }
                 }
@@ -242,6 +241,7 @@ export class PaymentService implements IPaymentService {
                     try {
                         await this.trainerassignmentservice.createAssignment({
                             userId: payment.userId.toString(),
+                            trainerId: payment.trainerId.toString(),
                             packageId: payment.packageId.toString(),
                             paymentId: payment._id.toString()
                         });

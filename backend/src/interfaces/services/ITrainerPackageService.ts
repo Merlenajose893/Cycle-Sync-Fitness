@@ -3,9 +3,9 @@ import type { ITrainerPackage } from "../../models/TrainerPackage.js";
 
 export interface ITrainerPackageService{
     createPackage(trainerId:string,data:CreatePackageDTO):Promise<ITrainerPackage>;
-    updatePackage(trainerId:string,data:UpdatePackageDTO,packageId:string):Promise<ITrainerPackage>;
+    updatePackage(trainerId:string,data:UpdatePackageDTO,packageId:string):Promise<ITrainerPackage|null>;
     deletePackage(trainerId:string,packageId:string):Promise<void>;
     getTrainerPackages(trainerId:string):Promise<ITrainerPackage[]>;
-    getActivePackages(trainerId:string,isActive:true):Promise<ITrainerPackage[]>;
+    getActivePackages(trainerId:string,isActive?:boolean):Promise<ITrainerPackage[]>;
     getPackageById(packageId:string):Promise<ITrainerPackage>;
 }

@@ -20,7 +20,11 @@ import {
     X,
     Package,
     CheckCircle,
-    FileText
+    FileText,
+    ShieldAlert,
+    ShieldCheck,
+    Sparkles,
+    Send
 } from 'lucide-react';
 import '../../styles/AdminPage.css';
 import type { Trainer } from '../../types/auth.types';
@@ -40,6 +44,16 @@ const ManageTrainersPage: React.FC = () => {
     const [approvingTrainerId, setApprovingTrainerId] = useState<string | null>(null);
     const [rejectionReason, setRejectionReason] = useState('');
     const [activeTab, setActiveTab] = useState<'trainers' | 'packages'>('trainers');
+    
+    // Form state for adding a trainer
+    const [addForm, setAddForm] = useState({
+        fullName: '',
+        email: '',
+        specialty: '',
+        experience: ''
+    });
+    const [inviting, setInviting] = useState(false);
+
     const filteredPackages: any[] = [];
 
     const stats = {
@@ -62,7 +76,6 @@ const ManageTrainersPage: React.FC = () => {
     useEffect(() => {
         fetchTrainers();
     }, [fetchTrainers]);
-    
 
     const handleBlock = async (trainerId: string): Promise<void> => {
         try {
@@ -122,6 +135,26 @@ const ManageTrainersPage: React.FC = () => {
         }
     };
 
+    const handleSendInvite = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!addForm.fullName.trim() || !addForm.email.trim()) {
+            showToast.error("Please enter trainer name and email");
+            return;
+        }
+        try {
+            setInviting(true);
+            // Simulate sending invite
+            await new Promise(r => setTimeout(r, 600));
+            showToast.success(`Invite sent successfully to ${addForm.email}`);
+            setShowAddModal(false);
+            setAddForm({ fullName: '', email: '', specialty: '', experience: '' });
+        } catch (err) {
+            showToast.error("Failed to send trainer invitation");
+        } finally {
+            setInviting(false);
+        }
+    };
+
     const toggleSelection = (id: string) => {
         setSelectedTrainers((prev) =>
             prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
@@ -149,98 +182,116 @@ const ManageTrainersPage: React.FC = () => {
         return matchesSearch && matchesFilter;
     });
 
+    const renderSpecialties = (specialityString?: string) => {
+        if (!specialityString) {
+            return <span className="trainer-spec-chip text-muted">General Fitness</span>;
+        }
+        const items = specialityString.split(',').map(s => s.trim()).filter(Boolean);
+        if (items.length === 0) return <span className="trainer-spec-chip text-muted">General</span>;
+
+        const visible = items.slice(0, 2);
+        const remaining = items.length - 2;
+
+        return (
+            <div className="trainer-spec-chips-container">
+                {visible.map((spec, idx) => (
+                    <span key={idx} className="trainer-spec-chip">
+                        <Award size={11} />
+                        {spec}
+                    </span>
+                ))}
+                {remaining > 0 && (
+                    <span className="trainer-spec-chip more" title={items.slice(2).join(', ')}>
+                        +{remaining} more
+                    </span>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="admin-container">
-            <div className="admin-header">
+            {/* Header Banner */}
+            <div className="admin-header trainer-header-banner">
                 <div>
                     <h1 className="admin-title">Manage Trainers & Packages</h1>
-                    <p className="admin-subtitle">View, add, and manage registered trainers and their coaching packages.</p>
+                    <p className="admin-subtitle">View, onboard, and oversee certified trainers and coaching programs</p>
                 </div>
                 <div className="admin-header-actions">
-                    <button className="btn btn-secondary">
-                        <Download size={18} /> Export
+                    <button className="btn btn-secondary-admin">
+                        <Download size={16} /> Export CSV
                     </button>
                     {activeTab === 'trainers' && (
                         <button
-                            className="btn btn-primary"
-                            style={{ background: '#0d9488', display: 'flex', alignItems: 'center', gap: '8px' }}
+                            className="btn btn-add-trainer"
                             onClick={() => setShowAddModal(true)}
                         >
-                            <UserPlus size={18} /> Add Trainer
+                            <UserPlus size={18} />
+                            <span>Add Trainer</span>
                         </button>
                     )}
                 </div>
             </div>
 
-            {/* Tabs */}
-            <div style={{ display: 'flex', gap: '20px', borderBottom: '1px solid var(--border)', marginBottom: '24px' }}>
+            {/* Navigation Tabs */}
+            <div className="trainer-tabs-bar">
                 <button
                     onClick={() => setActiveTab('trainers')}
-                    style={{
-                        padding: '12px 16px', border: 'none', background: 'transparent', cursor: 'pointer',
-                        fontWeight: activeTab === 'trainers' ? 700 : 500, fontSize: '1rem',
-                        color: activeTab === 'trainers' ? 'var(--primary)' : 'var(--text-secondary)',
-                        borderBottom: activeTab === 'trainers' ? '2px solid var(--primary)' : '2px solid transparent',
-                        marginBottom: '-1px'
-                    }}
+                    className={`trainer-tab-btn ${activeTab === 'trainers' ? 'active' : ''}`}
                 >
-                    <Dumbbell size={16} style={{ display: 'inline', marginRight: '6px' }} />
-                    Trainers
+                    <Dumbbell size={18} />
+                    <span>Trainers Directory</span>
+                    <span className="tab-count-badge">{trainers.length}</span>
                 </button>
                 <button
                     onClick={() => setActiveTab('packages')}
-                    style={{
-                        padding: '12px 16px', border: 'none', background: 'transparent', cursor: 'pointer',
-                        fontWeight: activeTab === 'packages' ? 700 : 500, fontSize: '1rem',
-                        color: activeTab === 'packages' ? 'var(--primary)' : 'var(--text-secondary)',
-                        borderBottom: activeTab === 'packages' ? '2px solid var(--primary)' : '2px solid transparent',
-                        marginBottom: '-1px', display: 'flex', alignItems: 'center'
-                    }}
+                    className={`trainer-tab-btn ${activeTab === 'packages' ? 'active' : ''}`}
                 >
-                    <Package size={16} style={{ marginRight: '6px' }} />
-                    Trainer Packages
+                    <Package size={18} />
+                    <span>Trainer Packages</span>
                     {stats.pendingPackages > 0 && (
-                        <span style={{ marginLeft: '8px', background: '#fef3c7', color: '#b45309', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>
+                        <span className="tab-pending-badge">
                             {stats.pendingPackages} New
                         </span>
                     )}
                 </button>
             </div>
 
-            {/* Search & Filter */}
-            <div className="users-controls">
-                <div className="search-bar-admin">
-                    <Search size={20} className="search-icon" />
+            {/* Controls & Search */}
+            <div className="users-controls trainer-controls-box">
+                <div className="search-bar-admin trainer-search-bar">
+                    <Search size={18} className="search-icon" />
                     <input
                         type="text"
-                        placeholder={`Search ${activeTab === 'packages' ? 'packages' : 'trainers'}...`}
+                        placeholder={`Search ${activeTab === 'packages' ? 'packages' : 'trainers by name, email or specialty'}...`}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="search-input-admin"
                     />
                 </div>
+
                 <div className="filter-group">
-                    <label>Status:</label>
-                    <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="filter-select">
-                        <option value="all">All Statuses</option>
-                        <option value="active">Active</option>
-                        <option value="pending">Pending</option>
-                        <option value="suspended">{activeTab === 'trainers' ? 'Suspended' : 'Rejected'}</option>
+                    <label>Status Filter:</label>
+                    <select
+                        value={filterStatus}
+                        onChange={(e) => setFilterStatus(e.target.value)}
+                        className="filter-select"
+                    >
+                        <option value="all">All Statuses ({trainers.length})</option>
+                        <option value="active">Active ({stats.active})</option>
+                        <option value="pending">Pending ({stats.pendingTrainers})</option>
+                        <option value="suspended">Blocked / Suspended ({stats.suspended})</option>
                     </select>
                 </div>
-                <button className="btn btn-secondary">
-                    <Filter size={18} /> More Filters
-                </button>
             </div>
 
-            {/* Bulk Actions */}
+            {/* Bulk Actions Bar */}
             {selectedTrainers.length > 0 && (
                 <div className="bulk-actions-bar">
                     <span>{selectedTrainers.length} trainer(s) selected</span>
                     <div className="bulk-actions-buttons">
                         <button className="btn btn-sm btn-secondary"><Mail size={16} /> Send Email</button>
-                        <button className="btn btn-sm btn-secondary"><Ban size={16} /> Suspend</button>
-                        <button className="btn btn-sm btn-danger"><XCircle size={16} /> Remove</button>
+                        <button className="btn btn-sm btn-secondary"><Ban size={16} /> Block Selected</button>
                     </div>
                 </div>
             )}
@@ -248,165 +299,178 @@ const ManageTrainersPage: React.FC = () => {
             {activeTab === 'trainers' ? (
                 <>
                     {/* Trainers Table */}
-                    <div className="users-table-container">
+                    <div className="users-table-container trainer-table-card">
                         <table className="users-table">
                             <thead>
                                 <tr>
-                                    <th>
+                                    <th style={{ width: 40 }}>
                                         <input
                                             type="checkbox"
                                             checked={selectedTrainers.length === filteredTrainers.length && filteredTrainers.length > 0}
                                             onChange={(e) => setSelectedTrainers(e.target.checked ? filteredTrainers.map((t) => t._id) : [])}
                                         />
                                     </th>
-                                    <th>Trainer</th>
-                                    <th>Specialty</th>
+                                    <th>Trainer Details</th>
+                                    <th>Specialty & Certs</th>
                                     <th>Status</th>
                                     <th>Rating</th>
                                     <th>Clients</th>
-                                    <th>Sessions</th>
-                                    <th>Joined</th>
-                                    <th>Actions</th>
+                                    <th>Joined Date</th>
+                                    <th style={{ textAlign: 'right' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredTrainers.map((trainer) => (
-                                    <tr key={trainer._id} className={selectedTrainers.includes(trainer._id) ? 'selected' : ''}>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedTrainers.includes(trainer._id)}
-                                                onChange={() => toggleSelection(trainer._id)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <div className="user-cell">
-                                                <img src={trainer.avatar} alt={trainer.firstName} className="user-avatar" />
-                                                <div>
-                                                    <div className="user-name">{trainer.firstName}</div>
-                                                    <div className="user-email">{trainer.email}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span className="subscription-badge premium" style={{ background: '#f0fdfa', color: '#0d9488' }}>
-                                                <Award size={14} /> {trainer.speciality}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {trainer.isDeleted ? (
-                                                <span className="status-badge suspended">
-                                                    <Ban size={14} /> BLOCKED
-                                                </span>
-                                            ) : (
-                                                <>
-                                                    {trainer.status === 'ACTIVE' && (
-                                                        <span className="status-badge active">
-                                                            <CheckCircle2 size={14} /> ACTIVE
-                                                        </span>
-                                                    )}
-                                                    {trainer.status === 'PENDING_APPROVAL' && (
-                                                        <span className="status-badge pending">
-                                                            <Clock size={14} /> PENDING APPROVAL
-                                                        </span>
-                                                    )}
-                                                    {trainer.status === 'REGISTERED' && (
-                                                        <span className="status-badge inactive">
-                                                            <Clock size={14} /> REGISTERED
-                                                        </span>
-                                                    )}
-                                                    {trainer.status === 'ONBOARDING' && (
-                                                        <span className="status-badge inactive">
-                                                            <Clock size={14} /> ONBOARDING
-                                                        </span>
-                                                    )}
-                                                    {trainer.status === 'REJECTED' && (
-                                                        <span className="status-badge suspended">
-                                                            <XCircle size={14} /> REJECTED
-                                                        </span>
-                                                    )}
-                                                </>
-                                            )}
-                                        </td>
-                                        <td>
-                                            {trainer.rating > 0 ? (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                    <Star size={14} fill="#FBBF24" color="#FBBF24" />
-                                                    <span style={{ fontWeight: '700' }}>{trainer.rating}</span>
-                                                </div>
-                                            ) : (
-                                                <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>N/A</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                <Users size={14} color="var(--text-muted)" />
-                                                <span style={{ fontWeight: '600' }}>{trainer.totalClients}</span>
-                                            </div>
-                                        </td>
-                                        <td style={{ fontWeight: '600' }}>{trainer.totalSessions}</td>
-                                        <td>
-                                            <div className="date-cell">
-                                                <Calendar size={14} />
-                                                {new Date(trainer.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="action-buttons" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <button className="btn-icon" title="View Profile"><Eye size={16} /></button>
-                                                <button className="btn-icon" title="Send Email"><Mail size={16} /></button>
-                                                <button
-                                                    className="btn-icon"
-                                                    title="View Documents"
-                                                    onClick={() => setViewingDocumentsFor(trainer)}
-                                                    style={{ color: '#0d9488' }}
-                                                >
-                                                    <FileText size={16} />
-                                                </button>
-                                                {!trainer.isDeleted && trainer.status === 'PENDING_APPROVAL' && (
-                                                    <>
-                                                        <button
-                                                            className="btn-icon"
-                                                            title="Approve"
-                                                            onClick={() => handleApprove(trainer._id)}
-                                                            style={{ borderColor: '#22c55e', color: '#22c55e', background: 'transparent' }}
-                                                        >
-                                                            <CheckCircle2 size={16} />
-                                                        </button>
-                                                        <button
-                                                            className="btn-icon"
-                                                            title="Reject"
-                                                            onClick={() => handleReject(trainer._id)}
-                                                            style={{ borderColor: '#ef4444', color: '#ef4444', background: 'transparent' }}
-                                                        >
-                                                            <XCircle size={16} />
-                                                        </button>
-                                                    </>
-                                                )}
-                                                {trainer.isDeleted ? (
-                                                    <button
-                                                        className="btn-icon"
-                                                        title="Unblock Trainer"
-                                                        onClick={() => handleUnBlock(trainer._id)}
-                                                        style={{ borderColor: '#3b82f6', color: '#3b82f6', background: 'transparent', padding: '2px 8px', fontSize: '0.8rem', height: '28px' }}
-                                                    >
-                                                        unblock
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        className="btn-icon"
-                                                        title="Block Trainer"
-                                                        onClick={() => handleBlock(trainer._id)}
-                                                        style={{ borderColor: '#ef4444', color: '#ef4444', background: 'transparent', padding: '2px 8px', fontSize: '0.8rem', height: '28px' }}
-                                                    >
-                                                        block
-                                                    </button>
-                                                )}
-                                                <button className="btn-icon" title="More Actions"><MoreVertical size={16} /></button>
-                                            </div>
+                                {filteredTrainers.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={8} className="sub-empty-table">
+                                            <Sparkles size={32} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
+                                            <p>No trainers match the selected filters.</p>
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    filteredTrainers.map((trainer) => (
+                                        <tr key={trainer._id} className={`trainer-table-row ${selectedTrainers.includes(trainer._id) ? 'selected' : ''}`}>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedTrainers.includes(trainer._id)}
+                                                    onChange={() => toggleSelection(trainer._id)}
+                                                />
+                                            </td>
+                                            <td>
+                                                <div className="user-cell">
+                                                    <img
+                                                        src={trainer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(trainer.firstName)}&background=0d9488&color=fff`}
+                                                        alt={trainer.firstName}
+                                                        className="user-avatar"
+                                                    />
+                                                    <div>
+                                                        <div className="user-name-premium">
+                                                            {trainer.firstName} {trainer.lastName || ''}
+                                                        </div>
+                                                        <div className="user-email">{trainer.email}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {renderSpecialties(trainer.speciality)}
+                                            </td>
+                                            <td>
+                                                {trainer.isDeleted ? (
+                                                    <span className="status-pill status-pill-blocked">
+                                                        <Ban size={12} /> BLOCKED
+                                                    </span>
+                                                ) : (
+                                                    <>
+                                                        {trainer.status === 'ACTIVE' && (
+                                                            <span className="status-pill status-pill-active">
+                                                                <CheckCircle2 size={12} /> ACTIVE
+                                                            </span>
+                                                        )}
+                                                        {trainer.status === 'PENDING_APPROVAL' && (
+                                                            <span className="status-pill status-pill-pending">
+                                                                <Clock size={12} /> PENDING
+                                                            </span>
+                                                        )}
+                                                        {trainer.status === 'REGISTERED' && (
+                                                            <span className="status-pill status-pill-registered">
+                                                                <Clock size={12} /> REGISTERED
+                                                            </span>
+                                                        )}
+                                                        {trainer.status === 'ONBOARDING' && (
+                                                            <span className="status-pill status-pill-registered">
+                                                                <Clock size={12} /> ONBOARDING
+                                                            </span>
+                                                        )}
+                                                        {trainer.status === 'REJECTED' && (
+                                                            <span className="status-pill status-pill-inactive">
+                                                                <XCircle size={12} /> REJECTED
+                                                            </span>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </td>
+                                            <td>
+                                                {trainer.rating > 0 ? (
+                                                    <div className="trainer-rating-cell">
+                                                        <Star size={14} fill="#FBBF24" color="#FBBF24" />
+                                                        <span>{trainer.rating}</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-muted-sm">New</span>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <div className="trainer-clients-cell">
+                                                    <Users size={14} className="text-muted" />
+                                                    <span>{trainer.totalClients || 0}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className="date-cell">
+                                                    <Calendar size={13} />
+                                                    {new Date(trainer.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </div>
+                                            </td>
+                                            <td style={{ textAlign: 'right' }}>
+                                                <div className="trainer-actions-row">
+                                                    <button className="trainer-act-btn" title="View Profile">
+                                                        <Eye size={15} />
+                                                    </button>
+                                                    <button className="trainer-act-btn" title="Send Email">
+                                                        <Mail size={15} />
+                                                    </button>
+                                                    <button
+                                                        className="trainer-act-btn teal"
+                                                        title="View Documents"
+                                                        onClick={() => setViewingDocumentsFor(trainer)}
+                                                    >
+                                                        <FileText size={15} />
+                                                    </button>
+
+                                                    {!trainer.isDeleted && trainer.status === 'PENDING_APPROVAL' && (
+                                                        <>
+                                                            <button
+                                                                className="trainer-act-btn green"
+                                                                title="Approve Application"
+                                                                onClick={() => handleApprove(trainer._id)}
+                                                            >
+                                                                <CheckCircle2 size={15} />
+                                                            </button>
+                                                            <button
+                                                                className="trainer-act-btn red"
+                                                                title="Reject Application"
+                                                                onClick={() => handleReject(trainer._id)}
+                                                            >
+                                                                <XCircle size={15} />
+                                                            </button>
+                                                        </>
+                                                    )}
+
+                                                    {trainer.isDeleted ? (
+                                                        <button
+                                                            className="trainer-toggle-block-btn unblock"
+                                                            title="Unblock Trainer"
+                                                            onClick={() => handleUnBlock(trainer._id)}
+                                                        >
+                                                            <ShieldCheck size={14} />
+                                                            <span>Unblock</span>
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            className="trainer-toggle-block-btn block"
+                                                            title="Block Trainer"
+                                                            onClick={() => handleBlock(trainer._id)}
+                                                        >
+                                                            <ShieldAlert size={14} />
+                                                            <span>Block</span>
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -422,125 +486,152 @@ const ManageTrainersPage: React.FC = () => {
 
                     {/* Add Trainer Modal */}
                     {showAddModal && (
-                        <div style={{
-                            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-                            backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center',
-                            justifyContent: 'center', zIndex: 1000
-                        }} onClick={() => setShowAddModal(false)}>
-                            <div style={{
-                                background: 'white', borderRadius: 'var(--radius-xl)', width: '520px',
-                                maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto',
-                                boxShadow: 'var(--shadow-xl)', animation: 'scaleIn 0.2s ease'
-                            }} onClick={(e) => e.stopPropagation()}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 24px 0' }}>
-                                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>Add New Trainer</h2>
-                                    <button onClick={() => setShowAddModal(false)} style={{
-                                        width: '36px', height: '36px', borderRadius: 'var(--radius-full)',
-                                        background: 'var(--bg-primary)', border: 'none', display: 'flex',
-                                        alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-secondary)'
-                                    }}><X size={20} /></button>
-                                </div>
-                                <div style={{ padding: '24px' }}>
-                                    <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
-                                        An invite email will be sent to the trainer with an onboarding link.
-                                    </p>
-                                    <div style={{ marginBottom: '18px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Full Name</label>
-                                        <input type="text" placeholder="e.g. Dr. Sarah Mitchell" style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', fontSize: '0.9rem' }} />
+                        <div className="sub-modal-backdrop" onClick={() => setShowAddModal(false)}>
+                            <div className="sub-modal-card" onClick={(e) => e.stopPropagation()}>
+                                <div className="sub-modal-header" style={{ background: 'linear-gradient(135deg, #0f766e 0%, #115e59 100%)' }}>
+                                    <div className="sub-modal-title-box">
+                                        <UserPlus size={20} className="text-white" />
+                                        <h2>Add New Trainer</h2>
                                     </div>
-                                    <div style={{ marginBottom: '18px' }}>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Email Address</label>
-                                        <input type="email" placeholder="trainer@example.com" style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', fontSize: '0.9rem' }} />
-                                    </div>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '18px' }}>
-                                        <div>
-                                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Specialty</label>
-                                            <select style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', fontSize: '0.9rem', background: 'white' }}>
-                                                <option value="">Select...</option>
-                                                <option>Nutrition & Hormones</option>
-                                                <option>Fitness & Strength</option>
-                                                <option>Cycle Health</option>
-                                                <option>Mental Wellness</option>
-                                                <option>Yoga & Recovery</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Experience</label>
-                                            <select style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', fontSize: '0.9rem', background: 'white' }}>
-                                                <option value="">Select...</option>
-                                                <option>1-3 years</option>
-                                                <option>3-5 years</option>
-                                                <option>5-10 years</option>
-                                                <option>10+ years</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', padding: '16px 24px 24px', borderTop: '1px solid var(--border)' }}>
-                                    <button onClick={() => setShowAddModal(false)} className="btn btn-secondary">Cancel</button>
-                                    <button onClick={() => setShowAddModal(false)} className="btn btn-primary" style={{ background: '#0d9488' }}>
-                                        <Mail size={16} style={{ marginRight: '6px' }} /> Send Invite
+                                    <button className="sub-modal-close" onClick={() => setShowAddModal(false)}>
+                                        &times;
                                     </button>
                                 </div>
+
+                                <form onSubmit={handleSendInvite} className="sub-modal-body">
+                                    <p className="modal-description-sub">
+                                        Send an invitation email to the trainer with a secure onboarding link.
+                                    </p>
+
+                                    <div className="form-grid-2">
+                                        <div className="input-field-group">
+                                            <label>Full Name <span className="req">*</span></label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={addForm.fullName}
+                                                onChange={(e) => setAddForm({ ...addForm, fullName: e.target.value })}
+                                                placeholder="e.g. Dr. Sarah Mitchell"
+                                                className="sub-input"
+                                            />
+                                        </div>
+                                        <div className="input-field-group">
+                                            <label>Email Address <span className="req">*</span></label>
+                                            <input
+                                                type="email"
+                                                required
+                                                value={addForm.email}
+                                                onChange={(e) => setAddForm({ ...addForm, email: e.target.value })}
+                                                placeholder="trainer@example.com"
+                                                className="sub-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-grid-2" style={{ marginTop: 14 }}>
+                                        <div className="input-field-group">
+                                            <label>Primary Specialty</label>
+                                            <select
+                                                value={addForm.specialty}
+                                                onChange={(e) => setAddForm({ ...addForm, specialty: e.target.value })}
+                                                className="sub-select"
+                                            >
+                                                <option value="">Select specialty...</option>
+                                                <option value="Nutrition & Hormones">Nutrition & Hormones</option>
+                                                <option value="Fitness & Strength">Fitness & Strength</option>
+                                                <option value="Cycle Health">Cycle Health</option>
+                                                <option value="Mental Wellness">Mental Wellness</option>
+                                                <option value="Yoga & Recovery">Yoga & Recovery</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="input-field-group">
+                                            <label>Experience Level</label>
+                                            <select
+                                                value={addForm.experience}
+                                                onChange={(e) => setAddForm({ ...addForm, experience: e.target.value })}
+                                                className="sub-select"
+                                            >
+                                                <option value="">Select experience...</option>
+                                                <option value="1-3 years">1-3 years</option>
+                                                <option value="3-5 years">3-5 years</option>
+                                                <option value="5-10 years">5-10 years</option>
+                                                <option value="10+ years">10+ years</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="sub-modal-actions">
+                                        <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            type="submit" 
+                                            className="btn-submit"
+                                            disabled={inviting}
+                                            style={{ background: 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)' }}
+                                        >
+                                            <Send size={15} style={{ marginRight: 6 }} />
+                                            {inviting ? 'Sending...' : 'Send Invite'}
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     )}
 
                     {/* View Documents Modal */}
                     {viewingDocumentsFor && (
-                        <div style={{
-                            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-                            backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center',
-                            justifyContent: 'center', zIndex: 1000
-                        }} onClick={() => setViewingDocumentsFor(null)}>
-                            <div style={{
-                                background: 'white', borderRadius: 'var(--radius-xl)', width: '600px',
-                                maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto',
-                                boxShadow: 'var(--shadow-xl)', animation: 'scaleIn 0.2s ease'
-                            }} onClick={(e) => e.stopPropagation()}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 24px 0' }}>
-                                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>Documents for {viewingDocumentsFor.firstName}</h2>
-                                    <button onClick={() => setViewingDocumentsFor(null)} style={{
-                                        width: '36px', height: '36px', borderRadius: 'var(--radius-full)',
-                                        background: 'var(--bg-primary)', border: 'none', display: 'flex',
-                                        alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-secondary)'
-                                    }}><X size={20} /></button>
+                        <div className="sub-modal-backdrop" onClick={() => setViewingDocumentsFor(null)}>
+                            <div className="sub-modal-card" onClick={(e) => e.stopPropagation()}>
+                                <div className="sub-modal-header" style={{ background: '#0f766e' }}>
+                                    <div className="sub-modal-title-box">
+                                        <FileText size={20} className="text-white" />
+                                        <h2>Verification Documents ({viewingDocumentsFor.firstName})</h2>
+                                    </div>
+                                    <button className="sub-modal-close" onClick={() => setViewingDocumentsFor(null)}>
+                                        &times;
+                                    </button>
                                 </div>
-                                <div style={{ padding: '24px' }}>
+                                <div className="sub-modal-body">
                                     {(!viewingDocumentsFor.documents || viewingDocumentsFor.documents.length === 0) ? (
-                                        <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px 0' }}>
-                                            No documents uploaded by this trainer.
-                                        </p>
+                                        <div className="sub-empty-table" style={{ padding: '30px 0' }}>
+                                            <FileText size={32} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
+                                            <p>No certification or verification documents uploaded by this trainer.</p>
+                                        </div>
                                     ) : (
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                                             {viewingDocumentsFor.documents.map((doc, idx) => (
-                                                <div key={idx} style={{ padding: '16px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <div key={idx} className="trainer-doc-item">
                                                     <div>
-                                                        <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '4px' }}>{doc.name || `Document ${idx + 1}`}</div>
-                                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Type: {doc.type}</div>
+                                                        <div className="doc-name">{doc.name || `Document ${idx + 1}`}</div>
+                                                        <div className="doc-type">Type: {doc.type}</div>
                                                     </div>
-                                                    <a href={doc.url} target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm" style={{ textDecoration: 'none' }}>
-                                                        View
+                                                    <a href={doc.url} target="_blank" rel="noreferrer" className="btn-cancel" style={{ textDecoration: 'none', padding: '6px 14px', fontSize: '0.82rem' }}>
+                                                        View File
                                                     </a>
                                                 </div>
                                             ))}
                                         </div>
                                     )}
-                                </div>
-                                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', padding: '16px 24px 24px', borderTop: '1px solid var(--border)' }}>
-                                    <button onClick={() => setViewingDocumentsFor(null)} className="btn btn-secondary">Close</button>
+                                    <div className="sub-modal-actions" style={{ marginTop: 20 }}>
+                                        <button onClick={() => setViewingDocumentsFor(null)} className="btn-cancel">
+                                            Close
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     )}
                 </>
             ) : (
-                <div className="users-table-container">
+                /* Packages View */
+                <div className="users-table-container trainer-table-card">
                     <table className="users-table">
                         <thead>
                             <tr>
                                 <th>Package ID</th>
-                                <th>Package Info</th>
+                                <th>Package Name & Description</th>
                                 <th>Pricing & Duration</th>
                                 <th>Status</th>
                                 <th style={{ textAlign: 'right' }}>Actions</th>
@@ -549,50 +640,38 @@ const ManageTrainersPage: React.FC = () => {
                         <tbody>
                             {filteredPackages.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} style={{ textAlign: 'center', padding: '40px' }}>
+                                    <td colSpan={5} className="sub-empty-table">
                                         <Package size={32} style={{ color: '#94a3b8', margin: '0 auto 12px' }} />
-                                        <p style={{ color: '#64748b' }}>No packages found matching your criteria.</p>
+                                        <p>No coaching packages found.</p>
                                     </td>
                                 </tr>
                             ) : filteredPackages.map(pkg => (
                                 <tr key={pkg.id}>
                                     <td>
-                                        <span style={{ fontFamily: 'monospace', color: '#64748b' }}>#{pkg.id}</span>
+                                        <code className="sub-code-badge">#{pkg.id}</code>
                                     </td>
                                     <td>
-                                        <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>{pkg.name}</div>
+                                        <div className="sub-plan-name">{pkg.name}</div>
                                         <div style={{ fontSize: '0.85rem', color: '#64748b', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                             {pkg.description}
                                         </div>
                                     </td>
                                     <td>
-                                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>${pkg.price}</div>
-                                        <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{pkg.duration} ({pkg.sessions} sessions)</div>
+                                        <div className="sub-price-tag">
+                                            <span className="sub-currency">$</span>
+                                            <span className="sub-amount">{pkg.price}</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.82rem', color: '#64748b' }}>{pkg.duration} ({pkg.sessions} sessions)</div>
                                     </td>
                                     <td>
-                                        <span className={`status-pill ${pkg.status}`} style={{ textTransform: 'capitalize' }}>
-                                            <div className="dot"></div> {pkg.status}
+                                        <span className={`status-pill status-pill-${pkg.status}`}>
+                                            {pkg.status}
                                         </span>
                                     </td>
                                     <td style={{ textAlign: 'right' }}>
-                                        <div className="premium-action-group" style={{ justifyContent: 'flex-end' }}>
-                                            {pkg.status === 'pending' && (
-                                                <>
-                                                    <button className="p-action-btn" title="Approve Package" style={{ color: '#16a34a' }}>
-                                                        <CheckCircle size={16} />
-                                                    </button>
-                                                    <button className="p-action-btn" title="Reject Package" style={{ color: '#dc2626' }}>
-                                                        <XCircle size={16} />
-                                                    </button>
-                                                </>
-                                            )}
-                                            {pkg.status === 'active' && (
-                                                <button className="p-action-btn" title="Revoke / Suspend" style={{ color: '#f59e0b' }}>
-                                                    <Clock size={16} />
-                                                </button>
-                                            )}
-                                            <button className="p-action-btn more" title="More Options">
-                                                <MoreVertical size={16} />
+                                        <div className="trainer-actions-row" style={{ justifyContent: 'flex-end' }}>
+                                            <button className="trainer-act-btn" title="More Options">
+                                                <MoreVertical size={15} />
                                             </button>
                                         </div>
                                     </td>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  CreditCard, Plus, Search, Filter, CheckCircle2, XCircle,
-  Loader2, AlertCircle, Eye, Power
+  CreditCard, Plus, Search, CheckCircle2, XCircle,
+  Loader2, Power, Zap, Crown, Shield, Sparkles, Check, X
 } from 'lucide-react';
 import '../../styles/AdminPage.css';
-import {
-  subscriptionPlanService,
+import { subscriptionPlanService } from '../../services/subscriptionPlanService';
+import type {
   ISubscriptionPlanFrontend,
   CreateSubscriptionPlanInput
 } from '../../services/subscriptionPlanService';
@@ -65,14 +65,34 @@ const ManageSubscriptionPlans: React.FC = () => {
 
   const handleCreatePlan = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.name.trim() || !formData.code.trim()) {
+      showToast.error('Please fill in all required fields');
+      return;
+    }
+
     try {
       setSubmitting(true);
       await subscriptionPlanService.createPlan({
         ...formData,
-        code: formData.code.toUpperCase(),
+        code: formData.code.toUpperCase().replace(/\s+/g, '_'),
       });
       showToast.success('Subscription plan created successfully');
       setShowModal(false);
+      setFormData({
+        name: '',
+        code: '',
+        tier: 'premium',
+        price: 999,
+        currency: 'INR',
+        billingCycle: 'monthly',
+        features: {
+          aiPlanGeneration: true,
+          unlimitedFoodTracking: true,
+          trainerMatching: true,
+          cycleSyncInsights: true,
+          maxDailyFoodLogs: 10,
+        },
+      });
       fetchPlans();
     } catch (err: any) {
       console.error(err);
@@ -95,59 +115,92 @@ const ManageSubscriptionPlans: React.FC = () => {
   const premiumCount = plans.filter(p => p.tier === 'premium').length;
   const eliteCount = plans.filter(p => p.tier === 'elite').length;
 
+  const renderTierBadge = (tier: string) => {
+    switch (tier.toLowerCase()) {
+      case 'elite':
+        return (
+          <span className="tier-pill tier-pill-elite">
+            <Crown size={12} /> Elite
+          </span>
+        );
+      case 'premium':
+        return (
+          <span className="tier-pill tier-pill-premium">
+            <Zap size={12} /> Premium
+          </span>
+        );
+      default:
+        return (
+          <span className="tier-pill tier-pill-basic">
+            <Shield size={12} /> Basic
+          </span>
+        );
+    }
+  };
+
   return (
     <div className="admin-container">
-      <div className="admin-header">
+      {/* Header Banner */}
+      <div className="admin-header sub-header-banner">
         <div>
           <h1 className="admin-title">Manage Subscription Plans</h1>
-          <p className="admin-subtitle">Create, configure, and monitor subscription pricing tiers</p>
+          <p className="admin-subtitle">Create, configure, and monitor subscription pricing tiers for Cycle-Sync Fitness</p>
         </div>
         <div className="admin-header-actions">
-          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+          <button className="btn btn-create-plan" onClick={() => setShowModal(true)}>
             <Plus size={18} />
-            Create New Plan
+            <span>Create New Plan</span>
           </button>
         </div>
       </div>
 
       {/* Stats Overview */}
       <div className="users-stats-grid">
-        <div className="user-stat-card glass-premium">
-          <div className="stat-icon-wrapper">
-            <CreditCard size={24} className="stat-icon" />
+        <div className="sub-stat-card card-total">
+          <div className="sub-stat-icon-wrapper icon-purple">
+            <CreditCard size={24} />
           </div>
           <div className="stat-info">
             <div className="stat-value">{plans.length}</div>
             <div className="stat-label">Total Plans</div>
           </div>
         </div>
-        <div className="user-stat-card glass-premium active-border">
-          <div className="stat-icon-wrapper success">
-            <CheckCircle2 size={24} className="stat-icon" />
+
+        <div className="sub-stat-card card-active">
+          <div className="sub-stat-icon-wrapper icon-green">
+            <CheckCircle2 size={24} />
           </div>
           <div className="stat-info">
             <div className="stat-value">{activeCount}</div>
             <div className="stat-label">Active Tiers</div>
           </div>
         </div>
-        <div className="user-stat-card glass-premium">
+
+        <div className="sub-stat-card card-premium">
+          <div className="sub-stat-icon-wrapper icon-indigo">
+            <Zap size={24} />
+          </div>
           <div className="stat-info">
             <div className="stat-value">{premiumCount}</div>
-            <div className="stat-label">Premium Plans</div>
+            <div className="stat-label">Premium Tiers</div>
           </div>
         </div>
-        <div className="user-stat-card glass-premium">
+
+        <div className="sub-stat-card card-elite">
+          <div className="sub-stat-icon-wrapper icon-amber">
+            <Crown size={24} />
+          </div>
           <div className="stat-info">
             <div className="stat-value">{eliteCount}</div>
-            <div className="stat-label">Elite Plans</div>
+            <div className="stat-label">Elite Tiers</div>
           </div>
         </div>
       </div>
 
-      {/* Filters and Controls */}
-      <div className="users-controls">
-        <div className="search-bar-admin">
-          <Search size={20} className="search-icon" />
+      {/* Filters & Controls */}
+      <div className="users-controls sub-controls-wrapper">
+        <div className="search-bar-admin sub-search-bar">
+          <Search size={18} className="search-icon" />
           <input
             type="text"
             placeholder="Search plans by name or code..."
@@ -158,95 +211,109 @@ const ManageSubscriptionPlans: React.FC = () => {
         </div>
 
         <div className="filter-group">
-          <label>Tier:</label>
+          <label>Tier Filter:</label>
           <select
             value={filterTier}
             onChange={(e) => setFilterTier(e.target.value)}
             className="filter-select"
           >
-            <option value="all">All Tiers</option>
-            <option value="basic">Basic</option>
-            <option value="premium">Premium</option>
-            <option value="elite">Elite</option>
+            <option value="all">All Tiers ({plans.length})</option>
+            <option value="basic">Basic ({basicCount})</option>
+            <option value="premium">Premium ({premiumCount})</option>
+            <option value="elite">Elite ({eliteCount})</option>
           </select>
         </div>
       </div>
 
       {/* Plans Table */}
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
-          <Loader2 size={36} className="animate-spin" style={{ color: 'var(--primary)' }} />
+        <div className="sub-loading-container">
+          <Loader2 size={36} className="animate-spin text-primary" />
+          <p>Loading subscription plans...</p>
         </div>
       ) : (
-        <div className="users-table-container">
+        <div className="users-table-container sub-table-wrapper">
           <table className="users-table">
             <thead>
               <tr>
                 <th>Plan Name</th>
                 <th>Code</th>
                 <th>Tier</th>
-                <th>Price</th>
+                <th>Pricing</th>
                 <th>Billing Cycle</th>
-                <th>Key Features</th>
+                <th>Included Features</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredPlans.length === 0 ? (
                 <tr>
-                  <td colSpan={8} style={{ textAlign: 'center', padding: '30px' }}>
-                    No subscription plans found.
+                  <td colSpan={8} className="sub-empty-table">
+                    <Sparkles size={32} style={{ margin: '0 auto 12px', opacity: 0.5 }} />
+                    <p>No subscription plans match your search or filter.</p>
                   </td>
                 </tr>
               ) : (
                 filteredPlans.map((plan) => (
-                  <tr key={plan._id} className="table-row-premium">
+                  <tr key={plan._id} className="sub-table-row">
                     <td>
-                      <div className="user-name-premium">{plan.name}</div>
+                      <div className="sub-plan-name">{plan.name}</div>
                     </td>
                     <td>
-                      <code style={{ padding: '2px 6px', borderRadius: 4, background: 'var(--bg-secondary)', fontSize: '0.85rem' }}>
+                      <code className="sub-code-badge">
                         {plan.code}
                       </code>
                     </td>
+                    <td>{renderTierBadge(plan.tier)}</td>
                     <td>
-                      <span className={`badge-tier ${plan.tier}`} style={{ textTransform: 'capitalize', fontWeight: 600 }}>
-                        {plan.tier}
+                      <div className="sub-price-tag">
+                        <span className="sub-currency">₹</span>
+                        <span className="sub-amount">{plan.price}</span>
+                        <span className="sub-curr-code">{plan.currency}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="sub-billing-tag">
+                        {plan.billingCycle}
                       </span>
                     </td>
                     <td>
-                      ₹{plan.price} <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>{plan.currency}</span>
-                    </td>
-                    <td style={{ textTransform: 'capitalize' }}>{plan.billingCycle}</td>
-                    <td>
-                      <div style={{ fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <span>AI Plan: {plan.features.aiPlanGeneration ? '✓' : '✗'}</span>
-                        <span>Insights: {plan.features.cycleSyncInsights ? '✓' : '✗'}</span>
+                      <div className="sub-features-chips">
+                        <span className={`feat-chip ${plan.features.aiPlanGeneration ? 'active' : 'inactive'}`}>
+                          {plan.features.aiPlanGeneration ? <Check size={10} /> : <X size={10} />} AI Plan
+                        </span>
+                        <span className={`feat-chip ${plan.features.cycleSyncInsights ? 'active' : 'inactive'}`}>
+                          {plan.features.cycleSyncInsights ? <Check size={10} /> : <X size={10} />} Insights
+                        </span>
+                        <span className={`feat-chip ${plan.features.trainerMatching ? 'active' : 'inactive'}`}>
+                          {plan.features.trainerMatching ? <Check size={10} /> : <X size={10} />} Trainer
+                        </span>
                       </div>
                     </td>
                     <td>
                       {plan.isActive ? (
-                        <span style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.85rem' }}>
-                          <CheckCircle2 size={14} /> Active
+                        <span className="status-pill status-pill-active">
+                          <CheckCircle2 size={12} /> Active
                         </span>
                       ) : (
-                        <span style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.85rem' }}>
-                          <XCircle size={14} /> Inactive
+                        <span className="status-pill status-pill-inactive">
+                          <XCircle size={12} /> Inactive
                         </span>
                       )}
                     </td>
-                    <td className="actions-cell">
-                      {plan.isActive && (
+                    <td className="actions-cell" style={{ textAlign: 'right' }}>
+                      {plan.isActive ? (
                         <button
                           onClick={() => handleDeactivate(plan._id)}
-                          className="btn btn-sm btn-secondary"
+                          className="btn-deactivate-action"
                           title="Deactivate Plan"
-                          style={{ color: '#ef4444' }}
                         >
-                          <Power size={14} style={{ marginRight: 4 }} />
-                          Deactivate
+                          <Power size={14} />
+                          <span>Deactivate</span>
                         </button>
+                      ) : (
+                        <span className="sub-archived-lbl">Archived</span>
                       )}
                     </td>
                   </tr>
@@ -257,72 +324,87 @@ const ManageSubscriptionPlans: React.FC = () => {
         </div>
       )}
 
-      {/* Create Plan Modal */}
+      {/* Modal - Create Plan */}
       {showModal && (
-        <div className="modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="modal-container glass-premium" style={{ width: '100%', maxWidth: 540, padding: 24, borderRadius: 16, background: '#18181b', border: '1px solid var(--border-color)', color: 'white' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: 16 }}>Create Subscription Plan</h2>
-            <form onSubmit={handleCreatePlan} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div>
-                  <label style={{ fontSize: '0.85rem', display: 'block', marginBottom: 4 }}>Plan Name</label>
+        <div className="sub-modal-backdrop" onClick={() => setShowModal(false)}>
+          <div className="sub-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="sub-modal-header">
+              <div className="sub-modal-title-box">
+                <Sparkles size={20} className="icon-sparkle" />
+                <h2>Create Subscription Plan</h2>
+              </div>
+              <button className="sub-modal-close" onClick={() => setShowModal(false)}>
+                &times;
+              </button>
+            </div>
+
+            <form onSubmit={handleCreatePlan} className="sub-modal-body">
+              <div className="form-section-title">General Information</div>
+              <div className="form-grid-2">
+                <div className="input-field-group">
+                  <label>Plan Name <span className="req">*</span></label>
                   <input
                     type="text"
                     required
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormData({
+                        ...formData,
+                        name: val,
+                        code: formData.code || val.toUpperCase().replace(/\s+/g, '_')
+                      });
+                    }}
                     placeholder="e.g. Pro Monthly"
-                    className="search-input-admin"
-                    style={{ width: '100%' }}
+                    className="sub-input"
                   />
                 </div>
-                <div>
-                  <label style={{ fontSize: '0.85rem', display: 'block', marginBottom: 4 }}>Code</label>
+                <div className="input-field-group">
+                  <label>Plan Code <span className="req">*</span></label>
                   <input
                     type="text"
                     required
                     value={formData.code}
-                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                     placeholder="e.g. PRO_MONTHLY"
-                    className="search-input-admin"
-                    style={{ width: '100%' }}
+                    className="sub-input"
                   />
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-                <div>
-                  <label style={{ fontSize: '0.85rem', display: 'block', marginBottom: 4 }}>Tier</label>
+              <div className="form-section-title" style={{ marginTop: 16 }}>Pricing & Tier Configuration</div>
+              <div className="form-grid-3">
+                <div className="input-field-group">
+                  <label>Tier Category</label>
                   <select
                     value={formData.tier}
                     onChange={(e) => setFormData({ ...formData, tier: e.target.value as any })}
-                    className="filter-select"
-                    style={{ width: '100%' }}
+                    className="sub-select"
                   >
-                    <option value="basic">Basic</option>
-                    <option value="premium">Premium</option>
-                    <option value="elite">Elite</option>
+                    <option value="basic">Basic Tier</option>
+                    <option value="premium">Premium Tier</option>
+                    <option value="elite">Elite Tier</option>
                   </select>
                 </div>
-                <div>
-                  <label style={{ fontSize: '0.85rem', display: 'block', marginBottom: 4 }}>Price (₹)</label>
+
+                <div className="input-field-group">
+                  <label>Price (₹ INR) <span className="req">*</span></label>
                   <input
                     type="number"
                     min={0}
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                    className="search-input-admin"
-                    style={{ width: '100%' }}
+                    className="sub-input"
                   />
                 </div>
-                <div>
-                  <label style={{ fontSize: '0.85rem', display: 'block', marginBottom: 4 }}>Billing</label>
+
+                <div className="input-field-group">
+                  <label>Billing Cycle</label>
                   <select
                     value={formData.billingCycle}
                     onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value as any })}
-                    className="filter-select"
-                    style={{ width: '100%' }}
+                    className="sub-select"
                   >
                     <option value="monthly">Monthly</option>
                     <option value="annual">Annual</option>
@@ -330,61 +412,74 @@ const ManageSubscriptionPlans: React.FC = () => {
                 </div>
               </div>
 
-              <div style={{ marginTop: 8 }}>
-                <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: 8 }}>Features</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: '0.85rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.features.aiPlanGeneration}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        features: { ...formData.features, aiPlanGeneration: e.target.checked }
-                      })}
-                    />
-                    AI Plan Generation
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.features.cycleSyncInsights}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        features: { ...formData.features, cycleSyncInsights: e.target.checked }
-                      })}
-                    />
-                    Cycle Sync Insights
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.features.trainerMatching}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        features: { ...formData.features, trainerMatching: e.target.checked }
-                      })}
-                    />
-                    Trainer Matching
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.features.unlimitedFoodTracking}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        features: { ...formData.features, unlimitedFoodTracking: e.target.checked }
-                      })}
-                    />
-                    Unlimited Food Tracking
-                  </label>
+              <div className="form-section-title" style={{ marginTop: 16 }}>Included Feature Flags</div>
+              <div className="feature-cards-grid">
+                <div 
+                  className={`feature-toggle-card ${formData.features.aiPlanGeneration ? 'selected' : ''}`}
+                  onClick={() => setFormData({
+                    ...formData,
+                    features: { ...formData.features, aiPlanGeneration: !formData.features.aiPlanGeneration }
+                  })}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.features.aiPlanGeneration}
+                    onChange={() => {}}
+                  />
+                  <span>AI Plan Generation</span>
+                </div>
+
+                <div 
+                  className={`feature-toggle-card ${formData.features.cycleSyncInsights ? 'selected' : ''}`}
+                  onClick={() => setFormData({
+                    ...formData,
+                    features: { ...formData.features, cycleSyncInsights: !formData.features.cycleSyncInsights }
+                  })}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.features.cycleSyncInsights}
+                    onChange={() => {}}
+                  />
+                  <span>Cycle Sync Insights</span>
+                </div>
+
+                <div 
+                  className={`feature-toggle-card ${formData.features.trainerMatching ? 'selected' : ''}`}
+                  onClick={() => setFormData({
+                    ...formData,
+                    features: { ...formData.features, trainerMatching: !formData.features.trainerMatching }
+                  })}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.features.trainerMatching}
+                    onChange={() => {}}
+                  />
+                  <span>Trainer Matching</span>
+                </div>
+
+                <div 
+                  className={`feature-toggle-card ${formData.features.unlimitedFoodTracking ? 'selected' : ''}`}
+                  onClick={() => setFormData({
+                    ...formData,
+                    features: { ...formData.features, unlimitedFoodTracking: !formData.features.unlimitedFoodTracking }
+                  })}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.features.unlimitedFoodTracking}
+                    onChange={() => {}}
+                  />
+                  <span>Unlimited Food Tracking</span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+              <div className="sub-modal-actions">
+                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                <button type="submit" className="btn-submit" disabled={submitting}>
                   {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Create Plan'}
                 </button>
               </div>

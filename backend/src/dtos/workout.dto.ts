@@ -1,4 +1,4 @@
-import type { CyclePhase, WorkoutCategory,WorkoutDifficulty,WorkoutGoal } from "../constants/workout.js";
+import type { CyclePhase, WorkoutCategory,WorkoutDifficulty,WorkoutGoal, WorkoutSource } from "../constants/workout.js";
 import type { IWorkoutProgramDay } from "../models/WorkoutProgram.js";
 
 export interface CreateWorkoutProgramDTO{

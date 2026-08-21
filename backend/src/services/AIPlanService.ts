@@ -31,8 +31,8 @@ export class AIPlanService implements IAIPlanService {
             status: PlanStatus.ACTIVE,
             inputs,
             summary: generatedPlan.summary,
-            workoutPlan: generatedPlan.workoutPlan,
-            mealPlan: generatedPlan.mealPlan,
+            workoutPlan: generatedPlan.workoutPlan as any,
+            mealPlan: generatedPlan.mealPlan as any,
             recommendations: generatedPlan.recommendations,
         });
 
@@ -46,8 +46,8 @@ export class AIPlanService implements IAIPlanService {
             status: PlanStatus.DRAFT,
             inputs,
             summary: generatedPlan.summary,
-            workoutPlan: generatedPlan.workoutPlan,
-            mealPlan: generatedPlan.mealPlan,
+            workoutPlan: generatedPlan.workoutPlan as any,
+            mealPlan: generatedPlan.mealPlan as any,
             recommendations: generatedPlan.recommendations,
         });
 
@@ -111,7 +111,8 @@ export class AIPlanService implements IAIPlanService {
             throw new BadRequestError("Cannot edit an archived plan");
         }
 
-        const updatedPlan = await this.aiplanrepository.update(planId, updates);
+        Object.assign(plan, updates);
+        const updatedPlan = await this.aiplanrepository.save(plan);
         return updatedPlan;
     };
 

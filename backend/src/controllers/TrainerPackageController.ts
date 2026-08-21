@@ -11,7 +11,7 @@ export class TrainerPackageController {
 
     createPackage=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.user?.userId;
+            const trainerId=req.user?.userId || "";
             const result=await this.trainerpackageservice.createPackage(trainerId,req.body);
             console.log(result);
             
@@ -23,9 +23,10 @@ export class TrainerPackageController {
 
     updatePackage=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.user?.userId;
-            const result=await this.trainerpackageservice.updatePackage(trainerId,req.body);
-            successResponse(res,"Packages are updated successfully",HttpStatus.OK,result)
+            const trainerId=req.user?.userId || "";
+            const packageId=req.params.id as string;
+            const result=await this.trainerpackageservice.updatePackage(trainerId,req.body,packageId);
+            successResponse(res,"Packages are updated successfully",result,HttpStatus.OK)
         } catch (error) {
             next(error)
         }
@@ -33,10 +34,10 @@ export class TrainerPackageController {
 
     deletePackage=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.user?.userId;
-            const packageId=req.params.id;
+            const trainerId=req.user?.userId || "";
+            const packageId=req.params.id as string;
             const result=await this.trainerpackageservice.deletePackage(trainerId,packageId);
-            successResponse(res,"Packages are deleted successfully",HttpStatus.OK,result);
+            successResponse(res,"Packages are deleted successfully",result,HttpStatus.OK);
         } catch (error) {
             next(error)
         }
@@ -45,7 +46,7 @@ export class TrainerPackageController {
 
     getTrainerPackages=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.user?.userId;
+            const trainerId=req.user?.userId || "";
             const result=await this.trainerpackageservice.getTrainerPackages(trainerId);
             successResponse(res,"Trainer packages are fetched",result,HttpStatus.OK);
         } catch (error) {
@@ -55,7 +56,7 @@ export class TrainerPackageController {
 
     getActivePackages=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const trainerId=req.params.trainerId;
+            const trainerId=(req.params.trainerId || req.params.id || "") as string;
             const result=await this.trainerpackageservice.getActivePackages(trainerId);
             successResponse(res,"Active packages fetched successfully",result,HttpStatus.OK);
 
@@ -66,9 +67,9 @@ export class TrainerPackageController {
 
     getPackageById=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const packageId=req.params.id;
+            const packageId=req.params.id as string;
             const result=await this.trainerpackageservice.getPackageById(packageId);
-            successResponse(res,"Package fetched successfully",HttpStatus.OK,result);
+            successResponse(res,"Package fetched successfully",result,HttpStatus.OK);
 
         } catch (error) {
             next(error)

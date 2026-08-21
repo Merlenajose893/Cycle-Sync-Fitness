@@ -7,6 +7,7 @@ import { TOKENS } from "../container/tokens.js";
 import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.js";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/index.js";
 import type { IImageService } from "../interfaces/services/IImageService.js";
+import { Types } from "mongoose";
 @injectable()
 export class RecipeService implements IRecipeService{
     constructor(@inject(TOKENS.IRecipeRepository) private reciperepository:IRecipeRepository ,@inject(TOKENS.IImageService) private imageService:IImageService)
@@ -119,7 +120,7 @@ export class RecipeService implements IRecipeService{
             recipe.favorites=recipe.favorites.filter((id)=>id.toString()!==userId)
         }
         else{
-            recipe.favorites.push(userId);
+            recipe.favorites.push(new Types.ObjectId(userId) as any);
         }
         return await this.reciperepository.save(recipe)
     }
@@ -156,9 +157,9 @@ export class RecipeService implements IRecipeService{
         }
 
         recipe.reviews.push({
-            userId,
+            userId: new Types.ObjectId(userId) as any,
             rating:data.rating,
-            comment:data.comment,
+            comment:data.comment || "",
             createdAt:new Date()
         })
 

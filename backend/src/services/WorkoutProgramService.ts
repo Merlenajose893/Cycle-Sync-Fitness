@@ -16,7 +16,7 @@ createProgram=async(trainerId: string, data: CreateProgramDTO): Promise<IWorkout
    const program= await this.workoutrepository.create({
     trainerId:new Types.ObjectId(trainerId),
     ...data
-   })
+   } as any)
    return program;
 }
 updateProgram=async(trainerId: string,  programId:string,data: UpdateProgramDTO): Promise<IWorkoutProgram|null>=> {

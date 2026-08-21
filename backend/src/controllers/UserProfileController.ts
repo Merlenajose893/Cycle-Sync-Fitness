@@ -23,7 +23,7 @@ export class UserProfileController{
 
     updateProfile=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const userId=req.user?.userId;
+            const userId=req.user?.userId || "";
             const result=await this.userprofileservice.updateProfile(userId,req.body);
             successResponse(res,"User profile is updated",result,HttpStatus.OK);
         } catch (error) {
@@ -33,8 +33,8 @@ export class UserProfileController{
 
     uploadAvatar=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const userId=req.user?.userId;
-            const result=await this.userprofileservice.uploadAvatar(userId,req.file);
+            const userId=req.user?.userId || "";
+            const result=await this.userprofileservice.uploadAvatar(userId,req.file as Express.Multer.File);
             successResponse(res,"Avatar is uploaded successfully",result,HttpStatus.OK);
         } catch (error) {
             next(error)
@@ -43,7 +43,7 @@ export class UserProfileController{
 
     deleteAvatar=async (req:Request,res:Response,next:NextFunction) => {
         try {
-            const userId=req.user?.userId;
+            const userId=req.user?.userId || "";
             const result=await this.userprofileservice.deleteAvatar(userId);
             successResponse(res,"Avatar deleted successfully",result,HttpStatus.OK);
         } catch (error) {

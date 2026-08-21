@@ -23,7 +23,7 @@ export class TrainerBrowserController{
 
     getTrainerProfile=async (req:Request,res:Response,next:NextFunction) => {
         try {
-           const trainerId=req.params.trainerId;
+           const trainerId=(req.params.trainerId || req.params.id || "") as string;
            const result=await this.trainerbrowserservice.getTrainerProfile(trainerId);
            successResponse(res,"Trainer profile fetched",result,HttpStatus.OK); 
         } catch (error) {

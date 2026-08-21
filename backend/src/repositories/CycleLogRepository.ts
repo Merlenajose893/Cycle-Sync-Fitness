@@ -1,7 +1,9 @@
+import { injectable } from "tsyringe";
 import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.js";
 import { CycleLog, type ICycleLog } from "../models/CycleLog.js";
 import { BaseRepository } from "./BaseRepository.js";
 
+@injectable()
 export class CycleLogRepository extends BaseRepository<ICycleLog> implements ICycleLogRepository{
     constructor()
     {

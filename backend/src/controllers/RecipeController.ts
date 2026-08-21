@@ -29,7 +29,7 @@ export class RecipeController {
             await this.recipeService.createRecipe(
                 trainerId,
                 req.body,
-                req.file
+                req.file as Express.Multer.File
             );
 
             successResponse(
@@ -58,7 +58,7 @@ export class RecipeController {
 
             const trainerId=req.user?.userId!;
 
-            const recipeId=req.params.id!;
+            const recipeId=req.params.id as string;
 
             const result =
             await this.recipeService.updateRecipe(
@@ -95,7 +95,7 @@ export class RecipeController {
 
             await this.recipeService.deleteRecipe(
                 trainerId,
-                req.params.id!
+                req.params.id as string
             );
 
             successResponse(
@@ -229,7 +229,7 @@ export class RecipeController {
 
             const result =
             await this.recipeService.getRecipeById(
-                req.params.id!
+                req.params.id as string
             );
 
             successResponse(
@@ -261,7 +261,7 @@ export class RecipeController {
             const result =
             await this.recipeService.toggleFavourite(
                 userId,
-                req.params.id!
+                req.params.id as string
             );
 
             successResponse(
@@ -291,7 +291,7 @@ export class RecipeController {
             const userId=req.user?.userId!;
 
             const result =
-            await this.recipeService.getUsersFavorites(
+            await this.recipeService.getUsersFavourite(
                 userId
             );
 
@@ -324,7 +324,7 @@ export class RecipeController {
             const result =
             await this.recipeService.addReview(
                 userId,
-                req.params.id!,
+                req.params.id as string,
                 req.body
             );
 

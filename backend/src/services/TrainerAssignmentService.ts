@@ -10,6 +10,8 @@ import { PaymentStatus } from "../constants/payment.js";
 import { ConflictError, NotFoundError } from "../errors/index.js";
 import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
 
+import { Types } from "mongoose";
+
 @injectable()
 export class TrainerAssignmentService implements ITrainerAssignmentService{
     constructor(
@@ -35,10 +37,10 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         const endDate=new Date(startDate);
         endDate.setDate(endDate.getDate()+trainerPackage.durationDays);
         const assignment=await this.trainerassignrepository.create({
-            userId:data.userId,
-            trainerId:trainerPackage.trainerId,
-            paymentId:data.paymentId,
-            packageId:trainerPackage._id,
+            userId: new Types.ObjectId(data.userId) as any,
+            trainerId: trainerPackage.trainerId,
+            paymentId: new Types.ObjectId(data.paymentId) as any,
+            packageId: trainerPackage._id,
             startDate,
             endDate,
             assignmentStatus:TrainerAssignmentStatus.ACTIVE
@@ -73,6 +75,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
                             try {
                                 await this.createAssignment({
                                     userId: payment.userId.toString(),
+                                    trainerId: payment.trainerId.toString(),
                                     packageId: payment.packageId.toString(),
                                     paymentId: payment._id.toString()
                                 });
@@ -93,7 +96,7 @@ export class TrainerAssignmentService implements ITrainerAssignmentService{
         const expiredAssignments=await this.trainerassignrepository.findExpired();
         for(const assignment of expiredAssignments)
         {
-            await this.trainerassignrepository.updateAssignmentStatus(assignment._id,TrainerAssignmentStatus.EXPIRED)
+            await this.trainerassignrepository.updateAssignmentStatus(assignment._id.toString(),TrainerAssignmentStatus.EXPIRED)
         }
         return expiredAssignments.length;
     }

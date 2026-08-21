@@ -72,7 +72,7 @@ export class MealLogController {
 
 
             const date =
-                new Date(req.params.date);
+                new Date((req.params.date as string) || Date.now());
 
 
             const log: any =
@@ -133,11 +133,11 @@ export class MealLogController {
 
 
             const startDate =
-                new Date(req.params.startDate);
+                new Date((req.params.startDate as string) || Date.now());
 
 
             const endDate =
-                new Date(req.query.endDate as string);
+                new Date((req.query.endDate as string) || Date.now());
 
 
             const result =
@@ -177,7 +177,7 @@ export class MealLogController {
             const userId = req.user?.userId!;
 
 
-            const { mealType } = req.params;
+            const mealType = req.params.mealType as any;
 
             const result =
                 await this.mealLogService.removeMeal(

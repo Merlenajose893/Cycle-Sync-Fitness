@@ -23,13 +23,13 @@ getProfile=async(userId: string): Promise<UserProfileResponseDTO> =>{
 
 }
 
-updateProfile=async(userId: string, data: UpdateUserProfileDTO): Promise<IUser | null> =>{
+updateProfile=async(userId: string, data: UpdateUserProfileDTO): Promise<UserProfileResponseDTO> =>{
     const user=await this.userRepository.findById(userId);
     if(!user)
     {
         throw new NotFoundError("User not found");
     }
-    const updated=UserProfileMapper.toUpdateEntity(user);
+    const updated=UserProfileMapper.toUpdateEntity(data);
     const updatedUser=await this.userRepository.updateProfile(userId,updated);
     if (!updatedUser) {
       throw new NotFoundError("User not found");
@@ -37,7 +37,7 @@ updateProfile=async(userId: string, data: UpdateUserProfileDTO): Promise<IUser |
     return UserProfileMapper.toResponseDTO(updatedUser);
 }
 
-uploadAvatar=async(userId: string, file: Express.Multer.files): Promise<UserProfileResponseDTO> =>{
+uploadAvatar=async(userId: string, file: Express.Multer.File): Promise<UserProfileResponseDTO> =>{
     const user=await this.userRepository.findById(userId);
     if(!user)
     {
@@ -73,7 +73,7 @@ deleteAvatar=async(userId: string): Promise<UserProfileResponseDTO> =>{
         throw new NotFoundError("Avatar not Found");
     }
     await this.imageService.deleteImage(user.avatarPublicId);
-    const updatedUser=await this.userRepository.updateProfile(userId,UserProfileMapper.toUpdateEntity({avatarUrl:undefined,avatarPublicId:undefined}))
+    const updatedUser=await this.userRepository.updateProfile(userId,UserProfileMapper.toUpdateEntity({avatarUrl:"",avatarPublicId:""}))
      if (!updatedUser) {
         throw new NotFoundError("User not found");
     }
