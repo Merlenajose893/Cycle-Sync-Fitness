@@ -1,5 +1,6 @@
 import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
 import React, { useEffect, useState } from 'react';
+import DateOfBirthPicker from '../../components/common/DateOfBirthPicker/DateOfBirthPicker';
 import { useNavigate } from 'react-router-dom';
 import { useUserProfile } from '../../hooks/profile/useUserProfile';
 import type { UserProfile, UpdateUserProfileDTO } from '../../types/profile.types';
@@ -287,18 +288,24 @@ const Settings: React.FC = () => {
                                 </div>
 
                                 <div className="form-field">
-                                    <label className="field-label">Date of Birth</label>
-                                    <div className="input-wrapper">
-                                        <Calendar size={16} className="input-icon" />
-                                        <input
-                                            type="date"
-                                            className="form-input"
-                                            name="dateOfBirth"
-                                            max={getDobMaxDate(13)}
-                                            value={formData.bodyDetails?.dateOfBirth ? new Date(formData.bodyDetails.dateOfBirth).toISOString().split('T')[0] : ''}
-                                            onChange={handleBodyDetailsChange}
-                                        />
-                                    </div>
+                                    <DateOfBirthPicker
+                                        value={formData.bodyDetails?.dateOfBirth ? (
+                                            typeof formData.bodyDetails.dateOfBirth === 'string' && formData.bodyDetails.dateOfBirth.includes('-')
+                                                ? formData.bodyDetails.dateOfBirth
+                                                : new Date(formData.bodyDetails.dateOfBirth).toISOString().split('T')[0]
+                                        ) : ''}
+                                        onChange={(dateStr) => {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                bodyDetails: {
+                                                    height: prev.bodyDetails?.height || 0,
+                                                    weight: prev.bodyDetails?.weight || 0,
+                                                    biologicalSex: prev.bodyDetails?.biologicalSex || '',
+                                                    dateOfBirth: dateStr,
+                                                }
+                                            }));
+                                        }}
+                                    />
                                 </div>
 
                                 <div className="form-field full-width">

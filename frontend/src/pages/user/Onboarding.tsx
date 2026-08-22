@@ -20,6 +20,7 @@ import '../../styles/Auth.css';
 import { useUserOnboarding } from '../../hooks/onboarding/useUserOnboarding';
 import { useUserContext } from '../../context/UserAuthContext';
 import { userDobSchema, getDobMaxDate, parseApiErrorMessage } from '../../utils/validationUtils';
+import DateOfBirthPicker from '../../components/common/DateOfBirthPicker/DateOfBirthPicker';
 
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
@@ -234,31 +235,26 @@ const Onboarding: React.FC = () => {
                                 </div>
 
                                 <div className="form-group-row">
-                                    <div className="form-group">
-                                        <label>Date of Birth</label>
-
-                                        <div className="input-wrapper">
-                                            <User size={18} className="input-icon" />
-
-                                            <input
-                                                type="date"
-                                                max={getDobMaxDate(13)}
-                                                value={bodyDetails.dateOfBirth}
-                                                style={dobError ? { borderColor: '#ef4444' } : {}}
-                                                onChange={(e) => {
-                                                    setBodyDetails({
-                                                        ...bodyDetails,
-                                                        dateOfBirth: e.target.value,
-                                                    });
-                                                    const res = userDobSchema.safeParse(e.target.value);
+                                    <div className="form-group" style={{ flex: 1 }}>
+                                        <DateOfBirthPicker
+                                            value={bodyDetails.dateOfBirth}
+                                            error={dobError}
+                                            onChange={(dateStr) => {
+                                                setBodyDetails({
+                                                    ...bodyDetails,
+                                                    dateOfBirth: dateStr,
+                                                });
+                                                if (dateStr) {
+                                                    const res = userDobSchema.safeParse(dateStr);
                                                     setDobError(res.success ? null : res.error.issues[0]?.message || null);
-                                                }}
-                                            />
-                                        </div>
-                                        {dobError && <span style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{dobError}</span>}
+                                                } else {
+                                                    setDobError(null);
+                                                }
+                                            }}
+                                        />
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group" style={{ flex: 1 }}>
                                         <label>Biological Sex</label>
 
                                         <div className="input-wrapper">
