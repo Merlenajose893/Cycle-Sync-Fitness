@@ -70,7 +70,7 @@ const ResetPasswordPage: React.FC = () => {
             const targetUserId = searchParams.get("userId") || searchParams.get("email") || "";
             await resetPassword({ userId: targetUserId, otp: code, newPassword: password });
             showToast.success("Password reset successfully");
-            navigate("/login");
+            navigate("/login",{replace:true});
         } catch (err) {
             setError(true);
         }

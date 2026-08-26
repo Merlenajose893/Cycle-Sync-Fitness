@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Dumbbell } from 'lucide-react';
-import '../../styles/Header.css'
+import { Menu, X, Dumbbell, LogOut, User } from 'lucide-react';
+import { useUserContext } from '../../context/UserAuthContext';
+import '../../styles/Header.css';
 
 const Header: React.FC = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
     const location = useLocation();
+    const { isAuthenticated, user, logout } = useUserContext();
 
     const navLinks = [
         { path: '/', label: 'Home' },
@@ -53,12 +55,32 @@ const Header: React.FC = () => {
                     >
                         <Dumbbell size={15} /> For Trainers
                     </Link>
-                    <Link to="/login" className="btn btn-ghost">
-                        Log In
-                    </Link>
-                    <Link to="/register" className="btn btn-primary">
-                        Get Started
-                    </Link>
+
+                    {isAuthenticated ? (
+                        <>
+                            {user && !user.onboardingComplete ? (
+                                <Link to="/onboarding" className="btn btn-primary">
+                                    Continue Onboarding
+                                </Link>
+                            ) : (
+                                <Link to="/app" className="btn btn-primary">
+                                    Dashboard
+                                </Link>
+                            )}
+                            <button onClick={() => logout()} className="btn btn-ghost" title="Log Out">
+                                <LogOut size={16} /> Log Out
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" className="btn btn-ghost">
+                                Log In
+                            </Link>
+                            <Link to="/register" className="btn btn-primary">
+                                Get Started
+                            </Link>
+                        </>
+                    )}
                 </div>
 
                 <button

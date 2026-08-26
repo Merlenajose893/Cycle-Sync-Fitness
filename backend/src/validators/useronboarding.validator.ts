@@ -1,29 +1,44 @@
 import {z} from "zod"
 import { coerce } from "zod";
 export const updateBodyDetailsSchema=z.object({
-    height:z.coerce.number().positive("Height must be greater than 0").min(50,"Height must be atleast 50cm").max(300,"Height cannot be 300cm"),
-    weight:z.coerce.number().positive("Weight must be greater than 0").min(20,"Weight msut be atleast 20kg").max(500,"Weight cannot exceed 500kg"),
+    height:z.coerce.number().positive("Height must be greater than 0").min(50,"Height must be at least 50cm").max(300,"Height cannot exceed 300cm"),
+    weight:z.coerce.number().positive("Weight must be greater than 0").min(20,"Weight must be at least 20kg").max(500,"Weight cannot exceed 500kg"),
     dateOfBirth:z.coerce.date(),
     biologicalSex:z.string().min(1,"Biological sex is required")
 }).superRefine((data,ctx)=>{
+    if (isNaN(data.dateOfBirth.getTime())) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Date of birth is required and must be a valid date",
+            path: ["dateOfBirth"]
+        });
+        return;
+    }
+
     const today=new Date();
     if(data.dateOfBirth>today)
     {
         ctx.addIssue({
             code:z.ZodIssueCode.custom,
-            message:"Date of birth cannot be in future",
+            message:"Date of birth cannot be in the future",
             path:["dateOfBirth"]
-        })
+        });
+        return;
     }
 
-    const age=today.getFullYear()-data.dateOfBirth.getFullYear();
+    let age=today.getFullYear()-data.dateOfBirth.getFullYear();
+    const monthDiff = today.getMonth() - data.dateOfBirth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < data.dateOfBirth.getDate())) {
+        age--;
+    }
+
     if(age<13)
     {
         ctx.addIssue({
             code:z.ZodIssueCode.custom,
-            message:"User must be atleast 13 years old",
+            message:"User must be at least 13 years old",
             path:["dateOfBirth"]
-        })
+        });
     }
 });
 export const updateCycleSetupSchema=z.object({

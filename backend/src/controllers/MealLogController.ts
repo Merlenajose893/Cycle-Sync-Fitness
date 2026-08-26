@@ -40,6 +40,7 @@ export class MealLogController {
                     validDate,
                     mealData
                 );
+console.log(result);
 
 
             successResponse(

@@ -1,7 +1,7 @@
 .dob-picker-container {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
     font-family: inherit;
 }
@@ -10,33 +10,41 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 24px;
 }
 
 .dob-label {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary, #0f172a);
+    color: var(--text-primary, #1e293b);
+    letter-spacing: -0.01em;
 }
 
 .dob-icon {
     color: var(--primary, #0d9488);
+    transition: transform 0.2s ease;
+}
+
+.dob-picker-container:focus-within .dob-icon {
+    transform: scale(1.1);
 }
 
 .dob-age-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-    border: 1px solid rgba(13, 148, 136, 0.25);
-    border-radius: 999px;
+    gap: 6px;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--primary, #0d9488);
-    animation: fadeIn 0.3s ease-out;
+    color: #0f766e;
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.08);
+    animation: dobBadgeBounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dob-inputs-group {
@@ -60,38 +68,41 @@
 }
 
 .dob-select-wrapper.year-select {
-    flex: 1.2;
+    flex: 1.25;
 }
 
 .dob-select {
     width: 100%;
-    padding: 12px 28px 12px 12px;
-    border: 1px solid var(--border, #e2e8f0);
-    border-radius: var(--radius-md, 10px);
+    height: 46px;
+    padding: 0 30px 0 14px;
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: 12px;
     font-size: 0.925rem;
     font-weight: 500;
     background-color: #ffffff;
     color: var(--text-primary, #0f172a);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 14px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .dob-select:hover {
     border-color: var(--primary-light, #14b8a6);
     background-color: #f8fafc;
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.08);
 }
 
 .dob-select:focus {
     outline: none;
     border-color: var(--primary, #0d9488);
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    box-shadow: 0 0 0 3.5px rgba(13, 148, 136, 0.18);
     background-color: #ffffff;
 }
 
@@ -100,39 +111,47 @@
 }
 
 .dob-picker-container.has-error .dob-select {
-    border-color: #ef4444;
+    border-color: #f87171;
     background-color: #fef2f2;
 }
 
 .dob-picker-container.has-error .dob-select:focus {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    box-shadow: 0 0 0 3.5px rgba(239, 68, 68, 0.18);
 }
 
 .dob-calendar-btn-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    height: 46px;
 }
 
 .dob-calendar-btn {
-    width: 42px;
-    height: 42px;
+    width: 46px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border, #e2e8f0);
-    border-radius: var(--radius-md, 10px);
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: 12px;
     background: #ffffff;
     color: var(--text-muted, #64748b);
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .dob-calendar-btn:hover {
     border-color: var(--primary, #0d9488);
     color: var(--primary, #0d9488);
-    background: rgba(13, 148, 136, 0.05);
+    background: rgba(13, 148, 136, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+}
+
+.dob-calendar-btn:active {
+    transform: translateY(0);
 }
 
 .dob-native-date-input {
@@ -148,22 +167,29 @@
 .dob-error-msg {
     display: flex;
     align-items: center;
-    gap: 4px;
-    color: #ef4444;
-    font-size: 0.8rem;
-    font-weight: 500;
+    gap: 6px;
+    color: #dc2626;
+    font-size: 0.825rem;
+    font-weight: 600;
     margin-top: 2px;
+    animation: dobShake 0.3s ease-in-out;
 }
 
-@keyframes fadeIn {
-    from {
+@keyframes dobBadgeBounce {
+    0% {
         opacity: 0;
-        transform: translateY(-2px);
+        transform: scale(0.85) translateY(-4px);
     }
-    to {
+    100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1) translateY(0);
     }
+}
+
+@keyframes dobShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
 }
 
 @media (max-width: 480px) {
@@ -172,7 +198,13 @@
     }
     
     .dob-select {
-        padding: 10px 22px 10px 8px;
+        height: 42px;
+        padding: 0 24px 0 10px;
         font-size: 0.85rem;
+    }
+
+    .dob-calendar-btn {
+        width: 42px;
+        height: 42px;
     }
 }

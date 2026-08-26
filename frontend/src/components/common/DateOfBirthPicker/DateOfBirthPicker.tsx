@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Calendar, Sparkles, AlertCircle } from 'lucide-react';
 import './DateOfBirthPicker.css';
 
@@ -38,20 +38,25 @@ export const DateOfBirthPicker: React.FC<DateOfBirthPickerProps> = ({
     disabled = false,
     className = '',
 }) => {
-    // Parse YYYY-MM-DD into components
-    const { selectedYear, selectedMonth, selectedDay } = useMemo(() => {
-        if (!value || typeof value !== 'string') {
-            return { selectedYear: '', selectedMonth: '', selectedDay: '' };
+    // Local state for dropdown values so user can select month, day, year in any order
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedDay, setSelectedDay] = useState('');
+
+    // Sync local state when external `value` prop changes (e.g. native date picker or parent reset)
+    useEffect(() => {
+        if (value && typeof value === 'string') {
+            const parts = value.split('-');
+            if (parts.length === 3) {
+                setSelectedYear(parts[0] || '');
+                setSelectedMonth(parts[1] || '');
+                setSelectedDay(parts[2] || '');
+            }
+        } else if (!value) {
+            setSelectedYear('');
+            setSelectedMonth('');
+            setSelectedDay('');
         }
-        const parts = value.split('-');
-        if (parts.length === 3) {
-            return {
-                selectedYear: parts[0] || '',
-                selectedMonth: parts[1] || '',
-                selectedDay: parts[2] || '',
-            };
-        }
-        return { selectedYear: '', selectedMonth: '', selectedDay: '' };
     }, [value]);
 
     // Compute range of valid birth years
@@ -105,6 +110,26 @@ export const DateOfBirthPicker: React.FC<DateOfBirthPickerProps> = ({
         return date.toISOString().split('T')[0];
     }, [minAge]);
 
+    const updateDate = (y: string, m: string, d: string) => {
+        setSelectedYear(y);
+        setSelectedMonth(m);
+
+        let validDay = d;
+        if (m && d) {
+            const maxD = new Date(y ? parseInt(y, 10) : 2000, parseInt(m, 10), 0).getDate();
+            if (parseInt(d, 10) > maxD) {
+                validDay = maxD < 10 ? `0${maxD}` : `${maxD}`;
+            }
+        }
+        setSelectedDay(validDay);
+
+        if (y && m && validDay) {
+            onChange(`${y}-${m}-${validDay}`);
+        } else {
+            onChange('');
+        }
+    };
+
     const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const month = e.target.value;
         updateDate(selectedYear, month, selectedDay);
@@ -124,34 +149,8 @@ export const DateOfBirthPicker: React.FC<DateOfBirthPickerProps> = ({
         const val = e.target.value;
         if (val) {
             onChange(val);
-        }
-    };
-
-    const updateDate = (y: string, m: string, d: string) => {
-        if (!y && !m && !d) {
-            onChange('');
-            return;
-        }
-        // If day is greater than allowed in new month/year, cap it
-        let validDay = d;
-        if (m && d) {
-            const maxD = new Date(y ? parseInt(y, 10) : 2000, parseInt(m, 10), 0).getDate();
-            if (parseInt(d, 10) > maxD) {
-                validDay = maxD < 10 ? `0${maxD}` : `${maxD}`;
-            }
-        }
-
-        if (y && m && validDay) {
-            onChange(`${y}-${m}-${validDay}`);
         } else {
-            // Partial selection - keep state representation if needed by notifying YYYY-MM-DD format
-            const formattedY = y || 'YYYY';
-            const formattedM = m || 'MM';
-            const formattedD = validDay || 'DD';
-            // Only update parent if complete or reset
-            if (y && m && validDay) {
-                onChange(`${formattedY}-${formattedM}-${formattedD}`);
-            }
+            onChange('');
         }
     };
 

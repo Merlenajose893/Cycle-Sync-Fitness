@@ -172,7 +172,7 @@ const TrainerPackages: React.FC = () => {
                                 <label>Package Name</label>
                                 <input 
                                     type="text" 
-                                    required 
+                                    
                                     placeholder="e.g. 1-Month Fitness Boost"
                                     value={form.name}
                                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -186,7 +186,7 @@ const TrainerPackages: React.FC = () => {
                                         type="number" 
                                         min={1} 
                                         max={100} 
-                                        required
+                                        
                                         value={form.sessions}
                                         onChange={(e) => setForm({ ...form, sessions: Number(e.target.value) })}
                                     />
@@ -196,7 +196,7 @@ const TrainerPackages: React.FC = () => {
                                     <input 
                                         type="number" 
                                         min={100} 
-                                        required
+                                        
                                         value={form.price}
                                         onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
                                     />

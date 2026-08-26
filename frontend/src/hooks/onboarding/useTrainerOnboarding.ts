@@ -56,7 +56,19 @@ export const useTrainerOnboarding = () => {
         }
     };
 
-    
+    const updatePackages = async (data: UpdateTrainerPackageDTO) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await traineronboardingService.updateTrainerPackages(data);
+            return response;
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to update packages");
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const completeOnboarding = async () => {
         try {
@@ -126,7 +138,7 @@ export const useTrainerOnboarding = () => {
         getOnboardingStatus,
         updateProfile,
         updateCertifications,
-        
+        updatePackages,
         completeOnboarding,
         uploadAvatar,
         uploadDocuments

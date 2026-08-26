@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useUserAuth } from '../../hooks/auth/useUserAuth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import '../../styles/Auth.css';
 
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
+  const navigate=useNavigate()
   const [submitted, setSubmitted] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const {forgotPassword,loading,error}=useUserAuth();

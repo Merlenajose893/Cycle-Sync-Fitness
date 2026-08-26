@@ -1,7 +1,7 @@
 export interface updateBodyDetailsDTO{
     height:number;
     weight:number;
-    dateOfBirth:number;
+    dateOfBirth:string | number | Date;
     biologicalSex:string;
 }
 

@@ -9,9 +9,12 @@ import {
 
 import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
+import { useUserContext } from '../../context/UserAuthContext';
 import '../../styles/Landing.css';
 
 const LandingPage: React.FC = () => {
+    const { isAuthenticated, user } = useUserContext();
+
     return (
         <div className="landing-container">
             {/* Header */}
@@ -37,9 +40,21 @@ const LandingPage: React.FC = () => {
                     </p>
 
                     <div className="hero-actions-premium animate-slideUp" style={{ animationDelay: '0.3s' }}>
-                        <Link to="/register" className="btn btn-premium btn-lg">
-                            Start Your Journey <ArrowRight size={20} />
-                        </Link>
+                        {isAuthenticated ? (
+                            user && !user.onboardingComplete ? (
+                                <Link to="/onboarding" className="btn btn-premium btn-lg">
+                                    Continue Onboarding <ArrowRight size={20} />
+                                </Link>
+                            ) : (
+                                <Link to="/app" className="btn btn-premium btn-lg">
+                                    Go to Dashboard <ArrowRight size={20} />
+                                </Link>
+                            )
+                        ) : (
+                            <Link to="/register" className="btn btn-premium btn-lg">
+                                Start Your Journey <ArrowRight size={20} />
+                            </Link>
+                        )}
                         <Link to="/about" className="btn btn-outline btn-lg">
                             Watch Demo <Play size={18} fill="currentColor" />
                         </Link>
