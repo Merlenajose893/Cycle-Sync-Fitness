@@ -27,6 +27,7 @@ import ManageSubscriptionPlans from "../pages/admin/ManageSubscriptionPlans";
 import AppLayout from "../layouts/AppLayouts";
 import AdminLayout from "../layouts/AdminLayout";
 import TrainerDashboard from "../pages/trainer/trainerDashboard";
+import TrainerProfile from "../pages/trainer/TrainerProfile";
 import TrainerLayout from "../layouts/TrainerLayout";
 import FoodsAndRecipes from "../pages/trainer/FoodsAndRecipes";
 import TrainerClients from "../pages/trainer/TrainerClients";
@@ -130,6 +131,7 @@ function AppRoutes() {
                         <Route path="/trainer/workouts" element={<TrainerWorkouts />} />
                         <Route path="/trainer/packages" element={<TrainerPackages />} />
                         <Route path="/trainer/nutrition" element={<FoodsAndRecipes />} />
+                        <Route path="/trainer/profile" element={<TrainerProfile />} />
                     </Route>
                 </Route>
 

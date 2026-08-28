@@ -28,6 +28,8 @@ export interface Trainer{
     lastName:string;
     email:string;
     role:"trainer";
+    location:string;
+    phone:number;
     isEmailVerified:boolean;
     createdAt:string;
     updatedAt:string;

@@ -1648,3 +1648,773 @@ input:checked + .tp-toggle-slider:before {
         margin-top: 20px;
     }
 }
+
+/* ─────────────────── TRAINER PROFILE REFINED DESIGN ─────────────────── */
+
+.tp-profile-page-wrapper {
+    padding: 24px 32px;
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+.tp-profile-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.tp-profile-page-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+}
+
+.tp-profile-page-subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 2px 0 0 0;
+}
+
+.tp-client-preview-toggle-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 9999px;
+}
+
+.tp-preview-toggle-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.tp-alert-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Header Card (Hero) */
+.tp-profile-header-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+.tp-profile-header-card.editing {
+    border-color: #0d9488;
+}
+
+.tp-profile-cover-banner {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.tp-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(13, 148, 136, 0.05) 0%, rgba(255, 255, 255, 0.4) 100%);
+}
+
+.tp-cover-edit-btn {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    color: #475569;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.tp-cover-edit-btn:hover {
+    background: white;
+    color: #0d9488;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tp-profile-header-main {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    padding: 0 32px 28px;
+    margin-top: -50px;
+    position: relative;
+    z-index: 3;
+}
+
+.tp-profile-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.tp-profile-avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    border: 5px solid white;
+    object-fit: cover;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: white;
+}
+
+.tp-avatar-camera-btn {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.tp-avatar-camera-btn:hover {
+    color: #0d9488;
+    border-color: #0d9488;
+    transform: scale(1.05);
+}
+
+.tp-profile-header-info {
+    flex: 1;
+    margin-bottom: 4px;
+}
+
+.tp-profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tp-profile-display-name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.tp-verified-badge-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #0d9488;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(13, 148, 136, 0.3);
+}
+
+.tp-profile-headline {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 500;
+    margin: 4px 0 0 0;
+}
+
+.tp-profile-edit-name-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 480px;
+}
+
+.tp-profile-input-with-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tp-input-field {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.tp-input-field:focus {
+    outline: none;
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+
+.tp-input-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-color: #0d9488;
+}
+
+.tp-input-headline {
+    font-size: 0.9rem;
+}
+
+.tp-profile-header-actions {
+    margin-bottom: 4px;
+}
+
+.tp-btn-edit-profile {
+    background: #0d9488;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.tp-btn-edit-profile:hover {
+    background: #0f766e;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.35);
+}
+
+.tp-edit-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tp-btn-cancel {
+    background: white;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tp-btn-cancel:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.tp-btn-save {
+    background: #0d9488;
+    color: white;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.tp-btn-save:hover {
+    background: #0f766e;
+}
+
+/* Two Column Layout */
+.tp-profile-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 28px;
+}
+
+.tp-profile-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.02);
+}
+
+.tp-card-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+}
+
+.tp-card-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.tp-card-header-row .tp-card-title {
+    margin-bottom: 0;
+}
+
+.tp-profile-bio-text {
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: #475569;
+    margin: 0;
+}
+
+.tp-textarea-field {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #0d9488;
+    border-radius: 12px;
+    font-size: 0.93rem;
+    color: #1e293b;
+    line-height: 1.6;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.tp-textarea-field:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+
+/* Specialties Chips */
+.tp-specialties-chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tp-specialty-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0fdfa;
+    color: #0d9488;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    border: 1px solid #ccfbf1;
+}
+
+.tp-chip-remove-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ccfbf1;
+    color: #0d9488;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tp-chip-remove-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.tp-add-specialty-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.tp-input-add-tag {
+    flex: 1;
+    max-width: 260px;
+}
+
+.tp-btn-add-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tp-btn-add-tag:hover {
+    background: #0d9488;
+    color: white;
+    border-color: #0d9488;
+}
+
+/* Professional Certifications */
+.tp-btn-text-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #0d9488;
+    background: transparent;
+    border: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.tp-btn-text-action:hover {
+    color: #0f766e;
+    text-decoration: underline;
+}
+
+.tp-certifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tp-certification-card-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.tp-certification-card-item:hover {
+    background: white;
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.tp-cert-badge-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #f0fdfa;
+    color: #0d9488;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tp-cert-info-main {
+    flex: 1;
+}
+
+.tp-cert-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 2px 0;
+}
+
+.tp-cert-issuer {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.tp-cert-arrow {
+    color: #cbd5e1;
+}
+
+.tp-cert-edit-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tp-cert-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.tp-cert-input-sub {
+    flex: 1;
+}
+
+.tp-cert-input-year {
+    width: 90px;
+}
+
+.tp-btn-delete-cert {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tp-btn-delete-cert:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* Right Column Cards */
+.tp-badge-pill {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.tp-badge-active {
+    background: #f0fdfa;
+    color: #0d9488;
+    border: 1px solid #ccfbf1;
+}
+
+.tp-packages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tp-package-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid #f1f5f9;
+}
+
+.tp-package-item-card.active {
+    background: #f0fdf4;
+    border-color: #dcfce7;
+}
+
+.tp-package-item-card.pending {
+    background: #fffbebf5;
+    border-color: #fef3c7;
+}
+
+.tp-package-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tp-package-status-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tp-package-item-card.active .tp-package-status-icon {
+    color: #16a34a;
+}
+
+.tp-package-item-card.pending .tp-package-status-icon {
+    color: #d97706;
+}
+
+.tp-package-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 2px 0;
+}
+
+.tp-package-meta {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.tp-status-pending-text {
+    color: #d97706;
+    font-weight: 600;
+}
+
+.tp-package-price {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0d9488;
+}
+
+.tp-package-item-card.pending .tp-package-price {
+    color: #d97706;
+}
+
+/* Session Mode */
+.tp-select-field {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background: white;
+}
+
+.tp-session-mode-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.tp-session-icon {
+    color: #0d9488;
+}
+
+/* Professional Links */
+.tp-social-links-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tp-social-link-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.tp-social-link-pill:hover {
+    background: white;
+    border-color: #0d9488;
+    color: #0d9488;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08);
+}
+
+.tp-link-url {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tp-ext-icon {
+    color: #94a3b8;
+}
+
+.tp-social-inputs-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tp-social-input-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tp-social-icon {
+    color: #64748b;
+}
+
+/* Personal Information Rows */
+.tp-personal-info-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tp-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.88rem;
+}
+
+.tp-info-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.tp-info-value {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.tp-info-email {
+    font-weight: 600;
+    color: #0d9488;
+}
+
+.tp-info-input {
+    max-width: 180px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+    .tp-profile-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tp-profile-header-main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .tp-profile-header-actions {
+        width: 100%;
+    }
+}
+

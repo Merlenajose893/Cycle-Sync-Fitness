@@ -429,6 +429,7 @@
     -moz-appearance: textfield;
     box-sizing: border-box;
     transition: all var(--transition-fast);
+    padding: 0 !important;
 }
 
 .otp-field::-webkit-outer-spin-button,
