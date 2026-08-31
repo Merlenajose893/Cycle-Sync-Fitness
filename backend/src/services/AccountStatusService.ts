@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import type { IAccountStatusService } from "../interfaces/services/IAccountStatusService.js";
-import type { UserRole } from "../types/auth.types.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import type { IAccountStatusService } from "../interfaces/services/IAccountStatusService.ts";
+import type { UserRole } from "../types/auth.types.ts";
 import {
   ForbiddenError,
   NotFoundError,
   UnauthorizedError,
-} from "../errors/index.js";
+} from "../errors/index.ts";
 
 @injectable()
 export class AccountStatusService implements IAccountStatusService {

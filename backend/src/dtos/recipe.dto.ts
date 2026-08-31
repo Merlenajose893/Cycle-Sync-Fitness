@@ -1,4 +1,4 @@
-import { DietType,RecipeCategory,Difficulty } from "../constants/food.constants.js";
+import { DietType,RecipeCategory,Difficulty } from "../constants/food.constants.ts";
 
 export interface IngredientDTO {
   name: string;

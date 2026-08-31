@@ -1,7 +1,7 @@
 import type { Request,Response,NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { UnauthorizedError } from "../errors/index.js";
-import type { TokenPayload } from "../types/auth.types.js";
+import { UnauthorizedError } from "../errors/index.ts";
+import type { TokenPayload } from "../types/auth.types.ts";
 
 export const authMiddleware=(req:Request,res:Response,next:NextFunction):void=>{
     const token=req.cookies.access_token;

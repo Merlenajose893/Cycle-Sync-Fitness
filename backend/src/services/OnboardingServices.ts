@@ -1,6 +1,6 @@
-import { UserModel } from "../models/User.js";
-import type { IUser } from "../models/User.js";
-import { UserRepository } from "../repositories/UserRepository.js";
+import { UserModel } from "../models/User.ts";
+import type { IUser } from "../models/User.ts";
+import { UserRepository } from "../repositories/UserRepository.ts";
 
 export class Onboardingservice{
     private userRepository:UserRepository

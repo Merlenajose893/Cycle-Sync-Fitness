@@ -1,12 +1,12 @@
 
 import { inject,injectable } from "tsyringe";
-import type { IUserOnboardingService } from "../interfaces/services/IUserOnboardingService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { IUser } from "../models/User.js";
-import { NotFoundError } from "../errors/index.js";
-import type { UpdateBodyDetailsDTO, UpdateCycleSetUpDTO, UpdateGoals } from "../dtos/useronboarding.dto.js";
-import { UserOnboardingMapper } from "../mappers/UserOnboardingMappers.js";
+import type { IUserOnboardingService } from "../interfaces/services/IUserOnboardingService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { IUser } from "../models/User.ts";
+import { NotFoundError } from "../errors/index.ts";
+import type { UpdateBodyDetailsDTO, UpdateCycleSetUpDTO, UpdateGoals } from "../dtos/useronboarding.dto.ts";
+import { UserOnboardingMapper } from "../mappers/UserOnboardingMappers.ts";
 @injectable()
 export class UserOnboardingService implements IUserOnboardingService{
 constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository)

@@ -1,6 +1,6 @@
-import type { PaymentStatus } from "../../constants/payment.js";
-import type { IPayment } from "../../models/Payment.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { PaymentStatus } from "../../constants/payment.ts";
+import type { IPayment } from "../../models/Payment.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface IPaymentRepository extends IBaseRepository<IPayment>{
 findByStripeSessionId(stripeSessionId:string):Promise<IPayment|null>;

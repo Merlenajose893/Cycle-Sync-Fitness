@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import {  UserAuthController } from "../controllers/UserAuthControllers.js";
-import { validate } from "../middlewares/validate.js";
-import { registerUserSchema,loginSchema,verifyOtpSchema,resendOtpSchema } from "../validators/auth.validation.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { blockMiddleWare } from "../middlewares/blockMiddleware.js";
+import {  UserAuthController } from "../controllers/UserAuthControllers.ts";
+import { validate } from "../middlewares/validate.ts";
+import { registerUserSchema,loginSchema,verifyOtpSchema,resendOtpSchema } from "../validators/auth.validation.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { blockMiddleWare } from "../middlewares/blockMiddleware.ts";
 
 
 const router=Router();

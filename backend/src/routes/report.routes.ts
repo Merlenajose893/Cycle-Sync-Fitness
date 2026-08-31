@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { ReportController } from "../controllers/ReportController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { ReportController } from "../controllers/ReportController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
 
 const router = Router();
 

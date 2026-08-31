@@ -1,5 +1,5 @@
-import type { CreateProgramDTO, UpdateProgramDTO } from "../../dtos/workout.dto.js";
-import type { IWorkoutProgram } from "../../models/WorkoutProgram.js";
+import type { CreateProgramDTO, UpdateProgramDTO } from "../../dtos/workout.dto.ts";
+import type { IWorkoutProgram } from "../../models/WorkoutProgram.ts";
 
 export interface IWorkoutProgramService{
     createProgram(trainerId:string,data:CreateProgramDTO):Promise<IWorkoutProgram|null>;

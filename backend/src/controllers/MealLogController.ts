@@ -1,9 +1,9 @@
 import { injectable, inject } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IMealLogService } from "../interfaces/services/IMealLogService.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IMealLogService } from "../interfaces/services/IMealLogService.ts";
 import type { Request, Response, NextFunction } from "express";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 @injectable()
 export class MealLogController {

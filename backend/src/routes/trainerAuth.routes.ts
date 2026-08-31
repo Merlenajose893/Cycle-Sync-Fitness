@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { TrainerAuthController } from "../controllers/TrainerAuthController.js";
-import { validate } from "../middlewares/validate.js";
-import { loginTrainer, registerTrainerSchema, verifyTrainerOtpSchema } from "../validators/trainer.validation.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { blockMiddleWare } from "../middlewares/blockMiddleware.js";
+import { TrainerAuthController } from "../controllers/TrainerAuthController.ts";
+import { validate } from "../middlewares/validate.ts";
+import { loginTrainer, registerTrainerSchema, verifyTrainerOtpSchema } from "../validators/trainer.validation.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { blockMiddleWare } from "../middlewares/blockMiddleware.ts";
 const router=Router();
 const trainerAuthController=container.resolve(TrainerAuthController);
 router.post("/register",validate(registerTrainerSchema),trainerAuthController.registerTrainer);

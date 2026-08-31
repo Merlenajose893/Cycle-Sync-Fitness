@@ -2,11 +2,11 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
 import { injectable,inject } from "tsyringe";
-import type { ITokenService } from "../interfaces/services/ITokenService.js";
-import type { TokenPayload } from "../types/auth.types.js";
-import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefreshTokenRepository.js";
-import { UnauthorizedError } from "../errors/index.js";
-import { TOKENS } from "../container/tokens.js";
+import type { ITokenService } from "../interfaces/services/ITokenService.ts";
+import type { TokenPayload } from "../types/auth.types.ts";
+import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefreshTokenRepository.ts";
+import { UnauthorizedError } from "../errors/index.ts";
+import { TOKENS } from "../container/tokens.ts";
 import { IdTokenClient } from "google-auth-library";
 import { Types } from "mongoose";
 

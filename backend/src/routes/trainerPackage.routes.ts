@@ -1,10 +1,10 @@
 import { container } from "tsyringe";
 import { Router } from "express";
-import { TrainerPackageController } from "../controllers/TrainerPackageController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { validate } from "../middlewares/validate.js";
-import { createPackageSchema } from "../validators/trainerPackage.validator.js";
+import { TrainerPackageController } from "../controllers/TrainerPackageController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { validate } from "../middlewares/validate.ts";
+import { createPackageSchema } from "../validators/trainerPackage.validator.ts";
 const trainerPackageController=container.resolve(TrainerPackageController);
 const router=Router();
 router.post("/",authMiddleware,roleMiddleware("trainer"),validate(createPackageSchema),trainerPackageController.createPackage);

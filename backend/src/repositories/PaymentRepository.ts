@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import type { PaymentStatus } from "../constants/payment.js";
-import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.js";
-import { Payment, type IPayment } from "../models/Payment.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { PaymentStatus } from "../constants/payment.ts";
+import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.ts";
+import { Payment, type IPayment } from "../models/Payment.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
 @injectable()
 export class PaymentRepository

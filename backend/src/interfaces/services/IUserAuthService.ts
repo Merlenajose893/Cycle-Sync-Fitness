@@ -1,7 +1,7 @@
 
-import type { RegisterUserDTO,LoginDTO,VerifyOtpDTO, LogoutDTO, ResendOTPDTO, ForgotPasswordDTO, VerifyResetOtpDTO, ResetPasswordDTO,ForgotPasswordResponseDTO } from "../../dtos/auth.dto.js";
+import type { RegisterUserDTO,LoginDTO,VerifyOtpDTO, LogoutDTO, ResendOTPDTO, ForgotPasswordDTO, VerifyResetOtpDTO, ResetPasswordDTO,ForgotPasswordResponseDTO } from "../../dtos/auth.dto.ts";
 import type { Response } from "express";
-import type { IUser } from "../../models/User.js";
+import type { IUser } from "../../models/User.ts";
 
 export interface IUserAuthService{
     registerUser(data:RegisterUserDTO,res:Response):Promise<IUser>;

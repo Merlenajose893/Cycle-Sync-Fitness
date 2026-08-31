@@ -1,5 +1,5 @@
-import type { IWorkoutLog } from "../../models/WorkoutLog.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { IWorkoutLog } from "../../models/WorkoutLog.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface IWorkoutLogRepository extends IBaseRepository<IWorkoutLog> {
     findByUserAndDate(userId: string, date: Date): Promise<IWorkoutLog | null>;

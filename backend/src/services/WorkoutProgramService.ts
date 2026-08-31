@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import type { IWorkoutProgramService } from "../interfaces/services/IWorkoutProgramService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IWorkorkoutProgramRepository } from "../interfaces/repositories/IWorkoutProgramRepository.js";
-import type { CreateProgramDTO, UpdateProgramDTO } from "../dtos/workout.dto.js";
-import type { IWorkoutProgram } from "../models/WorkoutProgram.js";
-import { NotFoundError, UnauthorizedError } from "../errors/index.js";
+import type { IWorkoutProgramService } from "../interfaces/services/IWorkoutProgramService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IWorkorkoutProgramRepository } from "../interfaces/repositories/IWorkoutProgramRepository.ts";
+import type { CreateProgramDTO, UpdateProgramDTO } from "../dtos/workout.dto.ts";
+import type { IWorkoutProgram } from "../models/WorkoutProgram.ts";
+import { NotFoundError, UnauthorizedError } from "../errors/index.ts";
 import { Types } from "mongoose";
 @injectable()
 export class WorkoutProgramService implements IWorkoutProgramService{

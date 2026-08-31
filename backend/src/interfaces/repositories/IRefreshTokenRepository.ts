@@ -1,4 +1,4 @@
-import type { IRefreshToken } from "../../models/RefreshToken.js";
+import type { IRefreshToken } from "../../models/RefreshToken.ts";
 
 export interface IRefreshTokenRepository{
     create(data:Partial<IRefreshToken>):Promise<IRefreshToken>;

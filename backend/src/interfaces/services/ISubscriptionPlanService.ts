@@ -1,5 +1,5 @@
-import type { CreateSubscriptionPlanDTO, UpdateSubscriptionPlanDTO } from "../../dtos/subscriptionPlandto.js";
-import type { ISubscriptionPlan } from "../../models/SubscriptionPlan.js";
+import type { CreateSubscriptionPlanDTO, UpdateSubscriptionPlanDTO } from "../../dtos/subscriptionPlandto.ts";
+import type { ISubscriptionPlan } from "../../models/SubscriptionPlan.ts";
 
 export interface ISubscriptionPlanService{
     createPlan(data:CreateSubscriptionPlanDTO):Promise<ISubscriptionPlan>;

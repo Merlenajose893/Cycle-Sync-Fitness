@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
-import type { ISubscriptionPlan } from "../models/SubscriptionPlan.js";
-import { ForbiddenError, UnauthorizedError } from "../errors/index.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.ts";
+import type { ISubscriptionPlan } from "../models/SubscriptionPlan.ts";
+import { ForbiddenError, UnauthorizedError } from "../errors/index.ts";
 
 export function requireSubscriptionFeature(feature: keyof ISubscriptionPlan["features"]) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

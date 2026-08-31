@@ -1,5 +1,5 @@
 import mongoose, { Types ,Schema,Document} from "mongoose";
-import { Difficulty,DietType,RecipeCategory } from "../constants/food.constants.js";
+import { Difficulty,DietType,RecipeCategory } from "../constants/food.constants.ts";
 export interface IIngredient{
     name:string;
     quantity:string | number;

@@ -1,4 +1,4 @@
-import type { FlowIntensity } from "../constants/health.constant.js";
+import type { FlowIntensity } from "../constants/health.constant.ts";
 
 export interface CreateCycleLogDTO{
     startDate:Date;

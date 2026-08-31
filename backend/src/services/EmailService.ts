@@ -6,7 +6,7 @@ from "tsyringe";
 
 import type {
   IEmailService
-} from "../interfaces/services/IEmailService.js";
+} from "../interfaces/services/IEmailService.ts";
 
 @injectable()
 export class EmailService

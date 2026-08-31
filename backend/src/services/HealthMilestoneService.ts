@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IHealthMilestoneRepository } from "../interfaces/repositories/IHealthMilestoneRepository.js";
-import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.js";
-import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.js";
-import type { IHealthMilestoneService } from "../interfaces/services/IHealthMilestoneService.js";
-import type { IHealthMilestone } from "../models/HealthMilestone.js";
-import { HealthMilestoneType } from "../constants/health.constant.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IHealthMilestoneRepository } from "../interfaces/repositories/IHealthMilestoneRepository.ts";
+import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.ts";
+import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.ts";
+import type { IHealthMilestoneService } from "../interfaces/services/IHealthMilestoneService.ts";
+import type { IHealthMilestone } from "../models/HealthMilestone.ts";
+import { HealthMilestoneType } from "../constants/health.constant.ts";
 
 @injectable()
 export class HealthMilestoneService implements IHealthMilestoneService {

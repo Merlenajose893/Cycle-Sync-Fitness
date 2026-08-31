@@ -1,5 +1,5 @@
 import mongoose, { Schema,Types,Document } from "mongoose";
-import { PaymentMethod, PaymentStatus } from "../constants/payment.js";
+import { PaymentMethod, PaymentStatus } from "../constants/payment.ts";
 export interface IPayment extends Document{
     paymentId:string;
     userId:Types.ObjectId;

@@ -1,6 +1,6 @@
-import type { RecipeFilters, ReviewDTO } from "../../dtos/recipe.dto.js";
-import type { IRecipe } from "../../models/Recpe.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { RecipeFilters, ReviewDTO } from "../../dtos/recipe.dto.ts";
+import type { IRecipe } from "../../models/Recpe.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface IRecipeRepository extends IBaseRepository<IRecipe>{
     findByTrainer(trainerId:string):Promise<IRecipe[]>;

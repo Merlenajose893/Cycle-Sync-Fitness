@@ -1,5 +1,5 @@
 import {z} from "zod";
-import { MealType } from "../constants/food.constants.js";
+import { MealType } from "../constants/food.constants.ts";
 export const foodITemSchema=z.object({
 name:z.string().min(2,"Food name is required"),
 quantity:z.number().positive(),

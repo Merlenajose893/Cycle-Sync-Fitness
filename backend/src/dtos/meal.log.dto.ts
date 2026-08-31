@@ -1,4 +1,4 @@
-import type { MealType } from "../constants/food.constants.js";
+import type { MealType } from "../constants/food.constants.ts";
 
 export interface FoodITemDTO{
     name:string;

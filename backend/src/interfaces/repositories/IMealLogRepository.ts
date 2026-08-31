@@ -1,5 +1,5 @@
-import type { IMealLog } from "../../models/MealLog.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { IMealLog } from "../../models/MealLog.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface IMealLogRepository extends IBaseRepository<IMealLog>{
 findByUserAndDate(userId:string,date:Date):Promise<IMealLog|null>;

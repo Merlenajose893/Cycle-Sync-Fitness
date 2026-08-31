@@ -1,5 +1,5 @@
 import type { string } from "zod";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 export interface CommonResponse<T=null>{
 success:boolean;

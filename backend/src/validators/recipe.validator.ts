@@ -4,7 +4,7 @@ import {
   DietType,
   Difficulty,
   RecipeCategory,
-} from "../constants/food.constants.js";
+} from "../constants/food.constants.ts";
 
 const ingredientSchema = z.object({
 

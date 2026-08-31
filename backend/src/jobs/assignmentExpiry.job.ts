@@ -1,9 +1,9 @@
 import cron from "node-cron";
-import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.js";
+import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.ts";
 
-import type { IAssignmentExpiryScheduler } from "../interfaces/jobs/IAssignmentExpiryScheduler.js";
+import type { IAssignmentExpiryScheduler } from "../interfaces/jobs/IAssignmentExpiryScheduler.ts";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
+import { TOKENS } from "../container/tokens.ts";
 @injectable()
 export class AssignmentExpiryScheduler implements IAssignmentExpiryScheduler{
     constructor(@inject(TOKENS.ITrainerAssignmentService)private assignmentService:ITrainerAssignmentService)

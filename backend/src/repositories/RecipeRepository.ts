@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import type { RecipeFilters } from "../dtos/recipe.dto.js";
-import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.js";
-import { RecipeModel, type IRecipe } from "../models/Recpe.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { RecipeFilters } from "../dtos/recipe.dto.ts";
+import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.ts";
+import { RecipeModel, type IRecipe } from "../models/Recpe.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 @injectable()
 export class RecipeRepository extends BaseRepository<IRecipe> implements IRecipeRepository{
     constructor()

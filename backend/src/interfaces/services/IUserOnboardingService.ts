@@ -1,5 +1,5 @@
-import  type { UpdateBodyDetailsDTO,UpdateCycleSetUpDTO,UpdateGoals } from "../../dtos/useronboarding.dto.js";
-import type { IUser } from "../../models/User.js";
+import  type { UpdateBodyDetailsDTO,UpdateCycleSetUpDTO,UpdateGoals } from "../../dtos/useronboarding.dto.ts";
+import type { IUser } from "../../models/User.ts";
 
 export interface IUserOnboardingService{
     getOnboardingStatus(userId:string):Promise<IUser>;

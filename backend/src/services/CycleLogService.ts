@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.js";
-import type { ICycleLogService } from "../interfaces/services/ICycleLogService.js";
-import type { CreateCycleLogDTO, UpdateCycleLogDTO } from "../dtos/cycleLog.dto.js";
-import type { ICycleLog } from "../models/CycleLog.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.ts";
+import type { ICycleLogService } from "../interfaces/services/ICycleLogService.ts";
+import type { CreateCycleLogDTO, UpdateCycleLogDTO } from "../dtos/cycleLog.dto.ts";
+import type { ICycleLog } from "../models/CycleLog.ts";
 
 @injectable()
 export class CycleLogService implements ICycleLogService {

@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { ICycleLogService } from "../interfaces/services/ICycleLogService.js";
-import type { ICyclePredictionService } from "../interfaces/services/ICyclePredictionService.js";
-import type { IDailyHealthLogService } from "../interfaces/services/IDailyHealthLogService.js";
-import type { IHealthMilestoneService } from "../interfaces/services/IHealthMilestoneService.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { ICycleLogService } from "../interfaces/services/ICycleLogService.ts";
+import type { ICyclePredictionService } from "../interfaces/services/ICyclePredictionService.ts";
+import type { IDailyHealthLogService } from "../interfaces/services/IDailyHealthLogService.ts";
+import type { IHealthMilestoneService } from "../interfaces/services/IHealthMilestoneService.ts";
 import type { NextFunction, Request, Response } from "express";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 @injectable()
 export class HealthTrackingController {

@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import type { CreateRecipeDTO, RecipeFilters, ReviewDTO, UpdateRecipeDTO } from "../dtos/recipe.dto.js";
-import type { IRecipeService } from "../interfaces/services/IRecipeService.js";
-import type { IRecipe } from "../models/Recpe.js";
-import type { PaginatedResult } from "../types/paginated.result.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.js";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/index.js";
-import type { IImageService } from "../interfaces/services/IImageService.js";
+import type { CreateRecipeDTO, RecipeFilters, ReviewDTO, UpdateRecipeDTO } from "../dtos/recipe.dto.ts";
+import type { IRecipeService } from "../interfaces/services/IRecipeService.ts";
+import type { IRecipe } from "../models/Recpe.ts";
+import type { PaginatedResult } from "../types/paginated.result.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IRecipeRepository } from "../interfaces/repositories/IRecipeRepository.ts";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/index.ts";
+import type { IImageService } from "../interfaces/services/IImageService.ts";
 import { Types } from "mongoose";
 @injectable()
 export class RecipeService implements IRecipeService{

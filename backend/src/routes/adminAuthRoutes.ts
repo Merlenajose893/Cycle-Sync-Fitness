@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { AdminController } from "../controllers/AdminAuthController.js";
+import { AdminController } from "../controllers/AdminAuthController.ts";
 const router = Router();
 const adminController = container.resolve(AdminController);
 router.post("/admin-login", adminController.adminLogin);

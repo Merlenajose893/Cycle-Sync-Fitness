@@ -1,11 +1,11 @@
-import type { IUserStatusService } from "../interfaces/services/IUserAccountService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { ChangePassword, DeleteAccount } from "../dtos/userprofile.dto.js";
+import type { IUserStatusService } from "../interfaces/services/IUserAccountService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { ChangePassword, DeleteAccount } from "../dtos/userprofile.dto.ts";
 import { inject } from "tsyringe";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import { BadRequestError, NotFoundError } from "../errors/index.js";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import { BadRequestError, NotFoundError } from "../errors/index.ts";
 import bcrypt from "bcryptjs";
-import type { IImageService } from "../interfaces/services/IImageService.js";
+import type { IImageService } from "../interfaces/services/IImageService.ts";
 export class UserAccountStatusService implements IUserStatusService{
     constructor(@inject(TOKENS.IUserRepository) private userrepository:IUserRepository ,@inject(TOKENS.IImageService) private imageService:IImageService)
     {

@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import type { IStripeBillingGateway, StripePriceResult } from "../interfaces/gateways/IStripeBillingGateway.js";
+import type { IStripeBillingGateway, StripePriceResult } from "../interfaces/gateways/IStripeBillingGateway.ts";
 import Stripe from "stripe";
-import { NotFoundError } from "../errors/index.js";
+import { NotFoundError } from "../errors/index.ts";
 @injectable()
 export class StripeBillingGateway implements IStripeBillingGateway{
     private readonly stripe:Stripe

@@ -3,14 +3,14 @@ import { injectable, inject } from "tsyringe";
 import type {
   CreateSubscriptionPlanDTO,
   UpdateSubscriptionPlanDTO,
-} from "../dtos/subscriptionPlandto.js";
+} from "../dtos/subscriptionPlandto.ts";
 
-import type { ISubscriptionPlan } from "../models/SubscriptionPlan.js";
-import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
-import type { IStripeBillingGateway } from "../interfaces/gateways/IStripeBillingGateway.js";
-import { TOKENS } from "../container/tokens.js";
-import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.js";
-import { ConflictError } from "../errors/index.js";
+import type { ISubscriptionPlan } from "../models/SubscriptionPlan.ts";
+import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.ts";
+import type { IStripeBillingGateway } from "../interfaces/gateways/IStripeBillingGateway.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.ts";
+import { ConflictError } from "../errors/index.ts";
 
 @injectable()
 export class SubscriptionPlanService

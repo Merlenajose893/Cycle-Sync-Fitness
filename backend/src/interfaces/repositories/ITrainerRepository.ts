@@ -1,6 +1,6 @@
-import type { ITrainer } from "../../models/Trainer.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
-import { TrainerStatus } from "../../constants/TrainerStatus.js";
+import type { ITrainer } from "../../models/Trainer.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
+import { TrainerStatus } from "../../constants/TrainerStatus.ts";
 export interface  ITrainerRepository extends IBaseRepository<ITrainer>{
 
     findByEmail(email:string):Promise<ITrainer|null>;

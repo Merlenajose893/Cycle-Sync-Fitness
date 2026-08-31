@@ -1,5 +1,5 @@
-import type { DailyTargetDTO, LogMealDTO } from "../../dtos/meal.log.dto.js";
-import type { IMealLog } from "../../models/MealLog.js";
+import type { DailyTargetDTO, LogMealDTO } from "../../dtos/meal.log.dto.ts";
+import type { IMealLog } from "../../models/MealLog.ts";
 
 export interface IMealLogService{
     logMeal(userId:string,date:Date,mealData:LogMealDTO):Promise<IMealLog>;

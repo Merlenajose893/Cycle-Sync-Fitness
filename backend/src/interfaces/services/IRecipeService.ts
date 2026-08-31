@@ -1,6 +1,6 @@
-import type { CreateRecipeDTO, RecipeFilters, ReviewDTO, UpdateRecipeDTO } from "../../dtos/recipe.dto.js";
-import type { IRecipe } from "../../models/Recpe.js";
-import type { PaginatedResult } from "../../types/paginated.result.js";
+import type { CreateRecipeDTO, RecipeFilters, ReviewDTO, UpdateRecipeDTO } from "../../dtos/recipe.dto.ts";
+import type { IRecipe } from "../../models/Recpe.ts";
+import type { PaginatedResult } from "../../types/paginated.result.ts";
 
 export interface IRecipeService{
     createRecipe(trainerId:string,data:CreateRecipeDTO,file:Express.Multer.File):Promise<IRecipe>;

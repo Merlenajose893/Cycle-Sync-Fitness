@@ -1,6 +1,6 @@
-import type { TrainerAssignmentStatus } from "../../constants/trainerassign.js";
-import type { CreateAssignmentDTO } from "../../dtos/trainerAssignment.dto.js";
-import type { ITrainerAssignment } from "../../models/TrainerAssignment.js";
+import type { TrainerAssignmentStatus } from "../../constants/trainerassign.ts";
+import type { CreateAssignmentDTO } from "../../dtos/trainerAssignment.dto.ts";
+import type { ITrainerAssignment } from "../../models/TrainerAssignment.ts";
 
 export interface ITrainerAssignmentService {
     createAssignment(data: CreateAssignmentDTO): Promise<ITrainerAssignment>;

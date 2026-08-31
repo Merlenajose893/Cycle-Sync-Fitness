@@ -1,5 +1,5 @@
-import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../../dtos/userprofile.dto.js";
-import type { IUser } from "../../models/User.js";
+import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../../dtos/userprofile.dto.ts";
+import type { IUser } from "../../models/User.ts";
 
 export interface IUserProfileService{
     getProfile(userId:string):Promise<UserProfileResponseDTO>;

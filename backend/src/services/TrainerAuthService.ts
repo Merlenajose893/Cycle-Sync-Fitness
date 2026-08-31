@@ -1,22 +1,22 @@
 import  { inject,injectable } from "tsyringe";
-import type { ITrainerAuthService } from "../interfaces/services/ITrainerAuthService.js";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import type { IOtpService } from "../interfaces/services/IOtpService.js";
-import type { ITokenService } from "../interfaces/services/ITokenService.js";
+import type { ITrainerAuthService } from "../interfaces/services/ITrainerAuthService.ts";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import type { IOtpService } from "../interfaces/services/IOtpService.ts";
+import type { ITokenService } from "../interfaces/services/ITokenService.ts";
 import bcrypt from "bcryptjs";
-import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError, ForbiddenError } from "../errors/index.js";
+import { UnauthorizedError,BadRequestError,ConflictError, NotFoundError, ForbiddenError } from "../errors/index.ts";
 
-import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO, registerTrainerInviteDTO, loginTrainerResponseDTO } from "../dtos/trainerauth.dto.js";
-
-
+import type { TrainerRegisterDTO,LoginTrainerDTO,VerifyTrainerDTO,ForgotPasswordDTO,ResetPasswordDTO, ForgotPasswordResponseDTO, registerTrainerInviteDTO, loginTrainerResponseDTO } from "../dtos/trainerauth.dto.ts";
 
 
-import { TOKENS } from "../container/tokens.js";
+
+
+import { TOKENS } from "../container/tokens.ts";
 import type { Response } from "express";
 // import { email } from "zod";
-import type { ITrainer } from "../models/Trainer.js";
-import { TrainerStatus } from "../constants/TrainerStatus.js";
-// import { TRAINER_NEXT_STEP } from "../constants/Trainer-next-step.js";
+import type { ITrainer } from "../models/Trainer.ts";
+import { TrainerStatus } from "../constants/TrainerStatus.ts";
+// import { TRAINER_NEXT_STEP } from "../constants/Trainer-next-step.ts";
 @injectable()
 export class TrainerAuthService implements ITrainerAuthService{
 constructor(@inject(TOKENS.ITrainerRepository) private trainerRepository:ITrainerRepository,@inject(TOKENS.IOtpService) private otpService:IOtpService ,@inject(TOKENS.ITokenService) private tokenService:ITokenService)

@@ -1,9 +1,9 @@
 import { injectable, inject } from "tsyringe";
-import type { IWorkoutLogService } from "../interfaces/services/IWorkoutLogService.js";
-import { TOKENS } from "../container/tokens.js";
+import type { IWorkoutLogService } from "../interfaces/services/IWorkoutLogService.ts";
+import { TOKENS } from "../container/tokens.ts";
 import type { NextFunction, Request, Response } from "express";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 @injectable()
 export class WorkoutLogController {

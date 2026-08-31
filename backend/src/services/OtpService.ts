@@ -1,13 +1,13 @@
 import { injectable,inject } from "tsyringe";
-import type { IOtpService } from "../interfaces/services/IOtpService.js";
-import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
-import type { IEmailService } from "../interfaces/services/IEmailService.js";
+import type { IOtpService } from "../interfaces/services/IOtpService.ts";
+import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.ts";
+import type { IEmailService } from "../interfaces/services/IEmailService.ts";
 import bcrypt from "bcryptjs";
-// import { UnauthorizedError } from "../errors/index.js";
-import { TOKENS } from "../container/tokens.js";
-import type { OtpType,UserType } from "../models/Otp.js";
-import type { OtpRepository } from "../repositories/OtpRepository.js";
-import { BadRequestError, NotFoundError } from "../errors/index.js";
+// import { UnauthorizedError } from "../errors/index.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { OtpType,UserType } from "../models/Otp.ts";
+import type { OtpRepository } from "../repositories/OtpRepository.ts";
+import { BadRequestError, NotFoundError } from "../errors/index.ts";
 import { LoginTicket } from "google-auth-library";
 @injectable()
 export class OtpService implements IOtpService{

@@ -1,4 +1,4 @@
-import type { UpdateTrainerCertificateDTO, UpdateTrainerPackageDTO, UpdateTrainerProfileDTO } from "../dtos/traineronboarding.dto.js";
+import type { UpdateTrainerCertificateDTO, UpdateTrainerPackageDTO, UpdateTrainerProfileDTO } from "../dtos/traineronboarding.dto.ts";
 
 /**
  * Mapper for transforming trainer onboarding DTOs into domain objects.

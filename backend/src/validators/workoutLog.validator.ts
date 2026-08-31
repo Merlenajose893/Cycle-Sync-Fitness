@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import {
     WorkoutSource
-} from "../constants/workout.js"
+} from "../constants/workout.ts"
 
 
 export const loggedSetSchema =

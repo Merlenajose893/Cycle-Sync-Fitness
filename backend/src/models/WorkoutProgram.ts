@@ -1,4 +1,4 @@
-import { WorkoutCategory, CyclePhase,WorkoutDifficulty,WorkoutGoal, } from "../constants/workout.js";
+import { WorkoutCategory, CyclePhase,WorkoutDifficulty,WorkoutGoal, } from "../constants/workout.ts";
 import mongoose, { Schema, Document,Types } from "mongoose";
 
 export interface ITargetExercise {

@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import { injectable, inject } from "tsyringe";
-import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.js";
-import { TOKENS } from "../container/tokens.js";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 @injectable()
 export class TrainerPackageController {

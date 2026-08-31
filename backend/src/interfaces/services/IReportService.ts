@@ -1,4 +1,4 @@
-import type { ReportAnalytics, ReportRange } from "../../dtos/report.dto.js";
+import type { ReportAnalytics, ReportRange } from "../../dtos/report.dto.ts";
 
 
 export interface IReportService{

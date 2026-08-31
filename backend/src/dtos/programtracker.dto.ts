@@ -1,7 +1,7 @@
-import type { IRecipe } from "../models/Recpe.js";
-import type { ITrainerPackage } from "../models/Trainer.js";
-import type { ITrainerAssignment } from "../models/TrainerAssignment.js";
-import type { IWorkoutProgram } from "../models/WorkoutProgram.js";
+import type { IRecipe } from "../models/Recpe.ts";
+import type { ITrainerPackage } from "../models/Trainer.ts";
+import type { ITrainerAssignment } from "../models/TrainerAssignment.ts";
+import type { IWorkoutProgram } from "../models/WorkoutProgram.ts";
 
 export interface ProgramTrackerResponseDTO{
     assignment:ITrainerAssignment;

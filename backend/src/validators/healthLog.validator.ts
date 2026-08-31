@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Mood, PhysicalSymptom } from "../constants/health.constant.js";
+import { Mood, PhysicalSymptom } from "../constants/health.constant.ts";
 
 export const bodyMeasurementsSchema = z.object({
   waistCm: z.number().positive().optional(),

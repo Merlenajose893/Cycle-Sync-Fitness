@@ -1,5 +1,5 @@
-import type { CreatePackageDTO, UpdatePackageDTO } from "../../dtos/trainerPackage.dto.js";
-import type { ITrainerPackage } from "../../models/TrainerPackage.js";
+import type { CreatePackageDTO, UpdatePackageDTO } from "../../dtos/trainerPackage.dto.ts";
+import type { ITrainerPackage } from "../../models/TrainerPackage.ts";
 
 export interface ITrainerPackageService{
     createPackage(trainerId:string,data:CreatePackageDTO):Promise<ITrainerPackage>;

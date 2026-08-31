@@ -1,12 +1,12 @@
-import { TOKENS } from "../container/tokens.js";
-import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../dtos/userprofile.dto.js";
-import { NotFoundError } from "../errors/index.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { IUserProfileService } from "../interfaces/services/IUserProfileService.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { UpdateUserProfileDTO, UserProfileResponseDTO } from "../dtos/userprofile.dto.ts";
+import { NotFoundError } from "../errors/index.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { IUserProfileService } from "../interfaces/services/IUserProfileService.ts";
 import { injectable,inject } from "tsyringe";
-import { UserProfileMapper } from "../mappers/UserProfileMappers.js";
-import type { IUser } from "../models/User.js";
-import type { IImageService } from "../interfaces/services/IImageService.js";
+import { UserProfileMapper } from "../mappers/UserProfileMappers.ts";
+import type { IUser } from "../models/User.ts";
+import type { IImageService } from "../interfaces/services/IImageService.ts";
 @injectable()
 export class UserProfileService implements IUserProfileService{
     constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository ,@inject(TOKENS.IImageService) private imageService:IImageService)

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types ,Document} from "mongoose";
-import { TrainerAssignmentStatus } from "../constants/trainerassign.js";
+import { TrainerAssignmentStatus } from "../constants/trainerassign.ts";
 export interface ITrainerAssignment extends Document{
 userId:Types.ObjectId;
 trainerId:Types.ObjectId;

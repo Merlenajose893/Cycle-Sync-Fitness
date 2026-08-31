@@ -1,6 +1,6 @@
 import type { Request,Response,NextFunction } from "express";
-import { ForbiddenError,UnauthorizedError } from "../errors/index.js";
-import type { UserRole } from "../types/auth.types.js";
+import { ForbiddenError,UnauthorizedError } from "../errors/index.ts";
+import type { UserRole } from "../types/auth.types.ts";
 export const roleMiddleware = (...allowedroles: string[]) => {
     return (req: Request, res: Response, next: NextFunction): void => {
         if (!req.user) {

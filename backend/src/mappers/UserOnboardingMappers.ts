@@ -1,4 +1,4 @@
-import type { UpdateBodyDetailsDTO, UpdateCycleSetUpDTO, UpdateGoals } from "../dtos/useronboarding.dto.js";
+import type { UpdateBodyDetailsDTO, UpdateCycleSetUpDTO, UpdateGoals } from "../dtos/useronboarding.dto.ts";
 
 /**
  * Mapper for converting user onboarding DTOs into domain model fields.

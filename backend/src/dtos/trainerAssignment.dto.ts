@@ -1,4 +1,4 @@
-import type { TrainerAssignmentStatus } from "../constants/trainerassign.js";
+import type { TrainerAssignmentStatus } from "../constants/trainerassign.ts";
 
 export interface CreateAssignmentDTO {
     userId: string;

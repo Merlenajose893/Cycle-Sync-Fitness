@@ -1,4 +1,4 @@
-import type { CyclePhase } from "../../constants/health.constant.js";
+import type { CyclePhase } from "../../constants/health.constant.ts";
 
 export interface CyclePredictionResult {
   currentPhase: CyclePhase;

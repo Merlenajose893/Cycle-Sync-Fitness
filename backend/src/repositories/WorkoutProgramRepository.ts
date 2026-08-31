@@ -1,7 +1,7 @@
-import type { WorkoutProgramFilterDTO } from "../dtos/workout.dto.js";
-import type { IWorkorkoutProgramRepository } from "../interfaces/repositories/IWorkoutProgramRepository.js";
-import { WorkoutProgram, type IWorkoutProgram } from "../models/WorkoutProgram.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { WorkoutProgramFilterDTO } from "../dtos/workout.dto.ts";
+import type { IWorkorkoutProgramRepository } from "../interfaces/repositories/IWorkoutProgramRepository.ts";
+import { WorkoutProgram, type IWorkoutProgram } from "../models/WorkoutProgram.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
 export class WorkoutProgramRepository extends BaseRepository<IWorkoutProgram> implements IWorkorkoutProgramRepository{
 constructor()

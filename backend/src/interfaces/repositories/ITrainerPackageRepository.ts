@@ -1,6 +1,6 @@
-import type { UpdatePackageDTO } from "../../dtos/trainerPackage.dto.js";
-import type { ITrainerPackage } from "../../models/TrainerPackage.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { UpdatePackageDTO } from "../../dtos/trainerPackage.dto.ts";
+import type { ITrainerPackage } from "../../models/TrainerPackage.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface ITrainerPackageRepository extends IBaseRepository<ITrainerPackage>{
 findPackageByTrainer(trainerId:string):Promise<ITrainerPackage[]>;

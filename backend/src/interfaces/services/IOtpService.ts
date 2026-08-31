@@ -1,4 +1,4 @@
-import type { OtpType,UserType} from "../../models/Otp.js";
+import type { OtpType,UserType} from "../../models/Otp.ts";
 
 export interface IOtpService{
     

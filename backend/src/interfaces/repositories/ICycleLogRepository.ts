@@ -1,5 +1,5 @@
-import type { ICycleLog } from "../../models/CycleLog.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { ICycleLog } from "../../models/CycleLog.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface ICycleLogRepository extends IBaseRepository<ICycleLog>{
 findByUser(userId:string):Promise<ICycleLog[]>;

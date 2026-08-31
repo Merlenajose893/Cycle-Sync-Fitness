@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
-import { RefreshTokenModel, type IRefreshToken } from "../models/RefreshToken.js";
+import { RefreshTokenModel, type IRefreshToken } from "../models/RefreshToken.ts";
 
-import { BaseRepository } from "./BaseRepository.js";
+import { BaseRepository } from "./BaseRepository.ts";
 
-import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefreshTokenRepository.js";
+import type { IRefreshTokenRepository } from "../interfaces/repositories/IRefreshTokenRepository.ts";
 import { Types } from "mongoose";
 
 @injectable()

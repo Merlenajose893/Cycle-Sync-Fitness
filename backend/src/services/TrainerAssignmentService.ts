@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { ITrainerAssignmentRepository } from "../interfaces/repositories/ITrainerAssignmentRepository.js";
-import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.js";
-import type { CreateAssignmentDTO } from "../dtos/trainerAssignment.dto.js";
-import type { ITrainerAssignment } from "../models/TrainerAssignment.js";
-import { TrainerAssignmentStatus } from "../constants/trainerassign.js";
-import { PaymentStatus } from "../constants/payment.js";
-import { ConflictError, NotFoundError } from "../errors/index.js";
-import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
+import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { ITrainerAssignmentRepository } from "../interfaces/repositories/ITrainerAssignmentRepository.ts";
+import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.ts";
+import type { CreateAssignmentDTO } from "../dtos/trainerAssignment.dto.ts";
+import type { ITrainerAssignment } from "../models/TrainerAssignment.ts";
+import { TrainerAssignmentStatus } from "../constants/trainerassign.ts";
+import { PaymentStatus } from "../constants/payment.ts";
+import { ConflictError, NotFoundError } from "../errors/index.ts";
+import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.ts";
 
 import { Types } from "mongoose";
 

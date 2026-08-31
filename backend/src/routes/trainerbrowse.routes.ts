@@ -1,6 +1,6 @@
 import express from "express";
 import { container } from "tsyringe";
-import { TrainerBrowserController } from "../controllers/TrainerBrowserController.js";
+import { TrainerBrowserController } from "../controllers/TrainerBrowserController.ts";
 const router=express.Router();
 const trainerbrowsercontroler=container.resolve(TrainerBrowserController)
 router.get("/",trainerbrowsercontroler.browseTrainers);

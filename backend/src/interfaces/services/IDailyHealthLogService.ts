@@ -1,5 +1,5 @@
-import type { AddWaterDTO, CreateHealthLogDTO, UpdateDailyHealthLogDTO } from "../../dtos/healthLog.dto.js";
-import type { IDailyHealthLog } from "../../models/DailyHealthLog.js";
+import type { AddWaterDTO, CreateHealthLogDTO, UpdateDailyHealthLogDTO } from "../../dtos/healthLog.dto.ts";
+import type { IDailyHealthLog } from "../../models/DailyHealthLog.ts";
 
 export interface IDailyHealthLogService{
     logHealth(userId:string,data:CreateHealthLogDTO):Promise<IDailyHealthLog>;

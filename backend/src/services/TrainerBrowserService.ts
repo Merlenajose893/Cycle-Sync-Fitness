@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import type { ITrainerBrowserService } from "../interfaces/services/ITrainerBrowserService.js";
-import type { ITrainer } from "../models/Trainer.js";
-import { TOKENS } from "../container/tokens.js";
-import { NotFoundError } from "../errors/index.js";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import type { ITrainerBrowserService } from "../interfaces/services/ITrainerBrowserService.ts";
+import type { ITrainer } from "../models/Trainer.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { NotFoundError } from "../errors/index.ts";
 @injectable()
 export class TrainerBrowserService implements ITrainerBrowserService{
     constructor(@inject(TOKENS.ITrainerRepository)private trainerrepository:ITrainerRepository)

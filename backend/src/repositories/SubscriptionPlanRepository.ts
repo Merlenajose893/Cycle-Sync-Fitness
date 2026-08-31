@@ -1,10 +1,10 @@
 import { injectable } from "tsyringe";
-import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
-import { SubscriptionPlan } from "../models/SubscriptionPlan.js";
-import type { ISubscriptionPlan } from "../models/SubscriptionPlan.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.ts";
+import { SubscriptionPlan } from "../models/SubscriptionPlan.ts";
+import type { ISubscriptionPlan } from "../models/SubscriptionPlan.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
-import type { UpdateSubscriptionPlanDTO } from "../dtos/subscriptionPlandto.js";
+import type { UpdateSubscriptionPlanDTO } from "../dtos/subscriptionPlandto.ts";
 
 @injectable()
 export class SubscriptionPlanRepository extends BaseRepository<ISubscriptionPlan> implements ISubscriptionPlanRepository {

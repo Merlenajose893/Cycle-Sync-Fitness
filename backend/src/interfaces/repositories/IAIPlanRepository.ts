@@ -1,6 +1,6 @@
-import type { IBaseRepository } from "./IBaseRepository.js";
-import type { IAIPlan } from "../../models/AIPlan.js";
-import { PlanStatus } from "../../constants/aiPlan.js";
+import type { IBaseRepository } from "./IBaseRepository.ts";
+import type { IAIPlan } from "../../models/AIPlan.ts";
+import { PlanStatus } from "../../constants/aiPlan.ts";
 
 export interface IAIPlanRepository extends IBaseRepository<IAIPlan> {
     findActivePlan(userId: string, status?: PlanStatus): Promise<IAIPlan | null>;

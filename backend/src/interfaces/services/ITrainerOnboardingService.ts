@@ -1,5 +1,5 @@
-import type { UpdateTrainerCertificateDTO, UpdateTrainerPackageDTO, UpdateTrainerProfileDTO } from "../../dtos/traineronboarding.dto.js";
-import type { ITrainer } from "../../models/Trainer.js";
+import type { UpdateTrainerCertificateDTO, UpdateTrainerPackageDTO, UpdateTrainerProfileDTO } from "../../dtos/traineronboarding.dto.ts";
+import type { ITrainer } from "../../models/Trainer.ts";
 
 export interface ITrainerOnboardingService{
     getTrainerOnboardingStatus(trainerId:string):Promise<ITrainer>;

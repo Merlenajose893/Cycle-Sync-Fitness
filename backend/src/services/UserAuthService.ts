@@ -2,24 +2,24 @@ import { injectable,inject } from "tsyringe";
 
 import type { Response } from "express";
 
-import type { IUserAuthService } from "../interfaces/services/IUserAuthService.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
-import type { IEmailService } from "../interfaces/services/IEmailService.js";
-import type { ITokenService } from "../interfaces/services/ITokenService.js";
-import { TOKENS } from "../container/tokens.js";
+import type { IUserAuthService } from "../interfaces/services/IUserAuthService.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.ts";
+import type { IEmailService } from "../interfaces/services/IEmailService.ts";
+import type { ITokenService } from "../interfaces/services/ITokenService.ts";
+import { TOKENS } from "../container/tokens.ts";
 import bcrypt from "bcryptjs";
-import { ConflictError, ForbiddenError, NotFoundError } from "../errors/index.js";
+import { ConflictError, ForbiddenError, NotFoundError } from "../errors/index.ts";
 
-import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.js";
+import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.ts";
 
 
 
-import type { IUser } from "../models/User.js";
-import type { IOtpService } from "../interfaces/services/IOtpService.js";
-import type { LoginDTO } from "../dtos/auth.dto.js";
-// import type { IUser } from "../models/User.js";
-import { UnauthorizedError,BadRequestError } from "../errors/index.js";
+import type { IUser } from "../models/User.ts";
+import type { IOtpService } from "../interfaces/services/IOtpService.ts";
+import type { LoginDTO } from "../dtos/auth.dto.ts";
+// import type { IUser } from "../models/User.ts";
+import { UnauthorizedError,BadRequestError } from "../errors/index.ts";
 import { OAuth2Client } from "google-auth-library";
 @injectable()
 export class UserAuthService implements IUserAuthService{

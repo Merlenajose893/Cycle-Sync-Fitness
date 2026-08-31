@@ -1,7 +1,7 @@
 import type { NextFunction,Request,Response } from "express";
-import { AppError } from "../errors/index.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
-import { errorResponse } from "../dtos/response.dto.js";
+import { AppError } from "../errors/index.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
+import { errorResponse } from "../dtos/response.dto.ts";
 export const errorHandler=(
     err:Error,
     req:Request,

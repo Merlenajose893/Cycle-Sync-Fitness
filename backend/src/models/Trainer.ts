@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { TrainerStatus } from "../constants/TrainerStatus.js";
+import { TrainerStatus } from "../constants/TrainerStatus.ts";
 
 export interface ITrainerPackage {
   name: string;

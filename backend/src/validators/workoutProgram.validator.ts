@@ -1,5 +1,5 @@
 import {z } from "zod";
-import { WorkoutCategory,CyclePhase,WorkoutDifficulty,WorkoutGoal } from "../constants/workout.js";
+import { WorkoutCategory,CyclePhase,WorkoutDifficulty,WorkoutGoal } from "../constants/workout.ts";
 export const workoutExerciseSchema = z.object({
 
     exerciseName:

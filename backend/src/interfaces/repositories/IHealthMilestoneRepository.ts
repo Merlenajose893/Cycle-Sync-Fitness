@@ -1,6 +1,6 @@
-import type { HealthMilestoneType } from "../../constants/health.constant.js";
-import type { IHealthMilestone } from "../../models/HealthMilestone.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { HealthMilestoneType } from "../../constants/health.constant.ts";
+import type { IHealthMilestone } from "../../models/HealthMilestone.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface IHealthMilestoneRepository extends IBaseRepository<IHealthMilestone>{
     findByUser(userId:string):Promise<IHealthMilestone[]>;

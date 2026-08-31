@@ -1,10 +1,10 @@
 import { injectable } from "tsyringe";
-import { TrainerModel } from "../models/Trainer.js";
+import { TrainerModel } from "../models/Trainer.ts";
 
-import type { ITrainer } from "../models/Trainer.js";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import { BaseRepository } from "./BaseRepository.js";
-import { TrainerStatus } from "../constants/TrainerStatus.js";
+import type { ITrainer } from "../models/Trainer.ts";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import { BaseRepository } from "./BaseRepository.ts";
+import { TrainerStatus } from "../constants/TrainerStatus.ts";
 // import { tr } from "zod/locales";
 @injectable()
 export class TrainerRepository extends BaseRepository<ITrainer> implements ITrainerRepository {

@@ -1,4 +1,4 @@
-import type { HealthMilestoneType } from "../constants/health.constant.js";
+import type { HealthMilestoneType } from "../constants/health.constant.ts";
 
 export interface HealthMilestoneResponseDTO{
     milestoneType:HealthMilestoneType;

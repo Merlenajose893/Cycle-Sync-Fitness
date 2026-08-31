@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import type { TokenPayload } from "../../types/auth.types.js";
+import type { TokenPayload } from "../../types/auth.types.ts";
 
 export interface ITokenService{
 

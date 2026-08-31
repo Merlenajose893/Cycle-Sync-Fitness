@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
-import cloudinary from "../config/cloudinary.js";
+import cloudinary from "../config/cloudinary.ts";
 import type {
   IImageService,
   UploadImageResponse,
-} from "../interfaces/services/IImageService.js";
+} from "../interfaces/services/IImageService.ts";
 
 @injectable()
 export class ImageService implements IImageService {

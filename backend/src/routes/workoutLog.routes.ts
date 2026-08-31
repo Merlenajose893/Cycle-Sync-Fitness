@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { WorkoutLogController } from "../controllers/WorkoutLogController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { validate } from "../middlewares/validate.js";
-import { logWorkoutSchema } from "../validators/workoutLog.validator.js";
+import { WorkoutLogController } from "../controllers/WorkoutLogController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { validate } from "../middlewares/validate.ts";
+import { logWorkoutSchema } from "../validators/workoutLog.validator.ts";
 
-import { upload } from "../middlewares/upload.js";
+import { upload } from "../middlewares/upload.ts";
 
 const router = Router();
 const workoutLogController = container.resolve(WorkoutLogController);

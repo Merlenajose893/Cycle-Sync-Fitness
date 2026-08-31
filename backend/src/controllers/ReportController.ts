@@ -1,11 +1,11 @@
 import { injectable, inject } from "tsyringe";
 import type { Request, Response, NextFunction } from "express";
-import type { IReportService } from "../interfaces/services/IReportService.js";
-import type { IReportController } from "../interfaces/controllers/IReportController.js";
-import { TOKENS } from "../container/tokens.js";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
-import type { ReportRange } from "../dtos/report.dto.js";
+import type { IReportService } from "../interfaces/services/IReportService.ts";
+import type { IReportController } from "../interfaces/controllers/IReportController.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
+import type { ReportRange } from "../dtos/report.dto.ts";
 
 @injectable()
 export class ReportController implements IReportController {

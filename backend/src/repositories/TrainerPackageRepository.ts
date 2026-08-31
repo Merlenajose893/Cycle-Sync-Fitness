@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
-import type { UpdatePackageDTO } from "../dtos/trainerPackage.dto.js";
-import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
-import type { ITrainerPackage } from "../models/TrainerPackage.js";
-import { TrainerPackage} from "../models/TrainerPackage.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { UpdatePackageDTO } from "../dtos/trainerPackage.dto.ts";
+import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.ts";
+import type { ITrainerPackage } from "../models/TrainerPackage.ts";
+import { TrainerPackage} from "../models/TrainerPackage.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
 @injectable()
 export class TrainerPackageRepository extends BaseRepository<ITrainerPackage> implements ITrainerPackageRepository {

@@ -1,11 +1,11 @@
 import type { Request,Response,NextFunction } from "express";
 import { injectable,inject } from "tsyringe";
-import type { ITrainerAuthService } from "../interfaces/services/ITrainerAuthService.js";
-import { TOKENS } from "../container/tokens.js";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
-import { UnauthorizedError } from "../errors/index.js";
-import type { registerTrainerInviteDTO } from "../dtos/trainerauth.dto.js";
+import type { ITrainerAuthService } from "../interfaces/services/ITrainerAuthService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
+import { UnauthorizedError } from "../errors/index.ts";
+import type { registerTrainerInviteDTO } from "../dtos/trainerauth.dto.ts";
 @injectable()
 export class TrainerAuthController{
     constructor(@inject(TOKENS.ITrainerAuthService) private trainerAuthService:ITrainerAuthService)

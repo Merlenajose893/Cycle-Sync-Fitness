@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { WorkoutProgramController } from "../controllers/WorkoutProgramController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { validate } from "../middlewares/validate.js";
-import { createProgramSchema, updateProgramSchema } from "../validators/workoutProgram.validator.js";
+import { WorkoutProgramController } from "../controllers/WorkoutProgramController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { validate } from "../middlewares/validate.ts";
+import { createProgramSchema, updateProgramSchema } from "../validators/workoutProgram.validator.ts";
 
 const router = Router();
 const workoutProgramController = container.resolve(WorkoutProgramController);

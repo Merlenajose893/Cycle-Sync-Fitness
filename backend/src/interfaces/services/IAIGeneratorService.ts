@@ -1,5 +1,5 @@
-import type { AiPlanDTO } from "../../dtos/aiPlan.dto.js";
-import type { AIPlanInputs } from "../../models/AIPlan.js";
+import type { AiPlanDTO } from "../../dtos/aiPlan.dto.ts";
+import type { AIPlanInputs } from "../../models/AIPlan.ts";
 
 export interface IAIGeneratorService{
     generatePlan(input:AIPlanInputs):Promise<AiPlanDTO>

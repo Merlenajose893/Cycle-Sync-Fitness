@@ -1,8 +1,8 @@
 import { Router } from "express";
 import express from "express"
 import { container } from "tsyringe";
-import { PaymentController } from "../controllers/PaymentController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { PaymentController } from "../controllers/PaymentController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
 const paymenyController=container.resolve(PaymentController);
 const router=Router();
 router.post("/webhook",express.raw({type:"application/json"}),paymenyController.handleWebhook);

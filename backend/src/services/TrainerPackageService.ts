@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { CreatePackageDTO, UpdatePackageDTO } from "../dtos/trainerPackage.dto.js";
-import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.js";
-import type { ITrainerPackage } from "../models/TrainerPackage.js";
-import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import { NotFoundError, UnauthorizedError } from "../errors/index.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { CreatePackageDTO, UpdatePackageDTO } from "../dtos/trainerPackage.dto.ts";
+import type { ITrainerPackageService } from "../interfaces/services/ITrainerPackageService.ts";
+import type { ITrainerPackage } from "../models/TrainerPackage.ts";
+import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.ts";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import { NotFoundError, UnauthorizedError } from "../errors/index.ts";
 import { Types } from "mongoose";
 
 @injectable()

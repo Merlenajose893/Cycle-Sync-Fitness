@@ -7,7 +7,7 @@ import {
   WorkoutType,
   MealType,
   WeekDay,
-} from "../constants/aiPlan.js";
+} from "../constants/aiPlan.ts";
 
 /* -------------------- Interfaces -------------------- */
 

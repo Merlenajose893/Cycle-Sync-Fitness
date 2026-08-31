@@ -7,14 +7,14 @@ import type {
   WorkoutDataPoint,
   WeightCycleDataPoint,
   ReportSummary,
-} from "../dtos/report.dto.js";
-import type { IReportService } from "../interfaces/services/IReportService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IMealLogRepository } from "../interfaces/repositories/IMealLogRepository.js";
-import type { IWorkoutLogRepository } from "../interfaces/repositories/IWorkoutLogRepository.js";
-import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.js";
-import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.js";
-import { CyclePhase } from "../constants/health.constant.js";
+} from "../dtos/report.dto.ts";
+import type { IReportService } from "../interfaces/services/IReportService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IMealLogRepository } from "../interfaces/repositories/IMealLogRepository.ts";
+import type { IWorkoutLogRepository } from "../interfaces/repositories/IWorkoutLogRepository.ts";
+import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.ts";
+import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.ts";
+import { CyclePhase } from "../constants/health.constant.ts";
 
 @injectable()
 export class ReportService implements IReportService {

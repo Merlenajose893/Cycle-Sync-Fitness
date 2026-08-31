@@ -1,8 +1,8 @@
 import { inject,injectable } from "tsyringe";
 import type { Request,Response,NextFunction } from "express";
-import type  { IUserOnboardingService } from "../interfaces/services/IUserOnboardingService.js";
-import { TOKENS } from "../container/tokens.js";
-import { successResponse ,} from "../utils/response.js";
+import type  { IUserOnboardingService } from "../interfaces/services/IUserOnboardingService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { successResponse ,} from "../utils/response.ts";
 @injectable()
 export class UserOnboardingControlling{
     constructor(@inject(TOKENS.IUserOnboardingService) private useronboardingService:IUserOnboardingService)

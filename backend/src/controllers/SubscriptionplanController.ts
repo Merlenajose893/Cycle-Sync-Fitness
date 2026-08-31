@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "tsyringe";
-import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.js";
-import { TOKENS } from "../container/tokens.js";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
-import { NotFoundError } from "../errors/index.js";
+import type { ISubscriptionPlanService } from "../interfaces/services/ISubscriptionPlanService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
+import { NotFoundError } from "../errors/index.ts";
 
 @injectable()
 export class SubscriptionPlanController {

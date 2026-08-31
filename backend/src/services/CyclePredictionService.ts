@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.js";
-import type { ICyclePredictionService, CyclePredictionResult } from "../interfaces/services/ICyclePredictionService.js";
-import { CyclePhase } from "../constants/health.constant.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { ICycleLogRepository } from "../interfaces/repositories/ICycleLogRepository.ts";
+import type { ICyclePredictionService, CyclePredictionResult } from "../interfaces/services/ICyclePredictionService.ts";
+import { CyclePhase } from "../constants/health.constant.ts";
 
 @injectable()
 export class CyclePredictionService implements ICyclePredictionService {

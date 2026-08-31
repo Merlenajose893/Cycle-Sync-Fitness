@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import { UserModel } from "../models/User.js";
-import type { IUser } from "../models/User.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import { BaseRepository } from "./BaseRepository.js";
+import { UserModel } from "../models/User.ts";
+import type { IUser } from "../models/User.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 @injectable()
 export class UserRepository extends BaseRepository<IUser> implements IUserRepository{
     constructor()

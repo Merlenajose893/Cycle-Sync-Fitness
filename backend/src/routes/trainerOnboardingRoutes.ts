@@ -1,11 +1,11 @@
 import express from "express";
 import { container } from "tsyringe";
-import { TrainerOnboardingController } from "../controllers/TrainerOnboardingController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { validate } from "../middlewares/validate.js";
-import { updateTrainerCertificationSchema, updateTrainerPackageSchema, updateTrainerProfileSchema } from "../validators/traineronboarding.validator.js";
-import { upload } from "../middlewares/upload.js";
+import { TrainerOnboardingController } from "../controllers/TrainerOnboardingController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { validate } from "../middlewares/validate.ts";
+import { updateTrainerCertificationSchema, updateTrainerPackageSchema, updateTrainerProfileSchema } from "../validators/traineronboarding.validator.ts";
+import { upload } from "../middlewares/upload.ts";
 const router=express.Router();
 const controller=container.resolve(TrainerOnboardingController);
 router.get("/status",authMiddleware,roleMiddleware("trainer"),controller.getTrainerOnboardingStatus.bind(controller));

@@ -1,6 +1,6 @@
-import type { UpdateSubscriptionPlanDTO } from "../../dtos/subscriptionPlandto.js";
-import type { ISubscriptionPlan } from "../../models/SubscriptionPlan.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { UpdateSubscriptionPlanDTO } from "../../dtos/subscriptionPlandto.ts";
+import type { ISubscriptionPlan } from "../../models/SubscriptionPlan.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface ISubscriptionPlanRepository extends IBaseRepository<ISubscriptionPlan>{
     findByCode(code:string):Promise<ISubscriptionPlan | null>;

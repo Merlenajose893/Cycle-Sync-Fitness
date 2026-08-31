@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import type { IAIGeneratorService } from "../interfaces/services/IAIGeneratorService.js";
-import type { AiPlanDTO } from "../dtos/aiPlan.dto.js";
-import type { AIPlanInputs } from "../models/AIPlan.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IAIProvider } from "../interfaces/services/IAIProvider.js";
-import { WeekDay,WorkoutType,MealType } from "../constants/aiPlan.js";
+import type { IAIGeneratorService } from "../interfaces/services/IAIGeneratorService.ts";
+import type { AiPlanDTO } from "../dtos/aiPlan.dto.ts";
+import type { AIPlanInputs } from "../models/AIPlan.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IAIProvider } from "../interfaces/services/IAIProvider.ts";
+import { WeekDay,WorkoutType,MealType } from "../constants/aiPlan.ts";
 @injectable()
 export class AIGeneratedService implements IAIGeneratorService{
 constructor(@inject(TOKENS.IAIProvider) private aiprovider:IAIProvider)

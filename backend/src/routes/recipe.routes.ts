@@ -1,18 +1,18 @@
 import { Router } from "express";
 import { container } from "tsyringe";
 
-import { RecipeController } from "../controllers/RecipeController.js";
+import { RecipeController } from "../controllers/RecipeController.ts";
 
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { validate } from "../middlewares/validate.js";
-import { upload } from "../middlewares/upload.js";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { validate } from "../middlewares/validate.ts";
+import { upload } from "../middlewares/upload.ts";
 
 import {
     createRecipeSchema,
     updateRecipeSchema,
     reviewSchema
-} from "../validators/recipe.validator.js";
+} from "../validators/recipe.validator.ts";
 
 const router = Router();
 

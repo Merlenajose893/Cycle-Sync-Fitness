@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { MealLogController } from "../controllers/MealLogController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import {validate } from "../middlewares/validate.js"
-import {logMealSchema,dailyTargetSchema} from "../validators/meallog.validator.js"
+import { MealLogController } from "../controllers/MealLogController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import {validate } from "../middlewares/validate.ts"
+import {logMealSchema,dailyTargetSchema} from "../validators/meallog.validator.ts"
 const router=Router();
 const mealLogController=container.resolve(MealLogController);
 

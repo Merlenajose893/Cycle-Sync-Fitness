@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import type { IWorkoutLogService } from "../interfaces/services/IWorkoutLogService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IWorkoutLogRepository } from "../interfaces/repositories/IWorkoutLogRepository.js";
-import type { LogWorkoutDTO, LoggedExerciseDTO } from "../dtos/workout.dto.js";
-import type { IWorkoutLog } from "../models/WorkoutLog.js";
+import type { IWorkoutLogService } from "../interfaces/services/IWorkoutLogService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IWorkoutLogRepository } from "../interfaces/repositories/IWorkoutLogRepository.ts";
+import type { LogWorkoutDTO, LoggedExerciseDTO } from "../dtos/workout.dto.ts";
+import type { IWorkoutLog } from "../models/WorkoutLog.ts";
 
-import type { IImageService } from "../interfaces/services/IImageService.js";
+import type { IImageService } from "../interfaces/services/IImageService.ts";
 
 @injectable()
 export class WorkoutLogService implements IWorkoutLogService {

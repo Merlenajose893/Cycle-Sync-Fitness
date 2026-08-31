@@ -1,9 +1,9 @@
 import type { Request,Response,NextFunction } from "express"
-import { TOKENS } from "../container/tokens.js"
+import { TOKENS } from "../container/tokens.ts"
 import { inject, injectable } from "tsyringe"
-import type { IUserProfileService } from "../interfaces/services/IUserProfileService.js"
-import { successResponse } from "../utils/response.js"
-import { HttpStatus } from "../constants/HttpStatus.js"
+import type { IUserProfileService } from "../interfaces/services/IUserProfileService.ts"
+import { successResponse } from "../utils/response.ts"
+import { HttpStatus } from "../constants/HttpStatus.ts"
 @injectable()
 export class UserProfileController{
     constructor(@inject(TOKENS.IUserProfileService) private userprofileservice:IUserProfileService)

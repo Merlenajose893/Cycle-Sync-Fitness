@@ -1,18 +1,18 @@
 import { inject,injectable } from "tsyringe";
 import bcrypt from "bcryptjs";
-import type { AdminLoginDto,PaginationDto ,InviteTrainerDTO} from "../dtos/admin.dto.js";
-import type { IAdminService } from "../interfaces/services/IAdminService.js";
-import type { ITokenService } from "../interfaces/services/ITokenService.js";
-import type { IEmailService } from "../interfaces/services/IEmailService.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import { TOKENS } from "../container/tokens.js";
-import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "../errors/index.js";
+import type { AdminLoginDto,PaginationDto ,InviteTrainerDTO} from "../dtos/admin.dto.ts";
+import type { IAdminService } from "../interfaces/services/IAdminService.ts";
+import type { ITokenService } from "../interfaces/services/ITokenService.ts";
+import type { IEmailService } from "../interfaces/services/IEmailService.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "../errors/index.ts";
 import type { Response } from "express";
-import type { IUser } from "../models/User.js";
-import type { ITrainer } from "../models/Trainer.js";
+import type { IUser } from "../models/User.ts";
+import type { ITrainer } from "../models/Trainer.ts";
 import crypto from "crypto"
-import { TrainerStatus } from "../constants/TrainerStatus.js";
+import { TrainerStatus } from "../constants/TrainerStatus.ts";
 // import { tr } from "zod/locales";
 
 @injectable()

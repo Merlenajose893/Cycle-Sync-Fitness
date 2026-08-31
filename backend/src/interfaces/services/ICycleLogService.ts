@@ -1,5 +1,5 @@
-import type { CreateCycleLogDTO, UpdateCycleLogDTO } from "../../dtos/cycleLog.dto.js";
-import type { ICycleLog } from "../../models/CycleLog.js";
+import type { CreateCycleLogDTO, UpdateCycleLogDTO } from "../../dtos/cycleLog.dto.ts";
+import type { ICycleLog } from "../../models/CycleLog.ts";
 
 export interface ICycleLogService{
     startPeriodDate(userId:string,data:CreateCycleLogDTO):Promise<ICycleLog>;

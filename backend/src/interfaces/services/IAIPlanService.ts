@@ -1,5 +1,5 @@
-import type { PlanStatus } from "../../constants/aiPlan.js";
-import type { AIPlanInputs, IAIPlan } from "../../models/AIPlan.js";
+import type { PlanStatus } from "../../constants/aiPlan.ts";
+import type { AIPlanInputs, IAIPlan } from "../../models/AIPlan.ts";
 
 export interface IAIPlanService {
     generatePlans(userId: string, inputs: AIPlanInputs): Promise<IAIPlan | null>;

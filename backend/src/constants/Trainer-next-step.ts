@@ -1,4 +1,4 @@
-import { TrainerStatus } from "./TrainerStatus.js"
+import { TrainerStatus } from "./TrainerStatus.ts"
 export const TRAINER_NEXT_STEP={
 [TrainerStatus.REGISTERED]:"/trainer/onboarding",
 [TrainerStatus.PENDING_APPROVAL]:"/trainer/pending",

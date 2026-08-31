@@ -1,7 +1,7 @@
-import { TrainerAssignmentStatus } from "../constants/trainerassign.js";
-import type { ITrainerAssignmentRepository } from "../interfaces/repositories/ITrainerAssignmentRepository.js";
-import { TrainerAssignment, type ITrainerAssignment } from "../models/TrainerAssignment.js";
-import { BaseRepository } from "./BaseRepository.js";
+import { TrainerAssignmentStatus } from "../constants/trainerassign.ts";
+import type { ITrainerAssignmentRepository } from "../interfaces/repositories/ITrainerAssignmentRepository.ts";
+import { TrainerAssignment, type ITrainerAssignment } from "../models/TrainerAssignment.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
 export class TrainerAssignmentRepository extends BaseRepository<ITrainerAssignment> implements ITrainerAssignmentRepository {
     constructor() {

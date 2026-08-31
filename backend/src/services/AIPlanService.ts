@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import type { IAIPlanService } from "../interfaces/services/IAIPlanService.js";
-import type { AIPlanInputs, IAIPlan } from "../models/AIPlan.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IAIPlanRepository } from "../interfaces/repositories/IAIPlanRepository.js";
-import { BadRequestError, ForbiddenError, NotFoundError } from "../errors/index.js";
-import { PlanStatus } from "../constants/aiPlan.js";
-import type { IAIGeneratorService } from "../interfaces/services/IAIGeneratorService.js";
+import type { IAIPlanService } from "../interfaces/services/IAIPlanService.ts";
+import type { AIPlanInputs, IAIPlan } from "../models/AIPlan.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IAIPlanRepository } from "../interfaces/repositories/IAIPlanRepository.ts";
+import { BadRequestError, ForbiddenError, NotFoundError } from "../errors/index.ts";
+import { PlanStatus } from "../constants/aiPlan.ts";
+import type { IAIGeneratorService } from "../interfaces/services/IAIGeneratorService.ts";
 import { Types } from "mongoose";
 
 @injectable()

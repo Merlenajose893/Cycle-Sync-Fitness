@@ -1,5 +1,5 @@
-import type { IUser } from "../../models/User.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { IUser } from "../../models/User.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 export interface IUserRepository extends IBaseRepository<IUser>{
 findByEmail(email:string):Promise<IUser|null>;
 findByGoogleId(googleId:string):Promise<IUser|null>;

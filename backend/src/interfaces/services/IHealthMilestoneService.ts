@@ -1,4 +1,4 @@
-import type { IHealthMilestone } from "../../models/HealthMilestone.js";
+import type { IHealthMilestone } from "../../models/HealthMilestone.ts";
 
 export interface IHealthMilestoneService{
     getUserMilestones(userId:string):Promise<IHealthMilestone[]>;

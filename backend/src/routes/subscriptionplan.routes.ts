@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { SubscriptionPlanController } from "../controllers/SubscriptionplanController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { roleMiddleware } from "../middlewares/roleMiddleWare.js";
-import { validate } from "../middlewares/validate.js";
+import { SubscriptionPlanController } from "../controllers/SubscriptionplanController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../middlewares/roleMiddleWare.ts";
+import { validate } from "../middlewares/validate.ts";
 import {
   createSubscriptionPlanSchema,
   updateSubscriptionPlanSchema,
-} from "../validators/subscriptionPlan.validator.js";
+} from "../validators/subscriptionPlan.validator.ts";
 
 const router = Router();
 const subscriptionPlanController = container.resolve(SubscriptionPlanController);

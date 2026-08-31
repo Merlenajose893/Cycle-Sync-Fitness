@@ -1,12 +1,12 @@
 import type { Request,Response,NextFunction } from "express";
 
 import { container, inject,injectable } from "tsyringe";
-import { successResponse } from "../utils/response.js";
-import type { IAdminService } from "../interfaces/services/IAdminService.js";
-import { TOKENS } from "../container/tokens.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
-import type { InviteTrainerDTO } from "../dtos/admin.dto.js";
-import { errorResponse } from "../dtos/response.dto.js";
+import { successResponse } from "../utils/response.ts";
+import type { IAdminService } from "../interfaces/services/IAdminService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
+import type { InviteTrainerDTO } from "../dtos/admin.dto.ts";
+import { errorResponse } from "../dtos/response.dto.ts";
 @injectable()
 
     export class AdminController{

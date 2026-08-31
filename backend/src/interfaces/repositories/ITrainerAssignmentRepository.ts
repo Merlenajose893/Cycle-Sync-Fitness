@@ -1,6 +1,6 @@
-import type { TrainerAssignmentStatus } from "../../constants/trainerassign.js";
-import type { ITrainerAssignment } from "../../models/TrainerAssignment.js";
-import type { IBaseRepository } from "./IBaseRepository.js";
+import type { TrainerAssignmentStatus } from "../../constants/trainerassign.ts";
+import type { ITrainerAssignment } from "../../models/TrainerAssignment.ts";
+import type { IBaseRepository } from "./IBaseRepository.ts";
 
 export interface ITrainerAssignmentRepository extends IBaseRepository<ITrainerAssignment> {
     findActiveByUser(userId: string): Promise<ITrainerAssignment | null>;

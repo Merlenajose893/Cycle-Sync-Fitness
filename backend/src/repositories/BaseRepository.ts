@@ -1,5 +1,5 @@
 import { Document,Model, Types } from "mongoose";
-import type { IBaseRepository } from "../interfaces/repositories/IBaseRepository.js";
+import type { IBaseRepository } from "../interfaces/repositories/IBaseRepository.ts";
 
 
 export abstract class BaseRepository <T extends Document>implements IBaseRepository<T>{

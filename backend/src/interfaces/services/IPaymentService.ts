@@ -1,6 +1,6 @@
 import type Stripe from "stripe";
-import type { CheckoutResponseDTO, CreateCheckoutDTO, CreateSubscriptionCheckoutDTO } from "../../dtos/payment.dto.js";
-import type { IPayment } from "../../models/Payment.js";
+import type { CheckoutResponseDTO, CreateCheckoutDTO, CreateSubscriptionCheckoutDTO } from "../../dtos/payment.dto.ts";
+import type { IPayment } from "../../models/Payment.ts";
 
 export interface IPaymentService{
     createCheckoutSession(userId:string,data:CreateCheckoutDTO):Promise<CheckoutResponseDTO>;

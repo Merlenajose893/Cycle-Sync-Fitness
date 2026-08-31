@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { AIPlanController } from "../controllers/AIPlanController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { validate } from "../middlewares/validate.js";
-import { generatePlanSchema, updatePlanStatusSchema } from "../validators/aiPlan.validator.js";
+import { AIPlanController } from "../controllers/AIPlanController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { validate } from "../middlewares/validate.ts";
+import { generatePlanSchema, updatePlanStatusSchema } from "../validators/aiPlan.validator.ts";
 
 const router = Router();
 const aiPlanController = container.resolve(AIPlanController);

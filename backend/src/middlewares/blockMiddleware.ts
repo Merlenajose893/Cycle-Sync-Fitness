@@ -1,9 +1,9 @@
 import { container } from "tsyringe";
 import type { Request, Response, NextFunction } from "express";
-import { TOKENS } from "../container/tokens.js";
-import { UnauthorizedError } from "../errors/index.js";
-import type { IAccountStatusService } from "../interfaces/services/IAccountStatusService.js";
-import type { TokenPayload } from "../types/auth.types.js";
+import { TOKENS } from "../container/tokens.ts";
+import { UnauthorizedError } from "../errors/index.ts";
+import type { IAccountStatusService } from "../interfaces/services/IAccountStatusService.ts";
+import type { TokenPayload } from "../types/auth.types.ts";
 
 const accountStatusService = container.resolve(TOKENS.IAccountStatusService) as IAccountStatusService;
 

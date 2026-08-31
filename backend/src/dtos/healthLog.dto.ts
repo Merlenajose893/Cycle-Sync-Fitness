@@ -1,5 +1,5 @@
-import type { Mood, PhysicalSymptom } from "../constants/health.constant.js";
-import type { IBodyMeasurements } from "../models/DailyHealthLog.js";
+import type { Mood, PhysicalSymptom } from "../constants/health.constant.ts";
+import type { IBodyMeasurements } from "../models/DailyHealthLog.ts";
 
 export interface CreateHealthLogDTO{
     date:Date;

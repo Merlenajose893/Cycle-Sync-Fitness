@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import { PlanStatus } from "../constants/aiPlan.js";
-import type { IAIPlanRepository } from "../interfaces/repositories/IAIPlanRepository.js";
-import AIPlan, { type IAIPlan } from "../models/AIPlan.js";
-import { BaseRepository } from "./BaseRepository.js";
+import { PlanStatus } from "../constants/aiPlan.ts";
+import type { IAIPlanRepository } from "../interfaces/repositories/IAIPlanRepository.ts";
+import AIPlan, { type IAIPlan } from "../models/AIPlan.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
 @injectable()
 export class AIPlanRepository

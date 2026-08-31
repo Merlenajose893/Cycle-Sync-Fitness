@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.js";
-import type { IDailyHealthLogService } from "../interfaces/services/IDailyHealthLogService.js";
-import type { AddWaterDTO, CreateHealthLogDTO, UpdateDailyHealthLogDTO } from "../dtos/healthLog.dto.js";
-import type { IDailyHealthLog } from "../models/DailyHealthLog.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IDailyHealthLogRepository } from "../interfaces/repositories/IDailyHealthLogRepository.ts";
+import type { IDailyHealthLogService } from "../interfaces/services/IDailyHealthLogService.ts";
+import type { AddWaterDTO, CreateHealthLogDTO, UpdateDailyHealthLogDTO } from "../dtos/healthLog.dto.ts";
+import type { IDailyHealthLog } from "../models/DailyHealthLog.ts";
 
 @injectable()
 export class DailyHealthLogService implements IDailyHealthLogService {

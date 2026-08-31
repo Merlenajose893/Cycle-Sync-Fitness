@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FlowIntensity } from "../constants/health.constant.js";
+import { FlowIntensity } from "../constants/health.constant.ts";
 
 export const createCycleLogSchema = z.object({
   startDate: z.string().or(z.date()),

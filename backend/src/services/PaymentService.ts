@@ -1,17 +1,17 @@
-import type { IPaymentService } from "../interfaces/services/IPaymentService.js";
+import type { IPaymentService } from "../interfaces/services/IPaymentService.ts";
 import Stripe from "stripe";
-import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.js";
-import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
-import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.js";
-import type { IUserRepository } from "../interfaces/repositories/IUserRepository.js";
-import type { CheckoutResponseDTO, CreateCheckoutDTO, CreateSubscriptionCheckoutDTO } from "../dtos/payment.dto.js";
+import type { IPaymentRepository } from "../interfaces/repositories/IPaymentRepository.ts";
+import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.ts";
+import type { ISubscriptionPlanRepository } from "../interfaces/repositories/ISubscriptionplanRepository.ts";
+import type { IUserRepository } from "../interfaces/repositories/IUserRepository.ts";
+import type { CheckoutResponseDTO, CreateCheckoutDTO, CreateSubscriptionCheckoutDTO } from "../dtos/payment.dto.ts";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IPayment } from "../models/Payment.js";
-import { PaymentStatus } from "../constants/payment.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IPayment } from "../models/Payment.ts";
+import { PaymentStatus } from "../constants/payment.ts";
 import { Types } from "mongoose";
-import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.js";
-import { NotFoundError, UnauthorizedError } from "../errors/index.js";
+import type { ITrainerAssignmentService } from "../interfaces/services/ITrainerAssignmentService.ts";
+import { NotFoundError, UnauthorizedError } from "../errors/index.ts";
 
 
 @injectable()

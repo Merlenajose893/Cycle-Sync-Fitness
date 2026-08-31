@@ -1,10 +1,10 @@
 import { inject,injectable } from "tsyringe";
-import type { IMealLogService } from "../interfaces/services/IMealLogService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { IFoodItem, IMealEntry, IMealLog } from "../models/MealLog.js";
-import type { DailyTargetDTO, LogMealDTO } from "../dtos/meal.log.dto.js";
-import type { IMealLogRepository } from "../interfaces/repositories/IMealLogRepository.js";
-import { NotFoundError } from "../errors/index.js";
+import type { IMealLogService } from "../interfaces/services/IMealLogService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { IFoodItem, IMealEntry, IMealLog } from "../models/MealLog.ts";
+import type { DailyTargetDTO, LogMealDTO } from "../dtos/meal.log.dto.ts";
+import type { IMealLogRepository } from "../interfaces/repositories/IMealLogRepository.ts";
+import { NotFoundError } from "../errors/index.ts";
 import { Types } from "mongoose";
 @injectable()
 export class MealLogService implements IMealLogService{

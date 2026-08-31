@@ -1,4 +1,4 @@
-import type { ITrainer } from "../../models/Trainer.js";
+import type { ITrainer } from "../../models/Trainer.ts";
 
 export interface ITrainerBrowserService{
     getApprovedTrainers():Promise<ITrainer[]>;

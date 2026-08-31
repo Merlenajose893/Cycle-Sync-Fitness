@@ -1,4 +1,4 @@
-import { HttpStatus } from "../constants/HttpStatus.js";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 export class AppError extends Error{
     public statuscode:number;

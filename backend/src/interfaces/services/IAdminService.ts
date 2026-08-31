@@ -1,7 +1,7 @@
-import type { AdminLoginDto,PaginationDto ,InviteTrainerDTO} from "../../dtos/admin.dto.js";
+import type { AdminLoginDto,PaginationDto ,InviteTrainerDTO} from "../../dtos/admin.dto.ts";
 import type { Response } from "express";
-import type { IUser } from "../../models/User.js";
-import type { ITrainer } from "../../models/Trainer.js";
+import type { IUser } from "../../models/User.ts";
+import type { ITrainer } from "../../models/Trainer.ts";
 export interface IAdminService{
     adminLogin(data:AdminLoginDto,res:Response):Promise<void>;
     listUsers(pagination:PaginationDto):Promise<IUser[]>;

@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import type { IMealLogRepository } from "../interfaces/repositories/IMealLogRepository.js";
-import { MealLog, type IMealLog } from "../models/MealLog.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { IMealLogRepository } from "../interfaces/repositories/IMealLogRepository.ts";
+import { MealLog, type IMealLog } from "../models/MealLog.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 @injectable()
 export class MealLogRepository extends BaseRepository<IMealLog> implements IMealLogRepository{
 

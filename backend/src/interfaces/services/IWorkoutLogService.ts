@@ -1,5 +1,5 @@
-import type { LogWorkoutDTO } from "../../dtos/workout.dto.js";
-import type { IWorkoutLog } from "../../models/WorkoutLog.js";
+import type { LogWorkoutDTO } from "../../dtos/workout.dto.ts";
+import type { IWorkoutLog } from "../../models/WorkoutLog.ts";
 
 export interface IWorkoutLogService{
     logWorkout(userId:string,data:LogWorkoutDTO):Promise<IWorkoutLog>;

@@ -1,14 +1,14 @@
 import { inject,injectable } from "tsyringe";
-import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.js";
-import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.js";
-import type { ITrainer } from "../models/Trainer.js";
-import type { ITrainerOnboardingService } from "../interfaces/services/ITrainerOnboardingService.js";
-import { TOKENS } from "../container/tokens.js";
-import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerPackageDTO } from "../dtos/traineronboarding.dto.js";
-import { TrainerOnboardingMapper } from "../mappers/TrainerOnboardingMapper.js";
-import { BadRequestError, NotFoundError } from "../errors/index.js";
-import type { IImageService } from "../interfaces/services/IImageService.js";
-import { TrainerStatus } from "../constants/TrainerStatus.js";
+import type { ITrainerRepository } from "../interfaces/repositories/ITrainerRepository.ts";
+import type { ITrainerPackageRepository } from "../interfaces/repositories/ITrainerPackageRepository.ts";
+import type { ITrainer } from "../models/Trainer.ts";
+import type { ITrainerOnboardingService } from "../interfaces/services/ITrainerOnboardingService.ts";
+import { TOKENS } from "../container/tokens.ts";
+import type { UpdateTrainerProfileDTO,UpdateTrainerCertificateDTO,UpdateTrainerPackageDTO } from "../dtos/traineronboarding.dto.ts";
+import { TrainerOnboardingMapper } from "../mappers/TrainerOnboardingMapper.ts";
+import { BadRequestError, NotFoundError } from "../errors/index.ts";
+import type { IImageService } from "../interfaces/services/IImageService.ts";
+import { TrainerStatus } from "../constants/TrainerStatus.ts";
 
 @injectable()
 export class TrainerOnboardingService implements ITrainerOnboardingService{

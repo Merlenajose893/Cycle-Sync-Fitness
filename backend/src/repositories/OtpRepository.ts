@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
 import mongoose from "mongoose";
-import type { OtpType,UserType,IOtp } from "../models/Otp.js";
-import { otpModel } from "../models/Otp.js";
-import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { OtpType,UserType,IOtp } from "../models/Otp.ts";
+import { otpModel } from "../models/Otp.ts";
+import type { IOtpRepository } from "../interfaces/repositories/IOtpRepository.ts";
+import { BaseRepository } from "./BaseRepository.ts";
 
 @injectable()
 export class OtpRepository extends BaseRepository<IOtp>implements IOtpRepository{

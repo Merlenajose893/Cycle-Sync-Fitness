@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
-import type { IPaymentService } from "../interfaces/services/IPaymentService.js";
+import { TOKENS } from "../container/tokens.ts";
+import type { IPaymentService } from "../interfaces/services/IPaymentService.ts";
 import type { NextFunction, Request, Response } from "express";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 import type Stripe from "stripe";
 
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError } from "../errors/index.ts";
 
 @injectable()
 export class PaymentController {

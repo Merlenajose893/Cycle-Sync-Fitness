@@ -1,6 +1,6 @@
 import { Schema, Document, Types } from "mongoose";
 import mongoose from "mongoose";
-import { MealType } from "../constants/food.constants.js";
+import { MealType } from "../constants/food.constants.ts";
 
 export interface IFoodItem{
     name:string;

@@ -1,5 +1,5 @@
 import mongoose, { Document,Schema,Types } from "mongoose";
-import { HealthMilestoneType } from "../constants/health.constant.js";
+import { HealthMilestoneType } from "../constants/health.constant.ts";
 export interface IHealthMilestone extends Document{
 userId:Types.ObjectId;
 milestoneType:HealthMilestoneType;

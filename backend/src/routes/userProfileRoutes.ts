@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { UserProfileController } from "../controllers/UserProfileController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { validate } from "../middlewares/validate.js";
-import { upload } from "../middlewares/upload.js";
-import { updateUserProfileSchema } from "../validators/userprofile.validator.js";
+import { UserProfileController } from "../controllers/UserProfileController.ts";
+import { authMiddleware } from "../middlewares/authMiddleware.ts";
+import { validate } from "../middlewares/validate.ts";
+import { upload } from "../middlewares/upload.ts";
+import { updateUserProfileSchema } from "../validators/userprofile.validator.ts";
 const router=Router();
 const userprofilecontroller=container.resolve(UserProfileController);
 

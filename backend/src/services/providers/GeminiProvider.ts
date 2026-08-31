@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import type { IAIProvider } from "../../interfaces/services/IAIProvider.js";
+import type { IAIProvider } from "../../interfaces/services/IAIProvider.ts";
 import { GoogleGenAI, type Model } from "@google/genai";
-import { NotFoundError, ServiceUnavailableError } from "../../errors/index.js";
+import { NotFoundError, ServiceUnavailableError } from "../../errors/index.ts";
 @injectable()
 export class GeminiProvider implements IAIProvider{
 private ai:GoogleGenAI;

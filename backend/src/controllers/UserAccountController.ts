@@ -1,9 +1,9 @@
 import { inject } from "tsyringe";
-import { TOKENS } from "../container/tokens.js";
+import { TOKENS } from "../container/tokens.ts";
 import type { Request,Response,NextFunction } from "express";
-import type { IUserStatusService } from "../interfaces/services/IUserAccountService.js";
-import { successResponse } from "../utils/response.js";
-import { HttpStatus } from "../constants/HttpStatus.js";
+import type { IUserStatusService } from "../interfaces/services/IUserAccountService.ts";
+import { successResponse } from "../utils/response.ts";
+import { HttpStatus } from "../constants/HttpStatus.ts";
 
 export class UserAccountController{
     constructor(@inject(TOKENS.IUserStatusService) private userstatusservice:IUserStatusService)

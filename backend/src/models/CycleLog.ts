@@ -1,5 +1,5 @@
 import mongoose, { Schema,  Types,Document } from "mongoose";
-import { FlowIntensity } from "../constants/health.constant.js";
+import { FlowIntensity } from "../constants/health.constant.ts";
 
 
 export interface ICycleLog extends Document{
