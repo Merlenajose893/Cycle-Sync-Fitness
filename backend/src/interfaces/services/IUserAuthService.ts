@@ -1,10 +1,10 @@
 
-import type { RegisterUserDTO,LoginDTO,VerifyOtpDTO, LogoutDTO, ResendOTPDTO, ForgotPasswordDTO, VerifyResetOtpDTO, ResetPasswordDTO,ForgotPasswordResponseDTO } from "../../dtos/auth.dto.ts";
+import type { RegisterUserDTO, RegisterUserResponse, LoginDTO, VerifyOtpDTO, LogoutDTO, ResendOTPDTO, ForgotPasswordDTO, VerifyResetOtpDTO, ResetPasswordDTO, ForgotPasswordResponseDTO } from "../../dtos/auth.dto.ts";
 import type { Response } from "express";
 import type { IUser } from "../../models/User.ts";
 
 export interface IUserAuthService{
-    registerUser(data:RegisterUserDTO,res:Response):Promise<IUser>;
+    registerUser(data:RegisterUserDTO,res:Response):Promise<RegisterUserResponse>;
     loginUser(data:LoginDTO,res:Response):Promise<IUser>;
     googleSignIn(idToken:string,res:Response):Promise<IUser>
     verifyEmailOTP(data:VerifyOtpDTO,res:Response):Promise<IUser>;

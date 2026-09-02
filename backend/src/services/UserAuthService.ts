@@ -11,7 +11,7 @@ import { TOKENS } from "../container/tokens.ts";
 import bcrypt from "bcryptjs";
 import { ConflictError, ForbiddenError, NotFoundError } from "../errors/index.ts";
 
-import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.ts";
+import type { ForgotPasswordDTO, ForgotPasswordResponseDTO, LogoutDTO, RegisterUserDTO, RegisterUserResponse, ResendOTPDTO, ResetPasswordDTO, VerifyOtpDTO, VerifyResetOtpDTO, } from "../dtos/auth.dto.ts";
 
 
 
@@ -21,6 +21,7 @@ import type { LoginDTO } from "../dtos/auth.dto.ts";
 // import type { IUser } from "../models/User.ts";
 import { UnauthorizedError,BadRequestError } from "../errors/index.ts";
 import { OAuth2Client } from "google-auth-library";
+import { UserAuthMapper } from "../mappers/UserAuthMapper.ts";
 @injectable()
 export class UserAuthService implements IUserAuthService{
     constructor(@inject(TOKENS.IUserRepository) private userRepository:IUserRepository,
@@ -35,17 +36,16 @@ export class UserAuthService implements IUserAuthService{
 
 ){}
 
-async registerUser(data: RegisterUserDTO,res:Response): Promise<IUser> {
+async registerUser(data: RegisterUserDTO,res:Response): Promise<RegisterUserResponse> {
     const existingUser=await this.userRepository.findByEmail(data.email);
     if(existingUser)
     {
         throw new ConflictError("User already exists")
     }
     const hashedPassword=await bcrypt.hash(data.password,10);
+    const userData=UserAuthMapper.toRegisterUser(data);
     const user=await this.userRepository.create({
-        firstName:data.firstName,
-        lastName:data.lastName,
-        email:data.email,
+        ...userData,
         password:hashedPassword,
         role:"user"
     })
@@ -58,7 +58,7 @@ async registerUser(data: RegisterUserDTO,res:Response): Promise<IUser> {
     )
     console.log(ans);
     
-return user;
+ return UserAuthMapper.toRegisterResponse(user)
 }
 
 verifyEmailOTP=async(data: VerifyOtpDTO,res:Response): Promise<IUser>=> {

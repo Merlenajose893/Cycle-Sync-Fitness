@@ -16,6 +16,7 @@ import type { Response } from "express";
 // import { email } from "zod";
 import type { ITrainer } from "../models/Trainer.ts";
 import { TrainerStatus } from "../constants/TrainerStatus.ts";
+import { TrainerAuthMapper } from "../mappers/TrainerAuthMapper.ts";
 // import { TRAINER_NEXT_STEP } from "../constants/Trainer-next-step.ts";
 @injectable()
 export class TrainerAuthService implements ITrainerAuthService{
@@ -30,13 +31,11 @@ registerTrainer=async(data: TrainerRegisterDTO)=> {
     {
 throw new ConflictError("Trainer already exists")
     }
+
+    const trainerData=TrainerAuthMapper.toRegisterTrainer(data)
     const hashedPassword=await bcrypt.hash(data.password,10);
     const trainer=await this.trainerRepository.create({
-        firstName:data.firstName,
-        lastName:data.lastName,
-        email:data.email,
-        password:hashedPassword,
-        speciality:data.speciality,
+        ...trainerData,
         status:TrainerStatus.REGISTERED,
         onboardingCompleted:false,
         onboardingSteps:1,
@@ -46,7 +45,7 @@ throw new ConflictError("Trainer already exists")
     await this.otpService.createAndSentOtp(trainer._id.toString(),"trainer",trainer.email,"email-verification");
 
 
-    return trainer;
+    return TrainerAuthMapper.toRegisterTrainerResponse(trainer)
 
    
 

@@ -5,6 +5,15 @@ export interface RegisterUserDTO{
     password:string;
 }
 
+export interface RegisterUserResponse{
+    id:string;
+    firstName:string;
+    lastName:string;
+    email:string;
+    role:string;
+    isEmailVerified:boolean;
+}
+
 export interface LoginDTO{
     email:string;
     password:string;
