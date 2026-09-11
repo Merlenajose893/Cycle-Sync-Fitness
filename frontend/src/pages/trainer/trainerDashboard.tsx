@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Users,
   MessageSquare,
@@ -99,11 +100,12 @@ const prioritySessions: { name: string; initials: string; time: string; type: st
 const shortcuts = [
   { label: 'Create Workout', icon: Dumbbell, color: 'teal' as const },
   { label: 'New Recipe', icon: UtensilsCrossed, color: 'orange' as const },
-  { label: 'Manage Slots', icon: Clock, color: 'blue' as const },
+  { label: 'Manage Slots', icon: Clock, color: 'blue' as const, path: '/trainer/slots' },
   { label: 'Assign Plan', icon: Plus, color: 'purple' as const },
 ];
 
 const TrainerDashboard: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="trainer-content">
       {/* ═══ STAT CARDS ═══ */}
@@ -337,7 +339,9 @@ const TrainerDashboard: React.FC = () => {
             gridTemplateColumns: '1fr 1fr',
             gap: '16px',
           }}>
-            {shortcuts.map((shortcut) => (
+            {shortcuts.map((shortcut) => {
+              const enabled = Boolean(shortcut.path);
+              return (
               <button
                 key={shortcut.label}
                 className="tp-quick-btn"
@@ -346,17 +350,19 @@ const TrainerDashboard: React.FC = () => {
                   textAlign: 'center',
                   padding: '24px 16px',
                   gap: '12px',
-                  opacity: 0.5,
-                  cursor: 'not-allowed',
+                  opacity: enabled ? 1 : 0.5,
+                  cursor: enabled ? 'pointer' : 'not-allowed',
                   position: 'relative',
                 }}
-                disabled
-                title="Coming soon"
+                disabled={!enabled}
+                title={enabled ? shortcut.label : 'Coming soon'}
+                onClick={() => enabled && shortcut.path && navigate(shortcut.path)}
               >
                 <div className={`tp-quick-icon ${shortcut.color}`}>
                   <shortcut.icon size={22} />
                 </div>
                 <span style={{ fontSize: '0.85rem' }}>{shortcut.label}</span>
+                {!enabled && (
                 <span style={{
                   position: 'absolute',
                   top: '8px',
@@ -371,8 +377,10 @@ const TrainerDashboard: React.FC = () => {
                 }}>
                   SOON
                 </span>
+                )}
               </button>
-            ))}
+            );
+            })}
           </div>
         </div>
       </div>

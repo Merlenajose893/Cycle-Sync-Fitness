@@ -33,6 +33,7 @@ import FoodsAndRecipes from "../pages/trainer/FoodsAndRecipes";
 import TrainerClients from "../pages/trainer/TrainerClients";
 import TrainerWorkouts from "../pages/trainer/TrainerWorkouts";
 import TrainerPackages from "../pages/trainer/TrainerPackages";
+import TrainerSlots from "../pages/trainer/TrainerSlots";
 import BlockedPage from "../pages/common/BlockedPage";
 import About from "../pages/common/About";
 import TrainerPendingPage from "../pages/trainer/TrainerPending";
@@ -131,6 +132,7 @@ function AppRoutes() {
                         <Route path="/trainer/workouts" element={<TrainerWorkouts />} />
                         <Route path="/trainer/packages" element={<TrainerPackages />} />
                         <Route path="/trainer/nutrition" element={<FoodsAndRecipes />} />
+                        <Route path="/trainer/slots" element={<TrainerSlots />} />
                         <Route path="/trainer/profile" element={<TrainerProfile />} />
                     </Route>
                 </Route>

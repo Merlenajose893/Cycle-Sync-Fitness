@@ -23,12 +23,5 @@ export class UserAuthMapper {
         };
     }
 
-    // Retain legacy method aliases for backward compatibility if needed
-    static toregisterUser(dto: RegisterUserDTO) {
-        return this.toRegisterUser(dto);
-    }
 
-    static toregisterResponse(user: IUser): RegisterUserResponse {
-        return this.toRegisterResponse(user);
-    }
 }

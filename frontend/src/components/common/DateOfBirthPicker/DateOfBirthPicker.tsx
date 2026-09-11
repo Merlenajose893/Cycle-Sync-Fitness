@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Calendar, Sparkles, AlertCircle } from 'lucide-react';
 import './DateOfBirthPicker.css';
 

@@ -1,0 +1,595 @@
+/* Slot Management — weekly calendar + session list + slot modals */
+
+.sm-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.sm-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.sm-page-header h1 {
+    margin: 0 0 4px;
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: #0f172a;
+}
+
+.sm-page-header p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.sm-calendar-card,
+.sm-sessions-card {
+    background: #ffffff;
+    border: 1px solid #eef2f7;
+    border-radius: 18px;
+    padding: 22px 24px 24px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.sm-calendar-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.sm-week-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sm-week-nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sm-week-nav-btn:hover {
+    border-color: #14b8a6;
+    color: #0d9488;
+    background: #f0fdfa;
+}
+
+.sm-week-label {
+    min-width: 210px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: #0f172a;
+}
+
+.sm-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.sm-legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sm-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.sm-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+.sm-legend-dot.available { background: #86efac; }
+.sm-legend-dot.booked { background: #93c5fd; }
+.sm-legend-dot.blocked { background: #cbd5e1; }
+
+.sm-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: none;
+    padding: 9px 16px;
+}
+
+.sm-btn-ghost {
+    background: #fff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+}
+
+.sm-btn-ghost:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+.sm-btn-primary {
+    background: #14b8a6;
+    color: #fff;
+}
+
+.sm-btn-primary:hover {
+    background: #0d9488;
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.28);
+}
+
+.sm-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.sm-day-col {
+    min-height: 168px;
+}
+
+.sm-day-head {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.sm-day-name {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #14b8a6;
+    margin-bottom: 2px;
+}
+
+.sm-day-num {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.sm-day-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sm-slot-pill {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    line-height: 1.25;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.sm-slot-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.sm-slot-pill.available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.sm-slot-pill.booked {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.sm-slot-pill.blocked {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.sm-slot-pill-client {
+    display: block;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.sm-sessions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.sm-sessions-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.sm-count-badge {
+    background: #ccfbf1;
+    color: #0f766e;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+}
+
+.sm-session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sm-session-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid #eef2f7;
+    border-radius: 14px;
+    background: #fff;
+}
+
+.sm-session-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #dbeafe;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sm-session-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.sm-session-body h3 {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.sm-session-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 0.82rem;
+    color: #64748b;
+}
+
+.sm-session-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sm-session-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.sm-mode-chip {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+    background: #eff6ff;
+    text-transform: lowercase;
+}
+
+.sm-mode-chip.online {
+    border-color: #99f6e4;
+    color: #0f766e;
+    background: #f0fdfa;
+}
+
+.sm-btn-reschedule {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 1px solid #93c5fd;
+    background: #fff;
+    color: #2563eb;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sm-btn-reschedule:hover {
+    background: #eff6ff;
+}
+
+.sm-btn-edit {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.sm-btn-edit:hover {
+    color: #0d9488;
+    background: #f0fdfa;
+}
+
+.sm-empty {
+    text-align: center;
+    padding: 36px 16px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+/* Overlay + modal */
+
+.sm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sm-modal {
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
+    padding: 22px 24px 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.sm-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.sm-modal-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.sm-modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.sm-modal-close:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.sm-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #fff7ed;
+    color: #9a3412;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    margin-bottom: 18px;
+}
+
+.sm-alert svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.sm-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+}
+
+.sm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sm-field.full {
+    grid-column: 1 / -1;
+}
+
+.sm-field label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.sm-input-wrap {
+    position: relative;
+}
+
+.sm-input-wrap input,
+.sm-input-wrap select,
+.sm-field textarea {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 40px 10px 12px;
+    font-size: 0.9rem;
+    color: #0f172a;
+    background: #fff;
+    appearance: none;
+}
+
+.sm-field textarea {
+    padding-right: 12px;
+    min-height: 92px;
+    resize: vertical;
+}
+
+.sm-input-wrap select {
+    padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.sm-input-wrap input:focus,
+.sm-input-wrap select:focus,
+.sm-field textarea:focus {
+    outline: none;
+    border-color: #14b8a6;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12);
+}
+
+.sm-input-wrap input:disabled,
+.sm-input-wrap select:disabled,
+.sm-field textarea:disabled,
+.sm-field input:disabled {
+    background: #f8fafc;
+    color: #475569;
+    cursor: not-allowed;
+}
+
+.sm-input-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.sm-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.sm-modal-footer.split {
+    justify-content: space-between;
+}
+
+.sm-btn-text-danger {
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    padding: 8px 4px;
+}
+
+.sm-btn-text-danger:hover {
+    color: #dc2626;
+}
+
+.sm-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 1100px) {
+    .sm-week-grid {
+        overflow-x: auto;
+        grid-template-columns: repeat(7, minmax(120px, 1fr));
+        padding-bottom: 8px;
+    }
+}
+
+@media (max-width: 720px) {
+    .sm-page-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .sm-session-row {
+        flex-wrap: wrap;
+    }
+
+    .sm-session-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .sm-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sm-modal-footer.split {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sm-footer-right {
+        justify-content: flex-end;
+    }
+}
